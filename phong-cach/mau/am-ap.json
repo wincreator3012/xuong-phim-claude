@@ -1,0 +1,37 @@
+{
+ "ten": "Ấm áp",
+ "cam_giac": [
+  "gần gũi",
+  "ấm",
+  "tin cậy"
+ ],
+ "mo_ta": "Kem sáng và nâu đất, điểm nhấn đất nung. Hợp giáo dục kỹ năng sống, nuôi dạy con, kể chuyện, chương trình cộng đồng.",
+ "theme_mac_dinh": "light",
+ "palettes": {
+  "light": {
+   "bg": "#FBF6EE",
+   "ink": "#2B2622",
+   "inkSoft": "#75695F",
+   "accent": "#B85C38",
+   "line": "#E3D9CB"
+  },
+  "dark": {
+   "bg": "#1E1A17",
+   "ink": "#F4EDE3",
+   "inkSoft": "#A89C90",
+   "accent": "#D89A6A",
+   "line": "#3E3630"
+  }
+ },
+ "nhac": {
+  "nhom_uu_tien": [
+   "acoustic-am",
+   "piano-tinh-lang"
+  ],
+  "mode_bai_dai": "bookends",
+  "mode_clip_ngan": "full"
+ },
+ "hieu_ung": "tiet-che",
+ "intro_giay": 6,
+ "_ghi_chu": "Mẫu phong cách: Claude chép 'palettes' sang brand/brand.json và ghi tên mẫu vào phong-cach/PHONG-CACH.md khi thiết lập. Đổi mã màu ở brand.json, không cần sửa file này."
+}

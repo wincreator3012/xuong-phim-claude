@@ -1,0 +1,465 @@
+{
+ "_ghi_chu": "Danh mục chất liệu âm thanh đã kiểm định giấy phép (dùng thương mại mọi nền tảng, không Content ID). File KHÔNG nằm trong repo: tools/tai-chat-lieu.py tải về nhac-nen/<nhom>/ và hieu-ung/<nhom>/ theo mẫu phong cách. Sau khi tải, tools/nhap-am-thanh.py đo LUFS thật và ghi nhac-nen/THU-VIEN.md. Trường 'trang' là URL trang nguồn để tra ngược; 'truc_tiep' (nếu có) là link tải thẳng bằng curl.",
+ "giay_phep": {
+  "pixabay": {
+   "ten": "Pixabay Content License",
+   "ghi_cong": false,
+   "ghi_chu": "Dùng thương mại mọi nền tảng, không cần ghi công, không bán lại file nhạc. Tải qua trình duyệt (nút Free download), giữ id trong tên file để tra ngược. Trước khi tải một track mới: kiểm trang track KHÔNG có nhãn 'Content ID Registered'."
+  },
+  "cc-by": {
+   "ten": "Creative Commons BY 4.0 (Kevin MacLeod, incompetech.com)",
+   "ghi_cong": true,
+   "mau_ghi_cong": "Music: \"<Tên track>\" - Kevin MacLeod (incompetech.com)\nLicensed under Creative Commons: By Attribution 4.0 - https://creativecommons.org/licenses/by/4.0/",
+   "ghi_chu": "Bắt buộc dán dòng ghi công vào mô tả video. Claude tự thêm khi dựng."
+  }
+ },
+ "nhom_nhac": {
+  "thien-ambient": "nền thiền, thực hành, bài giảng chiêm nghiệm",
+  "piano-tinh-lang": "piano trầm lắng, mở và kết bài giảng",
+  "acoustic-am": "guitar mộc ấm áp, clip quảng bá và kể chuyện",
+  "nang-luong-nhe": "sáng và nhẹ, Reels/Shorts",
+  "rieng": "nhạc riêng của người dùng (đã có quyền), không cần kiểm định"
+ },
+ "nhom_hieu_ung": {
+  "chuyen-canh": "whoosh chuyển cảnh, vào thẻ phần",
+  "chuong-thien": "chuông xoay, mở/kết thực hành",
+  "nhan-do-hoa": "điểm nhấn khi đồ họa xuất hiện"
+ },
+ "nhac": [
+  {
+   "id": "thien-bed-dai_verclub_pixabay-550885",
+   "nhom": "thien-ambient",
+   "ten_goc": "Meditation Music",
+   "tac_gia": "Verclub_Music",
+   "dai": "8:43",
+   "lufs": -15.7,
+   "gain_full": -14,
+   "gain_bookends": -6,
+   "giay_phep": "pixabay",
+   "trang": "https://pixabay.com/music/meditationspiritual-meditation-music-550885/",
+   "mood": [
+    "thiền",
+    "nền dài",
+    "thực hành có hướng dẫn"
+   ],
+   "mau": [
+    "tinh-lang"
+   ]
+  },
+  {
+   "id": "thien-bed-rat-dai_natureseye_pixabay-7618",
+   "nhom": "thien-ambient",
+   "ten_goc": "Autumn Sky Meditation",
+   "tac_gia": "NaturesEye",
+   "dai": "16:15",
+   "lufs": -16.1,
+   "gain_full": -14,
+   "gain_bookends": -6,
+   "giay_phep": "pixabay",
+   "trang": "https://pixabay.com/music/meditationspiritual-autumn-sky-meditation-7618/",
+   "mood": [
+    "thiền",
+    "nền rất dài"
+   ],
+   "mau": [
+    "tinh-lang"
+   ]
+  },
+  {
+   "id": "thien-sao-truc_miromax_pixabay-455457",
+   "nhom": "thien-ambient",
+   "ten_goc": "Meditation Flute",
+   "tac_gia": "MiroMaxMusic",
+   "dai": "4:32",
+   "lufs": -10.0,
+   "gain_full": -20,
+   "gain_bookends": -12,
+   "giay_phep": "pixabay",
+   "trang": "https://pixabay.com/music/meditationspiritual-meditation-flute-455457/",
+   "mood": [
+    "phương Đông",
+    "sáo",
+    "thiền"
+   ],
+   "mau": [
+    "tinh-lang"
+   ]
+  },
+  {
+   "id": "thien-zen-moment_macleod_ccby",
+   "nhom": "thien-ambient",
+   "ten_goc": "That Zen Moment",
+   "tac_gia": "Kevin MacLeod",
+   "dai": "10:02",
+   "lufs": -18.6,
+   "gain_full": -11,
+   "gain_bookends": -3,
+   "giay_phep": "cc-by",
+   "trang": "https://incompetech.com/music/royalty-free/music.html",
+   "truc_tiep": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/That%20Zen%20Moment.mp3",
+   "mood": [
+    "chiêm nghiệm",
+    "nền dài"
+   ],
+   "mau": [
+    "tinh-lang",
+    "hoc-thuat"
+   ]
+  },
+  {
+   "id": "thien-impromptu-01_macleod_ccby",
+   "nhom": "thien-ambient",
+   "ten_goc": "Meditation Impromptu 01",
+   "tac_gia": "Kevin MacLeod",
+   "dai": "3:33",
+   "lufs": -23,
+   "gain_full": -7,
+   "gain_bookends": 1,
+   "giay_phep": "cc-by",
+   "trang": "https://incompetech.com/music/royalty-free/music.html",
+   "truc_tiep": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Meditation%20Impromptu%2001.mp3",
+   "mood": [
+    "chiêm nghiệm",
+    "piano thoáng"
+   ],
+   "mau": [
+    "tinh-lang",
+    "hoc-thuat"
+   ]
+  },
+  {
+   "id": "thien-impromptu-02_macleod_ccby",
+   "nhom": "thien-ambient",
+   "ten_goc": "Meditation Impromptu 02",
+   "tac_gia": "Kevin MacLeod",
+   "dai": "4:15",
+   "lufs": -23,
+   "gain_full": -7,
+   "gain_bookends": 1,
+   "giay_phep": "cc-by",
+   "trang": "https://incompetech.com/music/royalty-free/music.html",
+   "truc_tiep": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Meditation%20Impromptu%2002.mp3",
+   "mood": [
+    "chiêm nghiệm"
+   ],
+   "mau": [
+    "tinh-lang"
+   ]
+  },
+  {
+   "id": "thien-impromptu-03_macleod_ccby",
+   "nhom": "thien-ambient",
+   "ten_goc": "Meditation Impromptu 03",
+   "tac_gia": "Kevin MacLeod",
+   "dai": "3:50",
+   "lufs": -23,
+   "gain_full": -7,
+   "gain_bookends": 1,
+   "giay_phep": "cc-by",
+   "trang": "https://incompetech.com/music/royalty-free/music.html",
+   "truc_tiep": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Meditation%20Impromptu%2003.mp3",
+   "mood": [
+    "chiêm nghiệm"
+   ],
+   "mau": [
+    "tinh-lang"
+   ]
+  },
+  {
+   "id": "thien-ngan_prettyjohn_pixabay-495676",
+   "nhom": "thien-ambient",
+   "ten_goc": "Meditation",
+   "tac_gia": "prettyjohn1",
+   "dai": "0:39",
+   "lufs": -10.5,
+   "gain_full": -20,
+   "gain_bookends": -12,
+   "giay_phep": "pixabay",
+   "trang": "https://pixabay.com/music/ambient-meditation-495676/",
+   "mood": [
+    "ngắn",
+    "intro bed",
+    "Reels"
+   ],
+   "mau": [
+    "tinh-lang"
+   ]
+  },
+  {
+   "id": "piano-hy-vong_macleod_ccby",
+   "nhom": "piano-tinh-lang",
+   "ten_goc": "Dreams Become Real",
+   "tac_gia": "Kevin MacLeod",
+   "dai": "6:50",
+   "lufs": -24.4,
+   "gain_full": -6,
+   "gain_bookends": 2,
+   "giay_phep": "cc-by",
+   "trang": "https://incompetech.com/music/royalty-free/music.html",
+   "truc_tiep": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Dreams%20Become%20Real.mp3",
+   "mood": [
+    "hy vọng",
+    "mở bài",
+    "kết bài"
+   ],
+   "mau": [
+    "tinh-lang",
+    "am-ap",
+    "hoc-thuat"
+   ]
+  },
+  {
+   "id": "piano-suy-tuong_macleod_ccby",
+   "nhom": "piano-tinh-lang",
+   "ten_goc": "Deliberate Thought",
+   "tac_gia": "Kevin MacLeod",
+   "dai": "2:58",
+   "lufs": -17.7,
+   "gain_full": -12,
+   "gain_bookends": -4,
+   "giay_phep": "cc-by",
+   "trang": "https://incompetech.com/music/royalty-free/music.html",
+   "truc_tiep": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Deliberate%20Thought.mp3",
+   "mood": [
+    "suy tưởng",
+    "bài giảng"
+   ],
+   "mau": [
+    "tinh-lang",
+    "hoc-thuat",
+    "hien-dai"
+   ]
+  },
+  {
+   "id": "acoustic-am-ap_macleod_ccby",
+   "nhom": "acoustic-am",
+   "ten_goc": "Wholesome",
+   "tac_gia": "Kevin MacLeod",
+   "dai": "6:04",
+   "lufs": -16.5,
+   "gain_full": -13,
+   "gain_bookends": -5,
+   "giay_phep": "cc-by",
+   "trang": "https://incompetech.com/music/royalty-free/music.html",
+   "truc_tiep": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Wholesome.mp3",
+   "mood": [
+    "ấm",
+    "kể chuyện",
+    "quảng bá"
+   ],
+   "mau": [
+    "am-ap",
+    "hien-dai"
+   ]
+  },
+  {
+   "id": "acoustic-cam-xuc_universfield_pixabay-232913",
+   "nhom": "acoustic-am",
+   "ten_goc": "Sentimental Acoustic Tune",
+   "tac_gia": "Universfield",
+   "dai": "1:39",
+   "lufs": -14.9,
+   "gain_full": -15,
+   "gain_bookends": -7,
+   "giay_phep": "pixabay",
+   "trang": "https://pixabay.com/music/acoustic-group-sentimental-acoustic-tune-for-emotional-scenes-232913/",
+   "mood": [
+    "cảm xúc",
+    "quảng bá"
+   ],
+   "mau": [
+    "am-ap"
+   ]
+  },
+  {
+   "id": "acoustic-guitar-diu_moonpub_pixabay-506572",
+   "nhom": "acoustic-am",
+   "ten_goc": "Gentle acoustic guitar melody",
+   "tac_gia": "Moonpub",
+   "dai": "1:18",
+   "lufs": -13.5,
+   "gain_full": -16,
+   "gain_bookends": -8,
+   "giay_phep": "pixabay",
+   "trang": "https://pixabay.com/music/acoustic-group-gentle-acoustic-guitar-melody-506572/",
+   "mood": [
+    "dịu",
+    "clip ngắn"
+   ],
+   "mau": [
+    "am-ap"
+   ]
+  },
+  {
+   "id": "acoustic-stinger-30s_universfield_pixabay-239071",
+   "nhom": "acoustic-am",
+   "ten_goc": "Relaxing Acoustic Guitar 30s",
+   "tac_gia": "Universfield",
+   "dai": "0:30",
+   "lufs": -15.7,
+   "gain_full": -14,
+   "gain_bookends": -6,
+   "giay_phep": "pixabay",
+   "trang": "https://pixabay.com/music/pulses-relaxing-acoustic-guitar-30s-239071/",
+   "mood": [
+    "30 giây",
+    "intro+outro vừa khít"
+   ],
+   "mau": [
+    "am-ap",
+    "hien-dai"
+   ]
+  },
+  {
+   "id": "soft-piano-nhe_andriih_pixabay-579821",
+   "nhom": "nang-luong-nhe",
+   "ten_goc": "Soft - Soft Music",
+   "tac_gia": "andriih",
+   "dai": "2:09",
+   "lufs": -20.7,
+   "gain_full": -9,
+   "gain_bookends": -1,
+   "giay_phep": "pixabay",
+   "trang": "https://pixabay.com/music/soft-house-soft-soft-music-579821/",
+   "mood": [
+    "sáng",
+    "nhẹ",
+    "Reels"
+   ],
+   "mau": [
+    "hien-dai"
+   ]
+  }
+ ],
+ "hieu_ung": [
+  {
+   "id": "whoosh-manh_universfield_pixabay-352756",
+   "nhom": "chuyen-canh",
+   "dai": "1.6s",
+   "tac_gia": "Universfield",
+   "trang": "https://pixabay.com/sound-effects/search/whoosh/",
+   "ghi_chu": "mảnh, kín đáo - mặc định cho thẻ chuyển phần",
+   "mau": [
+    "tinh-lang",
+    "am-ap",
+    "hien-dai",
+    "hoc-thuat"
+   ],
+   "giay_phep": "pixabay"
+  },
+  {
+   "id": "whoosh-cham_universfield_pixabay-567191",
+   "nhom": "chuyen-canh",
+   "dai": "3.1s",
+   "tac_gia": "Universfield",
+   "trang": "https://pixabay.com/sound-effects/search/whoosh/",
+   "ghi_chu": "chậm êm, chuyển phần lớn",
+   "mau": [
+    "tinh-lang",
+    "am-ap"
+   ],
+   "giay_phep": "pixabay"
+  },
+  {
+   "id": "whoosh-nhanh_universfield_pixabay-352855",
+   "nhom": "chuyen-canh",
+   "dai": "1.2s",
+   "tac_gia": "Universfield",
+   "trang": "https://pixabay.com/sound-effects/search/whoosh/",
+   "ghi_chu": "nhịp cắt nhanh của Reels",
+   "mau": [
+    "hien-dai"
+   ],
+   "giay_phep": "pixabay"
+  },
+  {
+   "id": "chuong-xoay-go_freesound_pixabay-33366",
+   "nhom": "chuong-thien",
+   "dai": "14.8s",
+   "tac_gia": "freesound_community",
+   "trang": "https://pixabay.com/sound-effects/search/singing%20bowl/",
+   "ghi_chu": "gõ ngân tự nhiên - mở đầu thực hành",
+   "mau": [
+    "tinh-lang"
+   ],
+   "giay_phep": "pixabay"
+  },
+  {
+   "id": "chuong-xoay-eb_freesound_pixabay-38746",
+   "nhom": "chuong-thien",
+   "dai": "12.6s",
+   "tac_gia": "freesound_community",
+   "trang": "https://pixabay.com/sound-effects/search/singing%20bowl/",
+   "ghi_chu": "nốt Eb tròn - điểm nhấn chiêm nghiệm",
+   "mau": [
+    "tinh-lang"
+   ],
+   "giay_phep": "pixabay"
+  },
+  {
+   "id": "chuong-xoay-ngan-dai_freesound_pixabay-55786",
+   "nhom": "chuong-thien",
+   "dai": "1:26",
+   "tac_gia": "freesound_community",
+   "trang": "https://pixabay.com/sound-effects/search/singing%20bowl/",
+   "ghi_chu": "ngân rất dài - kết bài thiền",
+   "mau": [
+    "tinh-lang"
+   ],
+   "giay_phep": "pixabay"
+  },
+  {
+   "id": "chime-mem-1_universfield_pixabay-146623",
+   "nhom": "nhan-do-hoa",
+   "dai": "1.4s",
+   "tac_gia": "Universfield",
+   "trang": "https://pixabay.com/sound-effects/search/chime/",
+   "ghi_chu": "chime mềm khi infographic hiện",
+   "mau": [
+    "tinh-lang",
+    "am-ap",
+    "hien-dai",
+    "hoc-thuat"
+   ],
+   "giay_phep": "pixabay"
+  },
+  {
+   "id": "chime-mem-2_universfield_pixabay-131438",
+   "nhom": "nhan-do-hoa",
+   "dai": "1.5s",
+   "tac_gia": "Universfield",
+   "trang": "https://pixabay.com/sound-effects/search/chime/",
+   "ghi_chu": "chime mềm, biến thể",
+   "mau": [
+    "tinh-lang",
+    "am-ap"
+   ],
+   "giay_phep": "pixabay"
+  },
+  {
+   "id": "pop-sach_dragon_pixabay-467466",
+   "nhom": "nhan-do-hoa",
+   "dai": "1.6s",
+   "tac_gia": "Dragon-Studio",
+   "trang": "https://pixabay.com/sound-effects/search/pop/",
+   "ghi_chu": "pop gọn khi từng mục danh sách hiện",
+   "mau": [
+    "hien-dai",
+    "am-ap"
+   ],
+   "giay_phep": "pixabay"
+  },
+  {
+   "id": "pop-nhe_humordome_pixabay-451232",
+   "nhom": "nhan-do-hoa",
+   "dai": "5s",
+   "tac_gia": "HumorDome",
+   "trang": "https://pixabay.com/sound-effects/search/pop/",
+   "ghi_chu": "nhiều click nhẹ trong một file, cắt lấy đoạn cần",
+   "mau": [
+    "hien-dai"
+   ],
+   "giay_phep": "pixabay"
+  }
+ ]
+}

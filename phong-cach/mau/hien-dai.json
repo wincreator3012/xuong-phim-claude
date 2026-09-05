@@ -1,0 +1,37 @@
+{
+ "ten": "Hiện đại",
+ "cam_giac": [
+  "rõ",
+  "sáng",
+  "năng động"
+ ],
+ "mo_ta": "Trắng xanh sạch, điểm nhấn xanh dương. Hợp công nghệ, kinh doanh, kỹ năng số, đào tạo doanh nghiệp.",
+ "theme_mac_dinh": "light",
+ "palettes": {
+  "light": {
+   "bg": "#F7F9FB",
+   "ink": "#14213D",
+   "inkSoft": "#5B6B85",
+   "accent": "#1F6FEB",
+   "line": "#D9E1EA"
+  },
+  "dark": {
+   "bg": "#0F172A",
+   "ink": "#E5E7EB",
+   "inkSoft": "#94A3B8",
+   "accent": "#60A5FA",
+   "line": "#273449"
+  }
+ },
+ "nhac": {
+  "nhom_uu_tien": [
+   "nang-luong-nhe",
+   "acoustic-am"
+  ],
+  "mode_bai_dai": "bookends",
+  "mode_clip_ngan": "full"
+ },
+ "hieu_ung": "vua",
+ "intro_giay": 5,
+ "_ghi_chu": "Mẫu phong cách: Claude chép 'palettes' sang brand/brand.json và ghi tên mẫu vào phong-cach/PHONG-CACH.md khi thiết lập. Đổi mã màu ở brand.json, không cần sửa file này."
+}

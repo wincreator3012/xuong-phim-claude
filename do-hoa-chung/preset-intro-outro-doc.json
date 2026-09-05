@@ -1,0 +1,32 @@
+{
+  "_ghi_chu": "Preset intro/outro khung dọc 9:16 cho Reels/Shorts. Clip ngắn thường vào thẳng nội dung nên intro dọc để 3-4 giây hoặc bỏ hẳn; outro dọc 5-6 giây, có QR thì 8-9 giây.",
+  "aspect": "doc",
+  "theme": "light",
+  "brandFile": "../../../brand/brand.json",
+  "outDir": "doc",
+  "assets": [],
+  "jobs": [
+    {
+      "comp": "Intro",
+      "out": "intro-doc.mp4",
+      "props": {
+        "title": "PLACEHOLDER - tên clip",
+        "subtitle": "PLACEHOLDER - chuỗi chương trình",
+        "durationInSeconds": 4
+      }
+    },
+    {
+      "comp": "Outro",
+      "out": "outro-doc.mp4",
+      "props": {
+        "headline": "PLACEHOLDER - thông điệp kết",
+        "ctaLines": ["PLACEHOLDER - lời mời hành động"],
+        "programName": "",
+        "contactLines": ["PLACEHOLDER - website"],
+        "qrFile": null,
+        "qrCaption": "Quét để đăng ký",
+        "durationInSeconds": 6
+      }
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+# Thứ tải/sinh lúc cài - không đưa lên repo
+tools/pylib/
+tools/models/*
+!tools/models/TAI-MODEL.md
+tools/.cai-dat.json
+tools/__pycache__/
+studio/node_modules/
+studio/public/brand/
+do-hoa-chung/bo-cuc/
+
+# Chất liệu tải về theo máy (danh mục nằm ở thu-vien/)
+nhac-nen/*
+!nhac-nen/README.md
+hieu-ung/*
+!hieu-ung/README.md
+
+# Logo và dự án riêng của từng người
+brand/logo/*
+!brand/logo/README.md
+du-an/*
+!du-an/_mau/
+du-an/_mau/.tam/
+du-an/_mau/xuat-*/
+
+# Rác hệ thống
+.DS_Store
+Thumbs.db
+_to_delete/
+.tam/

@@ -1,0 +1,42 @@
+{
+  "aspect": "ngang",
+  "fps": 30,
+  "theme": "light",
+  "fadeColor": "black",
+  "intro": "do-hoa/ngang/intro.mp4",
+  "outro": "do-hoa/ngang/outro.mp4",
+  "segments": [
+    {
+      "type": "video",
+      "src": "nguon/clip-chinh.mp4",
+      "in": 12.5,
+      "out": 95.0,
+      "snap": true,
+      "chapter": "Mở đầu",
+      "overlay": {"src": "do-hoa/ngang/bang-ten.webm", "at": 1.0}
+    },
+    {"type": "insert", "src": "do-hoa/ngang/info-3-diem.mp4"},
+    {
+      "type": "video",
+      "src": "nguon/clip-chinh.mp4",
+      "in": 130.0,
+      "out": 245.0,
+      "snap": true,
+      "chapter": "Nội dung chính",
+      "overlay": [
+        {"src": "do-hoa/ngang/pill-buoc-1.webm", "at": 8.0},
+        {"src": "do-hoa/ngang/pill-buoc-2.webm", "at": 41.5}
+      ],
+      "broll": [
+        {"src": "nguon/canh-lop-hoc.mp4", "at": 200.0, "duration": 6.0, "from": 3.0}
+      ]
+    }
+  ],
+  "music": {
+    "src": "nhac-nen/piano-tinh-lang/piano-suy-tuong_macleod_ccby.mp3",
+    "mode": "bookends",
+    "gainDb": -4,
+    "fadeIn": 2,
+    "fadeOut": 4
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "_ghi_chu": "Preset intro/outro khung ngang 16:9. Copy vào du-an/<x>/do-hoa/, sửa các PLACEHOLDER, xóa qrFile nếu không cần QR. Trường assets: file QR/hình cần copy vào studio trước khi render (đường dẫn tương đối so với file này).",
+  "aspect": "ngang",
+  "theme": "light",
+  "brandFile": "../../../brand/brand.json",
+  "outDir": "ngang",
+  "assets": [],
+  "jobs": [
+    {
+      "comp": "Intro",
+      "out": "intro.mp4",
+      "props": {
+        "title": "PLACEHOLDER - tên clip hoặc bài giảng",
+        "subtitle": "PLACEHOLDER - tên chuỗi chương trình",
+        "durationInSeconds": 6
+      }
+    },
+    {
+      "comp": "Outro",
+      "out": "outro.mp4",
+      "props": {
+        "headline": "PLACEHOLDER - thông điệp kết",
+        "ctaLines": ["PLACEHOLDER - lời mời hành động"],
+        "programName": "PLACEHOLDER - tên chương trình (bỏ trống nếu không có)",
+        "contactLines": ["PLACEHOLDER - website", "PLACEHOLDER - email hoặc điện thoại"],
+        "qrFile": null,
+        "qrCaption": "Quét để đăng ký",
+        "durationInSeconds": 8
+      }
+    }
+  ]
+}

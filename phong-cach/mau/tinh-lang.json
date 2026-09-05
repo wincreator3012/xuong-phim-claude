@@ -1,0 +1,37 @@
+{
+ "ten": "Tĩnh lặng",
+ "cam_giac": [
+  "điềm tĩnh",
+  "sâu",
+  "sạch"
+ ],
+ "mo_ta": "Giấy ngà và mực than, một điểm nhấn lục trầm. Nhiều khoảng trắng, chuyển động chậm. Hợp giáo dục chiêm nghiệm, tâm lý, chánh niệm, triết học, y khoa.",
+ "theme_mac_dinh": "light",
+ "palettes": {
+  "light": {
+   "bg": "#FAF7F1",
+   "ink": "#23282D",
+   "inkSoft": "#6E7278",
+   "accent": "#2F5D50",
+   "line": "#D8D2C6"
+  },
+  "dark": {
+   "bg": "#15181C",
+   "ink": "#F2EEE5",
+   "inkSoft": "#9AA0A6",
+   "accent": "#C7A97B",
+   "line": "#3A3F45"
+  }
+ },
+ "nhac": {
+  "nhom_uu_tien": [
+   "thien-ambient",
+   "piano-tinh-lang"
+  ],
+  "mode_bai_dai": "bookends",
+  "mode_clip_ngan": "full"
+ },
+ "hieu_ung": "tiet-che",
+ "intro_giay": 6,
+ "_ghi_chu": "Mẫu phong cách: Claude chép 'palettes' sang brand/brand.json và ghi tên mẫu vào phong-cach/PHONG-CACH.md khi thiết lập. Đổi mã màu ở brand.json, không cần sửa file này."
+}

@@ -1,0 +1,38 @@
+{
+  "aspect": "ngang",
+  "theme": "light",
+  "brandFile": "../../../brand/brand.json",
+  "outDir": "ngang",
+  "assets": [],
+  "jobs": [
+    {
+      "comp": "InfoList",
+      "out": "info-3-diem.mp4",
+      "props": {
+        "title": "Ba điểm chính",
+        "items": ["Điểm thứ nhất", "Điểm thứ hai", "Điểm thứ ba"]
+      }
+    },
+    {
+      "comp": "LowerThird",
+      "out": "bang-ten.webm",
+      "alpha": true,
+      "props": {
+        "name": "Tên người nói (lấy từ brand.json)",
+        "role": "Chức danh nguyên văn - đơn vị",
+        "durationInSeconds": 5
+      }
+    },
+    {
+      "comp": "Benefits",
+      "out": "pill-buoc-1.webm",
+      "alpha": true,
+      "props": {
+        "items": [{"label": "Bước 1: Quan sát", "revealAt": 0.3}],
+        "position": "right",
+        "showIndex": false,
+        "durationInSeconds": 5
+      }
+    }
+  ]
+}

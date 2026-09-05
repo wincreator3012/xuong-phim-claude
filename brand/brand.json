@@ -1,0 +1,26 @@
+{
+  "_huong_dan": "Thông tin thương hiệu dùng cho mọi đồ họa (intro, outro, bảng tên). Claude điền file này trong bước thiết lập (skill phim-thiet-lap) theo phong-cach/PHONG-CACH.md. Mỗi dự án vẫn có thể ghi đè trong job JSON của dự án đó.",
+  "name": "Tên của bạn",
+  "credentials": "",
+  "tagline": "Chức danh hoặc câu định vị ngắn",
+  "logoFile": null,
+  "logos": [],
+  "socialLine": "",
+  "contactLines": [],
+  "palettes": {
+    "light": {
+      "bg": "#FAF7F1",
+      "ink": "#23282D",
+      "inkSoft": "#6E7278",
+      "accent": "#2F5D50",
+      "line": "#D8D2C6"
+    },
+    "dark": {
+      "bg": "#15181C",
+      "ink": "#F2EEE5",
+      "inkSoft": "#9AA0A6",
+      "accent": "#C7A97B",
+      "line": "#3A3F45"
+    }
+  }
+}
