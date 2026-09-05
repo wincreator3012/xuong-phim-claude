@@ -54,6 +54,12 @@ Video của bạn được xử lý ngay trên máy bạn bằng ffmpeg trong m�
 
 Mã nguồn và tài liệu: MIT (xem `LICENSE`). Font Lora và Be Vietnam Pro: SIL Open Font License. Nhạc và hiệu ứng KHÔNG nằm trong repo; danh mục ghi rõ giấy phép từng track (Pixabay Content License, hoặc CC-BY 4.0 của Kevin MacLeod cần ghi công).
 
+## Tác giả
+
+Xưởng phim này do nhà giáo dục **Lương Dũng Nhân** xây dựng từ xưởng phim cá nhân đã vận hành thật, và chia sẻ lại hoàn toàn miễn phí để cộng đồng giáo dục cùng dùng. Website: [ldn.edu.vn](https://ldn.edu.vn). Email: hello@ldn.edu.vn.
+
+Nếu bạn dùng, chia sẻ lại hoặc giới thiệu repo này (bài viết, video, fork công khai...), một dòng ghi công dẫn về tác giả và nguồn gốc trên sẽ rất được trân trọng.
+
 ## Đóng góp
 
-Bạn dựng được clip tốt hơn nhờ một quy tắc mới, hay bắt được một lỗi? Mở issue hoặc pull request: sửa `skills/<tên>/SKILL.md` cho quy trình, `docs/BAI-HOC.md` cho bài học, `thu-vien/am-thanh.json` cho track mới (nhớ kiểm Content ID). Repo được khởi tạo bởi Lương Dũng Nhân từ xưởng phim cá nhân đã vận hành thật cùng Claude.
+Bạn dựng được clip tốt hơn nhờ một quy tắc mới, hay bắt được một lỗi? Mở issue hoặc pull request: sửa `skills/<tên>/SKILL.md` cho quy trình, `docs/BAI-HOC.md` cho bài học, `thu-vien/am-thanh.json` cho track mới (nhớ kiểm Content ID).
