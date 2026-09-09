@@ -31,6 +31,12 @@ export type BenefitsProps = {
   // van bi che la nho (xem docs/BAI-HOC.md).
   // Mac dinh 1 (khong doi so voi truoc).
   scale?: number;
+  // Khoang cach tu canh (top/bottom/left/right theo position) tinh theo
+  // PHAN TRAM chieu cao (top/bottom) hoac chieu rong (left/right) khung hinh
+  // (0-1) - dung khi mac dinh (sat canh) khong hop, vd can dat khoi pill
+  // o khoang 1/3 man hinh tu duoi len de tranh vung phu de burn-in o duoi
+  // cung. Bo trong thi dung mac dinh cu (sat canh, pad*0.75).
+  edgeInset?: number;
 };
 
 export const benefitsDefaults: BenefitsProps = {
@@ -57,12 +63,15 @@ export const Benefits: React.FC<BenefitsProps> = ({
   showIndex = true,
   wrap = false,
   scale = 1,
+  edgeInset,
 }) => {
   const palette = resolvePalette(theme, brand);
   const frame = useCurrentFrame();
   const {fps, durationInFrames} = useVideoConfig();
-  const {unit, isVertical, pad} = useLayout();
+  const {unit, isVertical, pad, width, height} = useLayout();
   const isSide = position === 'left' || position === 'right';
+  const vInset = edgeInset != null ? edgeInset * height : pad * 0.75;
+  const hInset = edgeInset != null ? edgeInset * width : pad * 0.7;
 
   const normalized = items.map((it, i) =>
     typeof it === 'string' ? {label: it, revealAt: undefined as number | undefined, i} : {...it, i},
@@ -82,10 +91,10 @@ export const Benefits: React.FC<BenefitsProps> = ({
           position: 'absolute',
           left: isSide ? undefined : 0,
           right: isSide ? undefined : 0,
-          top: position === 'top' ? pad * 0.75 : isSide ? 0 : undefined,
-          bottom: position === 'bottom' ? pad * 0.75 : isSide ? 0 : undefined,
-          ...(position === 'left' ? {left: pad * 0.7} : null),
-          ...(position === 'right' ? {right: pad * 0.7} : null),
+          top: position === 'top' ? vInset : isSide ? 0 : undefined,
+          bottom: position === 'bottom' ? vInset : isSide ? 0 : undefined,
+          ...(position === 'left' ? {left: hInset} : null),
+          ...(position === 'right' ? {right: hInset} : null),
           display: 'flex',
           flexDirection: isSide ? 'column' : 'row',
           flexWrap: isSide ? 'nowrap' : 'wrap',

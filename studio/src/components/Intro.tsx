@@ -2,7 +2,7 @@ import React from 'react';
 import {AbsoluteFill} from 'remotion';
 import {useLayout} from '../layout';
 import {Brand, DEFAULT_BRAND, ThemeName, resolvePalette} from '../theme';
-import {AccentLine, BrandBlock, Canvas, FadeUp, LogoRow} from '../common';
+import {AccentLine, BrandBlock, Canvas, FadeUp, LogoRow, QrPlate} from '../common';
 
 export type IntroProps = {
   title: string; // PLACEHOLDER: tên clip/bài giảng - NGẮN. Nếu cần xuống dòng, dùng
@@ -18,6 +18,10 @@ export type IntroProps = {
   // Các dòng nhỏ phía dưới description (vd "Tác giả: …", "Đơn vị xuất bản
   // và phát hành: …") - mỗi phần tử một dòng riêng, không tự ngắt.
   creditLines?: string[];
+  qrFile?: string | null; // file QR trong public/brand/ (đưa vào qua "assets" của job)
+  qrCaption?: string; // chú thích dưới QR
+  scheduleLabel?: string; // PLACEHOLDER: nhãn nhỏ phía trên lịch (vd "Lịch 5 chặng")
+  scheduleLines?: string[]; // PLACEHOLDER: các mốc ngày, nối bằng dấu ·
   theme: ThemeName;
   brand: Brand; // brand.logos: hàng 1-3 logo hiển thị đáy màn hình
   logoMono?: boolean; // ép logo đơn sắc; mặc định: theme tối = true
@@ -38,6 +42,10 @@ export const Intro: React.FC<IntroProps> = ({
   subtitle,
   description,
   creditLines,
+  qrFile,
+  qrCaption,
+  scheduleLabel,
+  scheduleLines,
   theme,
   brand,
   logoMono,
@@ -46,6 +54,8 @@ export const Intro: React.FC<IntroProps> = ({
   const palette = resolvePalette(theme, brand);
   const {pad, titleSize, subtitleSize, isVertical, unit, width} = useLayout();
   const mono = logoMono ?? theme === 'dark';
+  const hasQr = Boolean(qrFile);
+  const qrSize = isVertical ? unit * 22 : unit * 19;
 
   return (
     <Canvas palette={palette} fadeIn={0} fadeOut={20}>
@@ -53,11 +63,21 @@ export const Intro: React.FC<IntroProps> = ({
         style={{
           padding: pad,
           display: 'flex',
+          flexDirection: isVertical ? 'column' : 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: hasQr ? (isVertical ? unit * 5 : unit * 9) : 0,
+        }}
+      >
+      <div
+        style={{
+          display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
           textAlign: 'center',
           gap: titleSize * 0.55,
+          maxWidth: hasQr && !isVertical ? '68%' : '100%',
         }}
       >
         {subtitle ? (
@@ -119,6 +139,46 @@ export const Intro: React.FC<IntroProps> = ({
         <FadeUp from={48} duration={26} distance={0}>
           <AccentLine palette={palette} from={0} />
         </FadeUp>
+        {scheduleLines?.length ? (
+          <FadeUp from={52} duration={26}>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: unit * 0.5,
+              }}
+            >
+              {scheduleLabel ? (
+                <div
+                  style={{
+                    fontSize: subtitleSize * 0.55,
+                    fontWeight: 600,
+                    color: palette.accent,
+                    letterSpacing: '0.12em',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  {scheduleLabel}
+                </div>
+              ) : null}
+              <div
+                style={{
+                  fontFamily: 'Be Vietnam Pro',
+                  fontWeight: 400,
+                  fontSize: subtitleSize * 0.68,
+                  color: palette.inkSoft,
+                  letterSpacing: '0.02em',
+                  maxWidth: width * (isVertical ? 0.9 : 0.62),
+                  textAlign: 'center',
+                  lineHeight: 1.5,
+                }}
+              >
+                {scheduleLines.join(' · ')}
+              </div>
+            </div>
+          </FadeUp>
+        ) : null}
         {creditLines?.length ? (
           <FadeUp from={56} duration={26}>
             <div
@@ -144,6 +204,17 @@ export const Intro: React.FC<IntroProps> = ({
                 </div>
               ))}
             </div>
+          </FadeUp>
+        ) : null}
+      </div>
+        {hasQr ? (
+          <FadeUp from={64} duration={30} distance={18}>
+            <QrPlate
+              qrFile={qrFile as string}
+              qrCaption={qrCaption}
+              palette={palette}
+              size={qrSize}
+            />
           </FadeUp>
         ) : null}
       </AbsoluteFill>

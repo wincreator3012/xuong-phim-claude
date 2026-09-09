@@ -7,9 +7,13 @@
 **Intro** (mặc định 6 giây):
 - `title`: tên clip/bài giảng (placeholder chính)
 - `subtitle`: tên chuỗi chương trình, hiện thành kicker phía trên
+- `description`: một dòng mô tả phụ (vd tên đầy đủ + tác giả của một cuốn sách) - tách khỏi `title` để tránh xuống dòng vô duyên giữa từ khi tên dài
+- `creditLines`: mảng dòng credit như "Tác giả: ...", "Đơn vị xuất bản: ..." - mỗi dòng hiện riêng một nhịp
 - `brand.logos`: hàng 1-3 logo (file nằm trong `brand/logo/` ở gốc, tự đồng bộ khi render); mỗi logo có thể là tên file hoặc `{"file": "...", "scale": 0.85}` khi cần chỉnh cỡ riêng
 - `theme`: "light" / "dark"; theme tối tự chuyển logo về đơn sắc kem (`logoMono: false` nếu muốn giữ màu gốc)
 - `showBrandName: true` khi logo không chứa tên người
+- `qrFile` + `qrCaption`: mã QR (dùng chung cách với Outro bên dưới) - đặt QR ngay trên thẻ tiêu đề khi muốn người xem quét ngay từ đầu clip
+- `scheduleLabel` + `scheduleLines`: nhãn nhỏ + các mốc ngày (nối bằng dấu ·) - dùng khi chương trình có nhiều buổi/chặng và muốn liệt kê lịch ngay trên thẻ tiêu đề
 
 **Outro** (mặc định 8 giây, có QR nên để 9-10 giây cho kịp quét):
 - `headline`: thông điệp kết (placeholder chính)
@@ -17,7 +21,10 @@
 - `programName`: tên chương trình đang mở đăng ký (chữ nhấn màu accent)
 - `contactLines`: web, email, điện thoại - mỗi mục một dòng
 - `qrFile` + `qrCaption`: mã QR đăng ký (bỏ trống nếu không cần - bố cục tự dồn về giữa). QR theo dự án: đưa file PNG qua trường `"assets"` của job, hoặc đưa Claude đường link form để tạo QR tại chỗ
+- `scheduleLabel` + `scheduleLines`: nhãn nhỏ + các mốc ngày (vd ["Chặng 2 - 18/9", "Chặng 3 - 9/10"], nối bằng dấu ·) - hiện lịch các buổi/chặng tiếp theo ngay trên outro
 - `showTagline: false` để ẩn tagline dưới logo
+
+`qrFile`/`qrCaption` và `scheduleLabel`/`scheduleLines` dùng CHUNG cho cả Intro lẫn Outro (component `QrPlate` trong `common.tsx`) - đặt ở Intro khi muốn người xem quét/thấy lịch ngay từ đầu, ở Outro khi muốn nhắc lại lúc kết thúc, hoặc cả hai nếu clip dài.
 
 ## Quy tắc vị trí intro theo loại clip
 

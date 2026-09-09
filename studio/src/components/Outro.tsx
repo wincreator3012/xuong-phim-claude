@@ -1,8 +1,8 @@
 import React from 'react';
-import {AbsoluteFill, Img, staticFile} from 'remotion';
+import {AbsoluteFill} from 'remotion';
 import {useLayout} from '../layout';
-import {Brand, DEFAULT_BRAND, Palette, ThemeName, resolvePalette} from '../theme';
-import {AccentLine, Canvas, FadeUp, LogoRow} from '../common';
+import {Brand, DEFAULT_BRAND, ThemeName, resolvePalette} from '../theme';
+import {AccentLine, Canvas, FadeUp, LogoRow, QrPlate} from '../common';
 
 export type OutroProps = {
   headline?: string; // PLACEHOLDER: thông điệp kết
@@ -13,6 +13,8 @@ export type OutroProps = {
   qrCaption?: string; // chú thích dưới QR
   theme: ThemeName;
   brand: Brand;
+  scheduleLabel?: string; // PLACEHOLDER: nhãn nhỏ phía trên lịch (vd "Lịch 5 chặng")
+  scheduleLines?: string[]; // PLACEHOLDER: các mốc ngày (vd ["Chặng 2 - 18/9", "Chặng 3 - 9/10"]) - nối bằng dấu · 
   logoMono?: boolean;
   showTagline?: boolean;
   durationInSeconds?: number; // có QR nên để ≥9s cho người xem kịp quét
@@ -31,49 +33,6 @@ export const outroDefaults: OutroProps = {
   durationInSeconds: 8,
 };
 
-const QrPlate: React.FC<{
-  qrFile: string;
-  qrCaption?: string;
-  palette: Palette;
-  size: number;
-}> = ({qrFile, qrCaption, palette, size}) => (
-  <div
-    style={{
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      gap: size * 0.09,
-    }}
-  >
-    <div
-      style={{
-        backgroundColor: '#FFFFFF',
-        padding: size * 0.09,
-        borderRadius: size * 0.06,
-        border: `1.5px solid ${palette.line}`,
-        display: 'flex',
-      }}
-    >
-      <Img
-        src={staticFile(`brand/${qrFile}`)}
-        style={{width: size, height: size, objectFit: 'contain'}}
-      />
-    </div>
-    {qrCaption ? (
-      <div
-        style={{
-          fontSize: size * 0.115,
-          fontWeight: 500,
-          color: palette.inkSoft,
-          letterSpacing: '0.08em',
-        }}
-      >
-        {qrCaption}
-      </div>
-    ) : null}
-  </div>
-);
-
 export const Outro: React.FC<OutroProps> = ({
   headline,
   ctaLines,
@@ -81,6 +40,8 @@ export const Outro: React.FC<OutroProps> = ({
   contactLines,
   qrFile,
   qrCaption,
+  scheduleLabel,
+  scheduleLines,
   theme,
   brand,
   logoMono,
@@ -100,7 +61,7 @@ export const Outro: React.FC<OutroProps> = ({
         flexDirection: 'column',
         alignItems: 'center',
         textAlign: 'center',
-        gap: bodySize * 0.95,
+        gap: bodySize * 0.62,
         maxWidth: '100%',
       }}
     >
@@ -136,6 +97,45 @@ export const Outro: React.FC<OutroProps> = ({
           </div>
         </FadeUp>
       ))}
+      {scheduleLines?.length ? (
+        <FadeUp from={52} duration={26}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: bodySize * 0.28,
+            }}
+          >
+            {scheduleLabel ? (
+              <div
+                style={{
+                  fontSize: bodySize * 0.6,
+                  fontWeight: 600,
+                  color: palette.accent,
+                  letterSpacing: '0.12em',
+                  textTransform: 'uppercase',
+                }}
+              >
+                {scheduleLabel}
+              </div>
+            ) : null}
+            <div
+              style={{
+                fontSize: bodySize * 0.72,
+                fontWeight: 400,
+                color: palette.inkSoft,
+                letterSpacing: '0.02em',
+                maxWidth: '92%',
+                textAlign: 'center',
+                lineHeight: 1.5,
+              }}
+            >
+              {scheduleLines.join(' · ')}
+            </div>
+          </div>
+        </FadeUp>
+      ) : null}
       {programName || contacts.length ? (
         <FadeUp from={58} duration={28}>
           <div
@@ -143,8 +143,8 @@ export const Outro: React.FC<OutroProps> = ({
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              gap: bodySize * 0.42,
-              marginTop: bodySize * 0.5,
+              gap: bodySize * 0.3,
+              marginTop: bodySize * 0.22,
             }}
           >
             {programName ? (

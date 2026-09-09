@@ -147,6 +147,50 @@ export const LogoRow: React.FC<{
   );
 };
 
+// Khối mã QR: nền trắng bo góc + chú thích dưới - dùng chung cho Intro/Outro
+export const QrPlate: React.FC<{
+  qrFile: string;
+  qrCaption?: string;
+  palette: Palette;
+  size: number;
+}> = ({qrFile, qrCaption, palette, size}) => (
+  <div
+    style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      gap: size * 0.09,
+    }}
+  >
+    <div
+      style={{
+        backgroundColor: '#FFFFFF',
+        padding: size * 0.09,
+        borderRadius: size * 0.06,
+        border: `1.5px solid ${palette.line}`,
+        display: 'flex',
+      }}
+    >
+      <Img
+        src={staticFile(`brand/${qrFile}`)}
+        style={{width: size, height: size, objectFit: 'contain'}}
+      />
+    </div>
+    {qrCaption ? (
+      <div
+        style={{
+          fontSize: size * 0.115,
+          fontWeight: 500,
+          color: palette.inkSoft,
+          letterSpacing: '0.08em',
+        }}
+      >
+        {qrCaption}
+      </div>
+    ) : null}
+  </div>
+);
+
 // Khối thương hiệu: logo (nếu có) + tên + chức danh
 export const BrandBlock: React.FC<{
   brand: Brand;

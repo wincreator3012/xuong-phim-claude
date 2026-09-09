@@ -48,6 +48,8 @@ Xưởng này được rút ra từ hơn một tháng dựng clip thật (bài g
 
 **Hook trước intro** không chỉ cho clip ngắn; bài dài mà câu mở là câu chốt mạnh cũng nên tách hook làm segment đầu, intro là `insert` ngay sau.
 
+**Kiểm cropFocus của khung dọc bằng khung hình đang có cử chỉ tay, không chỉ khung tay để yên.** Tiêu chí đúng không phải "mặt đã giữa khung" mà là "toàn thân/cử chỉ còn đủ trong khung" - một giá trị cropFocus có thể đúng về mặt giữa khung mà vẫn cắt mất tay/cùi chỏ nếu người nói đang khoát tay rộng.
+
 **Pill ở `position:'bottom'` bị hiểu lầm là phụ đề** khi nhiều pill nối tiếp trên clip dài; ưu tiên `left`/`right` khi người nói ở giữa khung. Từ 3 mục trở lên, xuất thử một khung hình để xem người nói có bị đè trước khi chọn vị trí.
 
 **Tối thiểu 5 giây cảnh quay chính giữa hai thẻ toàn màn hình**; dày hơn thì đổi sang overlay bán trong suốt.
@@ -64,7 +66,9 @@ Xưởng này được rút ra từ hơn một tháng dựng clip thật (bài g
 
 **Mọi component mới phải commit file nguồn về máy ngay sau khi viết**; sandbox đám mây mất khi hết phiên, một component đã mất vì quên bước này.
 
-**Alpha của webm VP8: ffprobe báo `yuv420p` ngay cả khi file có alpha thật**; kiểm bằng `alpha_mode=1` trong tag hoặc ép `-c:v libvpx` khi decode để test.
+**Overlay Benefits nhiều mục tích lũy dần thành một khối lớn - kiểm ở trạng thái tích lũy ĐẦY ĐỦ, không chỉ khung hình vừa hiện mục đầu.** Mục cũ không biến mất khi mục mới xuất hiện, chỉ thu nhỏ/mờ đi; với cảnh quay tĩnh một khuôn mặt cố định, khối pill tích lũy có thể che đúng vùng mặt dù từng mục riêng lẻ không che gì. Luôn chồng thử lên khung hình thật (không phải nền màu đặc) ở đúng thời điểm đã tích lũy đủ tất cả các mục trước khi coi là xong. Quy tắc ưu tiên cứng cho mọi overlay/pill đè lên video có người nói: (1) không che cả người lẫn mặt nếu tránh được; (2) buộc phải đánh đổi thì tuyệt đối không che mặt, có thể che một phần thân người. Khung dọc cần cả pill lẫn phụ đề cùng lúc: dùng prop `edgeInset` của `Benefits` để neo pill cách đáy khung một khoảng tùy chỉnh, tránh chồng lấn phụ đề burn-in ở sát đáy.
+
+**Alpha của webm VP8: ffprobe báo `yuv420p` ngay cả khi file có alpha thật**; kiểm bằng `alpha_mode=1` trong tag hoặc ép `-c:v libvpx` khi decode để test. Bẫy này chỉ xảy ra khi TỰ TAY soạn lệnh ffmpeg để xem/test - pipeline overlay chính thức của `assemble.py` đã có sẵn flag đúng.
 
 **Render alpha webm dài rất chậm**; chia thành nhiều overlay ngắn độc lập rồi truyền list vào `overlay` của một segment.
 
@@ -79,6 +83,8 @@ Xưởng này được rút ra từ hơn một tháng dựng clip thật (bài g
 ## Về hạ tầng
 
 **`concat()` và `finalize()` không có resume như `build_parts()`**; bài dài (~10 phút) dễ vượt 180 giây lặp lại mà không tiến triển. Cách thoát: chia đôi danh sách part, xử lý từng nửa, ghép `-c copy`; hoặc khi `.tam/body.mp4` và `.tam/mix.wav` đã hợp lệ thì chạy thẳng hai lệnh ffmpeg còn lại của finalize thay vì gọi lại `run()`. Preset `ultrafast` chỉ là giải pháp tình thế: file nặng gấp 3.
+
+**Burn phụ đề bằng `subtitles=...:force_style='Key1=Val1,Key2=Val2,...'` không đáng tin khi truyền nhiều key cùng dấu phẩy** - libass có thể chỉ áp key đầu tiên hoặc rơi về mặc định (Arial/16/MarginV=10) một cách im lặng, không báo lỗi. Đáng tin hơn: sinh file `.ass` riêng có khối `[Script Info]` khai đúng `PlayResX`/`PlayResY` bằng độ phân giải thật của video xuất, và khối `[V4+ Styles]` khai đủ font/cỡ chữ/màu/`MarginV`, rồi burn bằng `ass=file.ass` thay vì `subtitles=...:force_style=...`. Thiếu `PlayResX`/`PlayResY`, libass tự giả định một độ phân giải thấp rồi nhân tỷ lệ ngược lại - giá trị FontSize/MarginV không còn là pixel thật, gây mập mờ khi tinh chỉnh.
 
 **Font tiếng Việt cho phụ đề burn-in phải cài trên đúng máy chạy ffmpeg** (`fc-match` kiểm); tải từ `raw.githubusercontent.com/google/fonts/main/ofl/bevietnampro/` vào `~/.fonts` rồi `fc-cache -f`.
 
