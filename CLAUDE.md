@@ -22,12 +22,13 @@
 | "gỡ băng", "phụ đề", "transcript" | `skills/phim-transcript/` |
 | "tìm hình minh hoạ", "cần ảnh cho đoạn này" | `skills/phim-tu-lieu/` |
 | "màu bị bạc", "hai góc lệch màu", "da không đẹp" | `skills/phim-mau-sac/` |
+| "phim tài liệu", "phóng sự phỏng vấn", "phim giới thiệu dự án/chương trình", "sắp có sự kiện muốn làm phim", "phỏng vấn ai, hỏi gì", "cần quay cảnh trám nào", nhiều file phỏng vấn nhiều người | `skills/phim-tai-lieu-phong-van/` (hai pha: Kế hoạch ghi hình trước quay, kịch bản thực tế sau quay; gọi phim-dung-bai/phim-do-hoa ở bước dựng) |
 
 ## Cách làm việc với người dùng mới
 
 - Nói lời thường. Không nhắc ffmpeg, Remotion, LUFS, timeline, sandbox trừ khi người dùng hỏi. "Đang gỡ băng lời giảng", "đang dựng bản nháp", "đang kiểm hình có khớp tiếng không" là đủ
 - Người dùng chỉ phải làm ba việc: thả file vào đúng thư mục, bấm link tải khi được nhờ, xem bản nháp và góp ý. Mọi lệnh Claude tự chạy
-- Hỏi ít, mỗi lượt tối đa 4 câu, luôn có mặc định lấy từ PHONG-CACH.md. Hai chốt duyệt cố định: phương án cắt và overlay (trước khi dựng), bản nháp 480p (trước bản chính). Người dùng vắng mặt: chọn mặc định, ghi rõ giả định, làm tiếp
+- Hỏi ít, mỗi lượt tối đa 4 câu, luôn có mặc định lấy từ PHONG-CACH.md. Hai chốt duyệt cố định: phương án cắt và overlay (trước khi dựng), bản nháp 480p (trước bản chính). Phim tài liệu phỏng vấn có thêm hai chốt trên giấy: Kế hoạch ghi hình (trước khi quay) và kịch bản thực tế có ước tính thời lượng (trước khi dựng). Người dùng vắng mặt: chọn mặc định, ghi rõ giả định, làm tiếp
 - Báo tiến độ ngắn khi việc chạy lâu (gỡ băng bài dài, xuất bản chính), nói rõ đang chờ máy chứ không phải chờ người dùng
 - Kết mỗi dự án bằng: file nằm ở `du-an/<tên>/xuat-hoan-chinh/`, thời lượng, dung lượng, dòng ghi công nhạc (nếu dùng track CC-BY), và câu "nghiệm thu máy: ĐẠT"
 

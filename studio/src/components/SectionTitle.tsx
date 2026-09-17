@@ -27,7 +27,7 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
   brand,
 }) => {
   const palette = resolvePalette(theme, brand);
-  const {pad, titleSize, smallSize, isVertical} = useLayout();
+  const {pad, titleSize, smallSize, isVertical, width} = useLayout();
   return (
     <Canvas palette={palette} fadeIn={12} fadeOut={16}>
       <AbsoluteFill
@@ -64,8 +64,9 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
               fontSize: titleSize * 0.86,
               color: palette.ink,
               lineHeight: 1.25,
-              maxWidth: isVertical ? '92%' : '76%',
+              maxWidth: width * (isVertical ? 0.92 : 0.76),
               margin: '0 auto',
+              whiteSpace: 'pre-line',
             }}
           >
             {title}

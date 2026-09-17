@@ -5,3 +5,4 @@ Dự án thật tạo cạnh thư mục này, ví dụ `du-an/bai-1/`, chỉ c�
 - `timeline.json` ở đây là ví dụ đầy đủ các trường hay dùng (schema chi tiết trong docstring `tools/assemble.py`)
 - `do-hoa/job-do-hoa.json` là ví dụ job render đồ họa (intro/outro nên bắt đầu từ preset `do-hoa-chung/` thay vì file này)
 - Hai hệ mốc thời gian: `in`/`out`/`broll.at` tính trong FILE NGUỒN; `overlay.at` tính từ ĐẦU ĐOẠN đã cắt
+- Phim tài liệu phỏng vấn nhiều nhân vật có cấu trúc riêng (nguồn chia theo loại, năm file hồ sơ đi qua nhiều phiên): xem `tai-lieu-phong-van/GHI-CHU.md` cạnh đây

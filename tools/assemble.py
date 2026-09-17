@@ -61,9 +61,9 @@ FPS_DEFAULT = 30
 SIZES = {"ngang": (1920, 1080), "doc": (1080, 1920)}
 PREVIEW_SIZES = {"ngang": (854, 480), "doc": (480, 854)}
 
-# --- Chống lệch hình-tiếng (bản vá 2026-09-05) --------------------------------
+# --- Chống lệch hình-tiếng (bản vá 2026-09-05, 2026-09-17) --------------------
 # Đổi TOOL_VERSION mỗi khi sửa logic encode → mọi cache .sig cũ tự vô hiệu.
-TOOL_VERSION = "2026-09-05.antidrift-1"
+TOOL_VERSION = "2026-09-17.antidrift-2"
 AV_TOL = 0.06       # hình và tiếng lệch nhau quá 2 khung hình (30fps) là LỖI
 DUR_TOL = 0.15      # part dài/ngắn hơn dự kiến quá mức này là LỖI
 
@@ -768,10 +768,29 @@ class Assembler:
         return t_cursor
 
     def concat(self, expected):
-        """Ghép các part bằng concat -c copy. TRƯỚC khi ghép: kiểm từng part
-        hình = tiếng. SAU khi ghép: body phải = tổng part và hình = tiếng.
-        Không còn tự 'encode lại' để che lệch - muốn encode lại phải bật
-        --ep-encode-lai một cách có ý thức, và kết quả vẫn bị kiểm."""
+        """Ghép các part bằng GIẢI MÃ + MÃ HOÁ LẠI một lần (hình + tiếng).
+        TRƯỚC khi ghép: kiểm từng part hình = tiếng. SAU khi ghép: body phải
+        = tổng part và hình = tiếng.
+
+        Bản vá 2026-09-17 (xem docs/BAI-HOC.md, mục "Về hạ tầng"): KHÔNG còn
+        dùng '-f concat -c copy' để ghép, dù nhanh và không giảm chất lượng, vì
+        gây lệch hình-tiếng thật ở MỌI ranh giới đoạn - không phải lỗi lý thuyết:
+        - AAC có độ trễ mào đầu bộ mã hoá (encoder priming, ~1 khung/1024 mẫu
+          ở 48kHz ≈ 21ms), ghi bằng edit-list (elst) trong mỗi part.mp4.
+        - '-f concat -c copy' đọc gói thô, KHÔNG tôn trọng elst: nó dịch TOÀN
+          BỘ hình muộn đi ~21ms so với tiếng (đo được: part tự nó hình=tiếng=0
+          nhưng body ghép ra có start_time hình=0.021, tiếng=0.000), và chèn
+          một gói tiếng ngắn/trùng dấu thời gian tại đúng mỗi ranh giới đoạn.
+        - check_av() (so khớp TỔNG thời lượng) không bắt được vì tổng vẫn đúng
+          - chỉ điểm NỐI mới lệch, dưới AV_TOL (0.06s) nên không báo lỗi, dù
+          người xem tinh ý (đặc biệt với cảnh phỏng vấn cần khớp khẩu hình)
+          vẫn thấy rõ.
+        Giải mã + mã hoá lại (bộ lọc làm việc trên khung/mẫu ĐÃ áp elst đúng,
+        không phụ thuộc gói thô) loại bỏ hoàn toàn hai lỗi trên - đã kiểm
+        chứng bằng thử nghiệm tách biệt trước khi vá. Cái giá là một lượt mã
+        hoá hình nữa (chậm hơn, giảm một bậc chất lượng khó nhận ra ở crf đã
+        dùng) - chấp nhận được vì đổi lại khớp hình-tiếng chính xác, ưu tiên
+        cao hơn tốc độ cho nội dung phỏng vấn."""
         # Kiểm từng part (kể cả part lấy từ cache) - in bảng chẩn đoán nếu có lệch
         rows, bad = [], []
         for p in self.parts:
@@ -797,21 +816,11 @@ class Assembler:
                 f.write("file '" + os.path.abspath(p).replace("'", r"'\''") + "'\n")
         body = os.path.join(self.tmp, "body.mp4")
         sh(["ffmpeg", "-hide_banner", "-y", "-f", "concat", "-safe", "0",
-            "-i", lst, "-c", "copy", body])
-        ok = check_av(body, total_parts, label="body (sau concat copy)",
-                      raise_on_fail=False, dur_tol=0.1 + 0.01 * len(self.parts))
-        if not ok:
-            if not getattr(self, "allow_reencode", False):
-                raise RuntimeError("[NGHIỆM THU] concat copy cho body lệch dù từng part đều đạt → "
-                                   "các part không đồng nhất tham số (fps/timescale/codec?). "
-                                   "Xem lại enc_args; chỉ dùng --ep-encode-lai khi đã hiểu nguyên nhân.")
-            print("  ! --ep-encode-lai: encode lại body (chậm, chất lượng giảm một bậc)", flush=True)
-            sh(["ffmpeg", "-hide_banner", "-y", "-f", "concat", "-safe", "0",
-                "-i", lst, "-vf", f"fps={self.fps}", "-af",
-                "aresample=async=1:first_pts=0,aformat=sample_rates=48000:channel_layouts=stereo",
-                "-t", f"{total_parts:.3f}"] + self.enc_args() + [body])
-            check_av(body, total_parts, label="body (sau encode lại)",
-                     dur_tol=0.1 + 0.01 * len(self.parts))
+            "-i", lst, "-vf", f"fps={self.fps}", "-af",
+            "aresample=async=1:first_pts=0,aformat=sample_rates=48000:channel_layouts=stereo",
+            "-t", f"{total_parts:.3f}"] + self.enc_args() + [body])
+        check_av(body, total_parts, label="body (sau ghép + mã hoá lại)",
+                 dur_tol=0.1 + 0.01 * len(self.parts))
         return body
 
     def finalize(self, body):
@@ -945,14 +954,14 @@ def main():
     ap.add_argument("--kiem-tra", action="store_true",
                     help="chỉ kiểm timeline (file, mốc thời gian, overlay/B-roll), không dựng")
     ap.add_argument("--ep-encode-lai", action="store_true",
-                    help="cho phép encode lại body khi concat copy lệch (mặc định: DỪNG và báo)")
+                    help="(không còn tác dụng - từ 2026-09-17 concat() luôn giải mã + mã hoá lại"
+                         " để chống lệch hình-tiếng; giữ cờ này lại chỉ để không vỡ lệnh gọi cũ)")
     args = ap.parse_args()
 
     tl_path = args.timeline if os.path.isabs(args.timeline) else os.path.join(args.project, args.timeline)
     with open(tl_path, encoding="utf-8") as f:
         timeline = json.load(f)
     asm = Assembler(args.project, timeline, args.preview, args.out)
-    asm.allow_reencode = args.ep_encode_lai
     if args.kiem_tra:
         asm.validate_timeline()
         return

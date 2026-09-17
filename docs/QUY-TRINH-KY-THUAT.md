@@ -16,6 +16,7 @@
 | Hệ màu sắc | `tools/mau-sac.py kham\|soi` + đơn màu `du-an/<x>/mau-sac.json` mà `assemble.py` tự áp | skill phim-mau-sac; HDR (color_transfer smpte2084/arib-std-b67) bắt buộc tonemap; đa số kết luận đạt-không-chỉnh |
 | Bài giảng có slide (5 bố cục) | `tools/slide-nguon.py`, `tools/slide-khop.py`, `do-hoa-chung/bo-cuc/` (sinh bởi `bo-cuc-slide.py`, màu theo brand.json), trường `layout`/`slide` trong timeline | skill phim-bai-giang-slide |
 | Multicam (2-3 góc, podcast) | `tools/multicam-khop.py`, `tools/multicam-dan.py`, trường `audioSrc`/`audioIn` trong timeline | skill phim-multicam |
+| Phim tài liệu phỏng vấn (nhiều nhân vật, dự án/sự kiện) | `skills/phim-tai-lieu-phong-van/` + mẫu 5 file hồ sơ trong `references/mau-ho-so.md`, mẫu thư mục `du-an/_mau/tai-lieu-phong-van/` | khi user mô tả sự kiện sắp quay (Pha 1) hoặc thả nhiều file phỏng vấn nhiều người (Pha 2); mục "Phim tài liệu phỏng vấn" |
 | Cổng nghiệm thu tự động | `tools/nghiem-thu.py video\|transcript\|do-hoa`, `assemble.py --kiem-tra`, `render-do-hoa.mjs` tự đo | BẮT BUỘC trước khi báo "xong" |
 | Dự án mẫu | `du-an/_mau/` (cấu trúc, timeline mẫu, job đồ họa mẫu) | tham khảo cấu trúc; dự án thật tạo cạnh nó |
 | Nguồn skill | `skills/phim-*/SKILL.md` | đọc SKILL.md tương ứng khi việc khớp mô tả; sửa skill thì sửa ở đây |
@@ -120,3 +121,14 @@ Nguồn theo `nguon/<góc>/<file>`: thư mục chứa `toan` là góc toàn, b�
 | Người nói, session, dàn góc | `python3 tools/multicam-dan.py "du-an/<x>" --transcript "<tên>" [--che-do podcast\|bai-giang] [--phut 8]` → `multicam/DAN-GOC.md`, `timeline-multicam-nhap.json`, `job-session.json` |
 
 Bài giảng một người nhiều góc phải truyền `--che-do bai-giang`. File có `tin_cay` < 1.1 hay `khop_r` < 0.2 phải soi khung hình hai góc tại cùng mốc trục.
+
+## Phim tài liệu phỏng vấn (skill phim-tai-lieu-phong-van)
+
+Khác bài giảng một người: lời đến từ nhiều file quay riêng, ý nghĩa nằm ở cách dệt các giọng theo chủ đề. Hai pha, hai cổng duyệt trên giấy trước khi dựng.
+
+| Pha | Việc | File trong `du-an/<x>/` |
+|---|---|---|
+| 1 - Trước quay | mô tả/kịch bản dự kiến → `HO-SO-PHIM.md` → định hướng ba hồi (vấn đề - can thiệp - chuyển hoá), câu hỏi neo, cách kết → nhân vật + 5-8 câu hỏi mỗi người → danh mục cảnh trám (mã, chủ thể, cỡ, chuyển động, tối thiểu 10s, công dụng thiết lập/minh hoạ/che cắt/thở, phục vụ câu nào) → checklist ngày quay | `KE-HOACH-GHI-HINH.md` = Cổng duyệt 1 |
+| 2 - Sau quay | `mediainfo.py`; transcript + `nghiem-thu.py transcript`; `ffprobe` thời lượng thật từng cảnh trám + lưới khung hình; khám màu → `KIEM-KE-NGUON.md` (đối chiếu kế hoạch ↔ thực tế) → chọn soundbite → `KICH-BAN-THUC-TE.md` (từng dòng dựng có mốc, tổng ước tính, hai phương án nếu vượt 30%, quyết định cần user) = Cổng duyệt 2 → timeline theo phim-dung-bai → nháp `--out "<x>-<khung>-nhapN"` → `SO-GOP-Y.md` → bản chính | `KIEM-KE-NGUON.md`, `KICH-BAN-THUC-TE.md`, `SO-GOP-Y.md`, `do-hoa/job/` |
+
+Nguồn chia theo loại: `nguon/phong-van/`, `nguon/canh-tram/`, `nguon/su-kien/`, `nguon/anh/`. Mọi nháp đặt tên tường minh có số ngay từ nháp đầu (tên mặc định của `assemble.py` sẽ ghi đè lẫn nhau giữa các vòng). Quy tắc thể loại và định lượng cảnh trám (một cảnh dùng được cho mỗi 20-30 giây phim, quay gấp 2-3 danh mục, giữ máy tối thiểu 10 giây, ba cỡ mỗi chủ thể) trong `skills/phim-tai-lieu-phong-van/references/ke-chuyen-phong-van.md`.

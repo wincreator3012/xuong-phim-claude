@@ -47,7 +47,13 @@ export const benefitsDefaults: BenefitsProps = {
   ],
   theme: 'light',
   brand: DEFAULT_BRAND,
-  position: 'top',
+  // Mac dinh doi tu 'top' sang 'bottom' (xem docs/BAI-HOC.md, "Ve do hoa"):
+  // voi khung hinh phong van ngoi (dau nguoi noi o 1/3-1/2 tren khung),
+  // 'top' la nguyen nhan he thong khien pill che dau/mat moi khi job quen
+  // truyen rieng `position` - da lap lai nhieu lan o du an that. 'bottom'
+  // an toan hon lam mac dinh that bai (fail-safe); van nen tuong minh chon
+  // position hop tung canh quay va kiem bang khung hinh that.
+  position: 'bottom',
   durationInSeconds: 6,
 };
 
@@ -59,7 +65,7 @@ export const Benefits: React.FC<BenefitsProps> = ({
   items,
   theme,
   brand,
-  position = 'top',
+  position = 'bottom',
   showIndex = true,
   wrap = false,
   scale = 1,

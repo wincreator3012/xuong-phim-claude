@@ -44,6 +44,12 @@ Nói tự nhiên, nêu rõ thư mục dự án và kết quả mong muốn. Vài
 **Podcast hai người, ba máy**
 > du-an/podcast-1 có ba góc quay (toan, an, khach). Đồng bộ, chuyển góc theo người nói, chia thành các phần có thẻ tên phần.
 
+**Phim tài liệu phỏng vấn, trước khi quay**
+> Tháng sau chúng tôi ký kết hợp tác ba năm với trường X, muốn làm một phim 5 phút giới thiệu dự án cho nhà tài trợ. Đây là mô tả chương trình và kịch bản dự kiến. Giúp tôi lên kế hoạch: phỏng vấn ai, hỏi gì, quay cảnh nào.
+
+**Phim tài liệu phỏng vấn, sau khi quay**
+> Đã quay xong theo kế hoạch, source trong du-an/phim-du-an-x/nguon. Gỡ băng, đối chiếu với kế hoạch rồi viết kịch bản thực tế cho tôi duyệt trước khi dựng.
+
 **Chỉ gỡ băng**
 > Gỡ băng clip trong du-an/bai-3, cho tôi file SRT và bản text.
 

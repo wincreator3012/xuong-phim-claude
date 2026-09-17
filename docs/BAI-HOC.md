@@ -1,6 +1,6 @@
 # BÀI HỌC TỪ CÁC DỰ ÁN THẬT - dành cho Claude, đọc khi gặp tình huống tương tự
 
-Xưởng này được rút ra từ hơn một tháng dựng clip thật (bài giảng dài, clip dọc, clip giới thiệu sách, bài giảng có slide, multicam) và sửa lỗi qua nhiều vòng góp ý. Những bài học dưới đây không gắn với một người dùng cụ thể; chúng là lý do nhiều quy tắc trong `docs/QUY-TRINH-KY-THUAT.md` và các skill tồn tại. Mỗi dự án mới có bài học đáng giữ, thêm vào đây bằng một đoạn ngắn: chuyện gì xảy ra, gốc rễ, quy tắc rút ra.
+Xưởng này được rút ra từ hơn một tháng dựng clip thật (bài giảng dài, clip dọc, clip giới thiệu sách, bài giảng có slide, multicam, phim tài liệu phỏng vấn nhiều nhân vật) và sửa lỗi qua nhiều vòng góp ý. Những bài học dưới đây không gắn với một người dùng cụ thể; chúng là lý do nhiều quy tắc trong `docs/QUY-TRINH-KY-THUAT.md` và các skill tồn tại. Mỗi dự án mới có bài học đáng giữ, thêm vào đây bằng một đoạn ngắn: chuyện gì xảy ra, gốc rễ, quy tắc rút ra.
 
 ## Về nghiệm thu
 
@@ -15,6 +15,8 @@ Xưởng này được rút ra từ hơn một tháng dựng clip thật (bài g
 **File do một tiến trình "sống sót" qua lần gọi bị timeout tạo ra có thể bị cắt cụt** dù kích thước khác 0. Luôn `ffprobe` thời lượng thật trước khi dùng tiếp.
 
 **Con số khớp "gần đúng" một cách khó hiểu là dấu hiệu, không phải may mắn.** Nhánh concat tự encode lại khi lệch quá dung sai từng che mất lỗi thật trong nhiều dự án.
+
+**Đo tổng thời lượng hình so với tiếng không bắt được lệch pha liên tục mà tổng vẫn khớp.** Một phim phỏng vấn "mọi đoạn đều hơi lệch" qua cổng `nghiem-thu.py` ĐẠT vì phần dư ở đầu bù phần thiếu ở cuối. Khi người dùng nói "cảm giác hơi trễ, giật nhỏ" mà không chỉ được chỗ, quét trực tiếp tính liên tục của `pts` ở cấp PACKET quanh các ranh giới đoạn (`ffprobe -select_streams a:0 -show_entries packet=pts_time`; field `frame=pts_time` không tồn tại trên một số bản ffprobe và lặng lẽ trả về rỗng). Loại trừ nguồn quay trước bằng cách quét từng file nguồn riêng lẻ.
 
 ## Về mốc thời gian
 
@@ -56,6 +58,20 @@ Xưởng này được rút ra từ hơn một tháng dựng clip thật (bài g
 
 **Kể cả khi người dùng không yêu cầu duyệt nháp, vẫn chủ động mời xem trước** ở clip có nhiều thay đổi khung hình, tránh dựng lại toàn bộ nhiều lần.
 
+**Quy tắc 5 giây áp cả cho một lần lộ mặt ngắn xen giữa hai B-roll.** Một khe hở dưới một giây lộ mặt người nói giữa hai cảnh trám gây đúng cú "lóe" giật mắt như hai thẻ dính nhau, dù về kỹ thuật không phải "hai thẻ toàn màn hình". Nối liền B-roll (mở rộng phạm vi phủ tới hết khe) thay vì giữ khe.
+
+**Ước tính tổng thời lượng trên giấy trước khi dựng.** Một phim phỏng vấn dựng nháp đầu "giữ trọn các trích đoạn đã chọn rồi cắt sau" ra 9 phút so với mục tiêu 5-6 phút, tốn bốn vòng cắt dần. Kịch bản trên giấy phải cộng thời lượng từng dòng; vượt mục tiêu quá 30% thì đề xuất hai phương án (đầy đủ, gọn) để người dùng chọn trước khi dựng.
+
+**Phim nhiều nhân vật: dệt giọng theo chủ đề, cầu nối 2-3 giây khi đổi người, mở bằng 1,5-2 giây cảnh động thật.** Mở thẳng bằng mặt người nói và cắt thẳng mặt-sang-mặt giữa hai người đều bị góp ý ngay ở nháp đầu. Danh sách cấu phần làm MỘT overlay tích luỹ (hiện dần, ở lại) rõ hơn nhiều pill rời hiện rồi mất; câu hỏi neo và câu kết chiêm nghiệm làm overlay bán trong suốt đè lên cảnh thật thay cho thẻ toàn màn hình.
+
+**Gộp khối B-roll: `ffprobe` thời lượng thật từng clip trước, đừng giả định kéo dài được.** Bốn cảnh trám cùng bộ đều bị khoá cứng 6 giây; xếp nối đuôi ở đúng trần đó (`at` sau = `at` trước cộng thời lượng) cho một khối 24 giây liền mạch, không cần tìm clip khác. Bài học ngược cho lúc quay: mỗi cảnh giữ máy tối thiểu 10 giây.
+
+**Overlay cần hiện SAU khi B-roll trong cùng segment kết thúc**: B-roll là lớp đặc vẽ đè lên overlay, nên tách segment tại đúng điểm B-roll kết thúc thành hai sub-segment liền mạch (`out` = `in` kế tiếp, không trùng không thiếu khung), overlay tính `at` từ sub-segment mới.
+
+**Cắt một cụm nhạy nằm giữa một chunk gỡ băng dài**: ước lượng vị trí bằng tỷ lệ ký tự trong chunk, chạy `silencedetect` trên cửa sổ 3-4 giây quanh đó, neo vào khoảng lặng thật gần nhất, đặt `snap:false` cho đoạn ấy (snap toàn file có thể kéo sang một khoảng lặng xa hơn).
+
+**Góp ý neo vào một từ khoá mà transcript gần đó không có**: dùng điểm ngắt câu sạch gần nhất và báo rõ cho người dùng khi giao, không lặng lẽ giả định.
+
 ## Về đồ họa và CSS
 
 **`maxWidth` dạng % không đáng tin trong khối chữ nằm trong flex-column căn giữa không có width cố định**; dùng px thật từ `useLayout().width`. Tiêu đề ngắn từng tự xuống dòng giữa từ dù còn rất nhiều chỗ trống.
@@ -67,6 +83,12 @@ Xưởng này được rút ra từ hơn một tháng dựng clip thật (bài g
 **Mọi component mới phải commit file nguồn về máy ngay sau khi viết**; sandbox đám mây mất khi hết phiên, một component đã mất vì quên bước này.
 
 **Overlay Benefits nhiều mục tích lũy dần thành một khối lớn - kiểm ở trạng thái tích lũy ĐẦY ĐỦ, không chỉ khung hình vừa hiện mục đầu.** Mục cũ không biến mất khi mục mới xuất hiện, chỉ thu nhỏ/mờ đi; với cảnh quay tĩnh một khuôn mặt cố định, khối pill tích lũy có thể che đúng vùng mặt dù từng mục riêng lẻ không che gì. Luôn chồng thử lên khung hình thật (không phải nền màu đặc) ở đúng thời điểm đã tích lũy đủ tất cả các mục trước khi coi là xong. Quy tắc ưu tiên cứng cho mọi overlay/pill đè lên video có người nói: (1) không che cả người lẫn mặt nếu tránh được; (2) buộc phải đánh đổi thì tuyệt đối không che mặt, có thể che một phần thân người. Khung dọc cần cả pill lẫn phụ đề cùng lúc: dùng prop `edgeInset` của `Benefits` để neo pill cách đáy khung một khoảng tùy chỉnh, tránh chồng lấn phụ đề burn-in ở sát đáy.
+
+**Giá trị mặc định của một prop có thể là nguyên nhân hệ thống của một lỗi "lặp lại dù đã cẩn thận".** Ba pill che mặt ở ba vòng nháp khác nhau có cùng điểm chung: job không truyền `position`, rơi về mặc định `'top'` của `Benefits`, đúng vùng đầu người trong khung phỏng vấn ngồi. Đã đổi mặc định sang `'bottom'` ở CẢ HAI chỗ (`benefitsDefaults` cấp module và destructuring trong chữ ký component, vì `render-do-hoa.mjs` merge nông với defaultProps và một job thiếu trường có thể chạm chỗ nào tuỳ đường gọi). Mặc định an toàn không thay cho việc chọn `position` có chủ đích và kiểm bằng khung hình thật.
+
+**Đồ họa dùng làm `insert` (Intro, Outro, SectionTitle) render ra có thể mang tiếng dài hơn hình 0,05-0,06 giây** (đóng khung AAC 1024 mẫu khi không có tiếng thật), đủ chạm ngưỡng `check_av()` và dừng dựng ở bước chèn. Ngay sau render: `ffmpeg -i x.mp4 -t <thời lượng hình> -c:v copy -c:a aac -b:a 192k`, rồi `ffprobe` so hình bằng tiếng trước khi vào timeline.
+
+**Giữ job JSON đồ họa trong dự án tới khi giao xong.** Job bị dọn khỏi sandbox giữa hai vòng góp ý; sửa một trường `position` phải dựng lại job từ khung hình đã render (trích bằng `ffmpeg -c:v libvpx -i file.webm -vf "select=eq(n\,N)"`). Đặt job ở `du-an/<x>/do-hoa/job/`.
 
 **Alpha của webm VP8: ffprobe báo `yuv420p` ngay cả khi file có alpha thật**; kiểm bằng `alpha_mode=1` trong tag hoặc ép `-c:v libvpx` khi decode để test. Bẫy này chỉ xảy ra khi TỰ TAY soạn lệnh ffmpeg để xem/test - pipeline overlay chính thức của `assemble.py` đã có sẵn flag đúng.
 
@@ -81,6 +103,10 @@ Xưởng này được rút ra từ hơn một tháng dựng clip thật (bài g
 **Số liệu lệch kênh phụ thuộc bối cảnh, mắt quyết.** "Trội kênh G" trên năm clip hoá ra là cây cỏ trong khung. So chéo lệch màu giữa nguồn chỉ đáng xử lý khi các nguồn cắt qua lại cùng cảnh. Đa số clip đạt không chỉnh; HDR là trường hợp bắt buộc tonemap, kiểm từng file bằng `color_transfer`, không đoán theo thiết bị.
 
 ## Về hạ tầng
+
+**Ghép part bằng `-f concat -c copy` gây lệch hình-tiếng thật ở MỌI ranh giới đoạn.** AAC có độ trễ mào đầu bộ mã hoá (~21ms, 1024 mẫu ở 48kHz) ghi bằng edit-list trong từng part; stream-copy không tôn trọng edit-list, dịch toàn bộ hình trễ ~21ms và chèn một gói tiếng ngắn tại mỗi điểm nối. `-avoid_negative_ts make_zero` chỉ dán nhãn lại, không sửa. Từ `TOOL_VERSION 2026-09-17.antidrift-2`, `concat()` luôn giải mã và mã hoá lại; cờ `--ep-encode-lai` không còn tác dụng. Video dựng trước đó có từ hai segment trở lên đều có thể mang lỗi này; dựng lại nếu cần (cache tự vô hiệu theo `TOOL_VERSION`).
+
+**Gọi `assemble.py` không kèm `--out` từ vòng nháp thứ hai trở đi ghi đè âm thầm file của vòng trước** (tên mặc định `<project>-<aspect>-nhap.mp4` trùng nhau). Đã xảy ra thật. Mọi nháp đặt `--out "<project>-<aspect>-nhapN"` tường minh ngay từ nháp đầu.
 
 **`concat()` và `finalize()` không có resume như `build_parts()`**; bài dài (~10 phút) dễ vượt 180 giây lặp lại mà không tiến triển. Cách thoát: chia đôi danh sách part, xử lý từng nửa, ghép `-c copy`; hoặc khi `.tam/body.mp4` và `.tam/mix.wav` đã hợp lệ thì chạy thẳng hai lệnh ffmpeg còn lại của finalize thay vì gọi lại `run()`. Preset `ultrafast` chỉ là giải pháp tình thế: file nặng gấp 3.
 

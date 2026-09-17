@@ -12,7 +12,7 @@ Bản thân tôi không có nhu cầu với clip hình ảnh hay âm thanh do AI
 
 ## Bạn nhận được gì
 
-- **Tám năng lực dựng phim** đóng thành quy trình chuẩn [skill] cho Claude: dựng bài giảng chuyên gia trình bày trước máy quay; bài giảng có slide (xen mặt, slide, hoặc cả hai theo bố cục tối ưu); clip ngắn dọc có phụ đề; podcast và buổi quay nhiều máy (tự đồng bộ bằng âm thanh, tự chuyển góc theo người nói); đồ họa động tối giản (dùng được cho clip minh hoạ chỉ có lời đọc, không cần lên hình); gỡ băng tiếng Việt chạy ngay trên máy (video không rời máy bạn); tìm hình và tư liệu minh hoạ phù hợp nội dung, đã kiểm định bản quyền; căn chỉnh màu cơ bản khi thật cần
+- **Chín năng lực dựng phim** đóng thành quy trình chuẩn [skill] cho Claude: dựng bài giảng chuyên gia trình bày trước máy quay; bài giảng có slide (xen mặt, slide, hoặc cả hai theo bố cục tối ưu); clip ngắn dọc có phụ đề; podcast và buổi quay nhiều máy (tự đồng bộ bằng âm thanh, tự chuyển góc theo người nói); đồ họa động tối giản (dùng được cho clip minh hoạ chỉ có lời đọc, không cần lên hình); gỡ băng tiếng Việt chạy ngay trên máy (video không rời máy bạn); tìm hình và tư liệu minh hoạ phù hợp nội dung, đã kiểm định bản quyền; căn chỉnh màu cơ bản khi thật cần; phim tài liệu phỏng vấn nhiều nhân vật giới thiệu một dự án hay sự kiện (Claude giúp lên kế hoạch ghi hình - phỏng vấn ai, hỏi gì, quay cảnh trám nào - trước khi quay, rồi viết kịch bản thực tế từ tư liệu thật và dựng)
 - **Một bước thiết lập phong cách** khoảng 30 phút: Claude hỏi bạn là ai, dạy gì, cho ai, thích cảm giác nào (bốn mẫu để chọn hoặc mô tả riêng), rồi điền tên, chức danh, màu sắc, nhạc, thông điệp kết vào chỗ đã chừa sẵn. Mọi clip sau đó mang đúng dấu ấn của bạn và đổi được bằng một câu nói
 - **Thư viện chất liệu sạch**: danh mục nhạc nền và hiệu ứng đã kiểm từng trang nguồn (dùng thương mại mọi nền tảng, không Content ID), tải về theo mẫu phong cách bạn chọn; danh mục nguồn hình miễn phí và quy tắc giấy phép
 - **Cổng nghiệm thu tự động**: hình khớp tiếng tới 2 khung hình, âm lượng chuẩn -14 LUFS, không khoảng đen, không đứng hình. Claude không được nói "xong" khi máy chưa báo đạt
@@ -36,7 +36,7 @@ xuong-phim-claude/
 ├── CLAUDE.md              ← điểm vào cho Claude (đọc đầu mỗi phiên)
 ├── phong-cach/            ← PHONG-CACH.md: bản đồ phong cách của BẠN; mau/: 4 mẫu khởi đầu
 ├── brand/                 ← brand.json (tên, chức danh, bảng màu) + logo/ (thả logo vào đây)
-├── skills/                ← 9 quy trình chuẩn cho Claude (thiết lập + 8 năng lực dựng phim)
+├── skills/                ← 10 quy trình chuẩn cho Claude (thiết lập + 9 năng lực dựng phim)
 ├── docs/                  ← tài liệu kỹ thuật cho Claude: môi trường, bài học từ dự án thật
 ├── thu-vien/              ← danh mục nhạc/hiệu ứng/hình đã kiểm định (không chứa file, tải lúc cài)
 ├── nhac-nen/  hieu-ung/   ← file âm thanh tải về, theo nhóm công dụng
