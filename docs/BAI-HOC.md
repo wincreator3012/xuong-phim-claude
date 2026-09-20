@@ -72,6 +72,14 @@ Xưởng này được rút ra từ hơn một tháng dựng clip thật (bài g
 
 **Góp ý neo vào một từ khoá mà transcript gần đó không có**: dùng điểm ngắt câu sạch gần nhất và báo rõ cho người dùng khi giao, không lặng lẽ giả định.
 
+**Cắt câu là việc làm nhiều vòng, không phải một lần cho gọn ngay.** Một bite đã qua paper edit và đã dựng ổn nhiều vòng vẫn có thể còn dư ở đầu hoặc cuối (chủ từ đưa đẩy, mệnh đề phụ lặp ý) mà chỉ lộ ra khi nghe lại lần sau, không phải khi đọc transcript. Rút `in`/`out` sát dần qua các vòng, mỗi lần neo `silencedetect` vào khoảng lặng thật gần cụm cần bỏ, ưu tiên ranh giới mệnh đề sạch.
+
+**Mở đầu bằng chuỗi nhiều cảnh động ngắn nối tiếp, không phải một cảnh động đơn kéo dài.** Ba tới bốn cảnh khác nhau (chuyển động tổng thể, chi tiết tay hoặc vật, khuôn mặt thoáng qua chưa nói) trong cùng 5-8 giây đầu tạo nhiều nhịp sống hơn một cảnh tĩnh kéo dài đúng bằng tổng thời lượng đó.
+
+**Không có thẻ nhận diện người nói [LowerThird] qua nhiều vòng nháp là một khoảng trống dễ bị bỏ sót.** Góp ý theo mốc phút-giây không bắt được việc này vì không ai "chỉ" được một chỗ cụ thể thiếu - chỉ lộ ra khi tự hỏi "người xem lạ có biết đây là ai không". LowerThird (thông tin về NGƯỜI, neo dưới trái, không tích luỹ) và pill Benefits (thông tin về Ý, tích luỹ) là hai lớp đồ họa khác việc, không thay thế nhau; cả hai cần có mặt ở phim nhiều nhân vật.
+
+**`volumeDb` nền là mức khởi điểm, không phải giá trị cố định.** Một mức nền đã theo đúng gợi ý chung vẫn có thể nghe hơi nổi trên lời phỏng vấn khi nghe lại kỹ hơn ở vòng sau; mức đúng phụ thuộc độ ồn thật của từng file gốc, cần nghe lại và hạ thêm khi cần.
+
 ## Về đồ họa và CSS
 
 **`maxWidth` dạng % không đáng tin trong khối chữ nằm trong flex-column căn giữa không có width cố định**; dùng px thật từ `useLayout().width`. Tiêu đề ngắn từng tự xuống dòng giữa từ dù còn rất nhiều chỗ trống.

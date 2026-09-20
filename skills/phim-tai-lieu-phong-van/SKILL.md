@@ -37,6 +37,8 @@ du-an/<tên phim>/
   KIEM-KE-NGUON.md         Pha 2: kiểm kê tư liệu thật, đối chiếu với kế hoạch
   KICH-BAN-THUC-TE.md      Pha 2: kịch bản thực tế có mốc thời gian (Cổng duyệt 2)
   SO-GOP-Y.md              từng vòng nháp: điểm góp ý, mốc, xử lý, cách đã kiểm
+  NHAN-DOAN.md             bảng đối chiếu nhãn ổn định (A/B/T/M) với mốc thời gian hiện tại,
+                           `tools/nhan-doan.py` tạo lại sau mỗi lần render
   do-hoa/<ngang|doc>/ + do-hoa/job/   đồ họa render và job JSON gốc (giữ tới khi giao)
   timeline.json, xuat-nhap/, xuat-hoan-chinh/   như mọi dự án khác
 ```
@@ -59,7 +61,7 @@ Viết phần đầu của `KE-HOACH-GHI-HINH.md`:
 - **Khung ba hồi**: vấn đề (khoảng trống thật, kể qua một hoàn cảnh cụ thể) - can thiệp (ai làm gì, mô hình ra sao, nhấn vào phần đã thành hình thật) - chuyển hoá và cam kết (khoảnh khắc thay đổi cụ thể, rồi cam kết cho chặng tới). Với phim về một sự kiện, biến thể là trước - trong - sau; với hành trình cá nhân, biến thể là xuất phát - ngã rẽ - hiện tại. Mỗi hồi ghi hai dòng: "cần lời của ai" và "cần thấy gì".
 - **Câu hỏi neo** dự kiến: câu hỏi mà cả phim cùng trả lời, sẽ hiện thành chữ trên hình ở cuối hồi 1.
 - **Cách kết**: theo giọng của user trong `PHONG-CACH.md`; mặc định là một câu tầm nhìn của nhân vật rồi một câu hỏi mở cho người xem, không lời kêu gọi khô cứng. User muốn có lời mời hành động rõ thì ghi một dòng, đặt sau câu hỏi.
-- **Hình ảnh mở đầu**: 1,5-2 giây cảnh động thật (không mở thẳng bằng mặt người nói), rồi câu móc [hook] của một nhân vật, rồi thẻ tiêu đề.
+- **Hình ảnh mở đầu**: chuỗi 3-4 cảnh động thật ngắn nối liền nhau (một cảnh toàn cảnh, một cảnh chi tiết tay hoặc vật, một khuôn mặt thoáng qua chưa nói), mỗi cảnh 1,5-2 giây, tổng khoảng 5-8 giây - không mở bằng MỘT cảnh động kéo dài và không mở thẳng bằng mặt người đang nói; rồi câu móc [hook] của một nhân vật, rồi thẻ chuyển tiêu đề (`kicker` + `title`, xem Bước 2.4).
 - **Độ dài mục tiêu** và phân bổ thô theo hồi (ví dụ 25 giây mở, 70 giây hồi 1, 100 giây hồi 2, 110 giây hồi 3, 15 giây kết).
 
 ### Bước 1.3 - Nhân vật và câu hỏi
@@ -109,10 +111,11 @@ Viết `KIEM-KE-NGUON.md` theo mẫu, phần quan trọng nhất là **bảng đ
 
 ### Bước 2.3 - Kịch bản thực tế [paper edit]
 
-Viết `KICH-BAN-THUC-TE.md` theo mẫu: khung ba hồi đã điều chỉnh theo lời thật (kế hoạch phục vụ phim, không ngược lại), rồi từng dòng dựng theo thứ tự phát: file nguồn, `in`-`out` theo transcript (ghi câu đầu và câu cuối của bite), thời lượng, trích lời rút gọn, cảnh trám phủ lên (file, đoạn, lý do), đồ họa (pill, thẻ, số liệu) và vị trí dự kiến, cầu nối giữa hai người nói. Nguyên tắc thể loại đã kiểm chứng:
+Viết `KICH-BAN-THUC-TE.md` theo mẫu: khung ba hồi đã điều chỉnh theo lời thật (kế hoạch phục vụ phim, không ngược lại), rồi từng dòng dựng theo thứ tự phát: file nguồn, `in`-`out` theo transcript (ghi câu đầu và câu cuối của bite), thời lượng, trích lời rút gọn, cảnh trám phủ lên (file, đoạn, lý do), đồ họa (pill, thẻ, số liệu) và vị trí dự kiến, cầu nối giữa hai người nói, và **nhãn ổn định** cho từng dòng: `A<n>` cho một đoạn lời liên tục, `T<n>` cho một cầu nối độc lập không nằm trong lời ai, `M<n>` cho từng cú trong chuỗi mở đầu nhiều cảnh. Nhãn `B<n>.<m>` (cảnh trám phủ lên lời của `A<n>`) không gán tay ở bước này, để `tools/nhan-doan.py` tự suy từ thứ tự cảnh trám khi dựng (xem mục 8 của `references/ke-chuyen-phong-van.md`). Gán nhãn một lần ở đây và giữ nguyên qua mọi nháp về sau, kể cả khi một dòng bị tách thành nhiều sub-segment lúc dựng. Nguyên tắc thể loại đã kiểm chứng:
 
-- Mở đầu bằng 1,5-2 giây cảnh động thật trước khi thấy mặt người nói đầu tiên; câu móc rồi mới tới thẻ tiêu đề.
+- Mở đầu bằng chuỗi 3-4 cảnh động thật ngắn nối liền nhau (tổng khoảng 5-8 giây) trước khi thấy mặt người nói đầu tiên; câu móc rồi mới tới thẻ chuyển tiêu đề.
 - Giữa hai nhân vật khác nhau chèn một cầu nối 2-3 giây bằng một hoặc hai cảnh trám (segment riêng, `fadeIn`/`fadeOut` khoảng 0,15 giây), không cắt thẳng mặt sang mặt.
+- Cắt câu không dừng ở một lần cho gọn: một bite chọn ở Bước 2.2 thường còn dư ở đầu hoặc cuối (chủ từ đưa đẩy, cụm mở lời, mệnh đề phụ lặp ý) mà đọc transcript chưa thấy ngay, chỉ lộ ra khi nghe lại bản dựng; rút `in`/`out` sát dần qua các vòng nháp, mỗi lần neo vào khoảng lặng thật gần cụm cần bỏ (không cắt giữa một âm), ưu tiên điểm cắt tại ranh giới mệnh đề sạch. Ghi mốc cũ và mốc mới vào `SO-GOP-Y.md` mỗi vòng để so sánh.
 - Câu hỏi neo và câu kết chiêm nghiệm hiện dưới dạng overlay bán trong suốt (Benefits một mục, `wrap:true`) đè lên cảnh thật, không cắt sang thẻ toàn màn hình.
 - Danh sách cấu phần (các gói, các bước) làm MỘT overlay tích luỹ (các mục hiện dần và ở lại), không phải nhiều pill rời hiện rồi mất.
 - Con số nổi bật (số năm, số tháng, số người) làm pill hoặc `InfoStat` đúng lúc lời nói nhắc tới; khép vòng số liệu nếu được (ví dụ "3 năm đã qua" ở hồi 2 và "3 năm tới" ở hồi 3).
@@ -132,6 +135,7 @@ Chuyển kịch bản thành `timeline.json` theo phim-dung-bai và `references/
 Quy tắc riêng của thể loại khi soạn timeline:
 
 - Khung hình phỏng vấn ngồi có mặt ở nửa trên khung: pill dùng `position:'bottom'` (đã là mặc định của Benefits), vẫn phải kiểm bằng khung hình thật ở trạng thái tích luỹ đầy đủ; không bao giờ che mặt.
+- Ba lớp đồ họa không dùng lẫn nhau (chi tiết và lý do trong `references/ke-chuyen-phong-van.md` mục 7): `LowerThird` là thẻ nhận diện (tên, chức danh, neo dưới trái, hiện vài giây khi một người mới xuất hiện hoặc xuất hiện lại sau một khoảng dài - thông tin về NGƯỜI, không tích luỹ); `Benefits` là pill nhấn mạnh nội dung (từ khoá, con số, danh sách cấu phần - thông tin về Ý, `position:'bottom'`, tích luỹ khi nhiều mục); `SectionTitle` là thẻ chuyển đánh dấu ranh giới HỒI chứ không phải ranh giới người nói, luôn có `kicker` (tên dự án viết hoa, lặp lại xuyên suốt phim) và `title` (tên hồi hoặc câu hỏi định hướng, hai dòng), `showLogos:true` ở ranh giới lớn. Khung hình cần cả LowerThird lẫn pill nội dung cùng lúc: kiểm bằng khung hình thật ở đúng lúc chồng lấn, dùng `edgeInset` hoặc đổi Benefits sang `position:'right'` để không đè lên LowerThird.
 - Quy tắc tối thiểu 5 giây cảnh chính giữa hai thẻ toàn màn hình áp dụng cả cho một lần lộ mặt ngắn dưới 5 giây xen giữa hai cảnh trám: nối liền cảnh trám thay vì để khe hở lộ mặt.
 - Gộp khối cảnh trám: `ffprobe` thời lượng thật từng clip trước, clip bị khoá thời lượng thì xếp nối đuôi ở đúng trần đó (`at` sau = `at` trước cộng thời lượng) để tạo khối liên tục, không giả định kéo dài được.
 - Overlay cần hiện SAU khi cảnh trám trong cùng segment đã kết thúc: tách segment tại đúng điểm cảnh trám kết thúc thành hai sub-segment liền mạch (`out` = `in` kế tiếp), overlay tính `at` từ sub-segment mới.
@@ -140,9 +144,11 @@ Quy tắc riêng của thể loại khi soạn timeline:
 
 Dựng: `assemble.py --kiem-tra`, rồi `--preview` với `--out "<tên>-<khung>-nhap1"` tường minh ngay từ nháp đầu (mọi nháp sau tăng số, không để tên mặc định vì sẽ ghi đè lẫn nhau), rồi `nghiem-thu.py video --nhap --anh`. Ngoài cổng máy, tự kiểm bằng mắt: lưới khung hình toàn phim, và với TỪNG overlay trích khung hình tại mốc thật tính từ `<thành phẩm>.map.json` rồi đọc đoạn transcript bao quanh để chắc chữ khớp ý đang nói, không chỉ khớp chính tả.
 
+Khi soạn `timeline.json`, chép đúng nhãn đã gán ở Bước 2.3 vào trường `"label"` của từng segment (mọi sub-segment tách ra từ cùng một dòng dựng giữ chung một nhãn). Sau mỗi lần render, chạy `tools/nhan-doan.py <timeline.json> <thành phẩm>.map.json` để tạo lại `NHAN-DOAN.md` - bảng đối chiếu nhãn ổn định với mốc thời gian hiện tại, dùng cho vòng góp ý ở Bước 2.5.
+
 ### Bước 2.5 - Vòng góp ý
 
-User góp ý theo mốc phút-giây trên chính bản nháp đang xem (mốc trên bản render đáng tin hơn mọi suy luận ngược). Ghi mọi điểm vào `SO-GOP-Y.md` theo mẫu: nháp số, điểm số, mốc, nội dung góp ý, cách xử lý, cách đã kiểm (khung hình tại mốc nào của `map.json` mới). Mỗi vòng dựng ra `nhapN+1` với `--out` tường minh, tính lại mọi mốc kiểm từ `map.json` của chính bản mới. Điểm góp ý neo vào một từ khoá mà transcript gần đó không có: dùng điểm ngắt câu sạch gần nhất và BÁO RÕ cho user, không lặng lẽ giả định. Một loại góp ý lặp lần thứ hai (pill che mặt, chữ sai chức danh) là tín hiệu sửa nguồn mặc định (defaultProps, brand, preset) chứ không chỉ sửa dự án này, ghi vào "Sổ tay góp ý" trong `PHONG-CACH.md`.
+User góp ý chủ yếu theo nhãn ổn định (A/B/T/M) tra trong `NHAN-DOAN.md`, kèm mốc phút-giây khi cần chỉ rõ vị trí bên trong một đoạn dài - nhãn không đổi qua các nháp trong khi mốc phút-giây đổi mỗi lần dựng lại, nên nhãn là điểm neo đáng tin hơn. Ghi mọi điểm vào `SO-GOP-Y.md` theo mẫu: nháp số, điểm số, mốc, nội dung góp ý, cách xử lý, cách đã kiểm (khung hình tại mốc nào của `map.json` mới). Mỗi vòng dựng ra `nhapN+1` với `--out` tường minh, tính lại mọi mốc kiểm từ `map.json` của chính bản mới. Điểm góp ý neo vào một từ khoá mà transcript gần đó không có: dùng điểm ngắt câu sạch gần nhất và BÁO RÕ cho user, không lặng lẽ giả định. Một loại góp ý lặp lần thứ hai (pill che mặt, chữ sai chức danh) là tín hiệu sửa nguồn mặc định (defaultProps, brand, preset) chứ không chỉ sửa dự án này, ghi vào "Sổ tay góp ý" trong `PHONG-CACH.md`.
 
 ### Bước 2.6 - Bản chính và bàn giao
 

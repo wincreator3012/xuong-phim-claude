@@ -2,13 +2,16 @@ import React from 'react';
 import {AbsoluteFill} from 'remotion';
 import {useLayout} from '../layout';
 import {Brand, DEFAULT_BRAND, ThemeName, resolvePalette} from '../theme';
-import {AccentLine, Canvas, FadeUp} from '../common';
+import {AccentLine, Canvas, FadeUp, LogoRow} from '../common';
 
 export type SectionTitleProps = {
   kicker?: string; // ví dụ "Phần 2"
   title: string;
   theme: ThemeName;
   brand: Brand;
+  showLogos?: boolean; // hiện hàng logo nhỏ ở đáy (mặc định false - dùng khi
+  // slide chuyển cần nhắc nhà tài trợ/đối tác, vd phim tài liệu phỏng vấn)
+  logoMono?: boolean; // ép logo đơn sắc; mặc định: theme tối = true
   durationInSeconds?: number;
 };
 
@@ -17,6 +20,7 @@ export const sectionTitleDefaults: SectionTitleProps = {
   title: 'Tên phần',
   theme: 'light',
   brand: DEFAULT_BRAND,
+  showLogos: false,
   durationInSeconds: 4,
 };
 
@@ -25,9 +29,12 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
   title,
   theme,
   brand,
+  showLogos = false,
+  logoMono,
 }) => {
   const palette = resolvePalette(theme, brand);
-  const {pad, titleSize, smallSize, isVertical, width} = useLayout();
+  const {pad, titleSize, smallSize, isVertical, width, unit} = useLayout();
+  const mono = logoMono ?? theme === 'dark';
   return (
     <Canvas palette={palette} fadeIn={12} fadeOut={16}>
       <AbsoluteFill
@@ -76,6 +83,24 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
           <AccentLine palette={palette} from={0} width={70} />
         </FadeUp>
       </AbsoluteFill>
+      {showLogos ? (
+        <AbsoluteFill
+          style={{
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+            paddingBottom: pad * 0.6,
+          }}
+        >
+          <FadeUp from={30} duration={26} distance={12}>
+            <LogoRow
+              brand={brand}
+              palette={palette}
+              height={unit * (isVertical ? 4.5 : 5)}
+              mono={mono}
+            />
+          </FadeUp>
+        </AbsoluteFill>
+      ) : null}
     </Canvas>
   );
 };
