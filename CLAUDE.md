@@ -15,6 +15,7 @@
 |---|---|
 | "thiết lập", "bắt đầu", "đổi màu/logo/chức danh mặc định", lần đầu dùng | `skills/phim-thiet-lap/` |
 | "dựng bài giảng", "cắt bài này", "ghép intro outro", thả clip vào `nguon/` | `skills/phim-dung-bai/` (quy trình chủ lực; đọc cả `references/bien-tap.md`) |
+| "infomotion", "làm video từ audio", "video hoạt hình giải thích", "explainer video", chỉ có file ghi âm không có video quay mặt | `skills/phim-infomotion/` (không có cảnh quay để cắt - hình tự nghĩ ra từ lời nói, dùng component `YNiem`/`YCanh`) |
 | "bài giảng có slide", có PPTX/PDF/ảnh slide cạnh video | `skills/phim-bai-giang-slide/` |
 | "cắt clip ngắn", "Reels", "Shorts", "TikTok", "teaser" | `skills/phim-clip-ngan/` |
 | "podcast hai người", "nhiều góc quay", nguon có nhiều thư mục con | `skills/phim-multicam/` |

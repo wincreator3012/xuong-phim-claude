@@ -133,4 +133,19 @@ Khác bài giảng một người: lời đến từ nhiều file quay riêng, �
 
 Nguồn chia theo loại: `nguon/phong-van/`, `nguon/canh-tram/`, `nguon/su-kien/`, `nguon/anh/`. Mọi nháp đặt tên tường minh có số ngay từ nháp đầu (tên mặc định của `assemble.py` sẽ ghi đè lẫn nhau giữa các vòng). Quy tắc thể loại và định lượng cảnh trám (một cảnh dùng được cho mỗi 20-30 giây phim, quay gấp 2-3 danh mục, giữ máy tối thiểu 10 giây, ba cỡ mỗi chủ thể) trong `skills/phim-tai-lieu-phong-van/references/ke-chuyen-phong-van.md`.
 
+## Infomotion - video dựng hoàn toàn từ đồ hoạ (skill phim-infomotion)
+
+Khác mọi skill khác: không có cảnh quay để cắt, nguồn chỉ là một file ghi âm. Hai component riêng cho việc này, không dùng ở skill khác:
+
+| Việc | Ghi chú |
+|---|---|
+| `YNiem` (`studio/src/components/YNiem.tsx`) | Một hình vẽ nét dần cho MỘT khái niệm đơn lẻ, hình lấy theo `slug` từ kho `studio/src/y-niem/index.ts`. Cờ tuỳ chọn `travelDot`/`endArrow` trên một shape gợi ý chuyển động chưa dừng dọc theo path cuối cùng - tính tổng quát từ cấu trúc path (`M x,y C ... C ...`), không hard-code toạ độ. |
+| `YCanh` (`studio/src/components/YCanh.tsx`) | Một chuỗi cảnh vẽ tay, mỗi `variant` một kỹ thuật chuyển động riêng (8 variant sẵn có: `hub-branches`, `filling-grid`, `radiant-sun`, `rising-moon`, `growing-bars`, `tick-cluster`, `clock-sweep`, `growing-flame`) - dùng khi một đoạn kể chuyện có nhiều nhịp liên tiếp cần cảm giác riêng từng nhịp. |
+| `do-hoa-chung/an-du-y-niem.json` | Từ điển ẩn dụ dùng chung mọi dự án infomotion của một người dùng. CHƯA TỒN TẠI cho tới dự án đầu tiên có ẩn dụ được duyệt - tạo mới dạng `{}` khi đó, không tạo trước. |
+
+Cả hai component nhận `floating`/`position` như các đồ hoạ nổi khác trong xưởng; `position: 'center'` là mặc định khi `floating` (canh giữa cả hai trục thay vì dồn lên một cạnh). Kích thước `floating` đã kiểm chứng qua dự án thật: icon `unit*58`, nhãn `unit*6.0`/`unit*3.9` - ngưỡng dưới, không nhỏ hơn khi không có lý do cụ thể.
+
+Quy trình đầy đủ (tám bước, ba nguyên tắc xuyên suốt, cách chọn ẩn dụ, ngân sách khung khi ô timeline LOCKED): `skills/phim-infomotion/SKILL.md`.
+
+
 Cập nhật 2026-09-20 (từ một vòng tinh chỉnh không chờ góp ý bằng số của dự án tham chiếu): cắt câu là việc làm nhiều vòng, rút `in`/`out` sát dần qua các nháp bằng cách neo `silencedetect` vào khoảng lặng gần cụm cần bỏ; mở đầu nên là chuỗi 3-4 cảnh động ngắn nối tiếp, không phải một cảnh động đơn kéo dài; đồ họa nhận diện `LowerThird` (thông tin về NGƯỜI) và pill `Benefits` (thông tin về Ý) là hai lớp bắt buộc tách biệt, không thay thế nhau; thẻ chuyển `SectionTitle` dùng `kicker` (tên dự án, lặp lại xuyên suốt) + `title` (tên hồi) làm quy ước chuẩn. Chi tiết và lý do trong `skills/phim-tai-lieu-phong-van/references/ke-chuyen-phong-van.md` mục 1, 4, 6, 7.

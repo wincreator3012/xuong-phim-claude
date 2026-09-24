@@ -125,3 +125,17 @@ Xưởng này được rút ra từ hơn một tháng dựng clip thật (bài g
 **`-ss` đặt SAU `-i`** khi cần PTS khớp chính xác với subtitle/overlay filter lúc trích khung hình kiểm tra.
 
 **Tránh `pkill -f <tên composition>`** trong sandbox: cụm từ có thể khớp luôn tiến trình node cha đang render hợp lệ.
+
+## Về infomotion (video dựng hoàn toàn từ đồ hoạ, không có cảnh quay)
+
+**Ngân sách khung phải tính riêng từng cảnh khi một ô timeline có `durationInSeconds` LOCKED.** Một dự án "chậm nhịp vẽ lại toàn bộ 50%" tưởng chỉ cần nhân một hệ số chung, nhưng mỗi ô timeline có tổng số khung cố định (giữ để không phá lịch overlay đã kiểm chứng không hở khung) - ô dư khung nhiều chậm được gần trọn, ô eo hẹp chỉ chậm được một phần. Tính `budget = durationInFrames - khung dành cho fade-out - biên an toàn` cho TỪNG cảnh, không áp một số chung; mốc hiện nhãn chữ và thời lượng hiện chữ cũng phải tính lại theo đúng ngân sách còn lại.
+
+**Góp ý "hình hơi kỳ" hay hai yếu tố trong cùng cảnh chồng lên nhau: đổi hẳn, không vá toạ độ.** Một icon ẩn dụ "sung sức" bị chê mơ hồ được thay hẳn bằng một mặt trời toả tia (không chỉnh nhẹ hình cũ); một cảnh trăng mọc + trang chữ bị chồng lấn cả không gian lẫn thời gian được sửa bằng cách tách RIÊNG vùng toạ độ (trăng chỉ chiếm nửa trên khung, chữ chỉ bắt đầu từ giữa khung trở xuống) VÀ tách RIÊNG mốc thời gian (chữ chỉ bắt đầu sau khi trăng đã yên vị) - sửa một trục mà bỏ trục kia vẫn còn chồng lấn.
+
+**Hiệu ứng gắn cứng vào toạ độ của một hình cụ thể (chấm trôi, mũi tên cuối đường) nên viết TỔNG QUÁT theo cấu trúc path, không hard-code control point của một path.** Một component từng có toạ độ bezier control point chép tay khớp đúng MỘT path duy nhất - đổi path là hỏng hiệu ứng. Sửa bằng một hàm phân tích cú pháp path SVG dạng `M x,y C ... C ...` thành danh sách đoạn cong, tính điểm/tiếp tuyến TỪ cấu trúc đó; hiệu ứng trở thành một cờ tuỳ chọn (`travelDot`/`endArrow`) áp được cho path bất kỳ đúng cú pháp, không phải một nhánh code riêng cho một slug.
+
+**`device_bash` (lệnh trên máy người dùng) không giữ tiến trình nền qua các lượt gọi tool khác nhau - khác hẳn `Bash` của sandbox đám mây.** Lệnh dài (assemble.py, transcribe) chạy trên máy phải chạy ĐỒNG BỘ trong một lượt gọi, dùng `timeout_ms` tối đa cho phép; thử `nohup ... & disown` trên máy người dùng rồi quay lại sau không có tác dụng như trên sandbox đám mây.
+
+**`device_commit_files` dùng được thẳng với `stagedPath` dưới `/mnt/user-data/outputs/`, không cần gọi `SendUserFile` trước để lấy `file_uuid`.** Nhanh hơn khi cần commit nhiều file nguồn cùng lúc mà không cần thẻ file hiện ra trong khung chat.
+
+**Heredoc hai bước (`cat > file << 'EOF' ... EOF`) có thể lặng lẽ làm phẳng dấu tiếng Việt ở bước THỰC THI dù nội dung nguồn đọc lại trông đúng.** Ghi file tiếng Việt bằng một bước duy nhất (`python3 <<'PYEOF' ... PYEOF` với `io.open(path, encoding='utf-8')`, hoặc công cụ `Write`/`Edit` trực tiếp) và LUÔN đọc lại nội dung vừa ghi để xác nhận dấu còn nguyên trước khi coi là xong - đừng chỉ tin bước soạn nội dung.

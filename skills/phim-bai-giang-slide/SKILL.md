@@ -11,11 +11,13 @@ Nguyên tắc rút từ nghiên cứu (Wang & Antonenko 2017; Polat 2022; Alemda
 
 ## Năm bố cục (khung ngang, toạ độ trong `do-hoa-chung/bo-cuc/bo-cuc.json`)
 
+**Mặc định nghiêng về `ca-hai`, `slide` toàn khung là ngoại lệ phải có lý do cụ thể.** Che hết màn hình bằng slide xoá luôn người nói khỏi hình - đi ngược đúng phát hiện nghiên cứu ở `references/bo-cuc-slide.md` mục 1 (xen mặt với slide giữ người xem lâu hơn; hiện diện giảng viên nâng kết nối/hài lòng dù không tự nâng điểm ghi nhớ). Slide bài giảng thông thường (gạch đầu dòng, sơ đồ đơn, ảnh minh hoạ) gần như luôn đọc được ở 73% khung của `ca-hai` - dùng `ca-hai` trước, chỉ đổi sang `slide` toàn khung khi kiểm THẬT (thu ảnh `ca-hai` về 480 ngang như Bước 4 mục 1) cho thấy chữ/số liệu không đọc được, hoặc slide có nhiều animation/là quay màn hình. Ngưỡng số từ trong bảng dưới chỉ là ước lượng ban đầu để `slide-khop.py` chạy tự động, không phải căn cứ chốt.
+
 | layout | Hình | Dùng khi |
 |---|---|---|
 | `mat` | mặt toàn khung | dẫn nhập, kể chuyện, chuyển ý, kết, lời mời - không có gì để đọc |
-| `slide` | slide toàn khung trên nền giấy | liệt kê dài, sơ đồ, bảng, số liệu, quy trình nhiều bước, slide động (>= 40 từ hoặc có bảng) |
-| `ca-hai` | slide chính 73% + mặt nhỏ 4:5 góc dưới phải | slide vừa 12-39 từ; slide đọc được, mặt giữ hiện diện; dải dưới trống cho pill |
+| `ca-hai` | slide chính 73% + mặt nhỏ 4:5 góc dưới phải | MẶC ĐỊNH cho mọi slide đọc được ở 73% khung - đa số slide bài giảng thông thường (gạch đầu dòng, sơ đồ đơn, số liệu vừa, trích dẫn dài); mặt giữ hiện diện, dải dưới trống cho pill |
+| `slide` | slide toàn khung trên nền giấy | CHỈ khi đã thử `ca-hai` và kiểm đọc thật thất bại: bảng nhiều cột/hàng, sơ đồ dày chi tiết nhỏ, slide động/quay màn hình |
 | `mat-chinh` | mặt toàn khung + slide thẻ nhỏ góc trên phải | slide < 12 từ: tên khung, trích dẫn ngắn, một ảnh - người nói là chính |
 | `chia-doi` | mặt trái 816x900, slide phải 888x500 | cần thấy cử chỉ tay/biểu cảm cùng lúc với một hình đơn giản |
 
@@ -56,7 +58,7 @@ Kiểm rồi dựng: `python3 tools/assemble.py --project "du-an/<tên>" --kiem-
 Như phim-dung-bai Bước 6 (cổng `nghiem-thu.py video` bắt buộc, ảnh lưới, mối nối theo `map.json`), thêm:
 
 1. Trên ảnh lưới và 1 frame mỗi bố cục: chữ slide đọc được ở cỡ điện thoại (thu ảnh về 480 ngang và nhìn) - không đọc được thì đổi `ca-hai` sang `slide` hoặc dùng `slideZoom`
-2. Mặt trong ô nhỏ không cắt trán/cằm: chỉnh `cropFocus` nếu lệch
+2. **Mặt trong ô nhỏ không cắt trán/cằm, đủ toàn thân khi có cử chỉ**: vì `ca-hai` giờ là bố cục mặc định (mục "Năm bố cục" trên), một dự án có thể có hàng chục đoạn `ca-hai` - kiểm `cropFocus` ở NHIỀU mốc rải đều trong TỪNG đoạn (không chỉ một khung đầu đoạn), nhìn cả hai mép trái-phải, đặc biệt khi người nói di chuyển/xoay người/đổi tư thế giữa đoạn. Kỹ thuật đo nhanh: trích khung hình CHƯA crop tại vài mốc trong đoạn, thử vài giá trị `cropFocus`, chọn giá trị giữ đủ người xuyên suốt; nếu người nói đổi vị trí lớn ngay trong một đoạn dài, tách thành nhiều segment `ca-hai` liên tiếp mỗi đoạn một `cropFocus` riêng thay vì ép một giá trị chung không sạch ở đâu cả
 3. Slide đúng mốc lời nói: mở `map.json`, với 2-3 slide quan trọng trích frame tại `start` của part và đọc lại câu transcript bao quanh
 4. Quãng `slide` đứng hình là cố ý (nghiem-thu đã bỏ cảnh báo theo `map.json`); quãng `mat`/`ca-hai` đứng hình là lỗi
 

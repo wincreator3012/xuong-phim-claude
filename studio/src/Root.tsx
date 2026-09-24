@@ -28,6 +28,8 @@ import {
   lowerThirdDefaults,
 } from './components/LowerThird';
 import {Benefits, BenefitsProps, benefitsDefaults} from './components/Benefits';
+import {YNiem, YNiemProps, yNiemDefaults, yNiemSuggestedSeconds} from './components/YNiem';
+import {YCanh, YCanhProps, yCanhDefaults, yCanhSuggestedSeconds} from './components/YCanh';
 
 loadFonts();
 
@@ -165,6 +167,33 @@ export const RemotionRoot: React.FC = () => {
             defaultProps={benefitsDefaults as BenefitsProps}
             calculateMetadata={({props}) => ({
               durationInFrames: durationOf(props, 6),
+            })}
+          />
+          <Composition
+            id={`YNiem-${suffix}`}
+            component={YNiem}
+            width={width}
+            height={height}
+            fps={FPS}
+            durationInFrames={seconds(3)}
+            defaultProps={yNiemDefaults as YNiemProps}
+            calculateMetadata={({props}) => ({
+              durationInFrames: durationOf(
+                props,
+                yNiemSuggestedSeconds(props.drawSeconds, props.labelAt),
+              ),
+            })}
+          />
+          <Composition
+            id={`YCanh-${suffix}`}
+            component={YCanh}
+            width={width}
+            height={height}
+            fps={FPS}
+            durationInFrames={seconds(4)}
+            defaultProps={yCanhDefaults as YCanhProps}
+            calculateMetadata={({props}) => ({
+              durationInFrames: durationOf(props, yCanhSuggestedSeconds(props.variant)),
             })}
           />
         </Folder>

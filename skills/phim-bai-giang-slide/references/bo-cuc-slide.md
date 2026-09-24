@@ -22,17 +22,18 @@ Tài liệu tham chiếu cho skill phim-bai-giang-slide. Đọc khi soạn "dàn
 
 Ba câu hỏi cho mỗi đoạn lời giảng, theo thứ tự:
 
-1. **Lúc này người học cần NHÌN cái gì để hiểu?** Nếu cần đọc/nhìn slide (sơ đồ, số liệu, liệt kê dài, bảng, trích dẫn dài) thì slide phải đủ lớn để đọc: `slide` toàn khung. Nếu chỉ cần nghe (kể chuyện, dẫn nhập, chuyển ý, lời mời, cảm xúc) thì `mat`.
-2. **Slide có đơn giản đến mức mặt không tranh chú ý không?** Slide vừa (12-39 từ, một hình đơn) thì `ca-hai`: slide vẫn đọc được, mặt nhỏ giữ kết nối và cử chỉ. Slide chỉ là một từ khoá/tiêu đề/trích dẫn ngắn/một ảnh thì `mat-chinh`: người nói là trọng tâm, slide là điểm nhấn.
-3. **Có cần thấy rõ cử chỉ tay hay biểu cảm cùng lúc với slide không?** (giải thích một mô hình bằng tay, so sánh hai bên, kể ví dụ có hình minh hoạ) thì `chia-doi`.
+1. **Lúc này người học cần NHÌN cái gì để hiểu?** Nếu chỉ cần nghe (kể chuyện, dẫn nhập, chuyển ý, lời mời, cảm xúc) thì `mat`, không cần slide. Nếu cần đọc/nhìn slide thì sang câu 2.
+2. **Slide có đọc được ở 73% khung không?** Mặc định là CÓ, dùng `ca-hai`: slide bài giảng thông thường (sơ đồ, số liệu, liệt kê, trích dẫn dài) hầu như luôn đọc được ở kích thước này, và giữ người nói trên hình quan trọng hơn khung to thêm một chút - đúng phát hiện ở mục 1 (xen mặt-slide giữ người xem lâu hơn; hiện diện giảng viên nâng kết nối/hài lòng). Chỉ lùi về `slide` toàn khung khi kiểm đọc THẬT (thu nhỏ về cỡ điện thoại, xem bằng mắt, không đoán) thất bại: bảng nhiều cột/hàng, sơ đồ dày chi tiết nhỏ, hoặc slide có animation/là quay màn hình.
+3. **Slide chỉ là một từ khoá/tiêu đề/trích dẫn ngắn/một ảnh (dưới 12 từ)?** Thì `mat-chinh`: người nói là trọng tâm, slide là điểm nhấn góc.
+4. **Có cần thấy rõ cử chỉ tay hay biểu cảm cùng lúc với slide không?** (giải thích một mô hình bằng tay, so sánh hai bên, kể ví dụ có hình minh hoạ) thì `chia-doi`.
 
-Bảng quy tắc mặc định (slide-khop.py đề xuất tự động theo số từ; Claude điều chỉnh theo nội dung thật):
+Bảng quy tắc mặc định (slide-khop.py đề xuất tự động theo số từ; Claude điều chỉnh theo nội dung thật - xem nguyên tắc "mặc định `ca-hai`" ở câu hỏi 2 trên):
 
 | Tình huống lời giảng | Slide | Bố cục | Vì sao |
 |---|---|---|---|
 | Dẫn nhập, kể chuyện, chuyển ý, kết, lời mời | không có hoặc không cần | `mat` | mặt + ánh nhìn thẳng tạo kết nối; không có gì để đọc |
-| Liệt kê dài, sơ đồ, bảng, số liệu, quy trình nhiều bước | dày (>= 40 từ, có bảng/sơ đồ) | `slide` | tránh chia chú ý; chữ phải đủ lớn; người học đọc |
-| Giải thích một ý có 3-6 gạch đầu dòng | vừa (12-39 từ) | `ca-hai` | slide đọc được ở 73% khung, mặt 7% giữ hiện diện |
+| Giải thích một ý, liệt kê gạch đầu dòng, sơ đồ/số liệu vừa, trích dẫn dài | đọc được ở 73% khung | `ca-hai` | MẶC ĐỊNH - slide đọc được, mặt 7% giữ hiện diện và kết nối |
+| Liệt kê rất dài, bảng nhiều cột/hàng, sơ đồ dày chi tiết nhỏ, quy trình nhiều bước phức tạp | đã kiểm ở `ca-hai` mà không đọc được | `slide` | chỉ khi 73% thật sự không đủ; tránh chia chú ý khi buộc phải full khung |
 | Nhấn một khái niệm, tên khung, trích dẫn ngắn, một ảnh | ít (< 12 từ) | `mat-chinh` | người nói là chính; slide là bảng phụ |
 | Mô tả có cử chỉ tay, so sánh, ví dụ minh hoạ bằng ảnh | ảnh/hình đơn giản | `chia-doi` | cả cử chỉ và hình đều rõ |
 | Slide động, nhiều animation (quay màn hình) | bất kỳ | `slide` | mặt cạnh tranh với chuyển động trên slide |
@@ -60,4 +61,4 @@ Bảng quy tắc mặc định (slide-khop.py đề xuất tự động theo s�
 
 ## 6. Kỹ thuật (tóm tắt)
 
-Toạ độ ô trong `do-hoa-chung/bo-cuc/bo-cuc.json` (sinh bởi `tools/bo-cuc-slide.py`): `ca-hai` slide 1392x783 tại (96,120), mặt 352x440 tại (1504,463); `chia-doi` mặt 816x900 tại (72,90), slide 888x500 tại (960,290); `mat-chinh` slide 600x338 tại (1248,72). Nền theo palette `theme` của timeline (light: #FAF7F1, dark: #15181C), bo góc 16-24px, bóng đổ mềm. Mặt trong ô nhỏ crop theo tỉ lệ ô quanh `cropFocus`. Ghép ở 1920x1080 rồi thu về preview.
+Toạ độ ô trong `do-hoa-chung/bo-cuc/bo-cuc.json` (sinh bởi `tools/bo-cuc-slide.py`): `ca-hai` slide 1392x783 tại (96,120), mặt 352x440 tại (1504,463); `chia-doi` mặt 816x900 tại (72,90), slide 888x500 tại (960,290); `mat-chinh` slide 600x338 tại (1248,72). Nền theo palette `theme` của timeline (light: #FAF7F1, dark: #15181C), bo góc 16-24px, bóng đổ mềm. Mặt trong ô nhỏ crop theo tỉ lệ ô quanh `cropFocus`. Ghép ở 1920x1080 rồi thu về preview. Vì `ca-hai` là mặc định (mục 2), kiểm `cropFocus` ở nhiều mốc rải đều trong từng đoạn, không chỉ một khung đầu đoạn - xem Bước 4 mục 2 của SKILL.md.
