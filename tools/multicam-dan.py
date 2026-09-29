@@ -6,6 +6,20 @@ theo thực hành podcast/multicam hiệu quả, sinh timeline nháp cho assembl
 Cách dùng (từ gốc "xuong-phim-claude", sau multicam-khop.py và transcript của tiếng chủ):
   python3 tools/multicam-dan.py "du-an/<x>" --transcript "<tên file transcript không đuôi>"
       [--che-do auto|podcast|bai-giang] [--phut 8] [--khong-session] [--tieng "nguon/tieng-chu.wav"]
+      [--nguoi-noi auto|tieng|hinh|<file.json>] [--khoa overlay.json] [--cua-so A-B --hau-to clip1]
+      [--gioi-han 150]
+
+  --nguoi-noi  auto (mặc định): so năng lượng mic gần; nếu > 30% thời gian nói bị nhận là 'chong'
+               (tiếng các góc gần như giống nhau: một mic tốt thu cả phòng, hoặc mỗi máy thu lọt tiếng
+               người kia) thì tự chuyển sang 'hinh' - so CHUYỂN ĐỘNG mặt/tay ở từng góc cận.
+               <file.json>: danh sách lượt nói soạn tay [{"start","end","ai"}] (trục chung).
+  --khoa       JSON {"overlay": [{"src": "do-hoa/ngang/p01.webm", "at": <giây trục chung>, "dur": <giây>,
+               "goc": "<góc bắt buộc, tuỳ chọn - ví dụ bảng tên>"}]}: mọi điểm cắt tránh khung
+               [at - 0.25, at + dur + 0.25]; overlay được gắn sẵn vào segment chứa nó (at tương đối).
+  --cua-so     chỉ dàn góc trong quãng A-B giây của trục chung (một buổi quay → nhiều clip độc lập);
+               --hau-to thêm vào tên file đầu ra (DAN-GOC-clip1.md, timeline-multicam-nhap-clip1.json).
+  --gioi-han   giây tối đa cho một lượt đo chuyển động (mỗi lượt gọi lệnh trên máy bị giới hạn ~180 s);
+               phần đã đo được cache trong multicam/.chuyen-dong/, chạy lại đúng lệnh để đo tiếp.
 
 Đầu vào: du-an/<x>/multicam.json (offset từng file), transcript/<tên>.transcript.json + .silences.json
   (transcript chạy trên TIẾNG CHỦ - nguon/tieng-chu.wav nếu đã --tron-tieng, hoặc file góc chủ).
@@ -137,11 +151,219 @@ def detect_speakers(project, mc, total):
     return turns, tracks
 
 
+# ---------------------------------------------------------------- ai đang nói: theo chuyển động hình
+MOTION_FPS = 5
+MOTION_CHUNK = 300.0   # giây mỗi mảnh cache: mỗi lượt gọi lệnh trên máy có giới hạn thời gian
+
+
+def probe_dur(path):
+    p = sh(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", path])
+    return float(p.stdout.decode().strip() or 0)
+
+
+def motion_file(path, cache_dir, deadline):
+    """Năng lượng chuyển động 5 lần/giây của một file góc cận: trung bình |khung - khung trước| trên
+    ảnh xám 64x36, bỏ viền hai bên và dải đáy (giữ vùng mặt + tay). Cache từng mảnh 300 s."""
+    import time
+    dur = probe_dur(path)
+    key = re.sub(r"[^\w.-]", "_", os.path.basename(os.path.dirname(path)) + "_" + os.path.basename(path))
+    parts, k = [], 0
+    while k * MOTION_CHUNK < dur:
+        cf = os.path.join(cache_dir, f"{key}.{k:03d}.npy")
+        if not os.path.isfile(cf):
+            if time.time() > deadline:
+                return None
+            w, h = 64, 36
+            p = sh(["ffmpeg", "-hide_banner", "-v", "error", "-ss", str(k * MOTION_CHUNK), "-t", str(MOTION_CHUNK),
+                    "-i", path, "-an", "-vf", f"fps={MOTION_FPS},scale={w}:{h},format=gray",
+                    "-f", "rawvideo", "-pix_fmt", "gray", "-"])
+            x = np.frombuffer(p.stdout, dtype=np.uint8)
+            x = x[: (len(x) // (w * h)) * w * h].reshape(-1, h, w).astype(np.float32)
+            x = x[:, : int(h * 0.9), int(w * 0.12): int(w * 0.88)]
+            d = np.abs(np.diff(x, axis=0)).mean(axis=(1, 2)) if len(x) > 1 else np.zeros(0, dtype=np.float32)
+            d = np.concatenate([[d[0] if len(d) else 0.0], d]).astype(np.float32)
+            np.save(cf, d)
+        parts.append(np.load(cf))
+        k += 1
+    return np.concatenate(parts) if parts else np.zeros(0, dtype=np.float32)
+
+
+def detect_speakers_motion(project, mc, total, cache_dir, budget=150.0):
+    """Ai đang nói theo CHUYỂN ĐỘNG ở từng góc cận: người nói cử động miệng, đầu, tay nhiều hơn người
+    nghe. Mỗi góc chuẩn hoá theo trung vị của chính nó (bù khác biệt cỡ cảnh, ánh sáng), làm trơn 5 s,
+    góc lớn hơn rõ rệt (>= 1.15 lần) là người nói; vùng lưỡng lự giữ người đang nói; lượt < 4 s nhập
+    lượt trước. Trả (turns, tracks); turns None khi chưa đo xong trong giới hạn thời gian."""
+    import time
+    deadline = time.time() + budget
+    os.makedirs(cache_dir, exist_ok=True)
+    n = int(math.ceil(total)) + 1                 # lưới 1 s
+    tracks = {}
+    for g in mc["goc"]:
+        if g["loai"] != "can":
+            continue
+        act = np.full(n, np.nan, dtype=np.float32)
+        for fe in g["files"]:
+            if fe.get("offset") is None or not fe.get("co_hinh", True):
+                continue
+            m = motion_file(os.path.join(project, fe["file"]), cache_dir, deadline)
+            if m is None:
+                return None, None
+            sec = len(m) // MOTION_FPS
+            per_s = m[: sec * MOTION_FPS].reshape(sec, MOTION_FPS).mean(axis=1)
+            k0 = int(round(fe["offset"]))
+            for k in range(sec):
+                if 0 <= k0 + k < n:
+                    act[k0 + k] = per_s[k]
+        med = float(np.nanmedian(act)) if np.any(~np.isnan(act)) else 0.0
+        tracks[g["ten"]] = act / (med if med > 0 else 1.0)
+    if len(tracks) < 2:
+        return [], tracks
+    names = list(tracks)
+    A = np.where(np.isnan(np.vstack([tracks[nm] for nm in names])), 0.0, np.vstack([tracks[nm] for nm in names]))
+    ker = np.ones(5) / 5
+    S = np.vstack([np.convolve(a, ker, mode="same") for a in A])
+    labels, cur = [None] * n, None
+    for j in range(n):
+        col = S[:, j]
+        order = np.argsort(col)[::-1]
+        top, sec_ = col[order[0]], col[order[1]]
+        if top > 0 and (sec_ <= 0 or top / sec_ >= 1.15):
+            cur = names[order[0]]
+        labels[j] = cur
+    runs = []
+    for j, lb in enumerate(labels):
+        if runs and runs[-1][2] == lb:
+            runs[-1][1] = j + 1
+        else:
+            runs.append([j, j + 1, lb])
+    merged = []
+    for r in runs:
+        if merged and ((r[1] - r[0]) < 4 or merged[-1][2] == r[2]):
+            merged[-1][1] = r[1]
+        else:
+            merged.append(r)
+    turns = [{"start": float(a), "end": float(b), "ai": lb, "nguon": "hinh"} for a, b, lb in merged if lb]
+    return turns, tracks
+
+
+# ---------------------------------------------------------------- khoá overlay: không cắt ngang pill/bảng tên
+LOCK_MARGIN = 0.25
+
+
+def load_locks(path):
+    d = load_json(path, {})
+    items = d.get("overlay", []) if isinstance(d, dict) else d
+    return sorted(({"src": o["src"], "at": float(o["at"]), "dur": float(o["dur"]), "goc": o.get("goc")}
+                   for o in items), key=lambda o: o["at"])
+
+
+def apply_locks(shots, locks, lo, hi):
+    """Dời mọi điểm cắt rơi vào [at - 0.25, at + dur + 0.25] của một overlay ra mép gần nhất; không
+    dời được (cú bên cạnh quá ngắn) thì nhập hai cú. Overlay có 'goc' bắt buộc (bảng tên người nói)
+    rơi vào cú xen (phản ứng, toàn) thì đổi cú đó sang góc yêu cầu; rơi vào cú cận người nói khác
+    thì cảnh báo (bảng tên đặt sai lượt nói)."""
+    def inside(t):
+        for o in locks:
+            a, b = o["at"] - LOCK_MARGIN, o["at"] + o["dur"] + LOCK_MARGIN
+            if a < t < b:
+                return a, b
+        return None
+    for _ in range(8):
+        changed, i = False, 0
+        while i < len(shots) - 1:
+            t = shots[i]["end"]
+            box = inside(t)
+            if box:
+                left, right = box[0] - 0.02, box[1] + 0.02
+                can_l = left - shots[i]["start"] >= 1.5 and left > lo
+                can_r = shots[i + 1]["end"] - right >= 1.5 and right < hi
+                if can_l and (not can_r or t - left <= right - t):
+                    nt = left
+                elif can_r:
+                    nt = right
+                else:
+                    shots[i]["end"] = shots[i + 1]["end"]
+                    shots[i]["ly_do"] += " (nhập cú sau: không cắt ngang overlay)"
+                    del shots[i + 1]
+                    changed = True
+                    continue
+                shots[i]["end"] = shots[i + 1]["start"] = round(nt, 2)
+                changed = True
+            i += 1
+        if not changed:
+            break
+    warns = []
+    for o in locks:
+        if not o.get("goc"):
+            continue
+        s_ = next((x for x in shots if x["start"] <= o["at"] < x["end"]), None)
+        if s_ and s_["goc"] != o["goc"]:
+            if s_["ly_do"].startswith("cận người nói"):
+                warns.append(f"{os.path.basename(o['src'])} tại {fmt(o['at'])} cần góc {o['goc']} nhưng lúc đó "
+                             f"{s_['goc']} đang nói - dời mốc bảng tên vào lượt nói của {o['goc']}")
+            else:
+                s_["goc"] = o["goc"]
+                s_["ly_do"] += f" (đổi sang {o['goc']} cho {os.path.basename(o['src'])})"
+    return shots, warns
+
+
+def refill_long(shots, locks, angles, wide, snap, max_hold=32.0):
+    """Sau khi khoá overlay, vài cú xen bị gỡ khiến cận người nói kéo dài > 32 s. Chèn lại cú xen
+    3-4 s (phản ứng người nghe xen kẽ góc toàn) ở chỗ trống không đụng overlay nào."""
+    def free(a, b):
+        return all(not (a < o["at"] + o["dur"] + LOCK_MARGIN and b > o["at"] - LOCK_MARGIN) for o in locks)
+    out, k = [], 0
+    for sh_ in shots:
+        if not sh_["ly_do"].startswith("cận người nói") or sh_["end"] - sh_["start"] <= max_hold:
+            out.append(sh_)
+            continue
+        others = [g for g in angles.values() if g != sh_["goc"]]
+        pos = sh_["start"]
+        while sh_["end"] - pos > max_hold:
+            cut = None
+            for step in range(0, int(sh_["end"] - pos - 24)):
+                for base in (pos + 20 + step, pos + 20 - step):
+                    if base < pos + 12 or base > sh_["end"] - 8:
+                        continue
+                    t = snap(base, 0.5)
+                    if free(t - 0.3, t + 4.0):
+                        cut = t
+                        break
+                if cut:
+                    break
+            if cut is None:
+                break
+            react = others[k % len(others)] if others and (k % 2 == 0 or not wide) else wide
+            r_end = round(cut + 3.2 + (k % 3) * 0.4, 2)
+            out.append({**sh_, "start": round(pos, 2), "end": round(cut, 2)})
+            out.append({"start": round(cut, 2), "end": r_end, "goc": react,
+                        "ly_do": "phản ứng người nghe (chèn sau khoá overlay)" if react != wide else "góc toàn xen giữa lượt dài (chèn sau khoá overlay)"})
+            pos, k = r_end, k + 1
+        out.append({**sh_, "start": round(pos, 2)})
+    return out
+
+
+def attach_overlays(tl_segs, locks):
+    """Gắn overlay vào segment chứa trọn nó (at tương đối từ đầu segment)."""
+    warns = []
+    for o in locks:
+        a, b = o["at"], o["at"] + o["dur"]
+        seg = next((x for x in tl_segs if x.get("type") == "video"
+                    and x["_truc"][0] - 1e-3 <= a and b <= x["_truc"][1] + 1e-3), None)
+        if not seg:
+            warns.append(f"{os.path.basename(o['src'])} tại {fmt(a)} vắt qua điểm cắt (thường do đổi file góc) - kiểm tay")
+            continue
+        ov = {"src": o["src"], "at": round(a - seg["_truc"][0], 2)}
+        cur = seg.get("overlay")
+        seg["overlay"] = ov if not cur else (cur if isinstance(cur, list) else [cur]) + [ov]
+    return warns
+
+
 # ---------------------------------------------------------------- session
-def split_sessions(segs, total, target_min):
+def split_sessions(segs, total, target_min, start=0.0):
     """Ranh giới session = khoảng ngắt dài + đổi từ vựng + cụm chuyển ý; tham lam theo độ dài mục tiêu."""
     if not segs:
-        return [{"start": 0.0, "end": total}]
+        return [{"start": start, "end": total}]
     words = lambda s: set(w for w in re.findall(r"\w+", s.lower()) if len(w) > 2)
     cands = []
     for i in range(1, len(segs)):
@@ -154,7 +376,7 @@ def split_sessions(segs, total, target_min):
         if gap >= 0.8 or cue:
             cands.append((segs[i]["start"], score, gap, cue))
     target = target_min * 60
-    bounds, last = [0.0], 0.0
+    bounds, last = [start], start
     while True:
         window = [c for c in cands if last + target * 0.6 <= c[0] <= last + target * 1.5]
         if not window or total - last < target * 1.3:
@@ -384,6 +606,11 @@ def main():
     ap.add_argument("--khong-session", action="store_true")
     ap.add_argument("--tieng", default=None, help="file tiếng chủ (mặc định: multicam.json tieng_chu hoặc góc chuẩn)")
     ap.add_argument("--chinh", default=None, help="bài giảng: góc chính (mặc định góc cận đầu tiên)")
+    ap.add_argument("--nguoi-noi", default="auto", help="auto | tieng | hinh | <file lượt nói .json>")
+    ap.add_argument("--khoa", default=None, help="JSON overlay cần giữ nguyên một cú (pill, bảng tên)")
+    ap.add_argument("--cua-so", default=None, help="A-B: chỉ dàn góc trong quãng này của trục chung")
+    ap.add_argument("--hau-to", default="", help="hậu tố tên file đầu ra, ví dụ clip1")
+    ap.add_argument("--gioi-han", type=float, default=150.0, help="giây tối đa mỗi lượt đo chuyển động")
     args = ap.parse_args()
     project = args.project.rstrip("/")
     mc = load_json(os.path.join(project, "multicam.json"))
@@ -434,17 +661,48 @@ def main():
         mode = "podcast" if len(people) >= 2 else "bai-giang"
     print(f"Chế độ: {mode} | góc cận: {[g['ten'] for g in can]} | toàn: {wide} | tiếng chủ: {audio_src}")
 
-    sessions = [{"start": 0.0, "end": total, "tu_khoa": [], "cau_mo": "", "ten": ""}] if args.khong_session \
-        else split_sessions(segs, total, args.phut)
+    lo, hi = 0.0, total
+    if args.cua_so:
+        lo, hi = (float(x) for x in args.cua_so.split("-", 1))
+        segs = [x for x in segs if x["end"] > lo and x["start"] < hi]
+        print(f"  cửa sổ {fmt(lo)} - {fmt(hi)} ({(hi - lo) / 60:.1f} phút)")
+    sfx = f"-{args.hau_to}" if args.hau_to else ""
+    sessions = [{"start": lo, "end": hi, "tu_khoa": [], "cau_mo": "", "ten": ""}] if args.khong_session \
+        else split_sessions(segs, hi, args.phut, lo)
     for i, s in enumerate(sessions, 1):
         s["so"] = i
-    json.dump(sessions, open(os.path.join(out_dir, "session.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    json.dump(sessions, open(os.path.join(out_dir, f"session{sfx}.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 
     turns = None
     if mode == "podcast":
-        turns, _ = detect_speakers(project, mc, total)
+        src_nn = args.nguoi_noi
+        if src_nn not in ("auto", "tieng", "hinh"):
+            fp = src_nn if os.path.isabs(src_nn) else os.path.join(project, src_nn)
+            turns = load_json(fp)
+            if not turns:
+                raise SystemExit(f"! Không đọc được lượt nói từ {fp}")
+            print(f"  người nói: đọc từ {src_nn} ({len(turns)} lượt)")
+        if turns is None and src_nn in ("auto", "tieng"):
+            try:
+                turns, _ = detect_speakers(project, mc, total)
+            except SystemExit as e:        # góc không có tiếng (proxy chỉ hình) → thử theo hình
+                if src_nn == "tieng":
+                    raise
+                print(f"  ! không so được tiếng các góc ({str(e).splitlines()[0][:80]}) → theo chuyển động hình")
+                turns = None
+            if turns and src_nn == "auto":
+                spoken = sum(t["end"] - t["start"] for t in turns) or 1.0
+                chong = sum(t["end"] - t["start"] for t in turns if t["ai"] == "chong")
+                if chong / spoken > 0.3:
+                    print(f"  ! {chong / spoken:.0%} thời gian nói bị nhận là 'chong' (tiếng các góc gần như "
+                          f"giống nhau) → nhận diện người nói theo chuyển động hình")
+                    turns = None
+        if not turns and src_nn in ("auto", "hinh"):
+            turns, _ = detect_speakers_motion(project, mc, total, os.path.join(out_dir, ".chuyen-dong"), args.gioi_han)
+            if turns is None:
+                raise SystemExit("⏸ Đang đo chuyển động hình (phần xong đã cache) - chạy lại đúng lệnh này để đo tiếp")
         if not turns:
-            raise SystemExit("! Podcast cần >= 2 góc cận có tiếng để biết ai đang nói (hoặc dùng --che-do bai-giang)")
+            raise SystemExit("! Podcast cần >= 2 góc cận có tiếng hoặc có hình để biết ai đang nói (hoặc dùng --che-do bai-giang)")
         json.dump(turns, open(os.path.join(out_dir, "nguoi-noi.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
         angles = {g["ten"]: g["ten"] for g in can}
         shots = plan_podcast(turns, sessions, angles, wide, snap, total)
@@ -455,7 +713,19 @@ def main():
         shots = plan_lecture(segs, sessions, main_g, second, wide, snap)
         fallback = main_g
 
+    warns = []
+    locks = load_locks(args.khoa if os.path.isabs(args.khoa) else os.path.join(project, args.khoa)) if args.khoa else []
+    if locks:
+        locks = [o for o in locks if lo <= o["at"] < hi]
+        shots, w = apply_locks(shots, locks, lo, hi)
+        warns += w
+        shots = enforce_holds(shots, snap)
+        if mode == "podcast":
+            shots = refill_long(shots, locks, angles, wide, snap)
     tl_segs = absorb_short(to_segments(shots, mc, audio_src, fallback, audio_off), mc)
+    if locks:
+        warns += attach_overlays(tl_segs, locks)
+        print(f"  khoá {len(locks)} overlay; {len(warns)} cảnh báo")
 
     # chèn SectionTitle giữa các session + chapter
     final_segs, jobs, chapters = [], [], []
@@ -475,12 +745,15 @@ def main():
     for x in tl_segs:
         by_goc[x["_goc"]] = by_goc.get(x["_goc"], 0) + (x["_truc"][1] - x["_truc"][0])
     cuts = len(tl_segs)
-    avg = (total / cuts) if cuts else 0
+    span = hi - lo
+    avg = (span / cuts) if cuts else 0
 
     lines = [f"# Dàn góc đề xuất - {os.path.basename(project)} ({mode})", "",
              f"Trục thời gian chung (góc chuẩn `{mc['truc_chuan']}`), tiếng chủ `{audio_src}`. "
              f"{cuts} cú cắt, trung bình {avg:.1f} s/cú. Tỉ lệ góc: " +
-             ", ".join(f"{g} {v / total * 100:.0f}%" for g, v in sorted(by_goc.items(), key=lambda x: -x[1])), ""]
+             ", ".join(f"{g} {v / span * 100:.0f}%" for g, v in sorted(by_goc.items(), key=lambda x: -x[1])), ""]
+    if warns:
+        lines += ["## Cảnh báo overlay", ""] + [f"- {w}" for w in warns] + [""]
     if len(sessions) > 1:
         lines += ["## Session (Claude đặt tên theo nội dung, user duyệt)", "",
                   "| # | Mốc | Dài | Từ khoá | Câu mở |", "|---|---|---|---|---|"]
@@ -499,20 +772,22 @@ def main():
     for i, x in enumerate(tl_segs, 1):
         a, b = x["_truc"]
         lines.append(f"| {i} | {fmt(a)} - {fmt(b)} | {b - a:.1f}s | {x['_goc']} | {os.path.basename(x['src'])} | {x['_ly_do']} |")
-    open(os.path.join(out_dir, "DAN-GOC.md"), "w", encoding="utf-8").write("\n".join(lines) + "\n")
+    open(os.path.join(out_dir, f"DAN-GOC{sfx}.md"), "w", encoding="utf-8").write("\n".join(lines) + "\n")
 
     tl = {"_ghi_chu": "NHÁP do multicam-dan.py sinh. in/out theo file GÓC; audioSrc/audioIn theo tiếng chủ "
                       "(trục chung). Claude chỉnh theo DAN-GOC.md đã duyệt, đặt tên session trong job-session.json, "
                       "render SectionTitle rồi chép vào timeline.json. Không dùng snap (điểm cắt đã hút về khoảng lặng).",
           "aspect": "ngang", "fps": 30, "segments": final_segs}
-    json.dump(tl, open(os.path.join(out_dir, "timeline-multicam-nhap.json"), "w", encoding="utf-8"),
+    json.dump(tl, open(os.path.join(out_dir, f"timeline-multicam-nhap{sfx}.json"), "w", encoding="utf-8"),
               ensure_ascii=False, indent=1)
     if jobs:
         json.dump({"aspect": "ngang", "theme": "light", "brandFile": "../../../brand/brand.json",
                    "outDir": "ngang", "jobs": jobs},
-                  open(os.path.join(out_dir, "job-session.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+                  open(os.path.join(out_dir, f"job-session{sfx}.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print("\n".join(lines[:40]))
-    print(f"\n✓ {out_dir}/: DAN-GOC.md, timeline-multicam-nhap.json, session.json"
+    for w in warns:
+        print(f"  ⚠ {w}")
+    print(f"\n✓ {out_dir}/: DAN-GOC{sfx}.md, timeline-multicam-nhap{sfx}.json, session{sfx}.json"
           + (", nguoi-noi.json" if turns else "") + (", job-session.json" if jobs else ""))
 
 

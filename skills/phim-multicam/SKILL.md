@@ -1,6 +1,6 @@
 ---
 name: phim-multicam
-description: Dựng clip ngang từ 2-3 góc quay của cùng một buổi trong thư mục xưởng (gốc repo xuong-phim-claude): đồng bộ các góc bằng đối chiếu âm thanh (multicam-khop.py), nhận diện người nói và đề xuất chuỗi chuyển góc theo thực hành podcast và multicam (multicam-dan.py), chia buổi dài thành session ngăn bằng thẻ chữ, dựng bằng assemble.py với audioSrc. Kích hoạt khi user nói "multicam", "nhiều góc quay", "podcast hai người", "góc cận góc toàn", "ghép các góc", "chuyển góc", hoặc nguon có nhiều thư mục con mỗi thư mục một máy quay.
+description: Dựng clip ngang từ 2-3 góc quay của cùng một buổi trong thư mục xưởng (gốc repo xuong-phim-claude): đồng bộ các góc bằng đối chiếu âm thanh (multicam-khop.py), nhận diện người nói và đề xuất chuỗi chuyển góc theo thực hành podcast và multicam (multicam-dan.py), chia buổi dài thành session ngăn bằng thẻ chữ, dựng bằng assemble.py với audioSrc. Kích hoạt khi user nói "multicam", "nhiều góc quay", "podcast hai người", "góc cận góc toàn", "ghép các góc", "chuyển góc", "cắt một buổi podcast thành nhiều clip", hoặc nguon có nhiều thư mục con mỗi thư mục một máy quay.
 ---
 
 # Multicam: khớp các góc rồi chuyển góc có chủ đích
@@ -30,6 +30,14 @@ Ra `du-an/<tên>/multicam.json`: trục chuẩn, từng file mỗi góc có `off
 
 Đọc kết quả trước khi đi tiếp: file có `tin_cay` < 1.1 hoặc `khop_r` < 0.2 là nghi ngờ (lời nói cùng phòng thường r 0.4-0.8); `drift_ppm` > 200 nghĩa là hai máy trôi rõ (tool đã hiệu chỉnh tại giữa mỗi segment nhưng segment > 60 giây nên tách đôi). Với file nghi ngờ, KIỂM BẰNG MẮT: trích một khung ở mốc trục chung T từ hai góc (`-ss` = T - offset của mỗi file) tại một khoảnh khắc có cử động rõ (vỗ tay, gật đầu, miệng mở) rồi ghép cạnh nhau và nhìn; hoặc cắt 3 giây tiếng của hai file tại cùng mốc trục, trộn và nghe xem có vọng đôi không. Sai thì soạn tay `multicam.json` (truyền `--cau-hinh`) hoặc bảo user báo mốc vỗ tay.
 
+**Nguồn 4K nặng (mỗi file hàng chục GB)**: khớp Bước 1 trên file gốc, rồi tạo proxy 1080p ĐÃ CĂN SẴN và làm mọi bước sau trên proxy (đo chuyển động, dàn góc, dựng nhanh hơn nhiều lần; file gốc không bị đụng tới):
+
+```
+python3 tools/multicam-proxy.py "du-an/<tên>" [--ra "du-an/<tên>/proxy"] [--tu A --den B]
+```
+
+Chạy lặp đúng lệnh tới khi báo "✓ Xong" (mỗi lượt ~150 giây, mảnh 120 giây đã xong được giữ; tham khảo: 4K sang 1080p khoảng 0,4 lần thời gian thực mỗi góc trên VM 4 lõi). Tool ghi `multicam.json` của proxy (mọi góc offset 0, tiếng chủ `nguon/tieng-chu.wav`) nên KHÔNG chạy lại multicam-khop trên proxy (proxy chỉ có hình). `--tu/--den` cắt bỏ phần chờ đầu và cuối buổi; mốc trục proxy = mốc trục gốc trừ `--tu` (ghi trong `PROXY.json`). Kiểm dung lượng trước (`df -h`): proxy khoảng 1-1,5 GB mỗi góc cho 20 phút; không sao chép file gốc sang chỗ khác. Ổ thư mục xưởng không đủ chỗ thì đặt `--ra` trong thư mục nhà của VM: nhanh nhưng mất khi phiên kết thúc và người dùng không thấy, nên bản dựng xong luôn ghi ra `xuat-hoan-chinh/` trong thư mục xưởng và timeline, kế hoạch overlay chép về dự án. Bản xuất từ proxy là 1080p.
+
 ## Bước 2 - transcript của tiếng chủ
 
 Chạy `transcribe.py` trên `nguon/tieng-chu.wav` (nếu đã trộn) hoặc file góc chuẩn, `--out-dir du-an/<tên>/transcript`, rồi `nghiem-thu.py transcript` như phim-dung-bai. Mốc transcript theo trục chung vì tiếng chủ chính là trục chung (tiếng trộn bắt đầu từ 0 của trục; nếu dùng `--tieng` là một file góc có offset khác 0 thì multicam-dan tự dời mốc transcript và `audioIn` theo).
@@ -38,10 +46,17 @@ Chạy `transcribe.py` trên `nguon/tieng-chu.wav` (nếu đã trộn) hoặc fi
 
 ```
 python3 tools/multicam-dan.py "du-an/<tên>" --transcript "<tên transcript không đuôi>" \
-    [--che-do auto|podcast|bai-giang] [--chinh <góc chính>] [--phut 8] [--khong-session]
+    [--che-do auto|podcast|bai-giang] [--chinh <góc chính>] [--phut 8] [--khong-session] \
+    [--nguoi-noi auto|hinh|luot-noi.json] [--khoa khoa-overlay.json] [--cua-so A-B --hau-to clipN]
 ```
 
 `auto` chọn podcast khi có từ 2 góc cận trở lên: bài giảng một người nhiều góc PHẢI truyền `--che-do bai-giang --chinh <góc>`. Ra `du-an/<tên>/multicam/`: `nguoi-noi.json` (ai nói khi nào, từ so năng lượng mic gần), `session.json` (ranh giới, từ khoá, câu mở), `DAN-GOC.md` (bảng duyệt), `timeline-multicam-nhap.json`, `job-session.json`.
+
+Ba cờ thêm cho podcast (2026-09-29, rút từ một podcast ba góc mà mọi góc cùng thu một nguồn tiếng):
+
+- **Người nói theo hình**: `--nguoi-noi auto` (mặc định) so năng lượng mic gần từng người; khi các góc cùng mang một tiếng (mic cài chung ghi vào góc toàn, hoặc tiếng lọt đều), gần như mọi quãng ra `chong` và dàn góc vô nghĩa. Tool tự nhận ra (trên 30% thời gian nói là `chong`) và chuyển sang so CHUYỂN ĐỘNG mặt và tay ở các góc cận (`--nguoi-noi hinh` để ép; cache trong `multicam/.chuyen-dong/`, báo ⏸ thì chạy lại đúng lệnh). Luôn đối chiếu `nguoi-noi.json` với transcript: ai đặt câu hỏi, ai gọi tên người kia mời nói, câu "cảm ơn anh/chị" thường mở lượt mới. Lượt lật ngắn 4-8 giây giữa một lượt dài thường là người nghe cười hoặc gật mạnh, không phải đổi người nói. Sai thì soạn tay `luot-noi.json` (`[{"start","end","ai"}]`, trục chung) và truyền `--nguoi-noi luot-noi.json`.
+- **Nhiều clip từ một buổi**: chia buổi theo chủ đề trên transcript (mỗi clip trọn một ý, điểm chia tại câu chuyển ý thật), chạy một lần cho mỗi clip với `--cua-so A-B --hau-to clipN --khong-session`. Mỗi clip có intro riêng, bảng tên hiện lại ở lượt nói đầu của mỗi người TRONG clip đó (người xem clip 2 chưa chắc đã xem clip 1), outro dùng chung.
+- **Khoá overlay khi dàn góc**: lập kế hoạch pill và bảng tên TRƯỚC khi dàn góc, ghi `khoa-overlay.json` (`{"overlay": [{"src", "at", "dur", "goc"}]}`, `at` TUYỆT ĐỐI trên trục chung, `goc` chỉ đặt cho bảng tên để bảng tên luôn nằm trên cận đúng người) rồi truyền `--khoa khoa-overlay.json`. Tool dời mọi điểm cắt ra khỏi vùng overlay cộng trừ 0,25 giây (overlay không được vắt qua điểm cắt), đổi cú xen sang đúng người cho bảng tên, chèn lại cú xen khi cận người nói bị kéo quá 32 giây, và gắn sẵn `overlay` (at tương đối) vào segment. Mục "Cảnh báo overlay" trong `DAN-GOC-*.md` phải về 0 trước khi dựng. Một nguồn chân lý: kế hoạch overlay (mốc, thời lượng, chữ) giữ trong `do-hoa/`, job đồ họa và `khoa-overlay.json` đều sinh ra từ đó, không gõ tay hai lần.
 
 Việc của Claude trên bản nháp này, trước khi trình user:
 
@@ -70,8 +85,18 @@ Như phim-dung-bai Bước 6 (cổng `nghiem-thu.py video` bắt buộc, ảnh l
 
 Báo kết quả kèm tỉ lệ góc (ví dụ "cận người dẫn 47%, cận khách 38%, toàn 15%, 42 cú cắt, trung bình 18 giây/cú") và dòng "nghiệm thu máy: ĐẠT".
 
+Sau khi giao, nếu user đăng YouTube: soạn mô tả chuẩn tìm kiếm cho từng clip. Mốc chương tính bằng tool, không cộng tay:
+
+```
+python3 tools/chuong-youtube.py --map "du-an/<tên>/xuat-hoan-chinh/<video>.map.json" \
+    --chuong "du-an/<tên>/chuong-clipN.json" --ket "Lời mời ..."
+```
+
+`chuong-clipN.json` là `[{"t": <giây trục chung>, "ten": "..."}]`, lấy thẳng từ mốc pill trong kế hoạch overlay; tool quy về mốc video đã dựng qua `audio_in` của map, tự áp luật YouTube (chương đầu 0:00, mỗi chương từ 10 giây, tối thiểu 3 chương; chương quá sát bị gộp và báo lại) và thêm chương outro. Mô tả gồm: 1-2 câu đầu chứa từ khoá chính (phần hiện trong kết quả tìm kiếm), những điều người xem nhận được, chương, khách mời với chức danh nguyên văn, lời mời kèm link, một câu hỏi mở mời bình luận, 3-8 hashtag; thêm danh sách tags cho ô Tags. Chi tiết transcript không chắc (tên người kể một câu chuyện, tên riêng nghe không rõ) thì viết trung tính và báo user kiểm, không đoán.
+
 ## Ghi nhớ
 
+- Một podcast 20 phút ba góc 4K đã chạy trọn quy trình: khớp → proxy → transcript → người nói theo hình → kế hoạch overlay → dàn góc có khoá → dựng hai clip → mô tả YouTube; mỗi bước chạy lặp được trong lượt gọi 180 giây nhờ cache, không cần tiến trình nền.
 - Đổi luật cắt (ngưỡng lượt nói, khoảng giữ, tần suất phản ứng): sửa hằng trong `plan_podcast`/`plan_lecture` của `tools/multicam-dan.py`; đổi thuật toán khớp: `tools/multicam-khop.py`; mọi mốc đều trên trục chung, chỉ `to_segments` mới quy về file góc.
 - Podcast có 3 người trở lên vẫn chạy: mỗi người một thư mục cận; góc toàn càng cần khi nhiều người chồng lời.
 - Clip ngắn dọc cắt từ buổi multicam: dùng phim-clip-ngan với `src` là góc cận người nói và `audioSrc` tiếng chủ như trên, `cropFocus` theo người.

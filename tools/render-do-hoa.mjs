@@ -16,8 +16,13 @@
 // }
 // - "comp" không cần hậu tố -ngang/-doc: script tự thêm theo "aspect".
 // - "alpha": true → xuất webm nền trong suốt (vp8 + yuva420p) để phủ lên video.
+//   Mặc định đi đường nhanh: chuỗi PNG + ffmpeg libvpx (xem chú thích trong vòng lặp).
+// Cờ: --lam-lai (render lại cả job đã có), --gioi-han <giây> (dừng gọn khi hết giờ, thoát mã 2,
+//     chạy lại để tiếp), --alpha-remotion (dùng encoder vp8 chậm của Remotion).
+// Job đã render đúng props được bỏ qua nhờ propsHash trong do-hoa-manifest.json.
 
 import {execFileSync} from 'node:child_process';
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -29,6 +34,18 @@ if (!jobFile) {
 }
 const studioIdx = args.indexOf('--studio');
 const studioDir = studioIdx >= 0 ? args[studioIdx + 1] : path.resolve(process.cwd(), 'studio');
+const forceAll = args.includes('--lam-lai');          // render lại cả job đã có
+const slowAlpha = args.includes('--alpha-remotion');  // dùng encoder vp8 của Remotion (chậm) thay ffmpeg
+const budgetIdx = args.indexOf('--gioi-han');          // giây; hết giờ thì dừng gọn, chạy lại để tiếp
+const budgetSec = budgetIdx >= 0 ? Number(args[budgetIdx + 1]) : Infinity;
+const startedAt = Date.now();
+const pending = [];
+let hasLibvpx = false;
+try {
+  hasLibvpx = execFileSync('ffmpeg', ['-hide_banner', '-encoders'], {encoding: 'utf8'}).includes('libvpx');
+} catch (e) {
+  hasLibvpx = false;
+}
 
 const spec = JSON.parse(fs.readFileSync(jobFile, 'utf8'));
 const aspect = spec.aspect ?? 'ngang';
@@ -82,7 +99,7 @@ function probeOut(file) {
       durationMeasured: Math.round(dur * 1000) / 1000,
       fps: d ? n / d : 0,
       width: v?.width, height: v?.height,
-      alpha: v?.pix_fmt?.startsWith('yuva') || v?.tags?.alpha_mode === '1',
+      alpha: v?.pix_fmt?.startsWith('yuva') || String(v?.tags?.alpha_mode ?? v?.tags?.ALPHA_MODE ?? '') === '1',
       hasAudio: Boolean(a),
     };
   } catch (e) {
@@ -110,20 +127,57 @@ for (const job of spec.jobs) {
     `--props=${propsFile}`,
     '--log=error',
   ];
-  if (job.alpha) {
-    cliArgs.push('--codec=vp8', '--image-format=png', '--pixel-format=yuva420p');
-  } else {
-    cliArgs.push('--codec=h264', '--crf=17');
+  // Bỏ qua job đã render đúng props (cho phép chạy lại nhiều lượt khi mỗi lượt gọi tool bị giới hạn
+  // thời gian): so dấu vân tay props với manifest và file còn đó. --lam-lai để ép render lại.
+  const propsHash = crypto.createHash('sha1').update(JSON.stringify({compId, props, alpha: !!job.alpha})).digest('hex');
+  const prev = manifest[path.basename(outFile)];
+  if (!forceAll && prev && prev.propsHash === propsHash && !prev.error && prev.ok !== false &&
+      fs.existsSync(outFile) && fs.statSync(outFile).size > 1000) {
+    console.log(`→ Bỏ qua ${path.basename(outFile)} (đã render đúng props)`);
+    fs.unlinkSync(propsFile);
+    continue;
+  }
+  if (Date.now() - startedAt > budgetSec * 1000) {
+    fs.unlinkSync(propsFile);
+    pending.push(job.out);
+    continue;
   }
   console.log(`→ Render ${compId} → ${path.basename(outFile)}`);
-  execFileSync('npx', cliArgs, {cwd: studioDir, stdio: 'inherit'});
+  if (job.alpha && hasLibvpx && !slowAlpha) {
+    // Đường nhanh cho alpha (2026-09-29): Remotion encode vp8 alpha bằng một luồng, một lower-third
+    // 4.5 s mất ~90 s trên máy 2 lõi. Render chuỗi PNG (~10 s) rồi để ffmpeg libvpx realtime encode
+    // (~5 s) cho cùng kết quả vp8 + yuva420p (alpha_mode=1), nhanh ~6 lần.
+    const seqDir = path.join(outDir, `_seq_${Date.now()}`);
+    fs.rmSync(seqDir, {recursive: true, force: true});
+    execFileSync('npx', ['remotion', 'render', 'src/index.ts', compId, seqDir, '--sequence',
+      `--props=${propsFile}`, '--image-format=png', '--log=error'], {cwd: studioDir, stdio: 'inherit'});
+    const pngs = fs.readdirSync(seqDir).filter((f) => f.endsWith('.png')).sort();
+    const m = pngs[0]?.match(/^(.*?)(\d+)\.png$/);
+    if (!m) throw new Error(`Không thấy khung PNG trong ${seqDir}`);
+    const pattern = path.join(seqDir, `${m[1]}%0${m[2].length}d.png`);
+    const fps = job.fps ?? spec.fps ?? 30;
+    execFileSync('ffmpeg', ['-v', 'error', '-y', '-framerate', String(fps), '-start_number', String(Number(m[2])),
+      '-i', pattern, '-c:v', 'libvpx', '-deadline', 'realtime', '-cpu-used', '8', '-auto-alt-ref', '0',
+      '-b:v', '2M', '-pix_fmt', 'yuva420p', outFile], {stdio: 'inherit'});
+    fs.rmSync(seqDir, {recursive: true, force: true});
+  } else {
+    if (job.alpha) {
+      cliArgs.push('--codec=vp8', '--image-format=png', '--pixel-format=yuva420p');
+    } else {
+      cliArgs.push('--codec=h264', '--crf=17');
+    }
+    execFileSync('npx', cliArgs, {cwd: studioDir, stdio: 'inherit'});
+  }
   fs.unlinkSync(propsFile);
 
   // Nghiệm thu file vừa render
   const m = probeOut(outFile);
   const expected = job.props?.durationInSeconds ?? null;
-  const entry = {comp: compId, durationInSeconds: expected, ...m};
+  const entry = {comp: compId, durationInSeconds: expected, propsHash, ...m};
+  entry.ok = !m.error && !(expected != null && Math.abs(m.durationMeasured - expected) > 0.1) &&
+    !(job.alpha && !m.alpha);
   manifest[path.basename(outFile)] = entry;
+  fs.writeFileSync(manifestFile, JSON.stringify(manifest, null, 1)); // ghi ngay: lượt sau bỏ qua được job này
   if (m.error) {
     failures.push(`${job.out}: không đọc được (${m.error})`);
   } else {
@@ -139,6 +193,11 @@ for (const job of spec.jobs) {
 }
 fs.writeFileSync(manifestFile, JSON.stringify(manifest, null, 1));
 console.log('→ Manifest:', manifestFile);
+if (pending.length) {
+  console.log(`\n⏸ Hết giới hạn thời gian, còn ${pending.length} job chưa render: ${pending.join(', ')}`);
+  console.log('  Chạy lại đúng lệnh này để render tiếp (job đã xong được bỏ qua).');
+  process.exit(2);
+}
 if (failures.length) {
   console.error('\n✗ NGHIỆM THU ĐỒ HỌA KHÔNG ĐẠT:\n  - ' + failures.join('\n  - '));
   process.exit(1);

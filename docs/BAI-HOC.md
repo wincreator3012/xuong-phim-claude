@@ -106,6 +106,18 @@ Xưởng này được rút ra từ hơn một tháng dựng clip thật (bài g
 
 **Một câu góp ý sửa chữ xuất hiện lần thứ hai là tín hiệu phải sửa NGUỒN MẶC ĐỊNH** (brand.json, defaultProps, preset), không chỉ sửa file job của dự án đang làm. Một chức danh từng bị rút gọn sai qua ba dự án vì mỗi lần chỉ sửa tại chỗ. Trong xưởng này, chức danh nguyên văn và "từ ngữ phải viết đúng" nằm ở `phong-cach/PHONG-CACH.md`; mọi góp ý lặp lại ghi vào "Sổ tay góp ý" ở cuối file đó.
 
+## Về multicam podcast
+
+**So năng lượng mic chỉ phân biệt được người nói khi mỗi góc thu tiếng của người gần nó.** Một podcast ba góc mà tiếng tốt đi từ một mic chung vào góc toàn, hai góc cận chỉ thu tiếng phòng, cho "nói chồng" ở gần như mọi quãng. Chuyển động hình ở góc cận (người nói cử động miệng, đầu, tay nhiều hơn người nghe, chuẩn hoá theo trung vị của từng góc, làm trơn 5 giây) tách đúng cả bốn lượt nói dài chỉ trong khoảng một phút đo trên proxy. `multicam-dan.py --nguoi-noi auto` giờ tự chuyển sang cách này; vẫn đối chiếu transcript để chốt.
+
+**Pill và bảng tên không được vắt qua điểm cắt góc**, vì overlay gắn vào một segment. Lập kế hoạch overlay TRƯỚC, dàn góc SAU với các vùng overlay bị khoá (`--khoa`); làm ngược lại thì phải dời tay hàng chục điểm cắt hoặc cắt ngắn pill. Khoá overlay làm rụng một số cú xen, cận người nói có thể kéo tới gần một phút; tool chèn lại cú xen ở chỗ trống.
+
+**Nguồn 4K: làm trên proxy đã căn sẵn.** Đo chuyển động, dàn góc và dựng trên file 4K hàng chục GB vừa chậm vừa dễ vượt giới hạn 180 giây mỗi lượt; ổ còn trống không đủ để sao chép file gốc. Proxy 1080p chỉ hình, cắt theo offset của multicam.json, nối mảnh bằng `-c copy` (an toàn vì không có AAC), tiếng chủ là một file .wav liền.
+
+**Một buổi quay có thể thành nhiều clip độc lập**: chia theo chủ đề trên transcript, mỗi clip dàn góc riêng trong cửa sổ của nó, có intro riêng và bảng tên hiện lại lần đầu mỗi người nói trong clip.
+
+**Chức danh người khác (khách mời, đồng tác giả) cũng là chữ bất khả xâm phạm.** Người dùng sửa chức danh khách sau khi đã xem bản dựng; chức danh nguyên văn của mọi người hay xuất hiện nên có chỗ ghi cố định (phong cách hoặc brand), không chỉ nằm trong job của một dự án.
+
 ## Về màu
 
 **Số liệu lệch kênh phụ thuộc bối cảnh, mắt quyết.** "Trội kênh G" trên năm clip hoá ra là cây cỏ trong khung. So chéo lệch màu giữa nguồn chỉ đáng xử lý khi các nguồn cắt qua lại cùng cảnh. Đa số clip đạt không chỉnh; HDR là trường hợp bắt buộc tonemap, kiểm từng file bằng `color_transfer`, không đoán theo thiết bị.
@@ -125,6 +137,18 @@ Xưởng này được rút ra từ hơn một tháng dựng clip thật (bài g
 **`-ss` đặt SAU `-i`** khi cần PTS khớp chính xác với subtitle/overlay filter lúc trích khung hình kiểm tra.
 
 **Tránh `pkill -f <tên composition>`** trong sandbox: cụm từ có thể khớp luôn tiến trình node cha đang render hợp lệ.
+
+**`device_commit_files` có thể ghi một bản CŨ khi cùng `stagedPath` được sửa rồi commit lại nhiều lần trong phiên.** Tool báo "written" nhưng máy nhận nội dung của lần commit trước; đã xảy ra hai lần liên tiếp với cùng một file. Mỗi lần commit bản sửa, chép sang một tên staged mới (ví dụ `ten.v2.py`) rồi commit vào đúng `devicePath`, và LUÔN so `md5sum` hai phía trước khi chạy hay báo xong.
+
+**Mỗi lượt `device_bash` tối đa 180 giây và không giữ tiến trình nền**, nên mọi việc dài phải chia mảnh có cache và chạy lại được: proxy theo mảnh 120 giây, đo chuyển động theo mảnh 300 giây, gỡ băng theo mảnh ~200 giây, `assemble.py` đã có resume ở bước dựng part (bài 10 phút xong trong hai lượt). Không dựa vào `nohup`.
+
+**VM Cowork khoảng 4 GB RAM**: whisper large-v3 chết lặng lẽ (hết bộ nhớ) mà không báo lỗi; dùng `turbo` (mặc định của `transcribe.py`). Cần mốc chính xác cho pill thì gỡ băng lại từng cửa sổ 10 giây quanh cụm từ thay vì chạy model lớn hơn.
+
+**Ngưỡng `silencedetect` phải đặt theo sàn tiếng ồn thật của file**, không dùng một số cố định: file có sàn khoảng -42 dB thì ngưỡng -38 dB không bắt được khoảng lặng nào; đo sàn trước (phân vị thấp của RMS) rồi đặt ngưỡng trên sàn 6-8 dB.
+
+**Render alpha bằng encoder vp8 của Remotion rất chậm và kẹt khi chạy song song**; `render-do-hoa.mjs` giờ đi đường PNG + ffmpeg libvpx và bỏ qua job đã xong.
+
+**Thư mục người dùng thường cấm xoá**: file tạm, khung kiểm tra để trong thư mục nhà của VM; lỡ tạo trong thư mục xưởng thì chuyển vào `_to_delete/` và báo người dùng.
 
 ## Về infomotion (video dựng hoàn toàn từ đồ hoạ, không có cảnh quay)
 

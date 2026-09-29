@@ -11,11 +11,11 @@
 | 18 composition đồ họa (Intro, Outro, SectionTitle, InfoList, InfoQuote, InfoStat, InfoSteps, LowerThird, Benefits, mỗi cái ngang và dọc) | `studio/` (Remotion) | mọi đồ họa động; không có composition "Caption": câu caption nổi bật = Benefits một mục, `showIndex:false`, `wrap:true`; minh họa khái niệm/số liệu ưu tiên infographic hơn ảnh tải |
 | Thư viện âm thanh | danh mục kiểm định `thu-vien/AM-THANH.md` + `am-thanh.json`; file thật và LUFS đo thật ở `nhac-nen/THU-VIEN.md` (sinh bởi `tools/nhap-am-thanh.py`) | mọi nhạc nền và hiệu ứng; không dùng nhạc ngoài danh mục trừ nhạc riêng người dùng ở `nhac-nen/rieng/` |
 | Nguồn hình minh hoạ | `thu-vien/HINH-ANH.md` | skill phim-tu-lieu, tải theo từng dự án vào `du-an/<x>/tu-lieu/` + `TU-LIEU.md` |
-| Bộ công cụ pipeline | `tools/`: `mediainfo.py`, `transcribe.py`, `assemble.py` (timeline → thành phẩm), `nghiem-thu.py`, `render-do-hoa.mjs`, `mau-sac.py`, `slide-nguon.py`, `slide-khop.py`, `bo-cuc-slide.py`, `multicam-khop.py`, `multicam-dan.py`; cài đặt `cai-dat.py`, `kiem-tra-xuong.py`, `tai-chat-lieu.py`, `nhap-am-thanh.py` | theo quy trình từng skill; docstring đầu mỗi file là tài liệu tham số |
+| Bộ công cụ pipeline | `tools/`: `mediainfo.py`, `transcribe.py`, `assemble.py` (timeline → thành phẩm), `nghiem-thu.py`, `render-do-hoa.mjs`, `mau-sac.py`, `slide-nguon.py`, `slide-khop.py`, `bo-cuc-slide.py`, `multicam-khop.py`, `multicam-proxy.py`, `multicam-dan.py`, `chuong-youtube.py`; cài đặt `cai-dat.py`, `kiem-tra-xuong.py`, `tai-chat-lieu.py`, `nhap-am-thanh.py` | theo quy trình từng skill; docstring đầu mỗi file là tài liệu tham số |
 | Thư viện Python và model | `tools/pylib/` (numpy, sherpa-onnx, pillow, python-pptx), `tools/models/` (silero VAD + whisper) | các tool tự thêm `pylib` vào `sys.path`; không cần PYTHONPATH |
 | Hệ màu sắc | `tools/mau-sac.py kham\|soi` + đơn màu `du-an/<x>/mau-sac.json` mà `assemble.py` tự áp | skill phim-mau-sac; HDR (color_transfer smpte2084/arib-std-b67) bắt buộc tonemap; đa số kết luận đạt-không-chỉnh |
 | Bài giảng có slide (5 bố cục) | `tools/slide-nguon.py`, `tools/slide-khop.py`, `do-hoa-chung/bo-cuc/` (sinh bởi `bo-cuc-slide.py`, màu theo brand.json), trường `layout`/`slide` trong timeline | skill phim-bai-giang-slide |
-| Multicam (2-3 góc, podcast) | `tools/multicam-khop.py`, `tools/multicam-dan.py`, trường `audioSrc`/`audioIn` trong timeline | skill phim-multicam |
+| Multicam (2-3 góc, podcast) | `tools/multicam-khop.py`, `tools/multicam-proxy.py` (proxy 1080p cho nguồn 4K), `tools/multicam-dan.py`, trường `audioSrc`/`audioIn` trong timeline | skill phim-multicam |
 | Phim tài liệu phỏng vấn (nhiều nhân vật, dự án/sự kiện) | `skills/phim-tai-lieu-phong-van/` + mẫu 5 file hồ sơ trong `references/mau-ho-so.md`, mẫu thư mục `du-an/_mau/tai-lieu-phong-van/` | khi user mô tả sự kiện sắp quay (Pha 1) hoặc thả nhiều file phỏng vấn nhiều người (Pha 2); mục "Phim tài liệu phỏng vấn" |
 | Cổng nghiệm thu tự động | `tools/nghiem-thu.py video\|transcript\|do-hoa`, `assemble.py --kiem-tra`, `render-do-hoa.mjs` tự đo | BẮT BUỘC trước khi báo "xong" |
 | Dự án mẫu | `du-an/_mau/` (cấu trúc, timeline mẫu, job đồ họa mẫu) | tham khảo cấu trúc; dự án thật tạo cạnh nó |
@@ -119,6 +119,9 @@ Nguồn theo `nguon/<góc>/<file>`: thư mục chứa `toan` là góc toàn, b�
 | Đồng bộ các góc bằng âm thanh | `python3 tools/multicam-khop.py "du-an/<x>" [--chu toan] [--tron-tieng]` → `multicam.json`, `nguon/tieng-chu.wav` |
 | Transcript tiếng chủ | `transcribe.py` trên `nguon/tieng-chu.wav` rồi `nghiem-thu.py transcript` |
 | Người nói, session, dàn góc | `python3 tools/multicam-dan.py "du-an/<x>" --transcript "<tên>" [--che-do podcast\|bai-giang] [--phut 8]` → `multicam/DAN-GOC.md`, `timeline-multicam-nhap.json`, `job-session.json` |
+| Proxy cho nguồn 4K nặng | `python3 tools/multicam-proxy.py "du-an/<x>" [--ra <thư mục>] [--tu A --den B]` (chạy lặp tới "✓ Xong") → proxy 1080p đã căn, `nguon/tieng-chu.wav`, `multicam.json` của proxy |
+| Dàn góc có khoá overlay, nhiều clip | `multicam-dan.py ... --nguoi-noi auto\|hinh\|<file> --khoa khoa-overlay.json --cua-so A-B --hau-to clipN` |
+| Chương YouTube | `python3 tools/chuong-youtube.py --map <video>.map.json --chuong chuong.json [--ket "Lời mời ..."]` → `<video>.chuong.txt` |
 
 Bài giảng một người nhiều góc phải truyền `--che-do bai-giang`. File có `tin_cay` < 1.1 hay `khop_r` < 0.2 phải soi khung hình hai góc tại cùng mốc trục.
 

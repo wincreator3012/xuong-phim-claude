@@ -3,6 +3,16 @@ import {AbsoluteFill, Easing, interpolate, useCurrentFrame, useVideoConfig} from
 import {useLayout} from '../layout';
 import {Brand, DEFAULT_BRAND, EASE_GENTLE, ThemeName, resolvePalette} from '../theme';
 
+
+// '#RRGGBB' hoặc '#RGB' → 'rgba(r,g,b,a)'; chuỗi màu khác giữ nguyên.
+const withAlpha = (color: string, a: number): string => {
+  const h = color.trim().replace('#', '');
+  if (!/^[0-9a-fA-F]{3}$|^[0-9a-fA-F]{6}$/.test(h)) return color;
+  const full = h.length === 3 ? h.split('').map((c) => c + c).join('') : h;
+  const n = parseInt(full, 16);
+  return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${a})`;
+};
+
 export type BenefitItem = {
   label: string;
   // Giây - thời điểm mục này xuất hiện (khớp lúc lời thoại nhắc tới nó).
@@ -148,10 +158,11 @@ export const Benefits: React.FC<BenefitsProps> = ({
           const scale = Math.min(entrance, settle);
           const isActive = !next || frame < next.frame + 16;
 
+          // Màu pill đang hiện lấy từ palette.accent của brand (2026-09-29): trước đây gắn cứng
+          // xanh rêu/vàng đồng của palette mặc định nên brand khác (ví dụ xanh dương) vẫn ra pill
+          // xanh rêu. Palette mặc định cho đúng màu cũ vì accent của nó chính là hai màu đó.
           const bg = isActive
-            ? theme === 'light'
-              ? 'rgba(47,93,80,0.92)'
-              : 'rgba(199,169,123,0.92)'
+            ? withAlpha(palette.accent, 0.92)
             : theme === 'light'
               ? 'rgba(250,247,241,0.85)'
               : 'rgba(21,24,28,0.78)';
