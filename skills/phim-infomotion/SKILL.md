@@ -1,24 +1,26 @@
 ---
-name: phim-infomotion
-description: Làm video hoàn toàn bằng đồ hoạ động [motion graphics] khớp chặt với một bản ghi âm trình bày (thường 3-15 phút, một framework hay một ý niệm trừu tượng) - không có cảnh quay để cắt, hình phải được nghĩ ra từ lời nói. Kích hoạt khi user nói "infomotion", "làm video từ audio", "video hoạt hình giải thích", "explainer video", "video hoá bài giảng không quay hình", "dựng video chỉ từ file ghi âm", hoặc đưa một file âm thanh trình bày (không kèm video quay mặt) vào yêu cầu dựng. KHÔNG dùng khi đã có video quay mặt (phim-dung-bai) hay có slide làm nền (phim-bai-giang-slide) - hai skill đó xử lý lớp hình đã có sẵn, còn skill này tạo lớp hình từ đầu.
+name: "phim-infomotion"
+description: "Dựng video giải thích hoàn toàn bằng motion graphic [infomotion] từ MỘT nguồn duy nhất là giọng ghi âm trình bày của người dùng, không có cảnh quay người. Hai cổng: AI gỡ băng, chia lời thành nhịp ý, phân loại năm loại nhịp, tra từ điển ẩn dụ cá nhân (do-hoa-chung/an-du-y-niem.json, lớn dần qua từng dự án) hoặc đề xuất ẩn dụ mới, viết KỊCH BẢN HÌNH TƯỢNG HOÁ BẰNG CHỮ để user duyệt trước khi render (cổng 1); rồi tạo nền, render đồ họa, ghép khớp voiceover gốc bằng assemble.py, nghiệm thu đúng ý lẫn đúng thời lượng, user xem nháp góp ý (cổng 2). Kích hoạt khi user nói \"infomotion\", \"làm video từ file ghi âm\", \"chỉ có voice không có hình\", \"hình tượng hoá bài nói\", \"motion graphic minh hoạ bài giảng\", \"dựng clip từ voiceover\", hoặc thả file âm thanh vào nguon/ mà không có video. KHÔNG dùng khi có cảnh quay người (phim-dung-bai, phim-bai-giang-slide), đồ họa lẻ (phim-do-hoa), phỏng vấn (phim-tai-lieu-phong-van), hay hoạt hình có nhân vật, cảnh (phim-hoat-hoa)."
 ---
 
 # Infomotion: từ giọng nói ra hình tượng hoá
 
-Mục tiêu: từ một bản ghi âm trình bày (thường 3-15 phút, một framework hay một ý niệm), làm ra một video hoàn toàn bằng đồ hoạ động khớp chặt với voiceover gốc, chính xác về nội dung, dễ hiểu, hấp dẫn, và mang đúng đặc trưng hình ảnh của người dùng. Khác mọi skill khác trong xưởng: KHÔNG có cảnh quay để cắt, hình phải được nghĩ ra từ lời nói.
+Mục tiêu: từ một bản ghi âm người dùng trình bày (thường 3-15 phút, một framework hay một ý niệm), làm ra một video hoàn toàn bằng đồ họa động khớp chặt với voiceover gốc, chính xác về nội dung, dễ hiểu, hấp dẫn, và mang đặc trưng hình ảnh riêng của người dùng. Khác mọi skill khác trong xưởng: KHÔNG có cảnh quay để cắt, hình phải được nghĩ ra từ lời nói.
 
-Ba nguyên tắc xuyên suốt:
+Ba nguyên tắc xuyên suốt (nền tảng nghiên cứu trong `skills/phim-infomotion/references/hinh-tuong-hoa.md`):
 
-1. **Duyệt trên giấy trước, render sau.** Kịch bản hình tượng hoá viết bằng chữ là cổng duyệt 1. Không render khung hình nào trước khi người dùng duyệt, trừ một khung tĩnh mẫu [style frame] cho loại hình lần đầu xuất hiện trong dự án. Lý do: sai ẩn dụ hay sai cấu trúc là lỗi tốn kém nhất, phải chặn khi còn rẻ.
-2. **Tra từ điển trước, sáng tạo sau.** Mọi khái niệm cố định của người dùng (tên framework, thuật ngữ riêng, các bước có tên...) tra `do-hoa-chung/an-du-y-niem.json` trước; có thì dùng nguyên hình đã chốt; chưa có thì đề xuất và đánh dấu rõ "ẨN DỤ MỚI" để người dùng duyệt, rồi ghi ngay vào từ điển sau khi duyệt. Nhờ vậy hình nhất quán qua mọi video của cùng một người dùng, và chi phí sáng tạo giảm dần qua từng dự án. File từ điển CHƯA TỒN TẠI ở dự án infomotion đầu tiên của một người dùng - tạo mới dạng `{}` ngay khi có ẩn dụ đầu tiên được duyệt, không phải trước đó.
-3. **Không phải câu nào cũng cần hình.** Trần mật độ: tối đa một hình mới mỗi 8-10 giây lời nói; nhịp "không cần hình" là lựa chọn hợp lệ, không phải thiếu sót. Thuật toán tự động có xu hướng nhồi animation vào mọi câu - đây là lỗi thật, không phải lý thuyết, và trùng lớp lỗi "quá tải overlay" xưởng từng gặp ở các skill khác.
+1. **Duyệt trên giấy trước, render sau.** Kịch bản hình tượng hoá viết bằng chữ là cổng duyệt 1. Không render video trước khi người dùng duyệt, trừ một khung tĩnh mẫu [style frame] cho loại hình lần đầu xuất hiện. Sai ẩn dụ hay sai cấu trúc là lỗi tốn kém nhất, phải chặn khi còn rẻ.
+2. **Tra từ điển trước, sáng tạo sau.** Mọi khái niệm cố định của người dùng (tên framework, thuật ngữ riêng, các bước có tên...) tra `do-hoa-chung/an-du-y-niem.json` trước (dự án infomotion đầu tiên chưa có file: tạo theo schema ở `references/mau-kich-ban.md` mục 4); có thì dùng nguyên hình đã chốt; chưa có thì đề xuất và đánh dấu "ẨN DỤ MỚI" để người dùng duyệt, rồi ghi ngay vào từ điển. Hình nhất quán qua mọi video và chi phí sáng tạo giảm dần.
+3. **Phủ kín có ý đồ, không nhồi.** Mặc định: không có khoảng nào quá 1 giây chỉ còn nền trơn, trừ nhịp đánh dấu `Hình: KHÔNG - <lý do>` (câu móc cần đứng một mình, khoảng lắng sau một hình nặng, câu hỏi kết để ngỏ). Mỗi nhịp một ý và một hình chính; các hình nối tiếp liền mạch thay vì chồng lớp; khoảng trống lấp bằng HÌNH có kỹ thuật chuyển động riêng từng nhịp, không bằng chữ thuần, không lặp một khuôn. Ranh giới nằm ở chỗ mỗi hình phải khớp ý câu đang nói, không ở số lượng hình (cảnh báo Data Player, TVCG 2023). Dự án người dùng muốn thưa hơn: ghi ở khung hình chung và chạy `uoc-luong.py --khoang-hinh 8`.
 
-Đọc trước: `docs/QUY-TRINH-KY-THUAT.md` ở gốc xưởng (môi trường, cổng nghiệm thu, hai hệ mốc thời gian), `skills/phim-do-hoa/SKILL.md` (ngôn ngữ thiết kế, cách render, cách thêm component mới), `phong-cach/PHONG-CACH.md` (chức danh nguyên văn, từ ngữ phải viết đúng, quy tắc chữ trên màn hình).
+**Ranh giới với phim-hoat-hoa.** Cùng nguồn là file voice, cùng pipeline gỡ băng, chia nhịp ý và từ điển ẩn dụ, nhưng khác ngôn ngữ hình: skill này là đồ họa thông tin tối giản trên nền phẳng (nhãn, danh sách, con số, ẩn dụ nét đơn `YNiem`/`YCanh`); phim-hoat-hoa dựng một thế giới hoạt hình có bối cảnh, nhân vật, mô-típ. Người dùng thả file voice mà chưa nói rõ loại nào thì hỏi một câu trước Bước 1. Mục từ điển do phim-hoat-hoa thêm có trường `nguon: "hoat-hoa"`.
+
+Đọc trước: `skills/_chung/van-hanh.md` (đọc gì, hai nơi chạy lệnh, truyền file, chữ và chức danh), `skills/_chung/timeline-va-dung.md`, `skills/_chung/nghiem-thu-dung-y.md`, `skills/phim-do-hoa/SKILL.md` (render, thêm component), `docs/BAI-HOC.md` chủ đề "Infomotion và hình vẽ ẩn dụ". Mẫu kịch bản, timeline, job JSON, lệnh tạo nền và schema từ điển: `skills/phim-infomotion/references/mau-kich-ban.md`.
 
 ## Hai lối vào
 
 - **Lối vào A - đã có bản ghi âm** (chuẩn): đi từ Bước 1.
-- **Lối vào B - có bài viết hoặc dàn ý, chưa ghi âm**: chia nhịp và viết `KICH-BAN-INFOMOTION.md` ngay trên chữ, mốc tạm tính theo tốc độ nói thật của chính người dùng (số từ mỗi phút đo từ transcript một dự án cũ; chưa có thì 130 từ/phút và ghi là giả định), mọi mốc ghi rõ "tạm". Duyệt ẩn dụ, cấu trúc và dữ kiện trên chữ (Cổng duyệt 1), rồi người dùng ghi âm theo đúng kịch bản đã duyệt. Có file thật thì quay về Bước 2, thay mọi mốc tạm bằng mốc thật từ transcript và chạy lại kiểm giấy trước khi render. Nếu phiên có sẵn giọng đọc máy [text-to-speech], được dùng giọng máy làm bản giọng tạm để tự nghe nhịp hoặc dựng một bản phác động [animatic] nội bộ; giọng máy không bao giờ vào bản giao: bản giao luôn là giọng thật của người dùng.
+- **Lối vào B - có bài viết hoặc dàn ý, chưa ghi âm**: chia nhịp và viết `KICH-BAN-INFOMOTION.md` ngay trên chữ, mốc tạm tính theo tốc độ nói thật của người dùng (số từ mỗi phút đo từ transcript một dự án cũ; chưa có thì 130 từ/phút, ghi là giả định), mọi mốc ghi "tạm". Duyệt ẩn dụ, cấu trúc, dữ kiện trên chữ (Cổng duyệt 1), rồi người dùng ghi âm theo kịch bản. Có file thật thì quay về Bước 2, thay mốc tạm bằng mốc thật và chạy lại kiểm giấy. Giọng đọc máy chỉ được làm bản giọng tạm để tự nghe nhịp hoặc dựng bản phác động [animatic] nội bộ; bản giao luôn là giọng thật của người dùng.
 
 ## Cấu trúc dự án
 
@@ -26,125 +28,93 @@ Ba nguyên tắc xuyên suốt:
 du-an/<tên>/
   nguon/voice.wav              giọng ghi âm gốc (chuẩn hoá 48 kHz; giữ file gốc cạnh đó)
   nguon/nen-<ngang|doc>.mp4    NỀN: video màu giấy brand có sẵn tiếng voice (Bước 2) - đây là "clip nguồn"
-  transcript/                  transcript tạo từ nen-*.mp4 (một trục thời gian duy nhất, theo skill phim-transcript)
+  transcript/                  phim-transcript tạo từ nen-*.mp4 (một trục thời gian duy nhất)
   KICH-BAN-INFOMOTION.md       kịch bản hình tượng hoá bằng chữ (Cổng duyệt 1)
-  do-hoa/<ngang|doc>/ + do-hoa/job/   đồ hoạ render + job JSON gốc (giữ tới khi giao)
-  timeline.json, SO-GOP-Y.md, xuat-nhap/, xuat-hoan-chinh/   như mọi dự án khác trong xưởng
-do-hoa-chung/an-du-y-niem.json  TỪ ĐIỂN ẨN DỤ dùng chung mọi dự án của người dùng (không nằm trong du-an/)
+  do-hoa/<ngang|doc>/ + do-hoa/job/   đồ họa render + job JSON gốc (giữ tới khi giao)
+  timeline.json, SO-GOP-Y.md, xuat-nhap/, xuat-hoan-chinh/   như mọi dự án khác
+do-hoa-chung/an-du-y-niem.json  TỪ ĐIỂN ẨN DỤ dùng chung mọi dự án (không nằm trong du-an/)
 ```
-
-## Hai thành phần đồ hoạ dành riêng cho infomotion
-
-Hai component Remotion `YNiem` và `YCanh` (trong `studio/src/components/`) là công cụ chính của skill này - không dùng ở skill nào khác trong xưởng vì chỉ infomotion mới cần "vẽ ra một ý niệm trừu tượng từ số không".
-
-- **`YNiem`** - MỘT hình vẽ nét dần cho MỘT khái niệm đơn lẻ, dùng khuôn chung "vẽ nét rồi hiện nhãn chữ". Hình lấy từ kho `studio/src/y-niem/index.ts` theo `slug`; slug mới phải được duyệt và ghi vào `an-du-y-niem.json` (xem Bước 4). Có hai cờ tuỳ chọn trên mỗi hình trong kho, `travelDot`/`endArrow`, gợi ý một chuyển động CHƯA DỪNG dọc theo path cuối cùng của hình (một chấm trôi có nhịp chớp tắt, một mũi tên bật ra ở điểm cuối theo đúng tiếp tuyến) - dùng cho ý niệm kiểu "một xu hướng còn tiếp diễn", không dùng cho hình đã khép kín (như "rễ sâu").
-- **`YCanh`** - một chuỗi CẢNH VẼ TAY riêng biệt, mỗi `variant` là một kỹ thuật chuyển động khác nhau (chấm bung theo cụm, lưới lấp dần kèm đếm số, mặt trời toả tia, trăng mọc rồi trang giấy hiện dần, vạch mọc dần kèm đếm số, chùm tick bật nhanh, kim đồng hồ quét, lửa lớn dần) - dùng khi một đoạn kể chuyện có NHIỀU nhịp liên tiếp cần mỗi nhịp một cảm giác riêng để không đơn điệu. Tám `variant` sẵn có (`hub-branches`, `filling-grid`, `radiant-sun`, `rising-moon`, `growing-bars`, `tick-cluster`, `clock-sweep`, `growing-flame`) là TÁM KỸ THUẬT chuyển động tổng quát - `label`/`sublabel` mới là nơi mang nội dung cụ thể của dự án, không sửa code cho từng dự án. Chọn variant theo ĐÚNG cảm giác của ý niệm (xem chú thích chọn dùng ở đầu mỗi variant trong `YCanh.tsx`), không theo variant còn "mới lạ chưa dùng".
-- Cả hai đều nhận `floating` (true = nền trong suốt, dùng làm overlay nổi trên một cảnh khác hoặc trên nền màu của video) và `position` (`'center'` là mặc định khi `floating`, canh giữa cả hai trục - đã đổi từ mặc định cũ `'top'` sau một dự án thật bị góp ý "dồn hết lên nửa trên khung, nửa dưới trống"). Khi KHÔNG `floating`, cả hai tự vẽ nền toàn khung theo `Canvas` như một composition độc lập.
-- Kích thước và mật độ đã canh chỉnh qua một dự án thật: icon `floating` chiếm khoảng `unit*58`, nhãn chữ `unit*6.0`/`unit*3.9` (label/sublabel) - đây là NGƯỠNG DƯỚI đã kiểm chứng bằng khung hình thật, component mới hay dự án mới không nên nhỏ hơn nếu không có lý do cụ thể. Một hình chỉ có 2-3 chi tiết trông "nghèo" ở kích thước lớn - đặt mục tiêu 5-10 chi tiết chuyển động cho một cảnh `YCanh` (nhiều điểm bật ra, nhiều tia, nhiều dòng...), không dừng ở một đường nét đơn.
 
 ## Quy trình
 
 ### Bước 1 - Nhận file, hỏi một lượt
 
-Nhận file âm thanh, đọc `an-du-y-niem.json` nếu đã có và ghi chú dự án cũ nếu có. Hỏi MỘT lượt tối đa bốn câu, chỉ khi chưa rõ: (1) video cho ai xem và phát ở đâu (khung ngang mặc định; dọc khi người dùng nói rõ); (2) theme light hay dark; (3) tên chủ đề/framework và thuật ngữ nào là CỐ ĐỊNH (để tra từ điển đúng chỗ); (4) intro/outro dùng preset chuẩn hay có thông điệp kết riêng. Không có trả lời thì mặc định ngang, light, preset chuẩn, và ghi rõ là giả định.
+Nhận file âm thanh, đọc `an-du-y-niem.json` và ghi chú dự án nếu có. Hỏi MỘT lượt tối đa bốn câu, chỉ khi chưa rõ: (1) video cho ai xem và phát ở đâu (ngang mặc định; dọc khi người dùng nói rõ); (2) theme light hay dark; (3) tên chủ đề hay framework và thuật ngữ nào là CỐ ĐỊNH (để tra từ điển đúng chỗ); (4) intro, outro dùng preset chuẩn hay có thông điệp kết riêng. Không có trả lời thì mặc định ngang, light, preset chuẩn, ghi rõ là giả định.
 
 ### Bước 2 - Tạo nền và gỡ băng
 
-Chuẩn hoá tiếng, tạo `nguon/nen-<khung>.mp4` (nền màu `palettes.<theme>.bg` của brand, 30 fps, tiếng = voice, `-shortest`). Từ đây nền là "clip nguồn" duy nhất: mọi `in/out`, `snap`, `silences.json`, `overlay.at`, `broll.at` đều tính trên trục của nó, không có trục thứ hai. Chạy skill `phim-transcript` trên nền; nghiệm thu `nghiem-thu.py transcript` bắt buộc trước khi lên kịch bản (Whisper có thể rớt cụm ở ranh giới lô 28 giây).
+Chuẩn hoá tiếng, tạo `nguon/nen-<khung>.mp4` bằng lệnh trong `mau-kich-ban.md` (nền màu `palettes.<theme>.bg`, 30 fps, tiếng = voice, `-shortest`). Từ đây nền là "clip nguồn" duy nhất: mọi `in/out`, `snap`, `silences.json`, `overlay.at`, `broll.at` tính trên trục của nó. Gỡ băng theo phim-transcript (large-v3 trên Mac là ưu tiên), qua `nghiem-thu.py transcript` trước khi lên kịch bản.
 
 ### Bước 3 - Đọc như biên tập viên motion graphic, chia nhịp
 
-Đọc trọn transcript một lượt. Chia thành các **nhịp ý** [semantic beat] theo ranh giới Ý, không theo ranh giới câu (một nhịp thường 6-25 giây; câu dài nhiều mệnh đề có thể là một nhịp; ba câu ngắn cùng một ý là một nhịp). Mốc thật của nhịp lấy từ chunk transcript, vị trí trong chunk nội suy theo tỷ lệ ký tự, hút về khoảng lặng gần nhất.
+Đọc trọn transcript một lượt. Chia thành các **nhịp ý** [semantic beat] theo ranh giới Ý, không theo ranh giới câu (thường 6-25 giây; câu dài nhiều mệnh đề có thể là một nhịp; ba câu ngắn cùng một ý là một nhịp). Mốc thật lấy từ transcript, vị trí trong câu nội suy theo tỷ lệ ký tự, hút về khoảng lặng gần nhất.
 
 Gắn cho mỗi nhịp MỘT trong năm loại (đọc hiểu nội dung, không bắt từ khoá máy móc):
 
 | Loại | Dấu hiệu | Hình mặc định |
 |---|---|---|
-| Khái niệm trừu tượng | từ/cụm không có nghĩa đen | tra từ điển → `YNiem` (ẩn dụ vẽ nét dần) hoặc `Benefits` 1 mục `showIndex:false` |
-| Thuật ngữ/định nghĩa cố định | tên framework, cấu phần được liệt kê | `InfoSteps` (nhãn ngắn có thứ tự) / `InfoList` (mệnh đề dài) / `Benefits` hiện dần theo lời |
-| Bước/tiến trình | "đầu tiên... rồi... cuối cùng", nguyên nhân-kết quả | `InfoSteps`, hoặc `Benefits` với `revealAt` theo đúng lúc nói |
-| Số liệu/so sánh | con số, phần trăm, hơn-kém | `InfoStat` (một con số) / `InfoList` (nhiều mục) |
-| Chuỗi nhịp kể chuyện liên tiếp, mỗi nhịp cần cảm giác riêng | đoạn "Câu chuyện"/"Hành trình" nhiều nhịp ngắn nối tiếp | `YCanh`, mỗi nhịp một `variant` khác nhau |
-| Câu nhấn / không cần hình | câu chuyển ý, cảm xúc, mở/kết, câu hỏi để ngỏ | nền trơn; câu đắt nhất mới dùng `InfoQuote`; câu hỏi kết để trống hình |
+| Khái niệm trừu tượng | từ, cụm không có nghĩa đen (mắc kẹt, buông bỏ, gắn kết...) | tra từ điển → `YNiem` (một ẩn dụ vẽ nét) hoặc `YCanh` (cảnh vẽ tay riêng); `Benefits` 1 mục khi chỉ cần chữ |
+| Thuật ngữ, định nghĩa cố định | tên framework, cấu phần được liệt kê (các bước, cấu phần có tên riêng...) | `InfoSteps` (nhãn ngắn có thứ tự) / `InfoList` (mệnh đề dài) / `Benefits` hiện dần theo lời |
+| Bước, tiến trình | "đầu tiên... rồi... cuối cùng", nguyên nhân kết quả | `InfoSteps`, hoặc `Benefits` `revealAt` đúng lúc nói |
+| Số liệu, so sánh | con số, phần trăm, hơn kém | `InfoStat` (một con số) / `InfoList` (nhiều mục); chart động chỉ tạo khi hai dự án cùng cần |
+| Câu nhấn, chuyển ý | câu chuyển ý, cảm xúc, mở, kết, câu hỏi để ngỏ | giữ hình nhịp trước lắng lại (kéo dài ô), hoặc câu đắt nhất thành `InfoQuote`/`Benefits` 1 mục; nền trơn chỉ khi có ý đồ, ghi `Hình: KHÔNG - <lý do>` |
 
-Lưu ý thực tế: studio KHÔNG có composition "Caption"; nhu cầu "một dòng chữ nổi" dùng `Benefits` 1 mục `showIndex:false`. `YNiem`/`YCanh` tạm dùng kho hình/variant sẵn có; component/variant mới chỉ khi có trường hợp thật không gì biểu đạt được (xem mục "Thêm hình/variant mới" bên dưới).
+Kho hình có sẵn: `YNiem` tra hình theo `slug` trong `studio/src/y-niem/index.ts`; `YCanh` có tám variant đặt theo kỹ thuật chuyển động (`hub-branches`, `filling-grid`, `radiant-sun`, `rising-moon`, `growing-bars`, `tick-cluster`, `clock-sweep`, `growing-flame`); đặc tả ở `hinh-tuong-hoa.md` mục 4. Ẩn dụ đã duyệt dùng đúng như từ điển ghi; cần hình mới thì thêm variant hoặc slug theo mục "Thêm component mới" của phim-do-hoa và đưa người dùng duyệt như mọi ẩn dụ mới. Studio không có composition `Caption`.
 
 ### Bước 4 - Tra từ điển, đề xuất ẩn dụ mới
 
-Với mỗi nhịp loại "khái niệm trừu tượng" hoặc "thuật ngữ cố định": tra `an-du-y-niem.json` theo khoá slug không dấu của khái niệm (file chưa tồn tại ở dự án đầu tiên - coi như từ điển rỗng). Có → ghi "[ĐÃ CÓ]" và dùng nguyên `hinh-thuc`/`props`. Chưa có → chọn image schema gần nhất (chứa đựng, đường đi, cân bằng, trên-dưới, đẩy-kéo, sáng-tối, trung tâm-ngoại vi, vòng lặp, tầng lớp - xem chú thích các shape mẫu trong `studio/src/y-niem/index.ts`), đề xuất MỘT ẩn dụ tối giản vẽ được bằng đường nét 3 px (chữ ký thị giác của brand), ghi rõ "ẨN DỤ MỚI - cần duyệt". Không bao giờ tự coi ẩn dụ mới là đã chốt. Khái niệm chỉ xuất hiện một lần và không thuộc hệ thuật ngữ cố định của người dùng thì không cần vào từ điển.
+Với mỗi nhịp loại 1 và 2: tra `an-du-y-niem.json` theo khoá slug không dấu của khái niệm. Có → ghi "[ĐÃ CÓ]" và dùng nguyên `hinh-thuc`/`props`. Chưa có → chọn image schema gần nhất (chứa đựng, đường đi, cân bằng, trên dưới, đẩy kéo, sáng tối, trung tâm ngoại vi, vòng lặp, tầng lớp; heuristic ở `hinh-tuong-hoa.md` mục 3), đề xuất MỘT ẩn dụ tối giản vẽ được bằng nét 3 px, ghi rõ "ẨN DỤ MỚI - cần duyệt". Không bao giờ tự coi ẩn dụ mới là đã chốt. Khái niệm chỉ xuất hiện một lần và không thuộc hệ thuật ngữ của người dùng thì không cần vào từ điển.
 
 ### Bước 5 - Viết `KICH-BAN-INFOMOTION.md` (Cổng duyệt 1)
 
-Đầu file: thông điệp lõi một câu, khung ngang/dọc, theme, tổng thời lượng và số nhịp. Rồi mỗi nhịp một khối: mốc thật, lời nói nguyên văn (rút gọn nếu dài), loại, ẩn dụ (đã có / mới), hình thức và props chính, ghi chú. Cuối file: danh sách ẨN DỤ MỚI chờ duyệt, danh sách nhịp không có hình và lý do, kiểm tra mật độ (số hình / tổng phút), và câu hỏi cần người dùng quyết định (tên video, câu kết, có QR không). Nội dung dài hơn 5 phút: chia chương, đề xuất `SectionTitle` giữa các chương và `chapter` trong timeline.
+Theo mẫu trong `mau-kich-ban.md`: đầu file là thông điệp lõi một câu, khung, theme, tổng thời lượng, số nhịp; rồi mỗi nhịp một khối: mốc thật, lời nói nguyên văn (rút gọn nếu dài), loại, ẩn dụ (đã có / mới), hình thức và props chính, ghi chú. Cuối file: ẨN DỤ MỚI chờ duyệt, các nhịp `Hình: KHÔNG` và lý do, kiểm độ phủ, câu hỏi cần người dùng quyết (tên video, câu kết, QR). Nội dung dài hơn 5 phút: chia chương, `SectionTitle` giữa các chương và `chapter` trong timeline.
 
 Ba thứ mọi kịch bản phải có thêm:
 
-- **Khung hình chung** ở đầu file, chốt một lần tại Cổng duyệt 1 để mọi nhịp cùng một dáng: theme, màu nhấn chính, họ hình chủ đạo (vẽ nét `YNiem`, cảnh `YCanh`, infographic), nhịp chuyển động (mặc định chậm theo brand), vị trí mặc định của đồ họa nổi. Mọi job kế thừa khung này; nhịp nào lệch khung thì ghi lý do ngay ở nhịp đó.
-- **Dòng "Thấy gì:"** cho mỗi nhịp có hình: một câu lời thường tả người xem thấy gì trên màn hình, không dùng tên component hay tên prop, để người dùng duyệt được mà không cần biết studio.
-- **Dòng "Kiểm chứng:"** cho mỗi nhịp mà hình mang dữ kiện (con số, năm, tên nghiên cứu, tên tác giả, trích dẫn; loại "số liệu/so sánh" luôn cần): ghi nguồn (tác giả, năm, đường dẫn hoặc DOI) đã tra được. Mô hình hay công cụ của người khác được nhắc tới thì ghi tên tác giả trên hình. Lời trong bản ghi âm lệch với nguồn thì không sửa lời bằng chữ đè lên; đưa vào câu hỏi cuối file ba cách để người dùng chọn: (1) ghi âm lại riêng câu đó rồi thay vào đúng mốc trên nền; (2) giữ lời, hình không lặp lại dữ kiện; (3) cắt câu.
+- **Khung hình chung** ở đầu file, chốt một lần ở Cổng duyệt 1: theme, màu nhấn chính, họ hình chủ đạo (vẽ nét `YNiem`, cảnh `YCanh`, infographic), nhịp chuyển động, vị trí đồ họa nổi (mặc định canh giữa; luôn hỏi người dùng có muốn điều chỉnh không). Nhịp nào lệch khung thì ghi lý do ngay ở nhịp đó.
+- **Dòng "Thấy gì:"** cho mỗi nhịp có hình: một câu lời thường tả người xem thấy gì, không dùng tên component hay prop.
+- **Dòng "Kiểm chứng:"** cho mỗi nhịp mà hình mang dữ kiện (con số, năm, tên nghiên cứu, tác giả, trích dẫn): nguồn đã tra được. Mô hình hay công cụ của người khác thì ghi tên tác giả trên hình. Lời trong bản ghi âm lệch với nguồn thì không sửa lời bằng chữ đè; đưa ba cách để người dùng chọn: (1) ghi âm lại riêng câu đó rồi thay vào đúng mốc; (2) giữ lời, hình không lặp dữ kiện; (3) cắt câu.
 
-Trước khi trình, chạy `python3 tools/uoc-luong.py "du-an/<x>/KICH-BAN-INFOMOTION.md"`: tool tự đếm hình, mật độ, khe nền giữa hai đồ họa toàn khung và dòng "Kiểm chứng:" còn thiếu. Kết quả phải là "KIỂM GIẤY: ĐẠT", hoặc mỗi điểm "CẦN XEM" có lý do ghi trong kịch bản (ví dụ người dùng chủ động nới trần mật độ cho một đoạn).
+Trước khi trình, `python3 tools/uoc-luong.py "du-an/<x>/KICH-BAN-INFOMOTION.md"` phải báo "KIỂM GIẤY: ĐẠT", hoặc mỗi điểm "CẦN XEM" có lý do ghi trong kịch bản. Kịch bản đạt khi: người dùng đọc 10-15 phút không cần mở gì khác là hình dung được video; ẩn dụ mới đánh dấu rõ; hai nhịp liền nhau không dùng cùng một khuôn chuyển động; mọi mốc là mốc thật. Loại hình lần đầu xuất hiện: kèm MỘT still (`npx remotion still`).
 
-Tiêu chí bản kịch bản đạt: người dùng đọc 10-15 phút không cần mở gì khác là hình dung được video; mọi ẩn dụ mới đánh dấu rõ; không nhịp nào dày hơn 1 hình / 8 giây; mỗi khối có mốc thật (không phải ước lượng). Với loại hình lần đầu xuất hiện trong dự án, render MỘT still (`npx remotion still`) kèm theo để người dùng thấy dáng hình, không render video.
+Người dùng góp ý trên chữ; sửa tới khi người dùng nói duyệt. Ngay sau khi duyệt: ghi mọi ẩn dụ mới vào `an-du-y-niem.json` (kèm `duyet`, `du-an`) TRƯỚC khi render.
 
-Người dùng góp ý trên chữ; sửa tới khi họ nói duyệt. Ngay sau khi duyệt: ghi mọi ẩn dụ mới vào `an-du-y-niem.json` (tạo file mới dạng `{}` nếu chưa có) TRƯỚC khi render, không để cuối dự án.
+### Bước 6 - Render đồ họa, soạn timeline, dựng nháp
 
-### Bước 6 - Render đồ hoạ, soạn timeline, dựng nháp
-
-Job JSON theo mẫu của `phim-do-hoa`, mỗi nhịp một job với `durationInSeconds` = đúng độ dài nhịp (đo từ mốc thật, cộng đệm 0,5-1 giây nếu nhịp sau không có hình). Đồ hoạ toàn khung (InfoList/InfoSteps/InfoStat/InfoQuote/YNiem/YCanh toàn khung) render mp4 nền cùng màu nền; đồ hoạ nổi (Benefits, YNiem nổi, YCanh nổi) render webm `alpha: true`. Render trong sandbox, `render-do-hoa.mjs` tự đo thời lượng/alpha; kiểm ngay `ffprobe` hình = tiếng của từng file.
-
-**Ngân sách khung khi một ô timeline có `durationInSeconds` LOCKED** (để giữ một lịch overlay không hở khung đã kiểm chứng trên timeline thật): góp ý kiểu "chậm nhịp vẽ lại" KHÔNG áp một hệ số chậm đồng nhất cho mọi cảnh - tính riêng từng cảnh theo đúng `budget = durationInFrames - 14 (dành cho fade-out) - biên an toàn`. Ô nào dư khung nhiều thì chậm gần trọn, ô nào eo hẹp thì chỉ chậm được một phần; mốc hiện nhãn chữ (`labelFrame`) và thời lượng `FadeUp` cũng phải tính lại theo đúng ngân sách còn lại của từng ô, không giữ nguyên một con số chung.
-
-**"Đổi hẳn, không vá toạ độ"**: khi người dùng chê một ẩn dụ "hơi kỳ" hay hai yếu tố trong cùng cảnh chồng lên nhau (cả về không gian lẫn thời gian), sửa cả hai trục cùng lúc - đổi hẳn ý tưởng hình (không cố "sửa nhẹ" hình cũ) VÀ tách rõ vùng không gian lẫn mốc thời gian giữa các yếu tố (yếu tố B chỉ bắt đầu SAU KHI yếu tố A đã yên vị), thay vì chỉnh dần toạ độ từng chút một qua nhiều vòng góp ý.
-
-Timeline (schema đầy đủ trong docstring `tools/assemble.py`): mỗi chương MỘT segment `type: video` cắt từ `nen-<khung>.mp4` (tiếng voice đi liền, không cần `audioSrc`); đồ hoạ toàn khung vào `broll` với `at` theo trục nguồn và `duration` đúng; đồ hoạ nổi vào `overlay` (list) với `at` TƯƠNG ĐỐI so với `in` của segment. Intro (`insert`) sau nhịp mở đầu nếu có câu móc, outro cuối. Nhạc nền `bookends` hoặc `full` gainDb theo `nhac-nen/THU-VIEN.md`. Chạy `assemble.py --kiem-tra` → `--preview` với `--out "<tên>-<khung>-nhap1"` tường minh.
-
-Sandbox render thường chỉ có 2 CPU: KHÔNG chạy nhiều job `render-do-hoa.mjs` song song. Gộp vào một job JSON (nội bộ tự tuần tự), hoặc nếu cần chạy nền trên `Bash` của sandbox đám mây thì dùng `nohup ... & disown` rồi `sleep`/`tail log` để theo dõi tiến độ (tiến trình nền của `Bash` sống qua nhiều lượt gọi tool; tiến trình nền chạy trên shell của MÁY người dùng thì KHÔNG - lệnh dài trên máy phải chạy đồng bộ trong một lượt gọi, dùng `timeout_ms` tối đa cho phép).
+- **Job JSON** theo mẫu, mỗi nhịp một job, `durationInSeconds` = đúng độ dài nhịp (đo từ mốc thật; cộng đệm 0,5-1 giây nếu nhịp sau không có hình). Đồ họa toàn khung (InfoList, InfoSteps, InfoStat, InfoQuote, YNiem toàn khung) render mp4 nền cùng màu nền; đồ họa nổi (Benefits, YNiem nổi, YCanh nổi) render webm `alpha: true`. Nhiều job gộp chung một job JSON để chạy tuần tự.
+- **Render** `node tools/render-do-hoa.mjs <job.json> --studio <đường dẫn tuyệt đối>`; đo ngay thời lượng thật từng file bằng `ffprobe`. Lịch đồ họa nối liền dựa trên số đo này, không dựa trên `durationInSeconds` danh nghĩa.
+- **Tạo hình**: đồ họa nổi canh giữa (mặc định của component), lấp phần lớn khung, giàu chi tiết (5-10 chi tiết chuyển động mỗi hình), mỗi nhịp một kỹ thuật chuyển động. Làm chậm trong ô đã khoá thì tính ngân sách khung riêng từng cảnh; ẩn dụ bị chê hay chồng lấn thì thiết kế lại cả khối. Chi tiết và con số: `hinh-tuong-hoa.md` mục 6.
+- **Timeline** (mẫu trong references): mỗi chương MỘT segment `type: video` cắt từ `nen-<khung>.mp4` (tiếng voice đi liền); đồ họa toàn khung vào `broll` với `at` theo trục nguồn và `duration` đúng; đồ họa nổi vào `overlay` (list) với `at` TƯƠNG ĐỐI so với `in`. Overlay chỉ hiện ở quãng TRƯỚC B-roll đầu tiên của segment (`--kiem-tra` cảnh báo khi vi phạm): chương có đồ họa nổi xen sau đồ họa toàn khung thì tách chương thành nhiều sub-segment liền mạch tại điểm kết thúc mỗi đồ họa toàn khung (`out` đoạn trước = `in` đoạn sau), overlay tính `at` từ `in` của sub-segment chứa nó. Mốc kết thúc khối trước bằng đúng mốc bắt đầu khối sau. Hai đồ họa toàn khung liên tiếp chuyển liền mạch trên cùng màu nền (quy tắc 5 giây của phim có người nói không áp ở đây). Intro (`insert`, `"role": "intro"`) sau nhịp mở đầu nếu có câu móc, outro cuối. Nhạc theo `_chung/timeline-va-dung.md`.
+- **Dựng**: `assemble.py --kiem-tra` → `--preview --out "<tên>-<khung>-nhap1"`.
 
 ### Bước 7 - Nghiệm thu hai lớp, giao nháp (Cổng duyệt 2)
 
-Lớp máy: `tools/nghiem-thu.py video` (hình = tiếng, LUFS, khung). Cảnh báo "hình đứng" ở quãng nền trơn là ĐÚNG THIẾT KẾ nếu quãng đó trùng một nhịp "không cần hình" trong kịch bản và không dài quá 20 giây; ngược lại là lỗi bố cục. Lớp đúng ý: từ `<thành phẩm>.map.json`, với MỖI hình trích khung tại mốc +1 giây (độ trễ hiện dần), đọc lại đúng câu transcript bao quanh, ghi vào báo cáo cặp "hình - câu đang nói"; hình nào không khớp ý câu là lỗi dù render đẹp. Hình nhiều mục (`Benefits` tích luỹ) kiểm ở trạng thái đầy đủ. Giao nháp preview cho người dùng xem, nhận góp ý theo mốc phút-giây, ghi `SO-GOP-Y.md`; góp ý lặp lần hai về cùng một kiểu lỗi → sửa mặc định trong component/từ điển, không chỉ sửa job.
+Lớp máy: `tools/nghiem-thu.py video`. Cảnh báo "hình đứng" ở quãng nền trơn chỉ đúng thiết kế khi trùng một nhịp `Hình: KHÔNG - <lý do>` và không dài quá 20 giây; ngược lại là lỗi độ phủ hoặc bố cục. Lớp đúng ý theo `_chung/nghiem-thu-dung-y.md`: với MỖI hình, cặp "hình - câu đang nói" tại mốc `part.start + overlay.at` (+1 giây); contact sheet cho đoạn nhiều overlay nối tiếp để soát lịch nối liền và nhiều điểm góp ý cùng lúc; Benefits tích luỹ kiểm ở trạng thái đầy đủ.
+
+Giao nháp cho người dùng xem trên máy, nhận góp ý theo mốc phút giây, ghi `SO-GOP-Y.md`; góp ý lặp lần hai về cùng một kiểu lỗi → sửa mặc định trong component hoặc từ điển, không chỉ sửa job.
 
 ### Bước 8 - Bản chính, bàn giao, cập nhật
 
-Render 1080p với `--out "<tên>-<khung>-nhapN"` rồi copy bản đạt sang `xuat-hoan-chinh/`. Đề xuất bản dọc hoặc bản gọn 60-90 giây qua `phim-clip-ngan` nếu hợp. Cập nhật `an-du-y-niem.json` (số mục phải tăng nếu dự án có ẩn dụ mới). Ghi bài học kỹ thuật mới vào `docs/BAI-HOC.md` (mục "Về đồ hoạ" hoặc mở mục riêng nếu là bài học đặc thù infomotion); sửa quy trình thì sửa thẳng file này, `description` chỉ là mô tả kích hoạt, không ghi changelog vào đó. Giữ `do-hoa/job/*.json` tới khi giao xong.
-
-## Thêm hình/variant mới
-
-Component mới chỉ khi có trường hợp thật không gì biểu đạt được:
-
-- **Thêm một hình vào `YNiem`**: thêm một entry `YNiemShape` vào `studio/src/y-niem/index.ts` (path dạng `"M x,y C x1,y1 x2,y2 x3,y3 C ..."` để dùng được với `travelDot`/`endArrow` nếu cần), chú thích ngắn khái niệm nó minh hoạ và image schema đang dùng. KHÔNG cần sửa `YNiem.tsx` - component đọc hình từ kho một cách tổng quát.
-- **Thêm một variant vào `YCanh`**: viết một sub-component mới trong `YCanh.tsx` theo đúng khuôn các variant sẵn có (nhận `frame` + màu cần dùng từ `palette`, vẽ trong viewBox `0 0 100 100`, nét 3px qua `StrokePath`/`drawProgress`), đăng ký trong `YCanhVariant`, `VARIANT_LABEL_FRAME`, `VARIANT_LABEL_DURATION`, `yCanhSuggestedSeconds`, và nhánh `switch` của component chính.
-- Cả hai trường hợp: làm theo 5 bước "Thêm component mới" của `skills/phim-do-hoa/SKILL.md` (đăng ký cả hai khung nếu có thay đổi ở `Root.tsx`, `tsc --noEmit` sạch, `npx remotion compositions` liệt kê đúng, render still tiếng Việt có dấu và NHÌN bằng mắt trước khi coi là xong, commit file nguồn về máy ngay).
-
-## Ghi chú vận hành kỹ thuật (pipeline đám mây - máy)
-
-- **`device_bash` (lệnh chạy trên máy người dùng) KHÔNG giữ tiến trình nền qua các lượt gọi tool khác nhau** (khác với `Bash` của sandbox đám mây, tiến trình nền của nó sống qua nhiều lượt gọi). Lệnh dài chạy trên máy (assemble.py, transcribe) phải chạy ĐỒNG BỘ trong một lượt gọi `device_bash`, dùng `timeout_ms` tối đa cho phép.
-- **`device_commit_files` dùng được trực tiếp với `stagedPath`** dưới `/mnt/user-data/outputs/<file>` (sau khi `cp`/`Write` file vào đó) mà KHÔNG cần gọi `SendUserFile` trước để lấy `file_uuid` - nhanh hơn khi commit nhiều file cùng lúc và không cần thẻ file hiện trong khung chat.
-- **Bẫy dấu tiếng Việt khi ghi file bằng heredoc hai bước** (`cat > file << 'EOF' ... EOF` rồi mới chạy): có thể lặng lẽ làm phẳng/mất dấu tiếng Việt ở bước THỰC THI dù nội dung đọc lại từ nguồn trông đúng. Cách an toàn: ghi file một bước bằng `python3 <<'PYEOF' ... PYEOF` hoặc dùng công cụ `Write`/`Edit`, mở file bằng `io.open(path, 'a', encoding='utf-8')` khi cần nối thêm - và LUÔN đọc lại nội dung vừa ghi để xác nhận dấu còn nguyên trước khi coi là xong.
-- Ngân sách khung, mật độ chi tiết tối thiểu (5-10 chi tiết chuyển động một cảnh `YCanh`), và kích thước `floating` (`unit*58`/`unit*6.0`/`unit*3.9`) trong mục "Hai thành phần đồ hoạ" ở trên là kết quả một dự án thật đã qua nhiều vòng góp ý - không hạ xuống dưới các mốc đó khi bắt đầu dự án mới trừ khi người dùng chủ động yêu cầu.
+Render 1080p với `--out "<tên>-<khung>"`, nghiệm thu, copy bản đạt sang `xuat-hoan-chinh/`. Đề xuất bản dọc hoặc bản gọn 60-90 giây qua phim-clip-ngan nếu hợp. Cập nhật `an-du-y-niem.json` (số mục phải tăng nếu dự án có ẩn dụ mới); bài học kỹ thuật mới vào `docs/BAI-HOC.md` chủ đề "Infomotion và hình vẽ ẩn dụ"; cách làm đổi thì sửa skill theo `_chung/bao-tri-skill.md`. Giữ `do-hoa/job/*.json` tới khi giao xong.
 
 ## Khi một khâu hỏng
 
-Nguyên tắc chung và mẫu câu báo ở mục "Khi một khâu hỏng" của `QUY-TRINH-KY-THUAT.md`: thử lại tối đa một lần sau khi đã sửa nguyên nhân; không có cách bù ngầm; báo bằng lời thường. Riêng thể loại này:
+Nguyên tắc chung ở `_chung/van-hanh.md` và bảng từng khâu ở QUY-TRINH. Riêng thể loại này:
 
 - Transcript trên nền không qua `nghiem-thu.py transcript`: gỡ lại cửa sổ rộng quanh chỗ hỏng; chưa có transcript đạt thì chưa lên kịch bản, vì mọi mốc dựa vào nó.
-- Một hình mới không vẽ được sau một lần sửa (still lỗi, `tsc` không sạch): dừng riêng nhịp đó, báo người dùng và đề xuất thay bằng một hình đã có trong kho hoặc `Benefits` nhãn chữ. Đây là một lựa chọn đưa người dùng duyệt lại, không tự thay sau khi kịch bản đã duyệt.
+- Một hình mới không vẽ được sau một lần sửa (still lỗi, `tsc` không sạch): dừng riêng nhịp đó, báo người dùng, đề xuất thay bằng một hình đã có trong kho hoặc `Benefits` nhãn chữ. Đây là lựa chọn đưa người dùng duyệt lại, không tự thay sau khi kịch bản đã duyệt.
 - Một job render lỗi hoặc ra file ngắn hơn nhịp: không kéo dài bằng khung đứng, không đẩy file ngắn vào timeline; render lại đúng `durationInSeconds`, các job khác vẫn chạy.
 - Dựng không qua `check_av()` hoặc `nghiem-thu.py video`: dừng, đọc bảng chẩn đoán, không giao nháp lỗi.
 
 ## Quy tắc cứng
 
-- Không render video trước cổng 1; still mẫu được phép.
-- Tra từ điển là bước bắt buộc trước sáng tạo; ẩn dụ mới luôn đánh dấu; ghi vào từ điển ngay sau duyệt.
-- Trần mật độ 1 hình / 8-10 giây; nhịp không hình hợp lệ; câu hỏi kết để trống hình.
-- Tái dùng hình/variant có sẵn trong `YNiem`/`YCanh` trước; hình/variant mới chỉ khi có trường hợp thật không gì biểu đạt được, và làm theo `skills/phim-do-hoa/SKILL.md` (đăng ký cả hai khung, tsc sạch, still tiếng Việt có dấu, commit về máy ngay).
-- Overlay nổi (`floating: true`) mặc định `position: 'center'`, kích thước không nhỏ hơn ngưỡng đã kiểm chứng (`unit*58` icon, `unit*6.0`/`unit*3.9` label/sublabel), tối thiểu 5-10 chi tiết chuyển động cho một cảnh `YCanh`.
-- Ô timeline có `durationInSeconds` LOCKED (giữ lịch overlay đã kiểm chứng): "chậm nhịp" tính ngân sách khung RIÊNG từng cảnh, không dùng một hệ số chung.
-- Góp ý "hình hơi kỳ" hoặc hai yếu tố chồng nhau: đổi hẳn ý tưởng hình VÀ tách cả không gian lẫn thời gian, không vá toạ độ từng chút.
-- Mốc từ transcript thật, hút về khoảng lặng; không cộng dồn thời lượng danh nghĩa.
-- Đồ hoạ nổi không che nhau về thời gian trong cùng segment; hai đồ hoạ toàn khung liên tiếp cách nhau tối thiểu 5 giây nền hoặc gộp thành một.
-- Nghiệm thu máy VÀ đọc lại transcript quanh mốc là bắt buộc trước khi báo "xong"; `--out` tường minh từ nháp đầu.
-- `device_bash` trên máy người dùng chạy đồng bộ, không có tiến trình nền qua nhiều lượt gọi; sandbox đám mây chỉ 2 CPU nên không render đồ hoạ song song nhiều job.
-- Kiểm giấy bằng `tools/uoc-luong.py` trước Cổng duyệt 1; mọi hình mang dữ kiện có dòng "Kiểm chứng:"; lời lệch nguồn không sửa bằng chữ đè, người dùng chọn một trong ba cách.
+- Không render video trước Cổng duyệt 1; still mẫu được phép. Kiểm giấy bằng `uoc-luong.py` trước khi trình.
+- Tra từ điển trước khi sáng tạo; ẩn dụ mới luôn đánh dấu; ghi vào từ điển ngay sau khi duyệt.
+- Mỗi hình khớp ý câu đang nói; không hình nào nói điều người dùng không nói. Phủ kín là mặc định của skill (không quá 1 giây nền trơn trừ nhịp `Hình: KHÔNG - <lý do>`); clip nào cần thưa hơn hay nhịp khác vì trải nghiệm người xem thì đề xuất kèm lý do ở Cổng duyệt 1.
+- Mốc từ transcript thật và thời lượng đo bằng `ffprobe`; không cộng dồn số danh nghĩa.
+- Tái dùng component có sẵn trước; component mới theo phim-do-hoa (cả hai khung, `tsc` sạch, still tiếng Việt có dấu, commit về máy ngay).
+- Mọi hình mang dữ kiện có dòng "Kiểm chứng:"; lời lệch nguồn không sửa bằng chữ đè, người dùng chọn một trong ba cách.
 - Hình vẽ bằng code theo brand; không dùng ảnh hay clip do AI tạo. Giọng máy chỉ làm bản tạm ở Lối vào B, không bao giờ vào bản giao.
+- Nghiệm thu máy VÀ cặp "hình - câu đang nói" là bắt buộc trước khi báo "xong".
+
+<!-- ban-nguon: phim-infomotion 2026-09-30 3735b26d -->

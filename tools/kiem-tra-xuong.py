@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """DỰNG THỬ dự án tổng hợp nhỏ để chắc xưởng chạy đúng trên máy này.
 
-    python3 tools/kiem-tra-xuong.py [--co-slide] [--giu]
+    python3 tools/kiem-tra-xuong.py [--co-slide] [--giu] [--chi-tai-lieu]
 
 Tạo nguồn giả bằng ffmpeg (màn test + tiếng sine), soạn timeline có đủ các
 kỹ thuật chính (cắt, fade, overlay alpha, B-roll, insert, tuỳ chọn bố cục slide
@@ -10,6 +10,10 @@ và multicam audioSrc), rồi chạy đúng đường thật: assemble.py --kiem
 assemble.py --preview → nghiem-thu.py video. Thoát mã 0 = ĐẠT.
 
 Dự án thử nằm ở du-an/_kiem-tra-tu-dong/ (xoá được). Không cần model, không cần mạng.
+
+Trước khi dựng thử, chạy cổng kiểm tài liệu (tools/kiem-tai-lieu.py: YAML của skill,
+đường dẫn trong tài liệu, kho ẩn dụ, dấu phiên bản). Tài liệu KHÔNG ĐẠT thì vẫn dựng
+thử cho biết phần máy, nhưng kết quả chung là KHÔNG ĐẠT. --chi-tai-lieu: chỉ kiểm tài liệu.
 """
 import argparse
 import json
@@ -34,8 +38,16 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--co-slide", action="store_true", help="thêm hai đoạn bố cục slide (cần do-hoa-chung/bo-cuc và Pillow)")
     ap.add_argument("--giu", action="store_true", help="không dọn cache cũ trước khi dựng")
+    ap.add_argument("--chi-tai-lieu", action="store_true", help="chỉ chạy cổng kiểm tài liệu, không dựng thử")
     args = ap.parse_args()
     os.chdir(ROOT)
+
+    tai_lieu_dat = True
+    if os.path.isfile(os.path.join(TOOLS, "kiem-tai-lieu.py")):
+        print("→ kiem-tai-lieu.py", flush=True)
+        tai_lieu_dat = subprocess.run([sys.executable, os.path.join(TOOLS, "kiem-tai-lieu.py")]).returncode == 0
+    if args.chi_tai_lieu:
+        raise SystemExit(0 if tai_lieu_dat else 1)
 
     proj = os.path.join("du-an", "_kiem-tra-tu-dong")
     for d in ("nguon", "do-hoa"):
@@ -120,6 +132,8 @@ def main():
     if p.returncode != 0:
         raise SystemExit("! nghiem-thu.py báo KHÔNG ĐẠT trên dự án thử - xưởng CHƯA an toàn")
     print(f"\n✓ DỰNG THỬ ĐẠT trên máy này. Thư mục thử: {proj}/ (xoá được).")
+    if not tai_lieu_dat:
+        raise SystemExit("! Phần máy ĐẠT nhưng cổng kiểm tài liệu KHÔNG ĐẠT (xem LỖI ở đầu) - sửa tài liệu rồi chạy lại")
 
 
 if __name__ == "__main__":

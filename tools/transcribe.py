@@ -2,9 +2,13 @@
 # -*- coding: utf-8 -*-
 """Tạo transcript có mốc thời gian cho video/audio bằng Whisper (sherpa-onnx, chạy offline).
 
-Cách dùng (chạy trong VM cục bộ, từ thư mục gốc "xuong-phim-claude"):
-    python3 tools/transcribe.py "du-an/x/nguon/clip.mp4" \
-        --model small --out-dir "du-an/x/transcript"
+Hai nơi chạy (từ thư mục gốc "xuong-phim-claude"):
+  1. ƯU TIÊN - trên macOS, ngoài VM: đủ RAM để chạy large-v3. Không gọi trực tiếp;
+     Claude xếp việc bằng tools/hang-doi-go-bang.py, người dùng bấm đúp
+     "Go bang tren Mac.command" ở thư mục gốc (xem tools/models/TAI-MODEL.md).
+  2. DỰ PHÒNG - trong VM Cowork (device_bash):
+       python3 tools/transcribe.py "du-an/x/nguon/clip.mp4" --out-dir "du-an/x/transcript"
+     VM chỉ khoảng 3-4 GB RAM nên --model auto sẽ chọn turbo (large-v3 chết lặng trong VM).
 
 Kết quả (đặt theo tên file nguồn, ví dụ clip.*):
     clip.transcript.json  - [{"start", "end", "text"}, …] (giây)
@@ -12,7 +16,9 @@ Kết quả (đặt theo tên file nguồn, ví dụ clip.*):
     clip.txt              - dạng đọc nhanh: [hh:mm:ss - hh:mm:ss] nội dung
     clip.silences.json    - các khoảng lặng (từ ffmpeg silencedetect) để cắt chính xác
 
-Model đặt tại tools/models/sherpa-onnx-whisper-<model>/ (small | turbo).
+Model đặt tại tools/models/sherpa-onnx-whisper-<model>/ (large-v3 | turbo | small).
+--model auto (mặc định): large-v3 khi đủ RAM (Linux: >= 7 GB còn trống; macOS: tổng RAM
+>= 12 GB), không thì turbo. Dòng "model tự chọn: whisper-..." ghi rõ model đã dùng.
 """
 import argparse
 import json
@@ -24,7 +30,10 @@ import tempfile
 import wave
 
 TOOLS_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.join(TOOLS_DIR, "pylib"))
+if sys.platform.startswith("linux"):
+    # tools/pylib chứa thư viện biên dịch cho Linux (VM Cowork); trên macOS dùng
+    # môi trường riêng do "Go bang tren Mac.command" dựng, không nạp pylib.
+    sys.path.insert(0, os.path.join(TOOLS_DIR, "pylib"))
 
 import numpy as np  # noqa: E402
 import sherpa_onnx  # noqa: E402
@@ -153,13 +162,44 @@ def fmt_ts(t: float, srt: bool = False) -> str:
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("input")
-    ap.add_argument("--model", default="turbo", choices=["small", "turbo", "tiny", "base", "medium"])
+    ap.add_argument("--model", default="auto", choices=["auto", "small", "turbo", "large-v3", "tiny", "base", "medium"],
+                    help="auto: large-v3 khi đủ RAM (Linux >= 7 GB trống, macOS tổng >= 12 GB), không thì turbo")
     ap.add_argument("--lang", default="vi")
     ap.add_argument("--out-dir", default=None)
-    ap.add_argument("--threads", type=int, default=4)
+    ap.add_argument("--threads", type=int, default=None,
+                    help="mặc định: 4 trong VM Linux, tối đa 8 luồng trên macOS")
     ap.add_argument("--batch", type=int, default=2)
     args = ap.parse_args()
+    if args.threads is None:
+        args.threads = min(os.cpu_count() or 4, 8) if sys.platform == "darwin" else 4
+    if args.model == "auto":
+        # VM Cowork ~3-4 GB RAM làm large-v3 chết lặng lẽ (hết bộ nhớ, không báo lỗi)
+        if sys.platform == "darwin":
+            try:
+                total_gb = int(subprocess.run(["sysctl", "-n", "hw.memsize"], capture_output=True,
+                                              text=True).stdout.strip()) / 1024 ** 3
+            except (ValueError, OSError):
+                total_gb = 0.0
+            args.model = "large-v3" if total_gb >= 12 else "turbo"
+            print(f"      model tự chọn: whisper-{args.model} (macOS, tổng RAM {total_gb:.0f} GB)", flush=True)
+        else:
+            avail_gb = 0.0
+            try:
+                for line in open("/proc/meminfo"):
+                    if line.startswith("MemAvailable:"):
+                        avail_gb = int(line.split()[1]) / 1024 / 1024
+            except OSError:
+                pass
+            args.model = "large-v3" if avail_gb >= 7 else "turbo"
+            print(f"      model tự chọn: whisper-{args.model} (RAM trống {avail_gb:.1f} GB)", flush=True)
 
+        # máy chưa tải large-v3 (repo công khai chỉ cài turbo): lùi về model đang có, không dừng
+        if not os.path.isdir(os.path.join(TOOLS_DIR, "models", f"sherpa-onnx-whisper-{args.model}")):
+            for thay in ("turbo", "small"):
+                if os.path.isdir(os.path.join(TOOLS_DIR, "models", f"sherpa-onnx-whisper-{thay}")):
+                    print(f"      chưa có whisper-{args.model} trong tools/models/ (xem TAI-MODEL.md), dùng whisper-{thay}", flush=True)
+                    args.model = thay
+                    break
     src = args.input
     base = os.path.splitext(os.path.basename(src))[0]
     out_dir = args.out_dir or os.path.join(os.path.dirname(src), "..", "transcript")

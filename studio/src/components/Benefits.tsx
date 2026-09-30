@@ -38,7 +38,7 @@ export type BenefitsProps = {
   // thay vi tu khoa/cum tu ngan. Mac dinh false (nowrap, hanh vi cu).
   wrap?: boolean;
   // He so nhan them vao co chu/vong tron so/padding - dung khi mac dinh
-  // van bi che la nho (xem docs/BAI-HOC.md).
+  // van bi che la nho (xem docs/BAI-HOC.md, chu de Overlay).
   // Mac dinh 1 (khong doi so voi truoc).
   scale?: number;
   // Khoang cach tu canh (top/bottom/left/right theo position) tinh theo
@@ -57,12 +57,12 @@ export const benefitsDefaults: BenefitsProps = {
   ],
   theme: 'light',
   brand: DEFAULT_BRAND,
-  // Mac dinh doi tu 'top' sang 'bottom' (xem docs/BAI-HOC.md, "Ve do hoa"):
-  // voi khung hinh phong van ngoi (dau nguoi noi o 1/3-1/2 tren khung),
-  // 'top' la nguyen nhan he thong khien pill che dau/mat moi khi job quen
-  // truyen rieng `position` - da lap lai nhieu lan o du an that. 'bottom'
-  // an toan hon lam mac dinh that bai (fail-safe); van nen tuong minh chon
-  // position hop tung canh quay va kiem bang khung hinh that.
+  // Mac dinh 2026-09-17: doi tu 'top' sang 'bottom'. Voi khung hinh phong van
+  // ngoi (dau nguoi noi thuong o 1/3-1/2 tren khung), position 'top' la
+  // nguyen nhan he thong khien pill hay che dau/mat khi job quen truyen rieng
+  // `position` - da xay ra lap lai nhieu lan (xem docs/BAI-HOC.md).
+  // 'bottom' an toan hon lam mac dinh that bai (fail-safe); van nen tuong
+  // minh chon position phu hop tung canh quay va kiem bang frame that.
   position: 'bottom',
   durationInSeconds: 6,
 };

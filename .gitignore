@@ -4,6 +4,7 @@ tools/models/*
 !tools/models/TAI-MODEL.md
 tools/.cai-dat.json
 tools/__pycache__/
+tools/go-bang/
 studio/node_modules/
 studio/public/brand/
 do-hoa-chung/bo-cuc/
@@ -27,3 +28,4 @@ du-an/_mau/xuat-*/
 Thumbs.db
 _to_delete/
 .tam/
+.dong-bo.json

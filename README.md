@@ -12,7 +12,7 @@ Bản thân tôi không có nhu cầu với clip hình ảnh hay âm thanh do AI
 
 ## Bạn nhận được gì
 
-- **Chín năng lực dựng phim** đóng thành quy trình chuẩn [skill] cho Claude: dựng bài giảng chuyên gia trình bày trước máy quay; bài giảng có slide (xen mặt, slide, hoặc cả hai theo bố cục tối ưu); clip ngắn dọc có phụ đề; podcast và buổi quay nhiều máy (tự đồng bộ bằng âm thanh, tự chuyển góc theo người nói); đồ họa động tối giản (dùng được cho clip minh hoạ chỉ có lời đọc, không cần lên hình); gỡ băng tiếng Việt chạy ngay trên máy (video không rời máy bạn); tìm hình và tư liệu minh hoạ phù hợp nội dung, đã kiểm định bản quyền; căn chỉnh màu cơ bản khi thật cần; phim tài liệu phỏng vấn nhiều nhân vật giới thiệu một dự án hay sự kiện (Claude giúp lên kế hoạch ghi hình - phỏng vấn ai, hỏi gì, quay cảnh trám nào - trước khi quay, rồi viết kịch bản thực tế từ tư liệu thật và dựng)
+- **Mười một năng lực dựng phim** đóng thành quy trình chuẩn [skill] cho Claude: dựng bài giảng chuyên gia trình bày trước máy quay; bài giảng có slide (xen mặt, slide, hoặc cả hai theo bố cục tối ưu); clip ngắn dọc có phụ đề; podcast và buổi quay nhiều máy (tự đồng bộ bằng âm thanh, tự chuyển góc theo người nói); đồ họa động tối giản; video giải thích bằng đồ họa thông tin [infomotion] chỉ từ một file ghi âm, không cần lên hình; phim hoạt hình vẽ bằng code có nhân vật và cảnh, hình tượng hoá lời nói hay một câu chuyện (kèm bộ lệnh để tự làm hoặc chia sẻ, phương pháp kế thừa từ bộ lệnh phim "Nhà" của Đặng Hữu Sơn); gỡ băng tiếng Việt chạy ngay trên máy (video không rời máy bạn); tìm hình và tư liệu minh hoạ phù hợp nội dung, đã kiểm định bản quyền; căn chỉnh màu cơ bản khi thật cần; phim tài liệu phỏng vấn nhiều nhân vật giới thiệu một dự án hay sự kiện (Claude giúp lên kế hoạch ghi hình - phỏng vấn ai, hỏi gì, quay cảnh trám nào - trước khi quay, rồi viết kịch bản thực tế từ tư liệu thật và dựng)
 - **Một bước thiết lập phong cách** khoảng 30 phút: Claude hỏi bạn là ai, dạy gì, cho ai, thích cảm giác nào (bốn mẫu để chọn hoặc mô tả riêng), rồi điền tên, chức danh, màu sắc, nhạc, thông điệp kết vào chỗ đã chừa sẵn. Mọi clip sau đó mang đúng dấu ấn của bạn và đổi được bằng một câu nói
 - **Thư viện chất liệu sạch**: danh mục nhạc nền và hiệu ứng đã kiểm từng trang nguồn (dùng thương mại mọi nền tảng, không Content ID), tải về theo mẫu phong cách bạn chọn; danh mục nguồn hình miễn phí và quy tắc giấy phép
 - **Cổng nghiệm thu tự động**: hình khớp tiếng tới 2 khung hình, âm lượng chuẩn -14 LUFS, không khoảng đen, không đứng hình. Claude không được nói "xong" khi máy chưa báo đạt
@@ -34,9 +34,10 @@ xuong-phim-claude/
 ├── BAT-DAU.md             ← cài lần đầu, từng bước, cho người mới
 ├── HUONG-DAN.md           ← cách đặt yêu cầu, ví dụ, sự cố thường gặp
 ├── CLAUDE.md              ← điểm vào cho Claude (đọc đầu mỗi phiên)
+├── Go bang tren Mac.command ← bấm đúp để gỡ băng large-v3 trên Mac (khi Claude nhờ)
 ├── phong-cach/            ← PHONG-CACH.md: bản đồ phong cách của BẠN; mau/: 4 mẫu khởi đầu
 ├── brand/                 ← brand.json (tên, chức danh, bảng màu) + logo/ (thả logo vào đây)
-├── skills/                ← 10 quy trình chuẩn cho Claude (thiết lập + 9 năng lực dựng phim)
+├── skills/                ← 12 quy trình chuẩn cho Claude (thiết lập + 11 năng lực dựng phim)
 ├── docs/                  ← tài liệu kỹ thuật cho Claude: môi trường, bài học từ dự án thật
 ├── thu-vien/              ← danh mục nhạc/hiệu ứng/hình đã kiểm định (không chứa file, tải lúc cài)
 ├── nhac-nen/  hieu-ung/   ← file âm thanh tải về, theo nhóm công dụng
@@ -48,14 +49,14 @@ xuong-phim-claude/
 
 ## Cách nó chạy (cho người tò mò)
 
-Video của bạn được xử lý ngay trên máy bạn bằng ffmpeg trong máy ảo của Cowork; gỡ băng bằng Whisper chạy tại máy (sherpa-onnx), nên footage không rời máy. Đồ họa động (intro, outro, thẻ, nhãn từ khoá) là các thành phần Remotion tối giản, render trong sandbox của Claude rồi ghép về. Mọi bước nặng đều tự nối tiếp khi bị ngắt, mọi file trung gian đều được đo hình khớp tiếng, và một bộ bài học từ các dự án thật (`docs/BAI-HOC.md`) giúp Claude không lặp lại lỗi cũ.
+Video của bạn được xử lý ngay trên máy bạn bằng ffmpeg trong máy ảo của Cowork; gỡ băng bằng Whisper chạy tại máy (sherpa-onnx: model turbo trong máy ảo, hoặc large-v3 trên Mac khi bạn bấm đúp `Go bang tren Mac.command`), nên footage không rời máy. Đồ họa động (intro, outro, thẻ, nhãn từ khoá) là các thành phần Remotion tối giản, render trong sandbox của Claude rồi ghép về. Mọi bước nặng đều tự nối tiếp khi bị ngắt, mọi file trung gian đều được đo hình khớp tiếng, và một bộ bài học từ các dự án thật (`docs/BAI-HOC.md`) giúp Claude không lặp lại lỗi cũ.
 
 ## Yêu cầu
 
 - App Claude trên máy tính với Cowork, dùng tốt nhất với mô hình Sonnet 5 (Mac Apple Silicon chạy êm nhất; máy ảo Cowork có sẵn ffmpeg, Python, Node)
 - Windows dùng được, nhưng cần Claude rà soát kỹ hơn và tinh chỉnh, cài thêm vài thư viện tuỳ máy
-- Khoảng 3 GB trống cho model nhận dạng giọng nói và thư viện
-- Mạng lúc cài; sau đó gỡ băng và dựng đều chạy offline
+- Khoảng 3 GB trống cho model nhận dạng giọng nói và thư viện (thêm khoảng 2 GB nếu muốn dùng large-v3 trên Mac)
+- Mạng lúc cài và lần đầu gỡ băng trên Mac; sau đó gỡ băng và dựng đều chạy offline
 - Muốn dùng trợ lý AI khác ngoài Claude (Codex, ChatGPT Work, Antigravity...): nhờ trợ lý đó đọc `CLAUDE.md` rồi tự tinh chỉnh, cài đặt cho phù hợp với máy và công cụ của nó
 
 ## Giấy phép
@@ -70,4 +71,4 @@ Nếu bạn dùng, chia sẻ lại hoặc giới thiệu repo này (bài viết,
 
 ## Đóng góp
 
-Bạn dựng được clip tốt hơn nhờ một quy tắc mới, hay bắt được một lỗi? Mở issue hoặc pull request: sửa `skills/<tên>/SKILL.md` cho quy trình, `docs/BAI-HOC.md` cho bài học, `thu-vien/am-thanh.json` cho track mới (nhớ kiểm Content ID).
+Bạn dựng được clip tốt hơn nhờ một quy tắc mới, hay bắt được một lỗi? Mở issue hoặc pull request. Skill, `docs/`, `tools/` và `studio/` được đồng bộ tự động từ xưởng gốc của tác giả, nên thay đổi ở đó sẽ được chép về bản gốc trước rồi mới vào repo; `thu-vien/am-thanh.json` cho track mới thì sửa thẳng (nhớ kiểm Content ID). Trước khi gửi, chạy `python3 tools/kiem-tai-lieu.py` phải ĐẠT.

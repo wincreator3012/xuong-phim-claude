@@ -87,7 +87,7 @@ export const yCanhDefaults: YCanhProps = {
   theme: 'light',
   brand: DEFAULT_BRAND,
   floating: false,
-  position: 'bottom',
+  position: 'center', // mặc định canh giữa; khi dựng clip hỏi người dùng có muốn đổi không
 };
 
 // --- 1. hub-branches ---------------------------------------------------------
@@ -526,7 +526,7 @@ export const YCanh: React.FC<YCanhProps> = ({
   theme,
   brand,
   floating = false,
-  position = 'bottom',
+  position = 'center',
 }) => {
   const palette = resolvePalette(theme, brand);
   const frame = useCurrentFrame();

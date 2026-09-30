@@ -70,7 +70,8 @@ Cách đặt yêu cầu cho từng loại clip, ví dụ câu nói, và xử lý
 - **Bản nháp nhỏ (480p), bản chính 1080p.** Xem nháp để góp ý bố cục và nhịp, không đánh giá độ nét ở bản nháp
 - **Video của bạn không rời máy.** Gỡ băng và dựng chạy trên máy bạn. Chỉ đồ họa (intro, thẻ chữ, không có hình bạn) được dựng trong sandbox của Claude rồi ghép về
 - **Lần đầu trên một máy** có thể cần cấp thêm quyền (thư mục Downloads, cho phép trình duyệt tải nhiều file). Claude sẽ nhờ khi cần
-- **Dùng trên hai máy**: đặt thư mục xưởng vào iCloud Drive/Dropbox. Bộ nhận dạng giọng nói và thư viện nằm trong thư mục nên đồng bộ theo; trước khi dựng bài lớn, chờ file tải hết về máy đang ngồi (Finder không còn icon đám mây)
+- **Dùng trên hai máy**: đặt thư mục xưởng vào iCloud Drive/Dropbox. Bộ nhận dạng giọng nói và thư viện nằm trong thư mục nên đồng bộ theo; trước khi dựng bài lớn, chờ file tải hết về máy đang ngồi (Finder không còn icon đám mây). File `Go bang tren Mac.command` tự cài môi trường riêng trên từng máy, nên lần đầu bấm trên máy mới sẽ chờ vài phút
+- **Gỡ băng chất lượng cao nhất trên Mac (tuỳ chọn).** Xưởng mặc định dùng model turbo. Muốn dùng large-v3, nhờ Claude tải theo `tools/models/TAI-MODEL.md` (khoảng 1,7 GB). Khi Claude nhờ, bấm đúp file `Go bang tren Mac.command` trong Finder; lần đầu trên mỗi máy cần mạng và mất vài phút. macOS chặn thì bấm chuột phải, chọn Open, rồi Open lần nữa. Chưa tải large-v3 thì xưởng tự dùng turbo
 - **Muốn đổi phong cách** (màu, chức danh, nhạc): nói với Claude "đổi phong cách" và nêu điều muốn đổi. Không cần làm lại từ đầu
 
 ## Khi có gì không chạy

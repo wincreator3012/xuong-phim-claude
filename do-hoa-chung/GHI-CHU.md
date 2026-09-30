@@ -1,6 +1,6 @@
 # Bộ intro/outro dùng chung - cách lấy về dự án và tinh chỉnh
 
-Đây là preset intro/outro linh hoạt cho mọi dự án. Bốn file demo trong thư mục này chỉ để XEM cảm nhận chuyển động; mỗi dự án nên render bản riêng với chữ và lựa chọn của mình từ hai file preset JSON kèm theo (copy vào `du-an/<x>/do-hoa/`, sửa các giá trị PLACEHOLDER rồi nhờ Claude render - hoặc chỉ cần nói yêu cầu, Claude tự soạn).
+Đây là preset intro/outro linh hoạt cho mọi dự án. Mỗi dự án render bản riêng với chữ và lựa chọn của mình từ hai file preset JSON kèm theo (copy vào `du-an/<x>/do-hoa/`, sửa các giá trị PLACEHOLDER rồi nhờ Claude render - hoặc chỉ cần nói yêu cầu, Claude tự soạn).
 
 ## Chỗ nào tinh chỉnh được (props của Intro/Outro)
 
@@ -38,4 +38,4 @@ Render chỉ mất ~1 phút mỗi file và cho đúng tên bài, đúng chuỗi 
 ## Gợi ý chữ ký âm thanh (khi dựng timeline)
 
 - Intro: `hieu-ung/chuong-thien/chuong-xoay-go` vào đúng lúc đường nhấn xuất hiện (giây thứ ~1.6), hoặc `acoustic-stinger-30s` chạy trọn intro+outro
-- Outro: nhạc bookends theo THU-VIEN-AM-THANH.md; chuông ngân dài cho video thiền
+- Outro: nhạc bookends theo `nhac-nen/THU-VIEN.md`; chuông ngân dài cho video thiền

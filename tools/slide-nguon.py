@@ -17,7 +17,7 @@ Kết quả: du-an/<x>/slide/slide-01.png … + du-an/<x>/slide/slide.json
 
 Môi trường: PPTX cần LibreOffice (soffice), PDF cần poppler (pdftoppm/pdftotext) - đã kiểm
 Máy ảo Cowork thường có cả hai (kiểm bằng which soffice pdftoppm), sandbox đám mây cũng có.
-Máy khác (Mac Studio) kiểm bằng `which` trước; thiếu thì chạy bước này ở đám mây rồi commit
+Máy khác kiểm bằng `which` trước; thiếu thì chạy bước này ở đám mây rồi commit
 thư mục slide/ về máy. Bộ ảnh và quay màn hình chạy được ở bất cứ đâu có ffmpeg + Pillow.
 Keynote: user xuất PDF hoặc PPTX từ Keynote trước (File > Export To).
 """

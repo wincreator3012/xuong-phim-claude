@@ -1,56 +1,59 @@
 ---
-name: phim-do-hoa
-description: Tạo, chỉnh sửa và render đồ họa video Remotion minimalist theo brand.json và phong cách của người dùng - intro, outro, thẻ chuyển phần, infographic động (danh sách, trích dẫn, con số, các bước), bảng tên nền trong suốt - từ studio trong thư mục xưởng (gốc repo xuong-phim-claude). Kích hoạt khi user yêu cầu "làm intro", "làm outro", "tạo infographic", "làm bảng tên", "thẻ chuyển phần", "render đồ họa", "đổi màu/font/brand đồ họa video", "thêm kiểu animation mới", "sửa template Remotion", hoặc bất kỳ yêu cầu đồ họa chuyển động cho video nào - kể cả khi user chỉ mô tả "cần cái hình động minh họa 4 bước cho đoạn này". Cũng kích hoạt khi cần cập nhật logo hoặc brand.json cho hệ thống phim. KHÔNG dùng cho dựng video hoàn chỉnh (skill phim-dung-bai) hay thiết kế tĩnh/poster (skill canvas-design).
+name: "phim-do-hoa"
+description: "Tạo, chỉnh sửa và render đồ họa video Remotion minimalist cho người dùng - intro, outro, thẻ chuyển phần, infographic động (danh sách, trích dẫn, con số, các bước), bảng tên và chữ nổi nền trong suốt, hình ẩn dụ vẽ nét - từ studio trong thư mục \"xuong-phim-claude\". Kích hoạt khi user yêu cầu \"làm intro\", \"làm outro\", \"tạo infographic\", \"làm bảng tên\", \"thẻ chuyển phần\", \"render đồ họa\", \"đổi màu/font/brand đồ họa video\", \"thêm kiểu animation mới\", \"sửa template Remotion\", hoặc bất kỳ yêu cầu đồ họa chuyển động cho video nào - kể cả khi user chỉ mô tả \"cần cái hình động minh họa 4 bước cho đoạn này\". Cũng kích hoạt khi cần cập nhật logo hoặc brand.json cho hệ thống phim. KHÔNG dùng cho dựng video hoàn chỉnh (phim-dung-bai), video chỉ có giọng ghi âm (phim-infomotion), phim hoạt hình tự sự (phim-hoat-hoa) hay thiết kế tĩnh, poster (canvas-design)."
 ---
 
 # Đồ họa Remotion minimalist
 
-Studio nằm ở `studio/` trong thư mục xưởng (bản gốc trên máy người dùng), render trong sandbox đám mây rồi commit về máy. Mọi chi tiết môi trường: `docs/QUY-TRINH-KY-THUAT.md` ở gốc thư mục - đọc trước, làm mục "Khởi động phiên mới" nếu đám mây chưa dựng.
+Studio nằm ở `studio/` trong thư mục xưởng (bản gốc trên máy của người dùng), render trong sandbox đám mây rồi commit về máy. Đọc trước: `skills/_chung/van-hanh.md` (hai nơi chạy lệnh, truyền file, chữ và chức danh) và `skills/_chung/overlay-va-the.md` (chọn loại đồ họa, vị trí, không che mặt); sandbox chưa dựng thì làm mục "Khởi động phiên mới" của `docs/QUY-TRINH-KY-THUAT.md`. Props chi tiết từng composition và các bẫy đã gặp: `skills/phim-do-hoa/references/props-va-bay.md`.
 
 ## Ngôn ngữ thiết kế (bất biến giữa các dự án)
 
-Minimalist, tĩnh tại, "thở" - để nội dung và người nói là trung tâm; bảng màu cụ thể lấy từ `brand/brand.json` (chép từ mẫu trong `phong-cach/mau/` lúc thiết lập):
+Minimalist, tĩnh tại, "thở". Chi tiết tông, màu, chữ: `phong-cach/PHONG-CACH.md` mục 3-4; mã màu gốc trong `brand/brand.json`.
 
-- Khoảng trắng rộng; mỗi khung hình một ý; không bao giờ nhồi
-- Chuyển động chậm và êm: fade + trồi nhẹ 20-30px, easing bezier(0.22, 1, 0.36, 1), 24-34 frame mỗi chuyển động; KHÔNG spring nảy, KHÔNG hiệu ứng lòe loẹt, không emoji trong đồ họa
-- Typography: Lora 500/600 cho tiêu đề, Be Vietnam Pro 400/500/600 cho nội dung; sentence case hoặc FULL-CAP cho kicker, tuyệt đối không Title Case
-- Hai theme trong `brand/brand.json` (light và dark, mỗi theme năm màu bg/ink/inkSoft/accent/line); mỗi dự án chọn một theme, không pha; không tự thêm màu ngoài palette
-- Đường nhấn mảnh 3px là chữ ký thị giác; mọi thành phần mới nên có nó
-- Ngôn ngữ chữ: theo mục 4 của `phong-cach/PHONG-CACH.md` (mặc định thuần Việt, sentence case, gạch ngang thường, thuật ngữ tiếng Anh trong ngoặc vuông); từ ngữ "phải viết đúng" trong đó là bất khả xâm phạm
+- Khoảng trắng rộng; mỗi khung hình một ý; không bao giờ nhồi.
+- Chuyển động chậm và êm: fade + trồi nhẹ 20-30 px, easing bezier(0.22, 1, 0.36, 1), 24-34 frame mỗi chuyển động; không spring nảy, không hiệu ứng lòe loẹt, không emoji.
+- Typography: Lora 500/600 cho tiêu đề, Be Vietnam Pro 400/500/600 cho nội dung; sentence case hoặc FULL-CAP cho kicker, không Title Case.
+- Hai theme light, dark trong `brand.json`; mỗi dự án một theme, không pha.
+- Đường nhấn mảnh 3 px là chữ ký thị giác; mọi thành phần mới nên có nó.
 
-## Render đồ họa có sẵn (việc thường gặp nhất)
+## Composition có sẵn
 
-18 composition: Intro, Outro, SectionTitle, InfoList, InfoQuote, InfoStat, InfoSteps, LowerThird, Benefits - mỗi cái hai khung `-ngang` (1920x1080) và `-doc` (1080x1920), 30fps. Props và thời lượng: xem defaults trong `studio/src/components/*.tsx`; InfoList/InfoSteps tự tính thời lượng theo số mục nếu không truyền durationInSeconds. `Intro` từ 2026-08-31 có thêm hai prop tùy chọn để tách nội dung dài khỏi `title` (tránh title tự xuống dòng giữa từ - xem `bien-tap.md` mục "Xuống dòng trong thẻ tiêu đề toàn màn hình"): `description` (một dòng mô tả phụ, cỡ chữ `subtitleSize*0.92`) và `creditLines` (mảng dòng credit như "Tác giả:...", "Đơn vị xuất bản:...", cỡ chữ `subtitleSize*0.62`, mỗi dòng một FadeUp riêng).
+22 composition (11 loại, mỗi loại hai khung `-ngang` 1920x1080 và `-doc` 1080x1920, 30 fps). Danh sách thật lúc nào cũng kiểm được bằng `npx remotion compositions src/index.ts`.
 
-Composition dùng khi cần đè chữ/nhãn lên video thật mà VẪN giữ hình người nói (không che hết khung, khác với InfoList/InfoQuote/InfoStat vốn full-screen). Không có composition "Caption" riêng: một câu caption nổi bật = `Benefits` với một mục, `showIndex:false`, `wrap:true`.
-- **Benefits**: dải pill bán trong suốt, HIỆN DẦN TỪNG MỤC đúng lúc lời nói nhắc tới mục đó (không phải slide tĩnh hiện hết cùng lúc) - mỗi mục nhận prop `revealAt` (giây, tính từ mốc bắt đầu của overlay, khớp mốc `at` của assemble.py). Mục đã hiện tự thu nhỏ/mờ khi mục kế tiếp xuất hiện, mục vừa hiện được tô đậm - tạo cảm giác một chuỗi tiến trình đang được xây dần lên thay vì một slide chết. Layout hàng có tự xuống dòng (flex-wrap), canh giữa, đặt top hoặc bottom qua prop `position`; hợp cả liệt kê tĩnh (bỏ trống `revealAt` thì tự chia đều) lẫn tiến trình nhiều bước theo lời nói (2-6 mục). Cỡ chữ nhãn nên ở khoảng `unit * 4.5` (khung dọc) / `unit * 4.0` (khung ngang) - đủ đọc rõ khi lướt nhanh trên điện thoại, đừng để mặc định quá nhỏ (đã tăng hai lần sau góp ý thực tế - lần đầu từ `unit*3.0/2.7` lên `unit*3.6/3.2` vẫn còn bị chê nhỏ, lần hai lên hẳn `unit*4.5/4.0`; đã kiểm bằng đo biên nội dung qua alphaextract, nhãn dài nhất vẫn không tràn khung dọc 1080px) Prop `position` nhận `top`/`bottom`/`left`/`right` (từ 2026-08-30: `left`/`right` xếp cột dọc bám cạnh) - ưu tiên `left`/`right` khi khung hình còn khoảng trống hai bên (người nói không chiếm hết bề ngang) hoặc khi clip dài có NHIỀU pill liên tiếp, vì `position:'bottom'` dễ bị hiểu lầm là phụ đề (góp ý thực tế từ người dùng). Prop `scale` (mặc định 1, mới 2026-08-31) nhân đều gap/padding/cỡ vòng tròn số/cỡ chữ - dùng khi cần phóng to nguyên khối một pill mà không đổi bố cục (giá trị thực tế đã dùng: 1.1-1.15). Prop `edgeInset` (0-1) ghi đè khoảng cách neo mặc định (sát cạnh) bằng một phân số tùy chỉnh của chiều cao khung (`top`/`bottom`) hoặc chiều rộng khung (`left`/`right`) - dùng cho khung DỌC khi vừa cần pill vừa cần phụ đề burn-in ở vùng dưới màn hình: phụ đề sát đáy khung, pill neo cao hơn (`position:'bottom'` + `edgeInset:0.3` ≈ 1/3 chiều cao khung từ đáy) để không chồng lấn phụ đề. Với framework nhiều bước, nên chủ động đề xuất thêm một overlay Benefits TỔNG KẾT cuối cùng (liệt kê lại đủ tên các thành phần + tên framework) đặt đúng vào lúc người nói tự nhiên tổng kết lại - đối chiếu transcript để tìm câu tổng kết, không đặt cứng theo số giây.
+| Loại | Dùng cho | Xuất |
+|---|---|---|
+| Intro, Outro | mở, kết từ preset `do-hoa-chung/preset-intro-outro-<ngang\|doc>.json` | mp4 |
+| SectionTitle | thẻ chuyển hồi, chuyển phần | mp4 |
+| InfoList, InfoSteps, InfoQuote, InfoStat | infographic toàn khung: liệt kê; tiến trình nhãn ngắn; câu đúc kết; một con số | mp4 |
+| Benefits | chữ, pill đè lên hình thật (một mục = một dòng chữ nổi; nhiều mục = hiện dần theo lời) | webm alpha |
+| LowerThird | bảng tên người nói | webm alpha |
+| YNiem, YCanh | ẩn dụ vẽ nét (một khái niệm) và cảnh vẽ tay tám kỹ thuật chuyển động, chủ yếu cho infomotion; bản nổi mặc định canh giữa, khi dựng clip hỏi người dùng có muốn đổi vị trí không | mp4 toàn khung hoặc webm alpha nổi |
 
-**Quy tắc ưu tiên bố cục, áp dụng cho MỌI overlay/pill/chữ đè lên video có hình người nói**: (1) ưu tiên nhất - không che cả người lẫn mặt nếu có thể tránh; (2) nếu buộc phải đánh đổi (khung hình chật, nhiều mục cùng lúc, khung dọc hẹp) - tuyệt đối không che mặt, có thể chấp nhận che một phần thân người. Benefits nhiều mục (`revealAt` nối tiếp) TÍCH LŨY dần thành một khối lớn theo thời gian (mục cũ không biến mất, chỉ thu nhỏ/mờ) - LUÔN kiểm ở trạng thái TÍCH LŨY ĐẦY ĐỦ (khung hình cuối cùng của chuỗi, chồng lên FRAME THẬT của nguồn chứ không phải nền màu đặc), không chỉ ở khung hình vừa hiện mục đầu tiên, đặc biệt với cảnh quay tĩnh một khuôn mặt cố định ở một vùng khung hình.
+Studio KHÔNG có composition `Caption`. Đồ họa nổi (Benefits, LowerThird, YNiem/YCanh nổi) ghép bằng trường `overlay` của `tools/assemble.py`; đồ họa toàn khung bằng `insert` hoặc `broll` (xem `_chung/timeline-va-dung.md`).
 
-Benefits xuất webm alpha (`"alpha": true`), ghép vào video bằng trường `overlay` của `tools/assemble.py` - xem `phim-dung-bai/references/bien-tap.md` mục "Infographic/overlay" để biết khi nào dùng cái nào và cách tính thời lượng hiển thị theo nội dung (không phải số tròn tùy ý). `overlay` của một segment nhận cả list nhiều lớp chồng nối tiếp (nhiều Caption/Benefits/InfoList khác nhau trong CÙNG một đoạn quay liên tục), miễn khoảng hiển thị không chồng lấn thời gian.
+## Render đồ họa (việc thường gặp nhất)
 
-1. Soạn job JSON: intro/outro bắt đầu từ preset `do-hoa-chung/preset-intro-outro-<ngang|doc>.json` (đủ placeholder: title/subtitle; outro: headline thông điệp kết, ctaLines, programName, contactLines - bỏ qrFile thì bố cục tự dồn giữa; hướng dẫn tinh chỉnh: `do-hoa-chung/GHI-CHU.md`); cả `Intro` lẫn `Outro` đều nhận `qrFile`+`qrCaption` (dùng chung component `QrPlate`) và `scheduleLabel`+`scheduleLines` (lịch các buổi/chặng tiếp theo, nối bằng dấu ·) - dùng khi chương trình có nhiều chặng/kỳ và muốn cả hai thẻ đều hiện lịch; đồ họa khác theo mẫu `du-an/_mau/do-hoa/job-do-hoa.json`. brandFile trỏ `brand/brand.json`; LowerThird đặt `"alpha": true` để ra webm nền trong suốt. File QR/hình riêng của dự án: khai báo qua trường `"assets"` (đường dẫn tương đối so với file job) - script tự copy vào studio; QR tạo tại đám mây bằng python qrcode từ link user đưa
-2. Chạy ở đám mây: `node tools/render-do-hoa.mjs <job.json> --studio <studio-đám-mây>`
+1. **Soạn job JSON**: intro, outro bắt đầu từ preset (đủ placeholder; hướng dẫn tinh chỉnh `do-hoa-chung/GHI-CHU.md`); đồ họa khác theo mẫu `du-an/_mau/do-hoa/job-do-hoa.json`. `brandFile` trỏ `brand/brand.json`; đồ họa nổi đặt `"alpha": true`. File QR, hình riêng của dự án khai báo qua `"assets"` (đường dẫn tương đối so với file job); QR tạo ở sandbox bằng python `qrcode`. Prop có default kiểu placeholder (như `subtitle` của Intro) mà không dùng thì đặt `""` tường minh. Job JSON giữ trong `du-an/<x>/do-hoa/job/`.
+2. **Still trước**: đồ họa mới hoặc props lạ thì render một still (`npx remotion still ... --frame=<giữa bài> --props=...`) và xem bằng Read: chữ Việt đủ dấu, không tràn khung, đúng theme. Job đổi sau still thì render lại still hoặc trích khung từ file cuối.
+3. **Render ở sandbox**: `node tools/render-do-hoa.mjs <job.json> --studio <đường dẫn tuyệt đối>`. Nhiều đồ họa gộp một job để chạy tuần tự; không chạy song song; nhiều job thì `--gioi-han 150` và lặp đúng lệnh khi thoát mã 2. Script tự đồng bộ `brand/logo/`, tự đo thời lượng, bỏ qua job đã render đúng props.
+4. **Commit** về `du-an/<x>/do-hoa/<ngang|doc>/` trên máy theo `_chung/van-hanh.md` (tên staged mới mỗi lần sửa, so md5, file lớn hơn 20 MB thì split).
+5. **Soi chữ bằng mắt**: `nghiem-thu.py do-hoa` và cổng máy không đọc chữ trên hình. Sau MỖI lần sửa chữ (kể cả một chữ số), trích khung tại đúng mốc và xem bằng Read trước khi báo xong; đồ họa nổi kiểm thêm trên khung hình thật của video đã dựng.
 
-   Đường render alpha (2026-09-29): script mặc định render chuỗi PNG rồi encode bằng ffmpeg libvpx realtime, ra đúng vp8 + yuva420p nhưng nhanh khoảng 6 lần (một bảng tên 4,5 giây: ~15 giây thay vì ~90 giây trên sandbox 2 lõi); `--alpha-remotion` quay về encoder chậm cũ. Job đã render đúng props được bỏ qua (propsHash trong `do-hoa-manifest.json`), nên đợt nhiều job chạy `--gioi-han 150` và lặp lại đúng lệnh khi thoát mã 2; `--lam-lai` để ép render lại. KHÔNG chạy hai lệnh render song song hay chạy nền rồi chạy thêm lệnh khác trên sandbox 2 lõi: hai tiến trình vp8 kẹt nhau, file đứng ở 0 byte hàng chục phút.
-3. TRƯỚC khi render video, với đồ họa mới hoặc props lạ: render 1 still (`npx remotion still ... --frame=<giữa bài> --props=...`) và XEM HÌNH bằng Read - chữ Việt đủ dấu, không tràn khung, đúng theme
-4. **Test/ghép thử một webm alpha bằng ffmpeg TỰ TAY (không qua `assemble.py`)**: PHẢI đặt `-c:v libvpx` (vp9: `-c:v libvpx-vp9`) NGAY TRƯỚC `-i` của file webm alpha, nếu không ffmpeg âm thầm decode như hình KHÔNG có alpha (yuv420p đặc) mà KHÔNG báo lỗi - `assemble.py` đã tự làm đúng việc này trong pipeline overlay chính thức, chỉ lệnh test tự soạn mới thiếu và dễ tưởng nhầm alpha bị hỏng
-5. Commit kết quả về `du-an/<x>/do-hoa/<ngang|doc>/` trên máy (file >20MB: split 19m, commit từng phần, cat nối lại trong device_bash)
+## Thêm component mới, sửa component
 
-## Thêm component mới / sửa component
+1. Viết theo pattern có sẵn: `Canvas` (nền + fade biên), `FadeUp`, `AccentLine` từ `common.tsx`, palette qua `resolvePalette(theme, brand)` (bảng màu của người dùng chọn từ `phong-cach/mau/` lúc thiết lập, ghi vào `brand/brand.json`), kích thước qua `useLayout()` để một component chạy đúng cả hai khung.
+2. Đăng ký trong `Root.tsx` cho CẢ HAI khung ngang, dọc, có defaults và calculateMetadata. Tránh default kiểu placeholder; nếu có thì ghi rõ trong `props-va-bay.md`.
+3. Kiểm: `npx tsc --noEmit` sạch → `npx remotion compositions src/index.ts` liệt kê đủ → still cả ngang lẫn dọc với nội dung Việt CÓ DẤU dài thực tế và xem hình, chú ý tràn khung khi nhiều mục.
+4. Commit file nguồn về máy NGAY (máy là bản gốc; sandbox mất khi hết phiên).
+5. Cập nhật bảng composition ở trên, bảng tài nguyên của `docs/QUY-TRINH-KY-THUAT.md` và số composition ở khối "Khởi động phiên mới" nếu đổi.
 
-1. Viết theo pattern có sẵn: dùng `Canvas` (nền + fade biên), `FadeUp`, `AccentLine` từ `common.tsx`, palette qua `resolvePalette(theme, brand)`, kích thước qua `useLayout()` để một component tự chạy đúng cả hai khung
-2. Đăng ký trong `Root.tsx` cho CẢ HAI khung ngang/dọc, có defaults và calculateMetadata
-3. Kiểm tra: `npx tsc --noEmit` sạch → `npx remotion compositions src/index.ts` liệt kê đủ → render still cả ngang lẫn dọc với nội dung Việt CÓ DẤU dài thực tế (không "abc test") và xem hình - chú ý tràn khung khi danh sách/bước nhiều mục
-4. Commit file nguồn đã sửa về máy NGAY (máy là bản gốc; đám mây mất khi hết phiên)
-5. Component mới nên nêu trong docs/QUY-TRINH-KY-THUAT.md (bản đồ tài nguyên) nếu nó thêm khả năng mới cho hệ thống
+Hình ẩn dụ mới cho YNiem (slug) hay YCanh (variant): kèm một mục trong `do-hoa-chung/an-du-y-niem.json` (chưa có file thì tạo theo schema ở `skills/phim-infomotion/references/mau-kich-ban.md`) sau khi người dùng duyệt, không để slug "mồ côi".
 
 ## Cập nhật brand và logo
 
-- Logo dùng mảng `"logos"` trong `brand/brand.json` (1-3 logo, file nằm trong `brand/logo/` do người dùng thả vào lúc thiết lập); mỗi phần tử là tên file hoặc `{"file": "...", "scale": 0.85}` khi cần chỉnh cỡ riêng; hàng logo tự chuẩn hóa chiều cao và có vạch ngăn. `render-do-hoa.mjs` TỰ đồng bộ `brand/logo/` vào studio - không cần copy tay. Theme tối tự chuyển logo về đơn sắc kem (prop `logoMono: false` để giữ màu gốc). Ghi đè logos theo dự án: đặt trong props của job thay vì sửa brand gốc. Logo mới: thả file vào `brand/logo/`, render still xem cân đối rồi mới render loạt
-- Đổi màu/tagline/social: sửa `brand/brand.json` - ảnh hưởng mọi dự án từ đó về sau, xác nhận với user trước khi đổi giá trị mặc định; nhu cầu một dự án riêng thì ghi đè palettes trong job JSON của dự án đó thay vì sửa brand gốc
-- **Chức danh/tagline hiển thị trên clip là chỗ hay bị góp ý sửa LẶP LẠI qua nhiều dự án** (ví dụ một chức danh dài từng bị rút gọn sai ở `brand.json` `tagline` và giá trị mặc định `role` của `LowerThird.tsx`; chức danh nguyên văn nằm ở mục 1 của `phong-cach/PHONG-CACH.md`). Khi user góp ý sửa một câu chữ/chi tiết LẦN THỨ HAI trở lên, đó là tín hiệu phải sửa NGUỒN MẶC ĐỊNH (brand.json, defaultProps trong component) ngay, không chỉ sửa trong job JSON của dự án đang làm - nếu không, dự án kế tiếp lại rơi về giá trị cũ và lặp lỗi lần ba.
-- **Màu pill đang hiện của Benefits lấy từ `palette.accent`** của brand đang dùng (trước 2026-09-29 gắn cứng màu xanh rêu của palette mặc định, nên brand khác vẫn ra pill xanh rêu). Brand riêng của một dự án (chương trình có bộ nhận diện riêng): đặt `props.brand` (palettes, logos) trong từng job thay vì sửa `brand/brand.json`.
-- **`ctaLines` của Outro: mỗi phần tử là một dòng**, dòng dài tự xuống dòng và dễ để lại chữ mồ côi (một dòng chỉ còn "tháng"). Tự chia câu thành các dòng cân nhau, khoảng 30-40 ký tự mỗi dòng ở khung ngang, rồi xem khung hình outro trước khi dùng.
-- **Logo trên theme sáng**: bản logo có nền màu riêng (dạng huy hiệu) đọc rõ hơn bản trong suốt chữ trắng; chọn bản logo theo theme, xem still trước khi render loạt.
-- **Kiểm nhanh một loạt pill**: chồng từng webm lên nền xám bằng `-c:v libvpx -i` và trích một khung ở trạng thái tích luỹ đủ; chữ Việt đủ dấu, không tràn. Sau đó kiểm lại trên khung hình thật của video đã dựng (pill không che mặt).
+- Logo dùng mảng `"logos"` trong `brand/brand.json` (1-3 logo từ `brand/logo/`, cách chuẩn bị logo ở `brand/logo/README.md`; chưa có logo thì để mảng rỗng và dùng tên thương hiệu chữ `showBrandName`); hàng logo tự chuẩn hoá chiều cao, có vạch ngăn. Logo mới: thả vào `brand/logo/`, render still xem cân đối rồi mới render loạt. Ghi đè theo dự án, brand riêng của chương trình, clip không mang thương hiệu của người dùng: `props-va-bay.md` mục "Brand riêng và logo".
+- Đổi màu, tagline, social trong `brand/brand.json` ảnh hưởng mọi dự án về sau: xác nhận với người dùng trước; nhu cầu một dự án thì ghi đè trong job.
+- Chức danh, tagline trên clip là chỗ hay bị góp ý lặp lại: nguồn chuẩn là `phong-cach/PHONG-CACH.md` mục 1. Góp ý sửa câu chữ lần thứ hai là tín hiệu sửa NGUỒN MẶC ĐỊNH (brand.json, defaultProps) và ghi vào sổ tay góp ý của PHONG-CACH, không chỉ sửa job đang làm.
+
+<!-- ban-nguon: phim-do-hoa 2026-09-30 8d8e9d80 -->

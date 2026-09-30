@@ -55,11 +55,11 @@ Trình tự chuẩn của dựng phim tài liệu phỏng vấn: gỡ băng có 
 
 ## 6. Bài học từ dự án thật (đã tổng quát hoá)
 
-Một phim 9 phút, bốn nhân vật, sáu vòng nháp với 8-22 điểm góp ý mỗi vòng ở năm vòng đầu và một vòng tự tinh chỉnh cuối cùng. Những gì đáng giữ:
+Phim 9 phút giới thiệu một chương trình giáo dục tại một trường học, bốn nhân vật, sáu vòng nháp (vòng 6 là tự tinh chỉnh, không chờ góp ý bằng số). Những gì đáng giữ:
 
 - **Không có kế hoạch quay thì dựng phải tự bù**: cảnh trám khoá cứng 6 giây phải gộp bốn clip nối đuôi để có một khối 24 giây; nhiều đoạn phỏng vấn 30-60 giây liên tục không có cảnh trám nào để phủ; cảnh "người đang làm việc của mình" thiếu cho hai trong bốn nhân vật. Pha 1 của skill sinh ra từ đây.
 - **Ước tính thời lượng trên giấy trước khi dựng**: nháp đầu giữ trọn các bite đã chọn ra 9 phút so với mục tiêu 5-6 phút; bốn vòng sau cắt dần. Kịch bản thực tế giờ bắt buộc có tổng ước tính và hai phương án khi vượt 30%.
-- **Mở đầu**: mở thẳng bằng mặt người nói bị góp ý ngay; 1,5-2 giây cảnh động thật trước câu móc sửa được.
+- **Mở đầu**: mở thẳng bằng mặt người nói bị góp ý ngay; 1,5-2 giây cảnh động thật trước câu móc sửa được (từ nháp 6 nâng lên thành chuỗi 3-4 cảnh động ngắn, tổng 5-8 giây, xem mục 1).
 - **Cầu nối 2-3 giây giữa hai nhân vật** giảm hẳn cảm giác giật khi đổi người; một clip là đủ ở lần đầu nhưng hai clip nối nhau tự nhiên hơn.
 - **Danh sách cấu phần làm một overlay tích luỹ** rõ hơn nhiều pill rời hiện rồi mất.
 - **Câu hỏi neo và câu kết chiêm nghiệm dạng overlay bán trong suốt** đè lên cảnh thật (bảng "tầm nhìn" gắn trên tường thật là chỗ đặt câu kết đẹp nhất) thay cho thẻ toàn màn hình; giữ mạch và né quy tắc năm giây.
@@ -68,14 +68,14 @@ Một phim 9 phút, bốn nhân vật, sáu vòng nháp với 8-22 điểm góp 
 - **Overlay cần hiện sau khi cảnh trám trong cùng segment kết thúc**: tách segment thành hai sub-segment liền mạch tại đúng điểm cảnh trám kết thúc.
 - **Ghi đè trùng tên**: gọi dựng không có `--out` ở vòng nháp thứ năm ghi đè lên preview của nháp một; từ đó mọi nháp đặt tên tường minh có số.
 - **Job JSON đồ họa bị dọn khỏi sandbox** giữa hai vòng, phải dựng lại từ khung hình đã render để sửa một trường; giữ job trong dự án tới khi giao.
-- **Đồ họa insert (intro, outro, thẻ chuyển) có tiếng dài hơn hình 0,05-0,06 giây** do cách đóng khung AAC khi không có tiếng thật; ép `-t` bằng thời lượng hình ngay sau render, kiểm `ffprobe` trước khi vào timeline.
+- **Đồ họa insert (intro, outro, thẻ chuyển) có tiếng dài hơn hình 0,05-0,06 giây** do cách đóng khung AAC khi không có tiếng thật. Từ assemble.py bản 2026-09-30.r1, bước chèn tự cắt tiếng về bằng hình và in một dòng thông báo; không cần ép `-t` bằng tay nữa.
 - **Lệch hình-tiếng ở mọi ranh giới đoạn** hoá ra nằm ở bước ghép `-c copy` không tôn trọng edit-list của AAC; ghép giờ luôn giải mã và mã hoá lại. Nghi lệch thì quét `packet=pts_time` quanh ranh giới, đo tổng thời lượng không đủ bắt.
 - **Cụm nhạy nằm giữa một chunk gỡ băng dài** (tên một tổ chức) cắt được bằng ước lượng tỷ lệ ký tự rồi `silencedetect` trên cửa sổ 3-4 giây quanh đó, đặt `snap:false`.
 - **Báo rõ điều không tìm được**: một góp ý neo vào từ khoá không có trong transcript gần đó được xử lý bằng điểm ngắt câu sạch gần nhất và báo lại, thay vì lặng lẽ giả định.
 - **Người tổ chức có xuất hiện trong phim không** là quyết định biên tập cần hỏi sớm; mặc định là không, để phim thuộc về các nhân vật và người thụ hưởng.
-- **Một vòng tinh chỉnh cuối không chờ góp ý bằng số vẫn đáng làm**: sau khi các vòng góp ý bằng mốc phút-giây đã hết, tự nghe lại toàn phim một lượt riêng để bắt bốn loại vấn đề khó thấy qua từng góp ý rời: câu còn dư ở đầu hoặc cuối bite dù đã cắt theo góp ý, mở đầu vẫn là một cảnh tĩnh đơn thay vì nhiều nhịp, thẻ chuyển và đồ họa insert còn ở bản cũ dù nội dung đã đổi, và một lớp thông tin còn thiếu hoàn toàn.
-- **Không có thẻ nhận diện người nói qua nhiều vòng nháp là một khoảng trống dễ bị bỏ sót**: nhiều nhân vật xuất hiện xuyên suốt phim mà người xem không được giới thiệu tên ở đâu, chỉ có pill nội dung; khoảng trống này không lộ ra qua góp ý theo mốc phút-giây vì không ai "chỉ" được một chỗ thiếu - chỉ lộ ra khi tự hỏi "người xem lạ có biết đây là ai không". Từ đó, thẻ nhận diện LowerThird cho từng nhân vật là bước bắt buộc, không phải phần thêm tuỳ chọn.
-- **Mức `volumeDb` nền là mức khởi điểm, không phải giá trị cố định**: một mức nền đã theo đúng gợi ý chung ở các vòng đầu vẫn có thể nghe hơi nổi trên lời phỏng vấn khi nghe lại kỹ hơn ở vòng cuối; mức đúng phụ thuộc độ ồn thật của từng file gốc, cần nghe lại và hạ thêm khi cần chứ không dừng ở mức tra bảng.
+- **Nháp 6 (2026-09-20): một vòng tự tinh chỉnh, không chờ góp ý bằng số**, sửa bốn điểm cùng lúc: cắt câu tinh gọn hơn ở các bite đã dùng từ nháp trước (một điểm cắt lùi từ giây 38,5 về giây 27,6; một mốc bắt đầu từ giây 98,7 lùi về 97,7; một điểm cắt khác từ 44,0 về 42,4), mở đầu đổi từ một cảnh động đơn sang chuỗi nhiều cảnh động nối tiếp, ba thẻ chuyển tiêu đề lên phiên bản mới cùng `intro` và `outro`/`closing`, và bổ sung chín lượt `LowerThird` cho bốn nhân vật (trước đó phim không có bảng tên nào, chỉ có pill nội dung).
+- **Không có bảng tên qua năm vòng nháp đầu là một khoảng trống, không phải một lựa chọn có chủ đích**: bốn nhân vật xuất hiện xuyên suốt phim mà người xem không được giới thiệu tên ở đâu cả. Khoảng trống này chỉ lộ ra ở nháp 6 khi tự hỏi "người xem lạ có biết đây là ai không" - không phải từ một góp ý cụ thể. Từ dự án này, thẻ nhận diện LowerThird là bước bắt buộc trong Bước 2.4, không phải phần thêm tuỳ chọn.
+- **Mức `volumeDb` nền cần nghe lại theo từng dự án, không dùng một con số cố định**: nháp 1-5 hạ tiếng nền sự kiện và học sinh xuống -12dB theo mức gợi ý chung, nhưng nghe lại ở nháp 6 vẫn thấy hơi nổi trên lời phỏng vấn ở một số đoạn, phải hạ thêm 6dB (xuống -18dB cho nền xa, -12dB cho nền gần) mới thật sự chìm dưới lời nói.
 
 ## 7. Ba lớp đồ họa: nhận diện, nhấn mạnh, chuyển hồi
 
@@ -89,7 +89,7 @@ Khi một khung hình cần cả LowerThird lẫn pill nội dung cùng lúc (ng
 
 ## 8. Nhãn đoạn ổn định cho vòng góp ý
 
-Mốc phút-giây (mm:ss) đổi ở MỌI vòng nháp, vì cắt một câu ở đầu phim làm co giãn toàn bộ timeline phía sau. Nếu góp ý chỉ dựa vào mốc phút-giây, user phải mở lại video mỗi lần muốn trỏ đúng đoạn, và dễ trỏ nhầm khi có nhiều bản nháp mở song song. Giải pháp: gán một NHÃN ổn định cho từng đoạn footage ngay khi viết kịch bản thực tế (Bước 2.3), giữ nguyên nhãn đó xuyên suốt mọi vòng nháp sau - chỉ có mốc thời gian đi kèm là đổi theo từng bản dựng.
+Mốc phút-giây (mm:ss) đổi ở MỌI vòng nháp, vì cắt một câu ở đầu phim làm co giãn toàn bộ timeline phía sau. Nếu góp ý chỉ dựa vào mốc phút-giây, người dùng phải mở lại video mỗi lần muốn trỏ đúng đoạn, và dễ trỏ nhầm khi có nhiều bản nháp mở song song. Giải pháp: gán một NHÃN ổn định cho từng đoạn footage ngay khi viết kịch bản thực tế (Bước 2.3), giữ nguyên nhãn đó xuyên suốt mọi vòng nháp sau - chỉ có mốc thời gian đi kèm là đổi theo từng bản dựng.
 
 **Quy ước bốn loại nhãn:**
 
@@ -104,7 +104,7 @@ Thẻ đồ họa dựng sẵn (Intro, Outro, thẻ chuyển `SectionTitle`) kh�
 
 1. Bước 2.3 (viết `KICH-BAN-THUC-TE.md`): gán nhãn A/T/M vào cột đầu tiên của bảng "Dòng dựng", đúng thứ tự dòng. Nhãn giữ nguyên qua mọi vòng nháp kể cả khi thêm/bớt cảnh trám hay đổi mốc `in`/`out`.
 2. Bước 2.4 (dựng `timeline.json`): chép đúng nhãn vào trường `"label"` của segment tương ứng (cùng cách dùng như trường `chapter` đã có sẵn). Một dòng bị tách thành nhiều sub-segment vì lý do kỹ thuật (ví dụ cần overlay chỉ hiện sau khi cảnh trám kết thúc) thì TẤT CẢ sub-segment mang chung một nhãn - không đánh số phụ, vì với người xem đó vẫn là một dòng dựng duy nhất. Sau khi render xong một bản, chạy `python3 tools/nhan-doan.py timeline.json <bản-mới-nhất>.map.json` để sinh hoặc cập nhật `NHAN-DOAN.md` - bảng đối chiếu nhãn sang mốc thời gian thật của đúng bản đó, kèm cảnh báo nếu còn segment chưa gán nhãn.
-3. Bước 2.5 (vòng góp ý): user mở `NHAN-DOAN.md` của đúng bản đang xem, tra mốc theo nhãn, rồi góp ý bằng CÂU NÓI TỰ NHIÊN neo vào nhãn, ví dụ: "A2 cắt bớt 3 giây đầu và lấy thêm 2 giây phía sau cho trọn câu", "B2.1 đổi sang cảnh khác vì trùng ý với B2.2", "T3 rút ngắn còn 1,5 giây". Việc dịch nhãn sang mốc `in`/`out` thật trong `timeline.json` để sửa là việc của AI, dựa trên `NHAN-DOAN.md` của đúng vòng nháp đang góp ý - không phải việc user tự quy đổi. Ghi cột "Nhãn" vào `SO-GOP-Y.md` là chính, mốc phút-giây chỉ ghi kèm để đối chiếu nhanh.
+3. Bước 2.5 (vòng góp ý): người dùng mở `NHAN-DOAN.md` của đúng bản đang xem, tra mốc theo nhãn, rồi góp ý bằng CÂU NÓI TỰ NHIÊN neo vào nhãn, ví dụ: "A2 cắt bớt 3 giây đầu và lấy thêm 2 giây phía sau cho trọn câu", "B2.1 đổi sang cảnh khác vì trùng ý với B2.2", "T3 rút ngắn còn 1,5 giây". Việc dịch nhãn sang mốc `in`/`out` thật trong `timeline.json` để sửa là việc của AI, dựa trên `NHAN-DOAN.md` của đúng vòng nháp đang góp ý - không phải việc người dùng tự quy đổi. Ghi cột "Nhãn" vào `SO-GOP-Y.md` là chính, mốc phút-giây chỉ ghi kèm để đối chiếu nhanh.
 
 Quy ước này áp dụng cho dự án MỚI bắt đầu từ Bước 2.3 trở đi; không bắt buộc phải gán lại nhãn cho các dự án đã dựng xong trước đó.
 

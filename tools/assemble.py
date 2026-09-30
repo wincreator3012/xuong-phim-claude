@@ -4,11 +4,21 @@
 
 Cách dùng (từ thư mục gốc "xuong-phim-claude"):
     python3 tools/assemble.py --project "du-an/ten-du-an" [--timeline timeline.json]
-                              [--preview] [--out ten-file.mp4]
+                              [--preview] [--out ten-file]
 
-Thiết kế: mỗi đoạn được cắt + chuẩn hóa MỘT lần (encode đồng nhất), sau đó ghép
-bằng concat -c copy (không encode lại), cuối cùng chỉ xử lý audio (nhạc nền +
-chuẩn hóa âm lượng) với video copy → toàn bộ video chỉ encode đúng một lần.
+Tên file xuất (trong du-an/<x>/xuat-nhap/): mặc định "<tên dự án>-<khung>", thêm
+"-nhap" khi --preview. Từ vòng nháp thứ hai trở đi LUÔN truyền --out tường minh,
+quy ước "<tên>-<khung>-nhapN" cho nháp và "<tên>-<khung>" cho bản chính; tên đã
+kết thúc bằng "-nhap" hoặc "-nhapN" thì không nối thêm "-nhap" lần nữa.
+
+Thiết kế: mỗi đoạn được cắt + chuẩn hóa MỘT lần thành một part (có cache .sig, tự
+resume). Ghép các part bằng GIẢI MÃ + MÃ HOÁ LẠI một lần (không dùng concat -c copy:
+stream-copy bỏ qua edit-list của AAC, gây lệch hình-tiếng ~21ms ở mọi mối nối).
+Cuối cùng chỉ xử lý tiếng (nhạc nền + chuẩn hóa -14 LUFS), hình copy. Mọi part,
+thân phim và thành phẩm đều qua check_av() (hình = tiếng); sai là dừng.
+Đồ họa chèn (intro/outro/insert) mang đuôi tiếng AAC thừa 0,02-0,06s được tự cắt
+về bằng hình trong insert_part() và in ra một dòng thông báo (lỗi đã biết, có
+nguyên nhân xác định), không cần ép -t bằng tay trước khi đưa vào timeline.
 
 timeline.json:
 {
@@ -21,15 +31,22 @@ timeline.json:
     {"type": "video", "src": "nguon/a.mp4", "in": 12.5, "out": 95.0,
      "snap": true,                    // hút điểm cắt về khoảng lặng gần nhất
      "fadeIn": 0, "fadeOut": 0,       // giây; 0 = cắt thẳng
+     "fadeOutAudio": 0,               // giây; CHỈ mờ tiếng cuối segment, giữ hình cắt thẳng
      "cropFocus": 0.5,                // khung dọc: tâm crop ngang (0=trái, 1=phải)
      "chapter": "Tên chương",        // tùy chọn, để tạo chapters.txt
      "overlay": {"src": "do-hoa/ngang/lt.webm", "at": 1.0},  // bảng tên alpha
      "broll": [{"src": "nguon/broll.mp4", "at": 30.0, "duration": 6.0, "from": 0}]
     },                                 // "at" theo thời gian TRONG FILE NGUỒN
-    {"type": "insert", "src": "do-hoa/ngang/info-01.mp4"}
+    {"type": "insert", "src": "do-hoa/ngang/info-01.mp4"},
+    {"type": "insert", "src": "do-hoa/ngang/intro.mp4", "role": "intro"}
+                                       // role "intro"/"outro": đánh dấu thẻ intro/outro đặt
+                                       // TRONG segments (vd. hook trước intro) để nhạc
+                                       // bookends bám đúng vị trí của thẻ đó
   ],
   "music": {"src": "nhac-nen/x.mp3", "mode": "full",   // "full" | "bookends"
             "gainDb": -22, "duck": true, "fadeIn": 2, "fadeOut": 4},
+                                    // gainDb lấy theo từng track ở thu-vien/AM-THANH.md;
+                                    // duck chỉ tác dụng ở mode "full"
   "colorGrade": {"contrast": 1.04, "saturation": 1.08, "brightness": 0.01}
                                     // tùy chọn, áp cho CẢNH QUAY THẬT (cut_part)
                                     // qua bộ lọc eq của ffmpeg, KHÔNG áp cho đồ họa
@@ -53,6 +70,7 @@ MULTICAM (skill phim-multicam): segment thêm "audioSrc": "nguon/tieng-chu.wav",
 import argparse
 import json
 import os
+import re
 import shlex
 import subprocess
 import sys
@@ -63,7 +81,7 @@ PREVIEW_SIZES = {"ngang": (854, 480), "doc": (480, 854)}
 
 # --- Chống lệch hình-tiếng (bản vá 2026-09-05, 2026-09-17) --------------------
 # Đổi TOOL_VERSION mỗi khi sửa logic encode → mọi cache .sig cũ tự vô hiệu.
-TOOL_VERSION = "2026-09-17.antidrift-2"
+TOOL_VERSION = "2026-09-30.r1"  # r1: insert_part tự cắt đuôi tiếng AAC, role intro/outro cho bookends
 AV_TOL = 0.06       # hình và tiếng lệch nhau quá 2 khung hình (30fps) là LỖI
 DUR_TOL = 0.15      # part dài/ngắn hơn dự kiến quá mức này là LỖI
 
@@ -121,7 +139,7 @@ def check_av(path, expected=None, label="", raise_on_fail=True, dur_tol=DUR_TOL)
     if not problems:
         return True
     msg = (f"[NGHIỆM THU] {label} KHÔNG ĐẠT: " + "; ".join(problems) +
-           "\n  → Đây đúng là lớp lỗi 'lệch hình-tiếng ngầm' (xem docs/BAI-HOC.md)."
+           "\n  → Đây đúng là lớp lỗi 'lệch hình-tiếng ngầm' (một dự án bài giảng 2026-09-05)."
            "\n  → Không được đi tiếp/che bằng encode lại. Kiểm lại lệnh ffmpeg của part này"
            " (cờ -t phía output, apad), nguồn có bị cắt cụt không, overlay/B-roll có dài quá đoạn không.")
     if raise_on_fail:
@@ -209,11 +227,12 @@ class Assembler:
         name = out_name or f"{os.path.basename(os.path.normpath(project))}-{self.aspect}"
         if name.endswith(".mp4"):
             name = name[:-4]
-        if preview:
+        if preview and not re.search(r"-nhap\d*$", name):
             name += "-nhap"
         self.out_file = os.path.join(self.out_dir, name if name.endswith(".mp4") else name + ".mp4")
         self.parts = []
         self.chapters = []
+        self.bookend_spans = {}  # "intro"/"outro" -> (mốc bắt đầu, thời lượng) trên thành phẩm
 
     def resolve(self, p):
         """Đường dẫn tương đối: tìm trong thư mục dự án trước, rồi tới thư mục gốc
@@ -293,14 +312,17 @@ class Assembler:
                 f"'(iw-ow)*{focus}':'(ih-oh)*0.5'")
 
     def cut_part(self, src, t_in, t_out, focus=0.5, fade_in=0.0, fade_out=0.0,
+                 fade_out_audio=0.0,
                  overlay=None, video_from=None, broll_from=0.0,
                  layout="mat", slide=None, slide_zoom=None,
                  audio_src=None, audio_in=None):
         """Cắt [t_in, t_out] từ src thành một phần chuẩn hóa.
         video_from: nếu đặt → video lấy từ file khác (B-roll), audio vẫn từ src.
-        layout/slide: bố cục bài giảng có slide (xem skill phim-bai-giang-slide).
+        layout/slide: bố cục bài giảng có slide (xem docs/QUY-TRINH-KY-THUAT.md mục "Bài giảng có slide").
         audio_src/audio_in: MULTICAM - tiếng lấy từ file khác (tiếng chủ) bắt đầu tại audio_in,
-        hình vẫn từ src [t_in, t_out]. Bất biến: mọi part ra đều hình = tiếng = dur (check_av)."""
+        hình vẫn từ src [t_in, t_out]. Bất biến: mọi part ra đều hình = tiếng = dur (check_av).
+        fade_out_audio: mờ tiếng cuối part (afade), KHÔNG động tới hình - dùng khi hình cuối
+        (thường là B-roll) cắt thẳng sang insert kế tiếp nhưng lời nói cần tắt êm, không cụt tiếng."""
         idx = len(self.parts)
         out = os.path.join(self.tmp, f"part-{idx:03d}.mp4")
         dur = t_out - t_in
@@ -319,7 +341,7 @@ class Assembler:
         mau = self.vf_mau_sac(video_from or src)  # B-roll: hình từ video_from → đơn của nó
         a_path = self.resolve(audio_src) if audio_src else None
         sig = self._cache_sig(kind="cut", src=src, t_in=t_in, t_out=t_out, focus=focus,
-                               fade_in=fade_in, fade_out=fade_out, overlay=overlay,
+                               fade_in=fade_in, fade_out=fade_out, fade_out_audio=fade_out_audio, overlay=overlay,
                                video_from=video_from, broll_from=broll_from, preview=self.preview,
                                mau=mau, layout=layout, slide=slide, slide_zoom=slide_zoom, theme=theme,
                                audio_src=a_path, audio_in=audio_in)
@@ -336,6 +358,9 @@ class Assembler:
         if fade_out > 0:
             fade_v += f",fade=t=out:st={max(0, dur - fade_out):.3f}:d={fade_out}:color={self.fade_color}"
             af += f",afade=t=out:st={max(0, dur - fade_out):.3f}:d={fade_out}"
+        if fade_out_audio > 0 and fade_out <= 0:
+            # chỉ mờ tiếng, giữ hình cắt thẳng (xem docstring)
+            af += f",afade=t=out:st={max(0, dur - fade_out_audio):.3f}:d={fade_out_audio}"
 
         cmd = ["ffmpeg", "-hide_banner", "-y"]
         overlays = (overlay if isinstance(overlay, list) else [overlay]) if overlay else []
@@ -524,6 +549,17 @@ class Assembler:
                     "-vf", vf, "-map", "0:v", "-map", "1:a"]
         cmd += ["-t", f"{dur:.3f}"] + self.enc_args() + [out]
         sh(cmd)
+        # Chốt lại pha mux thứ hai (remux -c:v copy -c:a aac): bộ mã AAC có thể
+        # để lại đuôi thừa ~0.02-0.06s ở TIẾNG bất kể cờ -t/atrim phía trên đã
+        # ép ở bước encode chính (lớp lỗi 'lệch hình-tiếng ngầm', đã xác minh
+        # atrim filter KHÔNG loại được đuôi này - phải cắt lại sau khi mux xong).
+        v_real, a_real = stream_durations(out)
+        if v_real is not None and a_real is not None and abs(v_real - a_real) > AV_TOL:
+            print(f"    (đồ họa chèn có đuôi tiếng thừa {a_real - v_real:+.3f}s - đã cắt tiếng về bằng hình)", flush=True)
+            fixed = out + ".fix.mp4"
+            sh(["ffmpeg", "-hide_banner", "-y", "-i", out, "-t", f"{v_real:.6f}",
+                "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", fixed])
+            os.replace(fixed, out)
         check_av(out, dur, label=os.path.basename(out))
         self._cache_save(out, sig)
         self.parts.append(out)
@@ -668,6 +704,21 @@ class Assembler:
                                         f"thời lượng file B-roll {bd:.2f}s ({os.path.basename(bsrc)})")
                     except Exception:
                         pass
+        mus = self.tl.get("music") or {}
+        if mus.get("src") and mus.get("mode") == "bookends":
+            segs = self.tl.get("segments", [])
+            roles = {s.get("role") for s in segs if s.get("type") == "insert"}
+            has_i = bool(self.tl.get("intro")) or "intro" in roles
+            has_o = bool(self.tl.get("outro")) or "outro" in roles
+            if not (has_i or has_o):
+                errs.append("music bookends nhưng không có intro/outro nào: thêm trường intro/outro, "
+                            "hoặc \"role\": \"intro\"/\"outro\" cho segment insert tương ứng; hoặc đổi mode full")
+            elif not has_i:
+                if any(s.get("type") == "insert" for s in segs[:3]):
+                    warns.append("music bookends: có insert ở đầu timeline nhưng chưa đánh dấu \"role\": \"intro\" "
+                                 "- nhạc đầu phim sẽ không bám theo thẻ intro")
+                else:
+                    warns.append("music bookends: không có intro - chỉ có nhạc ở outro")
         for w in warns:
             print(f"  ⚠ {w}", flush=True)
         if errs:
@@ -707,7 +758,9 @@ class Assembler:
 
         if self.tl.get("intro"):
             print("  + intro", flush=True)
-            t_cursor += self.insert_part(rel(self.tl["intro"]))
+            d = self.insert_part(rel(self.tl["intro"]))
+            self.bookend_spans["intro"] = (t_cursor, d)
+            t_cursor += d
 
         for i, seg in enumerate(self.tl.get("segments", [])):
             stype = seg.get("type", "video")
@@ -715,7 +768,11 @@ class Assembler:
                 self.chapters.append((t_cursor, seg["chapter"]))
             if stype == "insert":
                 print(f"  + đồ họa chèn: {seg['src']}", flush=True)
-                t_cursor += self.insert_part(rel(seg["src"]))
+                d = self.insert_part(rel(seg["src"]))
+                role = seg.get("role")
+                if role in ("intro", "outro") and role not in self.bookend_spans:
+                    self.bookend_spans[role] = (t_cursor, d)
+                t_cursor += d
                 continue
 
             src = rel(seg["src"])
@@ -729,6 +786,7 @@ class Assembler:
             focus = float(seg.get("cropFocus", 0.5))
             fade_in = float(seg.get("fadeIn", 0))
             fade_out = float(seg.get("fadeOut", 0))
+            fade_out_audio = float(seg.get("fadeOutAudio", 0))
             brolls = sorted(seg.get("broll", []), key=lambda b: b["at"])
 
             # Chia đoạn theo các quãng B-roll (hình thay, tiếng giữ)
@@ -754,6 +812,7 @@ class Assembler:
                     src, a, b, focus=focus,
                     fade_in=fade_in if first else 0.0,
                     fade_out=fade_out if last else 0.0,
+                    fade_out_audio=fade_out_audio if last else 0.0,
                     overlay=seg.get("overlay") if first else None,
                     video_from=rel(binfo["src"]) if kind == "broll" else None,
                     broll_from=float(binfo.get("from", 0)) if kind == "broll" else 0.0,
@@ -764,7 +823,9 @@ class Assembler:
 
         if self.tl.get("outro"):
             print("  + outro", flush=True)
-            t_cursor += self.insert_part(rel(self.tl["outro"]))
+            d = self.insert_part(rel(self.tl["outro"]))
+            self.bookend_spans["outro"] = (t_cursor, d)
+            t_cursor += d
         return t_cursor
 
     def concat(self, expected):
@@ -772,9 +833,9 @@ class Assembler:
         TRƯỚC khi ghép: kiểm từng part hình = tiếng. SAU khi ghép: body phải
         = tổng part và hình = tiếng.
 
-        Bản vá 2026-09-17 (xem docs/BAI-HOC.md, mục "Về hạ tầng"): KHÔNG còn
-        dùng '-f concat -c copy' để ghép, dù nhanh và không giảm chất lượng, vì
-        gây lệch hình-tiếng thật ở MỌI ranh giới đoạn - không phải lỗi lý thuyết:
+        Bản vá 2026-09-17 (xem docs/BAI-HOC.md chủ đề 2): KHÔNG còn dùng
+        '-f concat -c copy' để ghép, dù nhanh và không giảm chất lượng, vì gây
+        lệch hình-tiếng thật ở MỌI ranh giới đoạn - không phải lỗi lý thuyết:
         - AAC có độ trễ mào đầu bộ mã hoá (encoder priming, ~1 khung/1024 mẫu
           ở 48kHz ≈ 21ms), ghi bằng edit-list (elst) trong mỗi part.mp4.
         - '-f concat -c copy' đọc gói thô, KHÔNG tôn trọng elst: nó dịch TOÀN
@@ -843,18 +904,33 @@ class Assembler:
                       f"atrim=0:{dur:.3f},volume={gain}dB,"
                       f"afade=t=in:st=0:d={f_in},afade=t=out:st={max(0, dur - f_out):.3f}:d={f_out}[mus]")
             if mode == "bookends":
-                intro_d = probe_duration(self.parts[0]) if self.tl.get("intro") else 0.0
-                outro_d = probe_duration(self.parts[-1]) if self.tl.get("outro") else 0.0
-                start2 = max(0.0, dur - outro_d - 1.0)
-                mchain = (
-                    f"[1:a]aformat=sample_rates=48000:channel_layouts=stereo,asplit=2[m1][m2];"
-                    f"[m1]atrim=0:{intro_d + 1.5:.3f},volume={gain}dB,"
-                    f"afade=t=in:st=0:d=0.8,afade=t=out:st={max(0.0, intro_d - 0.3):.3f}:d=1.8[i1];"
-                    f"[m2]atrim=0:{outro_d + 1.0:.3f},volume={gain}dB,"
-                    f"afade=t=in:st=0:d=1.5,afade=t=out:st={max(0.0, outro_d - 2.5):.3f}:d=2.5,"
-                    f"adelay={int(start2 * 1000)}|{int(start2 * 1000)}[i2];"
-                    f"[i1][i2]amix=inputs=2:duration=longest:normalize=0[mus]"
-                )
+                # Nhạc chỉ nằm dưới thẻ intro và thẻ outro, bám đúng vị trí thật của
+                # từng thẻ (kể cả intro đặt sau hook qua segment "role": "intro").
+                pieces = []
+                if "intro" in self.bookend_spans:
+                    st, d = self.bookend_spans["intro"]
+                    pieces.append((max(0.0, st), d + 1.5, 0.8, max(0.0, d - 0.3), 1.8))
+                if "outro" in self.bookend_spans:
+                    st, d = self.bookend_spans["outro"]
+                    s2 = max(0.0, st - 1.0)
+                    pieces.append((s2, d + 1.0, 1.5, max(0.0, d - 2.5), 2.5))
+                if not pieces:
+                    raise RuntimeError("[NHẠC] mode bookends nhưng timeline không có intro/outro "
+                                       "(trường intro/outro, hoặc segment insert có \"role\": \"intro\"/\"outro\"). "
+                                       "Đổi sang mode full hoặc đánh dấu role cho thẻ intro/outro.")
+                n = len(pieces)
+                labels = "".join(f"[m{k}]" for k in range(n))
+                mchain = f"[1:a]aformat=sample_rates=48000:channel_layouts=stereo,asplit={n}{labels}" if n > 1 \
+                    else "[1:a]aformat=sample_rates=48000:channel_layouts=stereo[m0]"
+                outs = ""
+                for k, (st, ln, fi, fo_st, fo_d) in enumerate(pieces):
+                    ms = int(st * 1000)
+                    mchain += (f";[m{k}]atrim=0:{ln:.3f},volume={gain}dB,"
+                               f"afade=t=in:st=0:d={fi},afade=t=out:st={fo_st:.3f}:d={fo_d},"
+                               f"adelay={ms}|{ms}[b{k}]")
+                    outs += f"[b{k}]"
+                mchain += (f";{outs}amix=inputs={n}:duration=longest:normalize=0[mus]" if n > 1
+                           else ";[b0]anull[mus]")
             if duck and mode == "full":
                 fc = (f"{mchain};[0:a]asplit=2[voice][sc];"
                       f"[mus][sc]sidechaincompress=threshold=0.015:ratio=8:attack=150:release=900[duckm];"

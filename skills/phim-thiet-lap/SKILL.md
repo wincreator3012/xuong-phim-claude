@@ -19,7 +19,7 @@ Chạy từ gốc xưởng: `python3 tools/cai-dat.py`. Lệnh tự bỏ qua bư
 
 Nếu bước dựng thử báo KHÔNG ĐẠT: đọc chẩn đoán, sửa (thường là thiếu ffmpeg hoặc Pillow), chạy lại. Chưa đạt thì chưa sang bước 2 - xưởng chưa an toàn.
 
-Song song, ở sandbox đám mây (nếu phiên có): dựng studio Remotion theo mục "Khởi động phiên" trong `docs/QUY-TRINH-KY-THUAT.md` (stage `studio/` lên, `npm install`, `npx remotion compositions src/index.ts` ra 18 composition). Cần cho Bước 4.
+Song song, ở sandbox đám mây (nếu phiên có): dựng studio Remotion theo mục "Khởi động phiên" trong `docs/QUY-TRINH-KY-THUAT.md` (stage `studio/` lên, `npm ci`, `npx remotion compositions src/index.ts` ra đúng 22 composition). Cần cho Bước 4.
 
 ## Bước 2 - phỏng vấn phong cách (3 lượt, AskUserQuestion)
 
@@ -56,8 +56,10 @@ Không có studio ở đâu cả (không sandbox, máy không có node): bỏ qu
 
 ## Bước 5 - bàn giao
 
-Tóm tắt cho người dùng bằng 5-7 câu: đã cài gì, mẫu phong cách nào, nhạc nào đã có, cái gì còn treo (logo, track chưa tải). Kết bằng câu đầu tiên họ có thể nói để làm clip thật, ví dụ: "Tạo thư mục du-an/bai-1, tôi sẽ thả clip quay vào nguon, rồi dựng bài giảng ngang cho tôi". Nhắc: mọi thứ vừa chọn đều đổi được sau bằng một câu nói.
+Tóm tắt cho người dùng bằng 5-7 câu: đã cài gì, mẫu phong cách nào, nhạc nào đã có, cái gì còn treo (logo, track chưa tải). Kết bằng câu đầu tiên họ có thể nói để làm clip thật, ví dụ: "Tạo thư mục du-an/bai-1, tôi sẽ thả clip quay vào nguon, rồi dựng bài giảng ngang cho tôi". Nhắc: mọi thứ vừa chọn đều đổi được sau bằng một câu nói. Máy là Mac thật và muốn gỡ băng chất lượng cao nhất: tải thêm model large-v3 theo `tools/models/TAI-MODEL.md` (tuỳ chọn, khoảng 1,7 GB); chưa tải thì xưởng dùng turbo.
 
 ## Khi người dùng muốn đổi phong cách về sau
 
 Đọc PHONG-CACH.md hiện tại, chỉ hỏi về phần muốn đổi, sửa PHONG-CACH.md + brand.json + preset, sinh lại bố cục slide, render thử một intro để xác nhận. Không hỏi lại từ đầu.
+
+<!-- ban-nguon: phim-thiet-lap 2026-09-30 35e15022 -->

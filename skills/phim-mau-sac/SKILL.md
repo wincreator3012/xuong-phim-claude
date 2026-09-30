@@ -1,11 +1,11 @@
 ---
-name: phim-mau-sac
-description: Đánh giá và căn chỉnh màu video tinh gọn cho clip talking head/podcast theo quy trình KHÁM - KÊ ĐƠN - SOI LẠI, chạy trong thư mục xưởng (tools/mau-sac.py + đơn màu mau-sac.json mà assemble.py tự áp). Kích hoạt khi user yêu cầu "khám màu", "đánh giá màu", "chỉnh màu", "căn màu", "color grade", "clip bị bạc màu", "màu da xấu", "hai góc máy lệch màu", "video nhìn nhạt", "footage HDR bị xám", hoặc bất kỳ than phiền nào về màu sắc/độ sáng/độ tương phản của video. Cũng kích hoạt TỰ ĐỘNG trong bước khảo sát tư liệu của skill phim-dung-bai (khám màu mọi nguồn trước khi dựng) và khi mediainfo/ffprobe cho thấy color_transfer là smpte2084 hay arib-std-b67 (HDR - bắt buộc xử lý). KHÔNG dùng cho chỉnh màu đồ họa Remotion (skill phim-do-hoa - đồ họa đã đúng màu thiết kế).
+name: "phim-mau-sac"
+description: "Đánh giá và căn chỉnh màu video tinh gọn cho clip talking head/podcast của người dùng theo quy trình KHÁM - KÊ ĐƠN - SOI LẠI, chạy trong thư mục \"xuong-phim-claude\" (tools/mau-sac.py + đơn màu mau-sac.json mà assemble.py tự áp). Kích hoạt khi user yêu cầu \"khám màu\", \"đánh giá màu\", \"chỉnh màu\", \"căn màu\", \"color grade\", \"clip bị bạc màu\", \"màu da xấu\", \"hai góc máy lệch màu\", \"video nhìn nhạt\", \"footage HDR bị xám\", hoặc bất kỳ than phiền nào về màu sắc/độ sáng/độ tương phản của video. Cũng kích hoạt TỰ ĐỘNG trong bước khảo sát tư liệu của skill phim-dung-bai (khám màu mọi nguồn trước khi dựng) và khi mediainfo/ffprobe cho thấy color_transfer là smpte2084 hay arib-std-b67 (HDR - bắt buộc xử lý). KHÔNG dùng cho chỉnh màu đồ họa Remotion (skill phim-do-hoa - đồ họa đã đúng màu thiết kế)."
 ---
 
 # Đánh giá và căn chỉnh màu: KHÁM - KÊ ĐƠN - SOI LẠI
 
-Triết lý đã chốt với user: **đa số clip không cần chỉnh** - chỉ can thiệp khi có bệnh thật, chỉnh thì nhỏ và tự nhiên [correction], tuyệt đối không "look" nghệ thuật. User không canh màu - Claude đo, Claude nhìn, Claude kê đơn; user chỉ duyệt một tấm ảnh trước/sau trong 30 giây. Mọi lệnh chạy từ gốc xưởng qua device_bash.
+Triết lý đã chốt với user: **đa số clip không cần chỉnh** - chỉ can thiệp khi có bệnh thật, chỉnh thì nhỏ và tự nhiên [correction], tuyệt đối không "look" nghệ thuật. User không canh màu - Claude đo, Claude nhìn, Claude kê đơn; user chỉ duyệt một tấm ảnh trước/sau trong 30 giây. Mọi lệnh chạy từ gốc "xuong-phim-claude" qua device_bash.
 
 ## Bước 1 - KHÁM (mỗi dự án một lần, trước khi dựng)
 
@@ -22,7 +22,7 @@ Kết luận chắc chắn duy nhất từ số liệu: `color_transfer` = smpte
 
 ## Bước 2 - KÊ ĐƠN (ba bậc, trần an toàn cứng)
 
-**Bậc 0 - đạt**: không chỉnh. Đây là kết luận kỳ vọng cho số đông (nghiệm thu thật trên năm clip quay ngoài trời bằng nhiều thiết bị: 3/5 đạt nguyên bản).
+**Bậc 0 - đạt**: không chỉnh. Đây là kết luận kỳ vọng cho số đông (nghiệm thu thật: phần lớn file đạt nguyên bản).
 
 **Bậc 1 - sửa bệnh kỹ thuật** (công thức chuẩn, điều chỉnh con số theo mắt):
 
@@ -63,3 +63,5 @@ assemble.py TỰ đọc mau-sac.json và chèn đơn vào trước chuỗi chu�
 - Khám màu chạy ở bước khảo sát tư liệu của skill phim-dung-bai, trước khi soạn phương án cắt; clip ngắn (skill phim-clip-ngan) thừa hưởng mau-sac.json sẵn có của dự án, không khám lại
 - Duyệt màu của user thực hiện trên màn Mac (đã chốt); Claude nhìn frame staged là đủ tin cho bậc 1, bậc 2
 - Frame khám nằm trong `.tam/mau/` - dọn theo .tam như thường lệ
+
+<!-- ban-nguon: phim-mau-sac 2026-09-30 7e33aede -->

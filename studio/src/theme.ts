@@ -46,9 +46,6 @@ export type Brand = {
   palettes?: Partial<Record<ThemeName, Partial<Palette>>>;
 };
 
-// Giá trị dự phòng khi job không truyền brand - bản thật nằm ở brand/brand.json
-// (tools/render-do-hoa.mjs nạp file đó và truyền vào props, nên bình thường
-// không bao giờ thấy các chữ này trên video).
 export const DEFAULT_BRAND: Brand = {
   name: 'Tên của bạn',
   credentials: '',

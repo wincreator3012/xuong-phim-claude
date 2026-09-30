@@ -50,6 +50,14 @@ Nói tự nhiên, nêu rõ thư mục dự án và kết quả mong muốn. Vài
 **Phim tài liệu phỏng vấn, sau khi quay**
 > Đã quay xong theo kế hoạch, source trong du-an/phim-du-an-x/nguon. Gỡ băng, đối chiếu với kế hoạch rồi viết kịch bản thực tế cho tôi duyệt trước khi dựng.
 
+**Chỉ có file ghi âm, muốn video giải thích**
+> Trong du-an/bai-4 có file ghi âm bài nói 6 phút. Làm video infomotion khung ngang, hình minh hoạ theo từng ý tôi nói.
+
+Mặc định hình phủ kín, nền trống không quá 1 giây. Muốn thoáng hơn thì nói rõ.
+
+**Phim hoạt hình từ lời nói hay một câu chuyện**
+> Từ file ghi âm trong du-an/chuyen-1, làm phim hoạt hình khoảng 90 giây có một nhân vật và cảnh vẽ tay, kết bằng một câu hỏi mở.
+
 **Chỉ gỡ băng**
 > Gỡ băng clip trong du-an/bai-3, cho tôi file SRT và bản text.
 
@@ -64,7 +72,7 @@ Bạn không cần nhớ tên skill hay tên công cụ. Claude nhận ra loại
 ## Chuyện gì xảy ra sau khi bạn nói
 
 1. **Khảo sát**: Claude đọc thông số video, khám màu (đa số không cần chỉnh), hỏi vài điều còn thiếu nếu `PHONG-CACH.md` chưa trả lời (ngang hay dọc, độ dài, nhạc nào)
-2. **Gỡ băng**: vài phút cho mỗi 10 phút video; bài dài hơn một giờ thì lâu tương ứng. Máy tự kiểm xem có đoạn nào bị bỏ sót
+2. **Gỡ băng**: vài phút cho mỗi 10 phút video; bài dài hơn một giờ thì lâu tương ứng. Máy tự kiểm xem có đoạn nào bị bỏ sót. Trên Mac, Claude có thể nhờ bạn bấm đúp `Go bang tren Mac.command` để gỡ băng bằng large-v3 (chính xác nhất)
 3. **Phương án cắt và nhãn** (bạn duyệt lần 1): một bảng ghi đoạn nào giữ, đoạn nào bỏ, vì sao, và các chỗ định chèn nhãn từ khoá, thẻ chuyển phần, cảnh trám. Sửa gì cứ nói
 4. **Đồ họa và bản nháp** (bạn duyệt lần 2): Claude render intro, outro, nhãn, rồi dựng bản nháp 480p vào `xuat-nhap/`. Mở xem trên máy, góp ý về nhịp, bố cục, chỗ nào chữ hiện sai lúc. Lặp tới khi ưng
 5. **Bản chính**: xuất 1080p, máy đo hình khớp tiếng, âm lượng chuẩn, không khoảng đen, rồi Claude nhìn ảnh lưới 12 khung. Đạt thì copy vào `xuat-hoan-chinh/` và báo bạn: tên file, thời lượng, dung lượng, danh sách chương (nếu có), dòng ghi công nhạc cần dán vào mô tả video (nếu dùng track CC-BY)
@@ -91,10 +99,10 @@ Nhạc chỉ lấy từ thư viện đã kiểm định (`nhac-nen/THU-VIEN.md`)
 
 **Chữ Việt trên đồ họa mất dấu hoặc tràn khung.** Nói với Claude kèm mốc thời gian; đây là lỗi hiển thị và Claude phải sửa rồi xem lại khung hình thật trước khi báo xong.
 
-**Whisper nghe sai thuật ngữ, tên riêng.** Bổ sung từ đó vào mục 4 của `PHONG-CACH.md` ("từ ngữ phải viết đúng"), Claude sẽ đối chiếu mỗi lần gỡ băng.
+**Whisper nghe sai thuật ngữ, tên riêng.** Bổ sung từ đó vào mục 4 của `PHONG-CACH.md` ("từ ngữ phải viết đúng"), Claude sẽ đối chiếu mỗi lần gỡ băng. Nếu đang dùng turbo, nhờ Claude gỡ băng lại bằng large-v3 trên Mac.
 
 **Muốn kiểm xem xưởng còn khoẻ không** (sau khi cập nhật repo hay đổi máy): nói "chạy kiểm tra xưởng". Claude chạy một bản dựng thử nhỏ qua cổng nghiệm thu.
 
 ## Cập nhật xưởng
 
-Tải bản mới của repo và chép đè các thư mục `tools/`, `studio/`, `skills/`, `docs/`, `thu-vien/` lên bản cũ; giữ nguyên `phong-cach/`, `brand/`, `nhac-nen/`, `hieu-ung/`, `du-an/` của bạn. Sau đó nói "chạy kiểm tra xưởng". Nếu dùng `git`, `git pull` làm việc này gọn hơn; các thư mục riêng của bạn đã được để ngoài theo dõi (`.gitignore`) trừ `phong-cach/PHONG-CACH.md` và `brand/brand.json`, hai file bạn nên giữ bản của mình khi có xung đột.
+Tải bản mới của repo và chép đè các thư mục `tools/`, `studio/`, `skills/`, `docs/`, `thu-vien/` cùng hai file `Go bang tren Mac.command` và `CLAUDE.md` ở thư mục gốc lên bản cũ; giữ nguyên `phong-cach/`, `brand/`, `nhac-nen/`, `hieu-ung/`, `du-an/` và, trong `do-hoa-chung/`, từ điển ẩn dụ `an-du-y-niem.json`, thư mục `do-hoa-chung/the-gioi-hoat-hoa/` (nếu có) cùng hai preset bạn đã sửa. Nếu bạn đã làm phim infomotion hay hoạt hình (có hình vẽ riêng trong `studio/src/y-niem/` hoặc `studio/src/hoat-hoa/`), nhờ Claude cập nhật `studio/` thay vì chép đè. Sau đó nói "chạy kiểm tra xưởng". Nếu dùng `git`, `git pull` làm việc này gọn hơn; các thư mục riêng của bạn đã được để ngoài theo dõi (`.gitignore`) trừ `phong-cach/PHONG-CACH.md` và `brand/brand.json`, hai file bạn nên giữ bản của mình khi có xung đột.

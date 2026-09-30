@@ -34,7 +34,7 @@ export const yNiemDefaults: YNiemProps = {
   drawSeconds: 1.2,
   labelAt: 1.4,
   floating: false,
-  position: 'bottom',
+  position: 'center', // mặc định canh giữa; khi dựng clip hỏi người dùng có muốn đổi không
 };
 
 // Easing "vẽ tay" - chậm rãi, không nảy; easing "bật ra" - dùng cho mũi tên
@@ -104,7 +104,7 @@ export const YNiem: React.FC<YNiemProps> = ({
   drawSeconds = 1.2,
   labelAt,
   floating = false,
-  position = 'bottom',
+  position = 'center',
 }) => {
   const palette = resolvePalette(theme, brand);
   const frame = useCurrentFrame();

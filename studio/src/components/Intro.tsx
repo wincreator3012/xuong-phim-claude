@@ -7,13 +7,16 @@ import {AccentLine, BrandBlock, Canvas, FadeUp, LogoRow, QrPlate} from '../commo
 export type IntroProps = {
   title: string; // PLACEHOLDER: tên clip/bài giảng - NGẮN. Nếu cần xuống dòng, dùng
   // ký tự '\n' NGAY TẠI ranh giới an toàn (cuối cụm từ, không cắt giữa từ ghép
-  // như "Hạnh Phúc") - render sẽ tôn trọng '\n' này (whiteSpace: pre-line),
+  // như "Chánh niệm") - render sẽ tôn trọng '\n' này (whiteSpace: pre-line),
   // KHÔNG để trình duyệt tự chọn điểm ngắt.
   subtitle?: string; // PLACEHOLDER: tên chuỗi chương trình (kicker phía trên)
-  // Câu mô tả dài hơn, hiện NHỎ HƠN ngay dưới title (vd phụ đề sách) - câu
-  // văn xuôi bình thường nên để tự xuống dòng theo bề rộng là ổn, khác với
-  // "title" (tên riêng ngắn - KHÔNG được để trình duyệt tự ngắt dòng giữa
-  // chừng một cụm từ, xem ghi chú "ngắt dòng trong đồ họa" trong bien-tap.md).
+  // Câu văn xuôi ngắn thì để tự xuống dòng theo bề rộng là ổn. NHƯNG khi
+  // subtitle là một nhãn ngắn kiểu "Tên - Chức danh" (kicker viết hoa, có
+  // letter-spacing) thì PHẢI tự chủ động chèn '\n' tại ranh giới an toàn
+  // (vd sau tên, trước chức danh) - từ 2026-09-21 subtitle đã tôn trọng
+  // '\n' (whiteSpace: pre-line) đúng như "title", để tránh trình duyệt tự
+  // ngắt dòng làm rớt một từ đơn độc xuống dòng cuối (lỗi đã gặp: một tên
+  // trường dài xuống dòng, chữ cuối còn lại một mình ở dòng dưới).
   description?: string;
   // Các dòng nhỏ phía dưới description (vd "Tác giả: …", "Đơn vị xuất bản
   // và phát hành: …") - mỗi phần tử một dòng riêng, không tự ngắt.
@@ -89,6 +92,9 @@ export const Intro: React.FC<IntroProps> = ({
                 color: palette.accent,
                 letterSpacing: '0.22em',
                 textTransform: 'uppercase',
+                whiteSpace: 'pre-line',
+                maxWidth: width * (isVertical ? 0.95 : 0.78),
+                textAlign: 'center',
               }}
             >
               {subtitle}
@@ -106,12 +112,12 @@ export const Intro: React.FC<IntroProps> = ({
               // px THẬT (không dùng % CSS): div bọc ngoài (FadeUp) không có
               // width cố định nên % sẽ resolve sai (theo shrink-to-fit của
               // chính nó), khiến chữ NGẮN vẫn bị ngắt dòng dù còn dư chỗ -
-              // đây chính là lỗi khiến "Hạnh Phúc" bị tách "Hạnh" / "Phúc".
+              // đây chính là lỗi khiến "Chánh niệm" bị tách "Chánh" / "niệm".
               maxWidth: width * (isVertical ? 0.92 : 0.78),
               margin: '0 auto',
               // Cho phép xuống dòng THỦ CÔNG có kiểm soát: truyền '\n' trong title
               // tại đúng ranh giới an toàn (cuối cụm từ) để tránh trình duyệt tự
-              // ngắt dòng giữa một từ ghép/cụm từ liền nghĩa (vd "Hạnh Phúc").
+              // ngắt dòng giữa một từ ghép/cụm từ liền nghĩa (vd "Chánh niệm").
               // pre-line vẫn cho phép wrap tự nhiên NẾU một dòng tự đặt vẫn quá dài.
               whiteSpace: 'pre-line',
             }}

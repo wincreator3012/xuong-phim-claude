@@ -14,11 +14,14 @@ Tự nhận loại kịch bản theo dòng tiêu đề đầu file:
   "## Thời lượng ước tính"); vượt quá 30% thì nhắc đề xuất hai phương án. Dòng có đồ họa mang
   dữ kiện (con số, trích dẫn, bảng tên, InfoStat...) mà cột "Kiểm chứng" trống là điểm cần xem.
 - "# Kịch bản hình tượng hoá ..." (skill phim-infomotion): đọc các khối
-  "### Nhịp <n> · m:ss,d-m:ss,d (d s) · <loại>"; đếm hình, mật độ hình/phút, khoảng cách
-  giữa hai hình liền nhau (trần 1 hình / 8 giây), khe nền giữa hai đồ họa toàn khung
-  (tối thiểu 5 giây), ẩn dụ mới chờ duyệt, nhịp cần dòng "Kiểm chứng:".
+  "### Nhịp <n> · m:ss,d-m:ss,d (d s) · <loại>" (và khối "### [Insert] <tên> · m:ss-m:ss" nếu
+  kịch bản ghi insert trên cùng trục). Kiểm ĐỘ PHỦ (mặc định từ 2026-09-30): nhịp nào thiếu dòng
+  "Hình:", nhịp "Hình: KHÔNG" nào thiếu lý do ("Hình: KHÔNG - <lý do>"), khoảng hở giữa hai khối
+  liền nhau quá 1 giây, nhịp không hình dài quá 20 giây (nghiệm thu máy sẽ báo hình đứng);
+  kèm ẩn dụ mới chờ duyệt và nhịp cần dòng "Kiểm chứng:".
 
---khoang-hinh <giây> nới trần mật độ infomotion khi user chủ động yêu cầu (ghi lý do trong kịch bản).
+--khoang-hinh <giây> bật lại kiểm trần cũ (hai hình mới cách nhau tối thiểu <giây>) khi user chủ
+động muốn video thưa hơn; mặc định không kiểm trần.
 --muc-tieu nhận "330" (giây), "5:30", "6p", "5-6p" (khoảng thì lấy cận trên).
 Kết quả in ra dạng markdown, dòng cuối "KIỂM GIẤY: ĐẠT" hoặc "KIỂM GIẤY: CẦN XEM (n điểm)";
 mã thoát 0 hoặc 1. Đây là bước soi trên giấy cho Cổng duyệt, KHÔNG thay cổng máy nghiem-thu.py.
@@ -28,8 +31,9 @@ import re
 import sys
 
 TRAN_VUOT = 0.30          # vượt mục tiêu quá 30% → đề xuất hai phương án
-KHOANG_HINH_MIN = 8.0     # trần mật độ infomotion: tối đa 1 hình mới mỗi 8 giây
-KHE_TOAN_KHUNG_MIN = 5.0  # tối thiểu 5 giây nền giữa hai đồ họa toàn khung
+KHOANG_HINH_MIN = None    # trần cũ (giây giữa hai hình mới); chỉ kiểm khi truyền --khoang-hinh
+KHE_HO_MAX = 1.0          # phủ kín: khoảng hở tối đa giữa hai khối liền nhau
+KHONG_HINH_MAX = 20.0     # nhịp không hình dài hơn mức này thì nghiệm thu máy báo hình đứng
 
 SO = r"\d+(?:[.,]\d+)?"
 
@@ -171,53 +175,88 @@ def kiem_tai_lieu(lines, muc_tieu_arg):
     return diem, bao
 
 
-NHIP = re.compile(rf"^###\s*Nhịp\s*(\w+)\s*·\s*(\d+):({SO})\s*-\s*(\d+):({SO})\s*(?:\(({SO})\s*s\))?\s*(?:·\s*(.*))?$")
+NHIP = re.compile(rf"^###\s*Nhịp\s*(\w+)\s*·\s*(?:[^·\d][^·]*·\s*)?(\d+):({SO})\s*-\s*(\d+):({SO})\s*(?:\(({SO})\s*s\))?\s*(?:·\s*(.*))?$")
+CHEN = re.compile(rf"^###\s*\[\s*insert\s*\]\s*([^·]+?)\s*·\s*(\d+):({SO})\s*-\s*(\d+):({SO})", re.I)
 TOAN_KHUNG = re.compile(r"toàn khung|InfoList|InfoSteps|InfoStat|InfoQuote", re.I)
+CHU_THUAN = re.compile(r"^\s*(Benefits|pill)\b", re.I)
 
 
 def kiem_infomotion(lines, muc_tieu_arg):
-    diem, bao, nhip = [], [], []
+    diem, bao, nhip, chen = [], [], [], []
     cur = None
     for l in lines:
-        m = NHIP.match(l.strip())
+        st = l.strip()
+        m = NHIP.match(st)
         if m:
             cur = {"ten": m.group(1), "bd": int(m.group(2)) * 60 + so(m.group(3)),
                    "kt": int(m.group(4)) * 60 + so(m.group(5)), "loai": (m.group(7) or "").strip(),
-                   "hinh": "", "kiem": None, "moi": False}
+                   "hinh": None, "kiem": None, "moi": False}
             nhip.append(cur)
             continue
-        if l.startswith("## "):
+        m = CHEN.match(st)
+        if m:
+            chen.append({"ten": "[" + m.group(1).strip() + "]", "bd": int(m.group(2)) * 60 + so(m.group(3)),
+                         "kt": int(m.group(4)) * 60 + so(m.group(5))})
+            cur = None
+            continue
+        if l.startswith("## ") or l.startswith("### "):
             cur = None
         if cur is None:
             continue
-        s = l.strip()
-        if s.lower().startswith("hình:"):
-            cur["hinh"] = s[5:].strip()
-        elif s.lower().startswith("kiểm chứng:"):
-            cur["kiem"] = s[11:].strip()
-        if "ẨN DỤ MỚI" in s:
+        if st.lower().startswith("hình:"):
+            cur["hinh"] = st[5:].strip()
+        elif st.lower().startswith("kiểm chứng:"):
+            cur["kiem"] = st[11:].strip()
+        if "ẨN DỤ MỚI" in st:
             cur["moi"] = True
     if not nhip:
         return ["Không tìm thấy khối '### Nhịp <n> · m:ss,d-m:ss,d · <loại>'."], ["Không đọc được kịch bản."]
-    tong = max(n["kt"] for n in nhip)
-    co_hinh = [n for n in nhip if n["hinh"] and not n["hinh"].upper().startswith("KHÔNG")]
-    for a, b in zip(co_hinh, co_hinh[1:]):
-        if b["bd"] - a["bd"] < KHOANG_HINH_MIN:
-            diem.append(f"Nhịp {a['ten']} → {b['ten']}: hai hình mới cách nhau {vn(b['bd'] - a['bd'])} giây (trần 1 hình / {vn(KHOANG_HINH_MIN, 0)} giây).")
-    toan = [n for n in co_hinh if TOAN_KHUNG.search(n["hinh"]) and "nổi" not in n["hinh"].lower()]
-    for a, b in zip(toan, toan[1:]):
-        khe = b["bd"] - a["kt"]
-        if 0 <= khe < KHE_TOAN_KHUNG_MIN:
-            diem.append(f"Nhịp {a['ten']} → {b['ten']}: hai đồ họa toàn khung chỉ cách {vn(khe)} giây nền (tối thiểu 5 giây, hoặc gộp làm một).")
+
+    def la_khong(h):
+        return h is not None and h.upper().startswith("KHÔNG")
+
     for n in nhip:
-        can = ("số liệu" in n["loai"].lower() or re.search(r"InfoStat|InfoQuote", n["hinh"], re.I)
-               or re.search(r"[\"“][^\"”]*\d[^\"”]*[\"”]", n["hinh"]))
+        if n["hinh"] is None:
+            diem.append(f"Nhịp {n['ten']}: thiếu dòng 'Hình:' (phủ kín: nhịp nào cũng ghi hình, hoặc 'Hình: KHÔNG - <lý do>').")
+        elif la_khong(n["hinh"]):
+            ly_do = re.sub(r"^KHÔNG\s*[-:(]?\s*", "", n["hinh"], flags=re.I).strip(" )")
+            if len(ly_do.split()) < 2:
+                diem.append(f"Nhịp {n['ten']}: 'Hình: KHÔNG' chưa ghi lý do có ý đồ (viết 'Hình: KHÔNG - <lý do>').")
+            if n["kt"] - n["bd"] > KHONG_HINH_MAX:
+                diem.append(f"Nhịp {n['ten']}: không hình {vn(n['kt'] - n['bd'])} giây (> {vn(KHONG_HINH_MAX, 0)} giây, nghiệm thu máy sẽ báo hình đứng): chia nhịp hoặc thêm hình.")
+
+    khoi = sorted(nhip + chen, key=lambda k: k["bd"])
+    ho_max = 0.0
+    for a, b in zip(khoi, khoi[1:]):
+        ho = b["bd"] - a["kt"]
+        ho_max = max(ho_max, ho)
+        if ho > KHE_HO_MAX + 1e-6:
+            diem.append(f"{a['ten']} → {b['ten']}: hở {vn(ho)} giây không thuộc nhịp nào (phủ kín: tối đa {vn(KHE_HO_MAX, 0)} giây).")
+        elif ho < -0.05:
+            diem.append(f"{a['ten']} → {b['ten']}: hai khối chồng mốc {vn(-ho)} giây (kiểm lại mốc từ transcript).")
+
+    co_hinh = [n for n in nhip if n["hinh"] and not la_khong(n["hinh"])]
+    if KHOANG_HINH_MIN:
+        for a, b in zip(co_hinh, co_hinh[1:]):
+            if b["bd"] - a["bd"] < KHOANG_HINH_MIN:
+                diem.append(f"Nhịp {a['ten']} → {b['ten']}: hai hình mới cách nhau {vn(b['bd'] - a['bd'])} giây (trần đã bật: 1 hình / {vn(KHOANG_HINH_MIN, 0)} giây).")
+    for n in nhip:
+        h = n["hinh"] or ""
+        can = ("số liệu" in n["loai"].lower() or re.search(r"InfoStat|InfoQuote", h, re.I)
+               or any(re.search(r"\d", q) for q in re.findall(r'"[^"]*"|“[^”]*”', h)))
         if can and not n["kiem"]:
             diem.append(f"Nhịp {n['ten']} ({n['loai'] or 'không ghi loại'}): hiện dữ kiện nhưng thiếu dòng 'Kiểm chứng:'.")
+    toan = [n for n in co_hinh if TOAN_KHUNG.search(n["hinh"]) and "nổi" not in n["hinh"].lower()]
+    chu = [n["ten"] for n in co_hinh if CHU_THUAN.match(n["hinh"])]
+    khong = [n for n in nhip if la_khong(n["hinh"])]
     moi = [n["ten"] for n in nhip if n["moi"]]
+    tong = max(k["kt"] for k in khoi) - min(k["bd"] for k in khoi)
     phut = tong / 60 if tong else 1
-    bao.append(f"Tổng: {fmt(tong)} · {len(nhip)} nhịp · {len(co_hinh)} hình ({vn(len(co_hinh) / phut)} hình/phút, trần 6-7,5) · "
-               f"{len(toan)} đồ họa toàn khung · {len(nhip) - len(co_hinh)} nhịp không hình.")
+    bao.append(f"Tổng: {fmt(tong)} · {len(nhip)} nhịp · {len(co_hinh)} hình ({vn(len(co_hinh) / phut)} hình/phút, tham khảo) · "
+               f"{len(toan)} đồ họa toàn khung · {len(khong)} nhịp 'Hình: KHÔNG' "
+               f"({vn(sum(n['kt'] - n['bd'] for n in khong))} giây) · hở lớn nhất {vn(max(ho_max, 0.0))} giây.")
+    if chu:
+        bao.append(f"Nhịp chỉ có chữ (Benefits/pill): {', '.join(chu)} - phủ kín cần HÌNH có chuyển động riêng; chữ thuần chỉ khi có lý do.")
     if moi:
         bao.append("Ẩn dụ mới chờ duyệt ở nhịp: " + ", ".join(moi) + ".")
     muc_tieu = doc_muc_tieu(muc_tieu_arg) if muc_tieu_arg else None
@@ -233,7 +272,7 @@ def main():
     ap.add_argument("--muc-tieu", default=None)
     ap.add_argument("--out", default=None)
     ap.add_argument("--khoang-hinh", type=float, default=None,
-                    help="infomotion: khoảng tối thiểu giữa hai hình mới, giây (mặc định 8; chỉ nới khi user chủ động yêu cầu)")
+                    help="infomotion: bật lại kiểm trần cũ - khoảng tối thiểu giữa hai hình mới, giây (ví dụ 8); mặc định không kiểm, chỉ kiểm độ phủ")
     a = ap.parse_args()
     global KHOANG_HINH_MIN
     if a.khoang_hinh:

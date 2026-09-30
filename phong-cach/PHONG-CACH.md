@@ -39,7 +39,7 @@ Hình ảnh nên tránh: `[ví dụ: không dùng ảnh stock có người lạ;
 ## 4. Chữ trên màn hình
 
 - Kiểu viết hoa tiêu đề: `[sentence case (chỉ viết hoa chữ đầu) | FULL-CAP cho kicker ngắn]` - mặc định của xưởng là sentence case, không Title Case
-- Dấu gạch: dùng gạch ngang thường (-), không dùng gạch dài (—)
+- Dấu gạch: dùng gạch ngang thường (-), không dùng gạch dài (em dash)
 - Thuật ngữ tiếng Anh: `[để trong ngoặc vuông sau từ Việt | giữ nguyên tiếng Anh | dịch hẳn]`
 - Từ ngữ PHẢI viết đúng như sau (tên riêng, tên chương trình, thuật ngữ nghề): `[ví dụ: "Chánh niệm" không "Chính niệm"; tên framework viết là ...]`
 - Từ ngữ KHÔNG dùng trên clip của tôi: `[...]`

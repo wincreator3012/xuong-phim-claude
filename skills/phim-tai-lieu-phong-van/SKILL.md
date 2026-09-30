@@ -1,25 +1,32 @@
 ---
-name: phim-tai-lieu-phong-van
-description: Làm phim tài liệu ngắn dựa trên phỏng vấn [interview-based documentary] giới thiệu một dự án, chương trình hay sự kiện cho nhà tài trợ, đối tác và công chúng, đi trọn hai pha. TRƯỚC QUAY, nhận mô tả hoặc kịch bản dự kiến của user rồi tạo dự án, định hướng kịch bản ba hồi, brainstorm cần phỏng vấn những ai với những câu nào và cần quay những cảnh trám nào, đóng thành Kế hoạch ghi hình để user duyệt rồi mang đi quay. SAU QUAY, nhận source, gỡ băng, kiểm kê tư liệu, đối chiếu với kế hoạch, viết kịch bản thực tế [paper edit] có mốc thời gian và ước tính thời lượng để user duyệt, rồi dựng nháp, nhận góp ý theo mốc phút-giây, hoàn thiện và nghiệm thu. Kích hoạt khi user nói "phim tài liệu", "phóng sự phỏng vấn", "phim giới thiệu dự án", "phim giới thiệu chương trình", "sắp có sự kiện muốn làm phim", "video gây quỹ", "impact story", "kể chuyện dự án bằng phỏng vấn", "phỏng vấn ai, hỏi gì", "cần quay cảnh trám nào", hoặc khi thả nhiều file phỏng vấn của nhiều nhân vật khác nhau vào một dự án. KHÔNG dùng cho bài giảng một người trước máy quay (phim-dung-bai), clip ngắn dọc (phim-clip-ngan), hay podcast nhiều góc quay cùng một buổi nói (phim-multicam) - skill này gọi các skill đó ở đúng bước.
+name: "phim-tai-lieu-phong-van"
+description: "Làm phim tài liệu ngắn dựa trên phỏng vấn nhiều nhân vật, giới thiệu một dự án, chương trình hay sự kiện có thật cho nhà tài trợ, đối tác và công chúng, đi hai pha: trước quay lên Kế hoạch ghi hình (phỏng vấn ai, hỏi gì, quay cảnh trám nào, checklist ngày quay), sau quay kiểm kê tư liệu, viết kịch bản thực tế có kiểm chứng dữ kiện rồi mới dựng và nhận góp ý theo nhãn đoạn. Kích hoạt khi user nói \"phim tài liệu\", \"phóng sự phỏng vấn\", \"phim giới thiệu dự án\", \"video gây quỹ\", \"phim cho nhà tài trợ\", \"lên kế hoạch quay phỏng vấn\", hoặc thả nhiều file phỏng vấn của nhiều người vào dự án. KHÔNG dùng cho bài giảng một người nói (phim-dung-bai), podcast hay buổi quay nhiều góc máy của cùng một cuộc trò chuyện (phim-multicam), clip ngắn cắt từ tư liệu có sẵn (phim-clip-ngan), hay video chỉ có giọng ghi âm (phim-infomotion)."
 ---
 
 # Phim tài liệu phỏng vấn
 
-Mục tiêu: từ một dự án hay sự kiện có thật, làm ra một phim ngắn (thường 4-7 phút, kèm bản gọn 60-90 giây khi cần) trong đó nhiều nhân vật kể MỘT câu chuyện, minh hoạ bằng hình ảnh thật, khiến người xem hiểu và muốn đồng hành. Khác với bài giảng một người (phim-dung-bai), ở đây lời nói đến từ nhiều file quay riêng biệt và ý nghĩa của phim nằm ở cách dệt các giọng lại với nhau.
+Mục tiêu: từ một dự án hay sự kiện có thật, làm ra một phim ngắn (thường 4-7 phút, kèm bản gọn 60-90 giây khi cần) trong đó nhiều nhân vật kể MỘT câu chuyện, minh hoạ bằng hình ảnh thật, khiến người xem hiểu và muốn đồng hành. Khác với bài giảng một người (phim-dung-bai), lời nói đến từ nhiều file quay riêng và ý nghĩa của phim nằm ở cách dệt các giọng lại với nhau.
 
 Bốn nguyên tắc xuyên suốt:
 
-1. **Dệt giọng theo chủ đề, không theo người.** Không phát hết lời người này rồi tới người kia. Mỗi hồi truyện mượn đúng câu của đúng người, xen hình ảnh thật. Bốn góc nhìn cộng hưởng thành một câu chuyện.
-2. **Người thụ hưởng ở trung tâm; cảm xúc trước, số liệu sau.** Khoảng 80% thời lượng là câu chuyện con người, 20% là con số (và con số hiện bằng đồ họa, không đọc suông). Tổ chức và nhà tài trợ ở vai bối cảnh, không ở vai nhân vật chính.
+1. **Dệt giọng theo chủ đề, không theo người.** Không phát hết lời người này rồi tới người kia. Mỗi hồi mượn đúng câu của đúng người, xen hình ảnh thật.
+2. **Người thụ hưởng ở trung tâm; cảm xúc trước, số liệu sau.** Khoảng 80% thời lượng là câu chuyện con người, 20% là con số (hiện bằng đồ họa, không đọc suông). Tổ chức và nhà tài trợ ở vai bối cảnh.
 3. **Phẩm giá và đồng thuận.** Không đóng khung ai theo hướng thương hại, không kể "người hùng cứu giúp", không dàn dựng người khác kể điều không thuộc đời thật của họ. Đồng thuận bằng văn bản, trẻ em qua phụ huynh hoặc nhà trường. Danh mục "điều không nói, không hiện" lập từ đầu và giữ tới cuối.
-4. **Chữ trên màn hình phải kiểm được; lời nhân vật giữ nguyên.** Mọi dữ kiện hiện thành đồ họa (con số, năm, tên tổ chức, chức danh, trích dẫn, tên tác giả của một mô hình hay công cụ) có nguồn đối chiếu ghi ngay trong kịch bản thực tế. Nhân vật nói lệch dữ kiện thì không sửa lời họ, không dựng cho họ nói khác đi, không đè chữ đúng lên lời sai: chọn một trong ba cách ở Bước 2.3. Hình do AI tạo không thay cho hình thật về người, nơi chốn hay sự kiện của dự án; phim chỉ dùng hình quay thật, ảnh tư liệu có nguồn, hoặc đồ họa mà người xem nhìn vào là biết là đồ họa.
+4. **Chữ trên màn hình phải kiểm được; lời nhân vật giữ nguyên.** Mọi dữ kiện lên đồ họa (con số, năm, tên tổ chức, chức danh, trích dẫn, tác giả của một mô hình) có nguồn đối chiếu ghi ngay trong kịch bản thực tế. Nhân vật nói lệch dữ kiện thì không sửa lời, không dựng cho họ nói khác, không đè chữ đúng lên lời sai: chọn một trong ba cách ở Bước 2.3. Hình do AI tạo không thay cho hình thật về người, nơi chốn, sự kiện của dự án.
 
-Đọc trước: `docs/QUY-TRINH-KY-THUAT.md` (môi trường, cổng nghiệm thu, hai hệ mốc thời gian) và `phong-cach/PHONG-CACH.md` (giọng, chữ trên màn hình, chức danh nguyên văn). Mẫu các file hồ sơ ở `references/mau-ho-so.md`; nền tảng kể chuyện, kỹ thuật phỏng vấn, định lượng cảnh trám và đạo đức ở `references/ke-chuyen-phong-van.md`.
+Đọc trước: `skills/_chung/van-hanh.md`, `skills/_chung/timeline-va-dung.md`, `skills/_chung/overlay-va-the.md`, `skills/_chung/nghiem-thu-dung-y.md`, `docs/BAI-HOC.md` chủ đề "Phim tài liệu phỏng vấn". Mẫu các file hồ sơ, checklist ngày quay và ngân hàng câu hỏi theo vai: `skills/phim-tai-lieu-phong-van/references/mau-ho-so.md`. Nền tảng kể chuyện, kỹ thuật phỏng vấn, định lượng cảnh trám, đạo đức, ba lớp đồ họa, nhãn đoạn và bài học dự án thật: `skills/phim-tai-lieu-phong-van/references/ke-chuyen-phong-van.md`.
+
+## Bối cảnh riêng của xưởng "xuong-phim-claude"
+
+- Mẫu cấu trúc thư mục dự án: `du-an/_mau/tai-lieu-phong-van/`; bài học từ dự án thật đã chưng cất ở `ke-chuyen-phong-van.md` mục 6. Gặp tình huống lạ thì đọc mục đó trước khi nghĩ cách mới.
+- Người dùng thường là một phần của đội dự án được làm phim. Hỏi sớm (Bước 1.1 hoặc 2.3) người dùng có muốn xuất hiện trong phim không; mặc định là không, để phim thuộc về nhân vật và người thụ hưởng. Nếu có, chức danh theo `phong-cach/PHONG-CACH.md` mục 1.
+- Logo các bên thả vào `brand/logo/` và truyền qua props `logos` của preset intro, outro (hàng 1-3 logo).
+- Cách kết mặc định: một câu tầm nhìn của nhân vật rồi một câu hỏi mở thật cho người xem, không lời kêu gọi tài trợ trực tiếp.
 
 ## Hai lối vào
 
-- **Lối vào A - trước quay** (chuẩn): user mô tả sự kiện hay chương trình sắp diễn ra, kèm kịch bản hoặc mô tả dự kiến. Đi trọn Pha 1 rồi Pha 2.
-- **Lối vào B - đã có source**: user thả file phỏng vấn và cảnh trám vào dự án nhưng chưa có kế hoạch. Tạo `HO-SO-PHIM.md` hồi cố từ transcript và vài câu hỏi, viết ngắn phần định hướng kịch bản (Bước 1.2) rồi vào thẳng Pha 2. Cảnh trám thiếu so với kịch bản thực tế thì đề nghị quay bổ sung hoặc thay bằng ảnh tĩnh và đồ họa.
+- **Lối vào A - trước quay** (chuẩn): user mô tả sự kiện hay chương trình sắp diễn ra. Đi trọn Pha 1 rồi Pha 2.
+- **Lối vào B - đã có source**: user thả file phỏng vấn và cảnh trám nhưng chưa có kế hoạch. Tạo `HO-SO-PHIM.md` hồi cố từ transcript và vài câu hỏi, viết ngắn phần định hướng (Bước 1.2) rồi vào thẳng Pha 2. Cảnh trám thiếu thì đề nghị quay bổ sung hoặc thay bằng ảnh tĩnh và đồ họa.
 
 ## Cấu trúc dự án
 
@@ -37,136 +44,111 @@ du-an/<tên phim>/
   transcript/              phim-transcript tạo
   KIEM-KE-NGUON.md         Pha 2: kiểm kê tư liệu thật, đối chiếu với kế hoạch
   KICH-BAN-THUC-TE.md      Pha 2: kịch bản thực tế có mốc thời gian (Cổng duyệt 2)
-  SO-GOP-Y.md              từng vòng nháp: điểm góp ý, mốc, xử lý, cách đã kiểm
-  NHAN-DOAN.md             bảng đối chiếu nhãn ổn định (A/B/T/M) với mốc thời gian hiện tại,
-                           `tools/nhan-doan.py` tạo lại sau mỗi lần render
+  SO-GOP-Y.md              từng vòng nháp: điểm góp ý, nhãn, mốc, xử lý, cách đã kiểm
+  NHAN-DOAN.md             nhãn ổn định (A/B/T/M) đối chiếu mốc hiện tại, tools/nhan-doan.py tạo lại
   do-hoa/<ngang|doc>/ + do-hoa/job/   đồ họa render và job JSON gốc (giữ tới khi giao)
   timeline.json, xuat-nhap/, xuat-hoan-chinh/   như mọi dự án khác
 ```
 
-User đã tự sắp thư mục theo cách khác (ví dụ "Lấy voice" / "Không lấy voice") thì giữ nguyên, ghi ánh xạ vào `HO-SO-PHIM.md`, không bắt đổi tên.
+User đã tự sắp thư mục theo cách khác (ví dụ "Lấy voice" / "Không lấy voice") thì giữ nguyên, ghi ánh xạ vào `HO-SO-PHIM.md`.
 
 ## Pha 1 - Trước quay
 
 ### Bước 1.1 - Nhận đầu vào, tạo hồ sơ
 
-Đọc hết những gì user đưa: mô tả chương trình, kịch bản dự kiến, tài liệu giới thiệu, danh sách người tham gia. Hỏi MỘT lượt, tối đa bốn câu, chỉ những gì tài liệu không trả lời: (1) phim làm cho ai xem trước nhất và để họ làm gì sau khi xem; (2) độ dài mong muốn và nơi phát (gửi riêng nhà tài trợ, website, mạng xã hội); (3) ngày quay, có bao nhiêu thời gian với từng người, có máy thứ hai không; (4) điều không được nói hay hiện, và ai có quyền duyệt bản cuối. Không có câu trả lời thì chọn mặc định (bản đầy đủ 5-6 phút cho nhà tài trợ và đối tác, bản gọn 60-90 giây cho mạng xã hội làm sau) và ghi rõ là giả định.
-
-Tạo `du-an/<tên>/` với cấu trúc trên và viết `HO-SO-PHIM.md` theo mẫu.
+Đọc hết những gì user đưa. Hỏi MỘT lượt, tối đa bốn câu, chỉ những gì tài liệu không trả lời: (1) phim làm cho ai xem trước nhất và để họ làm gì sau khi xem; (2) độ dài và nơi phát; (3) ngày quay, thời gian với từng người, có máy thứ hai không; (4) điều không được nói hay hiện, và ai duyệt bản cuối. Không có câu trả lời thì mặc định bản đầy đủ 5-6 phút cho nhà tài trợ và đối tác, bản gọn 60-90 giây làm sau, ghi rõ là giả định. Tạo `du-an/<tên>/` và viết `HO-SO-PHIM.md` theo mẫu.
 
 ### Bước 1.2 - Định hướng kịch bản
 
-Viết phần đầu của `KE-HOACH-GHI-HINH.md`:
+Viết phần đầu `KE-HOACH-GHI-HINH.md` (lý do từng mục: `ke-chuyen-phong-van.md` mục 1):
 
-- **Thông điệp lõi** một câu: người xem đi ra khỏi phim với điều gì trong đầu.
-- **Khung ba hồi**: vấn đề (khoảng trống thật, kể qua một hoàn cảnh cụ thể) - can thiệp (ai làm gì, mô hình ra sao, nhấn vào phần đã thành hình thật) - chuyển hoá và cam kết (khoảnh khắc thay đổi cụ thể, rồi cam kết cho chặng tới). Với phim về một sự kiện, biến thể là trước - trong - sau; với hành trình cá nhân, biến thể là xuất phát - ngã rẽ - hiện tại. Mỗi hồi ghi hai dòng: "cần lời của ai" và "cần thấy gì".
-- **Câu hỏi neo** dự kiến: câu hỏi mà cả phim cùng trả lời, sẽ hiện thành chữ trên hình ở cuối hồi 1.
-- **Cách kết**: theo giọng của user trong `PHONG-CACH.md`; mặc định là một câu tầm nhìn của nhân vật rồi một câu hỏi mở cho người xem, không lời kêu gọi khô cứng. User muốn có lời mời hành động rõ thì ghi một dòng, đặt sau câu hỏi.
-- **Hình ảnh mở đầu**: chuỗi 3-4 cảnh động thật ngắn nối liền nhau (một cảnh toàn cảnh, một cảnh chi tiết tay hoặc vật, một khuôn mặt thoáng qua chưa nói), mỗi cảnh 1,5-2 giây, tổng khoảng 5-8 giây - không mở bằng MỘT cảnh động kéo dài và không mở thẳng bằng mặt người đang nói; rồi câu móc [hook] của một nhân vật, rồi thẻ chuyển tiêu đề (`kicker` + `title`, xem Bước 2.4).
-- **Độ dài mục tiêu** và phân bổ thô theo hồi (ví dụ 25 giây mở, 70 giây hồi 1, 100 giây hồi 2, 110 giây hồi 3, 15 giây kết).
+- **Thông điệp lõi** một câu.
+- **Khung ba hồi**: vấn đề (khoảng trống thật, qua một hoàn cảnh cụ thể) - can thiệp (ai làm gì, nhấn phần đã thành hình thật) - chuyển hoá và cam kết. Biến thể: sự kiện thì trước - trong - sau; hành trình cá nhân thì xuất phát - ngã rẽ - hiện tại. Mỗi hồi hai dòng: "cần lời của ai", "cần thấy gì".
+- **Câu hỏi neo** dự kiến, hiện thành chữ trên hình cuối hồi 1.
+- **Cách kết** theo giọng của người dùng, xem `phong-cach/PHONG-CACH.md` mục 3 và 6 (mặc định ở mục "Bối cảnh riêng"). User muốn lời mời hành động rõ thì ghi một dòng, đặt sau câu hỏi.
+- **Hình ảnh mở đầu**: chuỗi 3-4 cảnh động thật ngắn (toàn cảnh, chi tiết tay hoặc vật, một khuôn mặt thoáng qua chưa nói), mỗi cảnh 1,5-2 giây, tổng 5-8 giây; rồi câu móc của một nhân vật; rồi thẻ chuyển tiêu đề.
+- **Độ dài mục tiêu** và phân bổ thô theo hồi.
 
 ### Bước 1.3 - Nhân vật và câu hỏi
 
-Lập **bảng nhân vật**: tên, chức danh hiển thị chính xác (hỏi lại và ghi nguyên văn, đây là chữ sẽ lên bảng tên), vai trong câu chuyện, phục vụ hồi nào, thời gian có được. Vai thường gặp: người thụ hưởng hoặc người gần họ nhất, người thực hành tại chỗ, người khởi xướng, đối tác hay lãnh đạo cam kết, người quan sát độc lập. Ba tới năm người là đủ cho phim 5-6 phút; ưu tiên người thụ hưởng và người thực hành trực tiếp, người của tổ chức ở vai bối cảnh. Đề xuất cả những người user chưa nghĩ tới nếu câu chuyện thiếu một góc nhìn.
+**Bảng nhân vật**: tên, chức danh hiển thị NGUYÊN VĂN (hỏi lại và ghi đúng, đây là chữ lên bảng tên), vai trong câu chuyện, phục vụ hồi nào, thời gian có được. Ba tới năm người là đủ cho phim 5-6 phút; ưu tiên người thụ hưởng và người thực hành trực tiếp; đề xuất cả góc nhìn user chưa nghĩ tới nếu câu chuyện thiếu.
 
-Với mỗi người soạn **5-8 câu hỏi**, mỗi câu ghi: hồi phục vụ, soundbite mong đợi (một câu trọn nghĩa 10-25 giây), gợi ý đào sâu nếu câu trả lời còn chung chung. Quy tắc soạn:
-
-- Câu mở, bắt đầu bằng "kể cho tôi nghe về...", "điều gì khiến...", "chị còn nhớ lần...". Không hỏi có/không, không hỏi câu dẫn sẵn đáp án, mỗi câu một ý.
-- Xin **khoảnh khắc cụ thể** thay vì đánh giá chung: "lần đầu một em tự tìm đến chị là lúc nào, chuyện gì xảy ra" cho ra lời đắt hơn "chương trình hiệu quả thế nào".
-- Luôn có một câu để lấy lời cho cảnh thiết lập: "chị mô tả nơi này cho người chưa từng tới" hoặc "một ngày ở đây bắt đầu thế nào".
-- Thứ tự: câu dễ, ấm trước; câu về khoảnh khắc chuyển hoá đặt giữa buổi khi người nói đã thoải mái; hai câu chốt luôn có: "còn điều gì chị muốn nói mà tôi chưa hỏi" và "nếu nói một câu với <khán giả của phim>, chị sẽ nói gì".
-- Ghi kèm lời nhắc cho người phỏng vấn: nhắc nhân vật nói trọn câu không phụ thuộc vào câu hỏi (đưa chủ ngữ vào câu trả lời), im lặng 2-3 giây sau mỗi câu trả lời, vấp thì nói lại từ đầu câu, câu đắt thì xin nói lại một lần cho bản sạch.
-
-Ngân hàng câu hỏi theo vai ở `references/mau-ho-so.md`, dùng làm điểm xuất phát rồi viết riêng cho từng người theo tài liệu thật.
+Mỗi người **5-8 câu hỏi**, mỗi câu ghi hồi phục vụ, soundbite mong đợi (một câu trọn nghĩa 10-25 giây), gợi ý đào sâu. Quy tắc soạn câu hỏi, thứ tự, hai câu chốt và lời nhắc cho người phỏng vấn: `ke-chuyen-phong-van.md` mục 2. Ngân hàng câu hỏi theo vai: `mau-ho-so.md` mục "Ngân hàng câu hỏi theo vai", dùng làm điểm xuất phát rồi viết riêng theo tài liệu thật.
 
 ### Bước 1.4 - Danh mục cảnh trám
 
-Cảnh trám [B-roll] làm bốn việc, mỗi cảnh trong danh mục phải ghi rõ nó làm việc nào: **thiết lập** (người xem biết mình đang ở đâu), **minh hoạ** (cho thấy đúng điều đang được nói), **che cắt** (giấu mối nối giữa hai câu), **thở** (nghỉ mắt sau đoạn dày). Suy danh mục ngược từ kịch bản: mỗi ý hay lời khẳng định trong ba hồi cần một cảnh minh hoạ cụ thể; mỗi lần chuyển hồi hay đổi bối cảnh cần một cảnh thiết lập; mỗi nhân vật cần một cảnh "đang làm việc của mình" để giới thiệu họ bằng hình trước khi họ nói; các cảnh tương tác thật giữa người với người (không dàn dựng) là chất liệu quý nhất; sự kiện cần đủ bộ: toàn cảnh, trung cảnh, cận chi tiết (tay ký, bắt tay, chữ trên văn bản), phản ứng người dự.
-
-Bảng danh mục: mã (T01, T02...), chủ thể, cỡ cảnh (toàn / trung / cận), chuyển động (tĩnh hoặc lướt chậm), thời lượng tối thiểu, công dụng, phục vụ câu nói hay hồi nào. Một dòng "sinh hoạt đầu giờ" là chưa dùng được; "cận, tay học sinh xếp ghế, máy tĩnh, 12 giây, minh hoạ cho lời cô hiệu trưởng về nếp sinh hoạt" mới dùng được.
-
-Định lượng: một cảnh dùng được cho mỗi 20-30 giây phim hoàn chỉnh; quay gấp 2-3 lần danh mục (nhiều góc, nhiều cỡ); **mỗi cảnh giữ máy tối thiểu 10 giây** (cảnh bị khoá 5-6 giây là thiếu hụt hay gặp nhất ở bước dựng); ba cỡ cảnh cho mỗi chủ thể; ghi 30 giây tiếng môi trường ở mỗi bối cảnh. Ghi thêm cột "có sẵn từ đâu" cho những gì user đã có (ảnh cũ, clip cũ).
+Mỗi cảnh ghi rõ nó làm việc nào trong bốn việc: **thiết lập**, **minh hoạ**, **che cắt**, **thở**. Suy danh mục ngược từ kịch bản; mỗi nhân vật cần một cảnh "đang làm việc của mình"; sự kiện cần đủ bộ toàn, trung, cận chi tiết, phản ứng người dự. Bảng: mã (T01...), chủ thể, cỡ, chuyển động, thời lượng tối thiểu, công dụng, phục vụ câu nào, có sẵn từ đâu. Định lượng (một cảnh cho mỗi 20-30 giây phim, quay gấp 2-3 danh mục, giữ máy tối thiểu 10 giây, ba cỡ mỗi chủ thể, 30 giây tiếng môi trường mỗi bối cảnh) và ví dụ dòng dùng được: `ke-chuyen-phong-van.md` mục 3.
 
 ### Bước 1.5 - Checklist ngày quay
 
-Chép nguyên khối checklist từ mẫu vào cuối `KE-HOACH-GHI-HINH.md`: khung hình phỏng vấn (ngang 16:9, người ở một phần ba khung, chừa một phần ba dưới trống cho bảng tên và chữ nổi bật, không quay cận sát mặt, nền không rối, nhìn người hỏi ngồi cạnh máy), tiếng (mic gần, ghi tiếng phòng 20-30 giây, không quay cạnh máy lạnh hay đường lớn), máy thứ hai nếu có (góc chéo hoặc cỡ khác, tự thu tiếng, để phim-multicam khớp bằng âm thanh), đồng thuận (giấy đồng thuận hình ảnh nêu dùng ở đâu, bao lâu, quyền rút lại; trẻ em qua phụ huynh hoặc nhà trường; hỏi ai cần xem trước bản cuối), đặt tên file theo nội dung ngay khi chép vào máy.
+Chép nguyên khối checklist từ `mau-ho-so.md` mục D vào cuối `KE-HOACH-GHI-HINH.md` (khung hình phỏng vấn, tiếng, máy thứ hai, cách hỏi, đồng thuận, sau buổi quay).
 
 ### Cổng duyệt 1 - Kế hoạch ghi hình
 
-Trình `KE-HOACH-GHI-HINH.md` cho user duyệt hoặc sửa. Kế hoạch được duyệt là thứ user mang đi quay; nếu user cần mang ra hiện trường, đề nghị xuất PDF hay DOCX theo skill tương ứng. Ghi trạng thái vào `HO-SO-PHIM.md`. Trong lúc chờ quay, không làm gì thêm ở dự án này.
+Trình `KE-HOACH-GHI-HINH.md` cho user duyệt hoặc sửa; đây là thứ user mang đi quay (cần mang ra hiện trường thì đề nghị xuất PDF hay DOCX). Ghi trạng thái vào `HO-SO-PHIM.md`. Trong lúc chờ quay, không làm gì thêm ở dự án này.
 
 ## Pha 2 - Sau quay
 
 ### Bước 2.1 - Nhận source, kiểm kê
 
-- `mediainfo.py` toàn bộ file. Phỏng vấn: gỡ băng theo phim-transcript rồi `nghiem-thu.py transcript`; các đoạn im lặng dài thật (người nói dừng suy nghĩ) là bình thường, ghi chú lại để không nhầm với lỗi gỡ băng. Sự kiện có tiếng: chỉ gỡ băng nếu có lời phát biểu định dùng; lễ ký kết thường chỉ cần hình.
-- Cảnh trám: `ffprobe` thời lượng THẬT từng file (clip bị khoá 5-6 giây phải biết ngay từ đây), trích lưới khung hình (một khung mỗi 2-3 giây, hoặc 6 khung mỗi clip) để xem bằng mắt và ghi nội dung thật, khoảnh khắc đáng dùng (ánh mắt, nụ cười, tương tác), lỗi (rung, ngược sáng, người nhìn máy, lộ điều không được hiện). File "full" quay liên tục hàng chục phút: lấy mẫu rải rác, thường chỉ dùng làm cảnh thiết lập, không săn khoảnh khắc trong đó nếu đã có clip ngắn lọc sẵn.
-- Khám màu toàn bộ nguồn theo phim-mau-sac; phỏng vấn nhiều người ở nhiều bối cảnh thì kê đơn theo từng file, không ép một đơn chung.
-- Ảnh tĩnh: liệt kê, ghi dùng cho đâu.
+- `mediainfo.py` toàn bộ file. Phỏng vấn: gỡ băng theo phim-transcript rồi `nghiem-thu.py transcript`; khoảng im lặng dài thật (người nói dừng suy nghĩ) ghi chú lại để không nhầm với lỗi gỡ băng. Sự kiện có tiếng: chỉ gỡ băng nếu định dùng lời.
+- Cảnh trám: `ffprobe` thời lượng THẬT từng file (clip bị khoá 5-6 giây phải biết ngay), trích lưới khung hình (một khung mỗi 2-3 giây, hoặc 6 khung mỗi clip) để xem bằng mắt và ghi nội dung thật, khoảnh khắc đáng dùng, lỗi. File "full" quay liên tục hàng chục phút: lấy mẫu rải rác, thường chỉ làm cảnh thiết lập.
+- Khám màu theo phim-mau-sac, kê đơn theo từng file khi nhiều bối cảnh.
 
-Viết `KIEM-KE-NGUON.md` theo mẫu, phần quan trọng nhất là **bảng đối chiếu kế hoạch với thực tế**: từng câu hỏi dự kiến có lời đạt không, từng cảnh trám dự kiến có quay được không, những gì có mà không nằm trong kế hoạch (thường là quà: phát hiện đẹp ngoài dự tính). Lối vào B không có kế hoạch để đối chiếu thì bảng này chỉ có cột "thực tế" và "còn thiếu".
+Viết `KIEM-KE-NGUON.md` theo mẫu; phần quan trọng nhất là **bảng đối chiếu kế hoạch với thực tế** (câu hỏi nào có lời đạt, cảnh trám nào quay được, những gì có mà ngoài kế hoạch). Lối vào B chỉ có cột "thực tế" và "còn thiếu".
 
 ### Bước 2.2 - Đọc transcript như biên tập viên
 
-Đọc trọn transcript từng người một lượt trước khi cắt. Đánh dấu soundbite [selects] cho từng hồi kèm mốc `start`-`end`, chấm ba mức: đắt (giữ gần nguyên văn), dùng được (có thể rút gọn), dự phòng. Tiêu chí câu đắt: cụ thể, có hình ảnh trong lời, có cảm xúc thật, đứng một mình vẫn hiểu. Ghi riêng **khoảnh khắc đắt nhất của cả phim** (thường là một câu chuyện nhỏ có lời thoại) để dành cho vị trí đẹp nhất ở hồi 3 và giữ hình người nói suốt đoạn đó. Tìm câu hỏi neo và câu kết THẬT trong lời nhân vật (thay cho câu dự kiến nếu lời thật hay hơn). Ghi các cụm nhạy phải cắt (tên riêng, chi tiết trong danh mục không nói) kèm mốc, và chất lượng tiếng từng bite. Ghi riêng mọi **dữ kiện kiểm được** trong lời (con số, năm, tên chương trình, tên người hay tổ chức được nhắc, trích dẫn) kèm mốc, nhất là những câu có thể thành đồ họa: đây là đầu vào cho cột "Kiểm chứng" ở Bước 2.3.
+Đọc trọn transcript từng người trước khi cắt. Đánh dấu soundbite [selects] cho từng hồi kèm mốc, chấm ba mức: đắt, dùng được, dự phòng (câu đắt: cụ thể, có hình ảnh trong lời, có cảm xúc thật, đứng một mình vẫn hiểu). Ghi riêng **khoảnh khắc đắt nhất của cả phim** để dành cho hồi 3 và giữ mặt người nói suốt đoạn đó. Tìm câu hỏi neo và câu kết THẬT trong lời nhân vật. Ghi các cụm nhạy phải cắt kèm mốc, chất lượng tiếng từng bite, và mọi **dữ kiện kiểm được** trong lời (con số, năm, tên chương trình, người, tổ chức, trích dẫn) kèm mốc: đầu vào cho cột "Kiểm chứng".
 
 ### Bước 2.3 - Kịch bản thực tế [paper edit]
 
-Viết `KICH-BAN-THUC-TE.md` theo mẫu: khung ba hồi đã điều chỉnh theo lời thật (kế hoạch phục vụ phim, không ngược lại), rồi từng dòng dựng theo thứ tự phát: file nguồn, `in`-`out` theo transcript (ghi câu đầu và câu cuối của bite), thời lượng, trích lời rút gọn, cảnh trám phủ lên (file, đoạn, lý do), đồ họa (pill, thẻ, số liệu) và vị trí dự kiến, cầu nối giữa hai người nói, và **nhãn ổn định** cho từng dòng: `A<n>` cho một đoạn lời liên tục, `T<n>` cho một cầu nối độc lập không nằm trong lời ai, `M<n>` cho từng cú trong chuỗi mở đầu nhiều cảnh. Nhãn `B<n>.<m>` (cảnh trám phủ lên lời của `A<n>`) không gán tay ở bước này, để `tools/nhan-doan.py` tự suy từ thứ tự cảnh trám khi dựng (xem mục 8 của `references/ke-chuyen-phong-van.md`). Gán nhãn một lần ở đây và giữ nguyên qua mọi nháp về sau, kể cả khi một dòng bị tách thành nhiều sub-segment lúc dựng. Nguyên tắc thể loại đã kiểm chứng:
+Viết `KICH-BAN-THUC-TE.md` theo mẫu: khung ba hồi đã điều chỉnh theo lời thật (kế hoạch phục vụ phim, không ngược lại), rồi từng dòng dựng theo thứ tự phát: **nhãn ổn định**, file nguồn, `in`-`out` (câu đầu, câu cuối của bite), thời lượng, trích lời rút gọn, cảnh trám phủ lên, đồ họa và vị trí dự kiến, cầu nối, cột "Kiểm chứng". Nhãn: `A<n>` đoạn lời liên tục, `T<n>` cầu nối độc lập, `M<n>` từng cú trong chuỗi mở đầu; `B<n>.<m>` không gán tay (`tools/nhan-doan.py` tự suy). Gán một lần ở đây, giữ nguyên qua mọi nháp (`ke-chuyen-phong-van.md` mục 8).
 
-- Mở đầu bằng chuỗi 3-4 cảnh động thật ngắn nối liền nhau (tổng khoảng 5-8 giây) trước khi thấy mặt người nói đầu tiên; câu móc rồi mới tới thẻ chuyển tiêu đề.
-- Giữa hai nhân vật khác nhau chèn một cầu nối 2-3 giây bằng một hoặc hai cảnh trám (segment riêng, `fadeIn`/`fadeOut` khoảng 0,15 giây), không cắt thẳng mặt sang mặt.
-- Cắt câu không dừng ở một lần cho gọn: một bite chọn ở Bước 2.2 thường còn dư ở đầu hoặc cuối (chủ từ đưa đẩy, cụm mở lời, mệnh đề phụ lặp ý) mà đọc transcript chưa thấy ngay, chỉ lộ ra khi nghe lại bản dựng; rút `in`/`out` sát dần qua các vòng nháp, mỗi lần neo vào khoảng lặng thật gần cụm cần bỏ (không cắt giữa một âm), ưu tiên điểm cắt tại ranh giới mệnh đề sạch. Ghi mốc cũ và mốc mới vào `SO-GOP-Y.md` mỗi vòng để so sánh.
-- Câu hỏi neo và câu kết chiêm nghiệm hiện dưới dạng overlay bán trong suốt (Benefits một mục, `wrap:true`) đè lên cảnh thật, không cắt sang thẻ toàn màn hình.
-- Danh sách cấu phần (các gói, các bước) làm MỘT overlay tích luỹ (các mục hiện dần và ở lại), không phải nhiều pill rời hiện rồi mất.
-- Con số nổi bật (số năm, số tháng, số người) làm pill hoặc `InfoStat` đúng lúc lời nói nhắc tới; khép vòng số liệu nếu được (ví dụ "3 năm đã qua" ở hồi 2 và "3 năm tới" ở hồi 3).
-- Đoạn đắt nhất: ít cắt, ít đồ họa, giữ mặt người nói; cảnh trám chỉ dùng khi lời nhắc tới một hình ảnh cụ thể có sẵn trong nguồn.
-- Cảnh sự kiện (ký kết) đặt ở chỗ lời nói về cam kết, không rải khắp phim.
+Nguyên tắc thể loại đã kiểm chứng (lý do và dự án gốc: `ke-chuyen-phong-van.md` mục 1, 4, 6): mở bằng chuỗi 3-4 cảnh động trước mặt người nói đầu tiên; cầu nối 2-3 giây bằng cảnh trám giữa hai nhân vật (segment riêng, fade khoảng 0,15 giây), không cắt thẳng mặt sang mặt; cắt câu nhiều vòng, mỗi lần neo vào khoảng lặng thật, ghi mốc cũ và mới vào `SO-GOP-Y.md`; câu hỏi neo và câu kết là overlay Benefits một mục đè lên cảnh thật; danh sách cấu phần là MỘT overlay tích luỹ; con số nổi bật làm pill hoặc `InfoStat` đúng lúc lời nhắc, khép vòng số liệu nếu được; đoạn đắt nhất ít cắt, ít đồ họa, giữ mặt người nói; cảnh sự kiện đặt đúng chỗ lời nói về cam kết.
 
-**Cổng kiểm chứng.** Mỗi dòng có đồ họa mang dữ kiện ghi nguồn đối chiếu vào cột "Kiểm chứng": tài liệu của tổ chức (tên file, trang), trang web chính thức, văn bản ký kết, `PHONG-CACH.md` cho chức danh nguyên văn, hoặc người có thẩm quyền đã xác nhận (ai, ngày nào). Dữ kiện công khai thì tra web và ghi đường dẫn; không tìm ra thì ghi "chưa kiểm được", không để trống. Callout biên tập (overlay không có câu nói tương ứng) cũng phải có nguồn. Dữ kiện chưa kiểm được hoặc lệch nguồn không lên đồ họa; đưa vào danh sách quyết định kèm bằng chứng và ba cách để user chọn: (1) nhờ tổ chức hoặc chính nhân vật xác nhận, rồi mới hiện dữ kiện đã kiểm; (2) giữ lời nói nguyên văn nhưng đồ họa không lặp lại dữ kiện đó; (3) bỏ câu, thay bằng một bite khác cùng ý. Không tự chọn thay user.
+**Cổng kiểm chứng.** Mỗi dòng có đồ họa mang dữ kiện ghi nguồn vào cột "Kiểm chứng": tài liệu của tổ chức (tên file, trang), trang web chính thức, văn bản ký kết, chức danh nguyên văn trong bảng nhân vật hoặc `phong-cach/PHONG-CACH.md`, hoặc người có thẩm quyền đã xác nhận (ai, ngày nào). Dữ kiện công khai thì tra web và ghi đường dẫn; không tìm ra thì ghi "chưa kiểm được", không để trống. Callout biên tập (overlay không có câu nói tương ứng) cũng phải có nguồn. Dữ kiện chưa kiểm được hoặc lệch nguồn không lên đồ họa; đưa vào danh sách quyết định kèm bằng chứng và ba cách: (1) nhờ tổ chức hoặc nhân vật xác nhận rồi mới hiện; (2) giữ lời nguyên văn, đồ họa không lặp dữ kiện; (3) bỏ câu, thay bằng một bite khác cùng ý. Không tự chọn thay user.
 
-Cuối kịch bản bắt buộc có: **tổng thời lượng ước tính** theo hồi (không cộng tay: `python3 tools/uoc-luong.py "du-an/<x>/KICH-BAN-THUC-TE.md"` cộng cột Dài theo hồi, so với mục tiêu và soi cột Kiểm chứng); nếu vượt mục tiêu quá 30% thì đề xuất ngay hai phương án (bản đầy đủ và bản gọn, ghi rõ bỏ bite nào) để user chọn TRƯỚC khi dựng, không dựng bản dài rồi cắt qua nhiều vòng; **danh sách quyết định cần user**: tên phim cho thẻ tiêu đề, dữ kiện chưa kiểm được hoặc lệch nguồn (kèm bằng chứng và ba cách của Cổng kiểm chứng), người tổ chức hay người quay có xuất hiện trong phim không, overlay nào không có câu nói tương ứng trong lời (callout biên tập) và đặt ở đâu vì sao, cụm nhạy nào đã cắt; **cảnh trám còn thiếu** và cách bù (quay bổ sung với mô tả cụ thể theo Bước 1.4, ảnh tĩnh qua Ken Burns theo phim-tu-lieu, hay đồ họa).
+Cuối kịch bản bắt buộc có: **tổng thời lượng ước tính** theo hồi do `python3 tools/uoc-luong.py "du-an/<x>/KICH-BAN-THUC-TE.md"` cộng (không cộng tay); vượt mục tiêu quá 30% thì đề xuất ngay hai phương án (bản đầy đủ và bản gọn, ghi rõ bỏ bite nào) để user chọn TRƯỚC khi dựng; **danh sách quyết định cần user** (tên phim, dữ kiện chưa kiểm được, người tổ chức hay người quay có xuất hiện không, overlay không có câu nói tương ứng đặt ở đâu vì sao, cụm nhạy đã cắt); **cảnh trám còn thiếu** và cách bù (quay bổ sung theo mô tả Bước 1.4, ảnh tĩnh có nguồn qua phim-tu-lieu, đồ họa).
 
 ### Cổng duyệt 2 - Kịch bản thực tế
 
-Trước khi trình, `uoc-luong.py` phải báo "KIỂM GIẤY: ĐẠT", hoặc mọi điểm "CẦN XEM" đã nằm trong danh sách quyết định. User đọc `KICH-BAN-THUC-TE.md` trong khoảng mười phút mà không cần mở video, trả lời các quyết định, sửa gì cứ nói. Được duyệt mới dựng.
+`uoc-luong.py` phải báo "KIỂM GIẤY: ĐẠT", hoặc mọi điểm "CẦN XEM" đã nằm trong danh sách quyết định. User đọc `KICH-BAN-THUC-TE.md` trong khoảng mười phút mà không cần mở video, trả lời các quyết định. Được duyệt mới dựng.
 
 ### Bước 2.4 - Dựng nháp
 
-Chuyển kịch bản thành `timeline.json` theo phim-dung-bai và `references/bien-tap.md` của skill đó (mốc `in`/`out` snap vào khoảng lặng thật; cụm nhạy nằm giữa một chunk gỡ băng thì tìm khoảng lặng bằng `silencedetect` trên cửa sổ 3-4 giây quanh vị trí ước lượng theo tỷ lệ ký tự, đặt `snap:false` cho đoạn đó). Đồ họa theo phim-do-hoa; intro, outro, thẻ chuyển dùng làm `insert` phải ép lại tiếng bằng đúng thời lượng hình ngay sau khi render (`ffmpeg -i x.mp4 -t <thời lượng hình> -c:v copy -c:a aac -b:a 192k`) rồi `ffprobe` kiểm hình bằng tiếng trước khi vào timeline. Job JSON của mọi đồ họa lưu trong `do-hoa/job/` của dự án cho tới khi giao xong, vì vòng góp ý sau thường chỉ cần đổi một trường rồi render lại.
+Chuyển kịch bản thành `timeline.json` theo phim-dung-bai và `_chung/timeline-va-dung.md`: mốc snap vào khoảng lặng thật; cụm nhạy giữa một câu gỡ băng dài thì tìm khoảng lặng bằng `silencedetect` trên cửa sổ 3-4 giây quanh vị trí ước lượng theo tỷ lệ ký tự, đặt `snap:false`; phim mở bằng câu móc rồi mới tới thẻ tiêu đề thì insert thẻ đó mang `"role": "intro"`. Chép nhãn vào trường `"label"` của từng segment (mọi sub-segment của cùng một dòng chung một nhãn); `chapter` theo hồi. Đồ họa theo phim-do-hoa; job JSON giữ trong `do-hoa/job/` tới khi giao.
 
-Quy tắc riêng của thể loại khi soạn timeline:
+Riêng thể loại này (chi tiết `ke-chuyen-phong-van.md` mục 6-7, bảng vị trí pill ở `_chung/overlay-va-the.md`):
 
-- Khung hình phỏng vấn ngồi có mặt ở nửa trên khung: pill dùng `position:'bottom'` (đã là mặc định của Benefits), vẫn phải kiểm bằng khung hình thật ở trạng thái tích luỹ đầy đủ; không bao giờ che mặt.
-- Ba lớp đồ họa không dùng lẫn nhau (chi tiết và lý do trong `references/ke-chuyen-phong-van.md` mục 7): `LowerThird` là thẻ nhận diện (tên, chức danh, neo dưới trái, hiện vài giây khi một người mới xuất hiện hoặc xuất hiện lại sau một khoảng dài - thông tin về NGƯỜI, không tích luỹ); `Benefits` là pill nhấn mạnh nội dung (từ khoá, con số, danh sách cấu phần - thông tin về Ý, `position:'bottom'`, tích luỹ khi nhiều mục); `SectionTitle` là thẻ chuyển đánh dấu ranh giới HỒI chứ không phải ranh giới người nói, luôn có `kicker` (tên dự án viết hoa, lặp lại xuyên suốt phim) và `title` (tên hồi hoặc câu hỏi định hướng, hai dòng), `showLogos:true` ở ranh giới lớn. Khung hình cần cả LowerThird lẫn pill nội dung cùng lúc: kiểm bằng khung hình thật ở đúng lúc chồng lấn, dùng `edgeInset` hoặc đổi Benefits sang `position:'right'` để không đè lên LowerThird.
-- Quy tắc tối thiểu 5 giây cảnh chính giữa hai thẻ toàn màn hình áp dụng cả cho một lần lộ mặt ngắn dưới 5 giây xen giữa hai cảnh trám: nối liền cảnh trám thay vì để khe hở lộ mặt.
-- Gộp khối cảnh trám: `ffprobe` thời lượng thật từng clip trước, clip bị khoá thời lượng thì xếp nối đuôi ở đúng trần đó (`at` sau = `at` trước cộng thời lượng) để tạo khối liên tục, không giả định kéo dài được.
-- Overlay cần hiện SAU khi cảnh trám trong cùng segment đã kết thúc: tách segment tại đúng điểm cảnh trám kết thúc thành hai sub-segment liền mạch (`out` = `in` kế tiếp), overlay tính `at` từ sub-segment mới.
-- Cảnh thật có tiếng học sinh, đám đông: `volumeDb` khoảng -12 để làm nền dưới lời nói; cảnh cầu nối tự nó có tiếng thì cũng hạ tương tự.
-- `chapter` đặt theo hồi để có danh sách chương khi đăng.
+- Ba lớp đồ họa không dùng lẫn: `LowerThird` cho mọi nhân vật khi xuất hiện lần đầu hoặc quay lại sau một khoảng dài (bắt buộc; chức danh nguyên văn từ bảng nhân vật), `Benefits` cho ý (`position:'bottom'` với phỏng vấn ngồi mặt ở nửa trên, kiểm ở trạng thái tích luỹ đầy đủ), `SectionTitle` cho ranh giới HỒI (`kicker` tên dự án lặp xuyên suốt, `title` tên hồi, `showLogos:true` ở ranh giới lớn). Cần LowerThird và pill cùng lúc thì kiểm tại đúng lúc chồng lấn.
+- Quy tắc 5 giây áp cả cho một lần lộ mặt ngắn giữa hai cảnh trám: nối liền cảnh trám.
+- Gộp khối cảnh trám theo thời lượng thật `ffprobe` (`at` sau = `at` trước + thời lượng), không giả định kéo dài được.
+- Overlay cần hiện SAU cảnh trám trong cùng segment: tách thành hai sub-segment liền mạch.
+- Cảnh thật có tiếng học sinh, đám đông: `volumeDb` khoảng -12 làm điểm khởi đầu; nghe lại rồi hạ hay nâng. Cảnh cầu nối tự nó có tiếng thì hạ tương tự.
 
-Dựng: `assemble.py --kiem-tra`, rồi `--preview` với `--out "<tên>-<khung>-nhap1"` tường minh ngay từ nháp đầu (mọi nháp sau tăng số, không để tên mặc định vì sẽ ghi đè lẫn nhau), rồi `nghiem-thu.py video --nhap --anh`. Ngoài cổng máy, tự kiểm bằng mắt: lưới khung hình toàn phim, và với TỪNG overlay trích khung hình tại mốc thật tính từ `<thành phẩm>.map.json` rồi đọc đoạn transcript bao quanh để chắc chữ khớp ý đang nói, không chỉ khớp chính tả.
-
-Khi soạn `timeline.json`, chép đúng nhãn đã gán ở Bước 2.3 vào trường `"label"` của từng segment (mọi sub-segment tách ra từ cùng một dòng dựng giữ chung một nhãn). Sau mỗi lần render, chạy `tools/nhan-doan.py <timeline.json> <thành phẩm>.map.json` để tạo lại `NHAN-DOAN.md` - bảng đối chiếu nhãn ổn định với mốc thời gian hiện tại, dùng cho vòng góp ý ở Bước 2.5.
+Dựng: `assemble.py --kiem-tra`, rồi `--preview --out "<tên>-<khung>-nhap1"` (mọi nháp sau tăng số), `nghiem-thu.py video --nhap --anh`, rồi `tools/nhan-doan.py <timeline.json> <thành phẩm>.map.json --out NHAN-DOAN.md`. Soi mắt theo `_chung/nghiem-thu-dung-y.md`: lưới khung hình toàn phim, và với TỪNG overlay cặp "hình - câu đang nói" từ `map.json`.
 
 ### Bước 2.5 - Vòng góp ý
 
-User góp ý chủ yếu theo nhãn ổn định (A/B/T/M) tra trong `NHAN-DOAN.md`, kèm mốc phút-giây khi cần chỉ rõ vị trí bên trong một đoạn dài - nhãn không đổi qua các nháp trong khi mốc phút-giây đổi mỗi lần dựng lại, nên nhãn là điểm neo đáng tin hơn. Ghi mọi điểm vào `SO-GOP-Y.md` theo mẫu: nháp số, điểm số, mốc, nội dung góp ý, cách xử lý, cách đã kiểm (khung hình tại mốc nào của `map.json` mới). Mỗi vòng dựng ra `nhapN+1` với `--out` tường minh, tính lại mọi mốc kiểm từ `map.json` của chính bản mới. Điểm góp ý neo vào một từ khoá mà transcript gần đó không có: dùng điểm ngắt câu sạch gần nhất và BÁO RÕ cho user, không lặng lẽ giả định. Một loại góp ý lặp lần thứ hai (pill che mặt, chữ sai chức danh) là tín hiệu sửa nguồn mặc định (defaultProps, brand, preset) chứ không chỉ sửa dự án này, ghi vào "Sổ tay góp ý" trong `PHONG-CACH.md`.
+User góp ý chủ yếu theo nhãn tra trong `NHAN-DOAN.md`, kèm mốc phút giây khi cần chỉ rõ vị trí bên trong một đoạn dài; dịch nhãn sang `in`/`out` là việc của Claude. Ghi mọi điểm vào `SO-GOP-Y.md` theo mẫu (nháp, nhãn, mốc, góp ý, xử lý, cách đã kiểm). Mỗi vòng dựng `nhapN+1`, tính lại mọi mốc kiểm từ `map.json` của bản mới, chạy lại `nhan-doan.py`. Điểm góp ý neo vào một từ khoá không có trong transcript gần đó: dùng điểm ngắt câu sạch gần nhất và BÁO RÕ. Góp ý lặp lần hai (pill che mặt, sai chức danh) là tín hiệu sửa nguồn mặc định, ghi vào sổ tay góp ý của PHONG-CACH. Trước khi báo hoàn tất, một vòng tự nghe lại và siết câu chữ thêm một lượt vẫn đáng làm.
 
 ### Bước 2.6 - Bản chính và bàn giao
 
-Xuất 1080p với `--out` tường minh, `nghiem-thu.py video` ĐẠT, lưới khung hình đọc lại lần cuối, copy vào `xuat-hoan-chinh/`. Báo user: tên file, thời lượng, dung lượng, danh sách chương, dòng ghi công nhạc nếu dùng track CC-BY, "nghiệm thu máy: ĐẠT". Đề xuất bước tiếp: bản gọn 60-90 giây cho mạng xã hội bằng phim-clip-ngan (cắt từ đoạn đắt nhất, câu hỏi neo, hình sự kiện); bản riêng cho từng đối tác nếu họ cần dùng logo riêng; gửi nhân vật xem trước nếu đã hứa ở Bước 1.5. Cập nhật `HO-SO-PHIM.md` trạng thái hoàn tất và những gì đã học, bài học kỹ thuật đáng giữ ghi vào `docs/BAI-HOC.md`.
+Xuất 1080p với `--out "<tên>-<khung>"`, `nghiem-thu.py video` ĐẠT, lưới khung hình đọc lại lần cuối, copy vào `xuat-hoan-chinh/`. Báo theo `_chung/van-hanh.md` (kèm danh sách chương, ghi công nhạc CC-BY nếu có). Đề xuất bước tiếp: bản gọn 60-90 giây bằng phim-clip-ngan; bản riêng cho từng đối tác nếu cần logo riêng; gửi nhân vật xem trước nếu đã hứa. Cập nhật `HO-SO-PHIM.md` trạng thái hoàn tất; bài học kỹ thuật vào `docs/BAI-HOC.md`, bài học kể chuyện vào `ke-chuyen-phong-van.md` mục 6.
 
 ## Khi một khâu hỏng
 
-Nguyên tắc chung và mẫu câu báo ở mục "Khi một khâu hỏng" của `QUY-TRINH-KY-THUAT.md`: thử lại tối đa một lần sau khi đã sửa nguyên nhân; không có cách bù ngầm; báo bằng lời thường khâu nào dừng, phần nào vẫn giữ, cần user làm gì. Riêng thể loại này:
+Nguyên tắc chung ở `_chung/van-hanh.md`. Riêng thể loại này:
 
-- Gỡ băng một file phỏng vấn không qua `nghiem-thu.py transcript`: gỡ lại cửa sổ rộng quanh chỗ hỏng; hai lần cho kết quả khác hẳn nhau thì dừng đoạn đó, nhờ user nghe tại mốc cụ thể. Các file phỏng vấn khác vẫn làm tiếp.
-- Cảnh trám thiếu hoặc bị khoá thời lượng: không kéo dài bằng khung đứng, không lặp clip, không thay bằng hình do AI tạo; ghi vào "Cảnh trám còn thiếu" với ba cách bù (quay bổ sung theo mô tả Bước 1.4, ảnh tĩnh có nguồn, đồ họa) để user chọn.
-- Dữ kiện không kiểm được: không phải lỗi kỹ thuật, là một quyết định của user (Cổng kiểm chứng ở Bước 2.3).
+- Gỡ băng một file phỏng vấn không qua `nghiem-thu.py transcript`: gỡ lại cửa sổ rộng quanh chỗ hỏng; hai lần cho kết quả khác hẳn nhau thì dừng đoạn đó, nhờ user nghe tại mốc cụ thể. Các file khác vẫn làm tiếp.
+- Cảnh trám thiếu hoặc bị khoá thời lượng: không kéo dài bằng khung đứng, không lặp clip, không thay bằng hình do AI tạo; ghi vào "Cảnh trám còn thiếu" với ba cách bù để user chọn.
+- Dữ kiện không kiểm được: không phải lỗi kỹ thuật, là một quyết định của user (Cổng kiểm chứng).
 - Một đồ họa render lỗi: dừng riêng dòng đó, các dòng khác vẫn làm; không thay bằng đồ họa khác nội dung khi chưa hỏi.
 - Dựng không qua `check_av()` hoặc `nghiem-thu.py video`: dừng, đọc bảng chẩn đoán, không giao nháp lỗi.
 
 ## Khi kết thúc mỗi phiên
 
-Dự án này luôn kéo qua nhiều phiên (chờ quay, chờ duyệt, chờ góp ý). Trước khi dừng, `HO-SO-PHIM.md` phải nói được: đang ở bước nào, chờ ai, quyết định nào đã chốt, file nháp mới nhất tên gì. Phiên sau đọc file đó trước, không hỏi lại điều đã chốt.
+Dự án này luôn kéo qua nhiều phiên. Trước khi dừng, `HO-SO-PHIM.md` phải nói được: đang ở bước nào, chờ ai, quyết định nào đã chốt, nháp mới nhất tên gì. Phiên sau đọc file đó trước, không hỏi lại điều đã chốt.
+
+<!-- ban-nguon: phim-tai-lieu-phong-van 2026-09-30 40209987 -->
