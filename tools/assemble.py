@@ -11,14 +11,17 @@ Tên file xuất (trong du-an/<x>/xuat-nhap/): mặc định "<tên dự án>-<k
 quy ước "<tên>-<khung>-nhapN" cho nháp và "<tên>-<khung>" cho bản chính; tên đã
 kết thúc bằng "-nhap" hoặc "-nhapN" thì không nối thêm "-nhap" lần nữa.
 
-Thiết kế: mỗi đoạn được cắt + chuẩn hóa MỘT lần thành một part (có cache .sig, tự
-resume). Ghép các part bằng GIẢI MÃ + MÃ HOÁ LẠI một lần (không dùng concat -c copy:
-stream-copy bỏ qua edit-list của AAC, gây lệch hình-tiếng ~21ms ở mọi mối nối).
-Cuối cùng chỉ xử lý tiếng (nhạc nền + chuẩn hóa -14 LUFS), hình copy. Mọi part,
-thân phim và thành phẩm đều qua check_av() (hình = tiếng); sai là dừng.
-Đồ họa chèn (intro/outro/insert) mang đuôi tiếng AAC thừa 0,02-0,06s được tự cắt
-về bằng hình trong insert_part() và in ra một dòng thông báo (lỗi đã biết, có
-nguyên nhân xác định), không cần ép -t bằng tay trước khi đưa vào timeline.
+Thiết kế (r5, 2026-09-30): mỗi đoạn được cắt + chuẩn hóa MỘT lần thành một part (có
+cache .sig, tự resume). Mỗi part dài ĐÚNG n khung và ĐÚNG n*48000/fps mẫu tiếng (fps=N:
+start_time=0 + tpad + trim=end_frame cho hình, atrim=end_sample cho tiếng), tiếng trung
+gian là PCM (mov) để không có độ trễ mồi AAC. Ghép: hình copy qua concat demuxer, tiếng
+NỐI THẲNG từng mẫu PCM của các part (không qua bộ ghép tiếng của ffmpeg, vốn mất hoặc
+dôi vài chục ms mỗi mối nối). AAC chỉ mã hoá MỘT lần ở finalize, cùng lúc nhạc nền và
+chuẩn hoá -14 LUFS; hình copy. Part và thân phim qua check_av() ngưỡng 4 ms (AV_TOL_PCM),
+thành phẩm AAC ngưỡng 60 ms; sai là dừng. Nguồn 29.97 fps ra 30 fps: sai số hình còn
+trong một khung (lượng tử hoá), tiếng khớp tuyệt đối. Kiểm đồng bộ tuyệt đối bằng
+tools/kiem-dong-bo.py (dựng thử chớp/click) và tools/do-dong-bo.py (đo trên phim thật).
+Đồ họa chèn (intro/outro/insert) cũng đi qua _exact() nên đúng khung và mẫu.
 
 timeline.json:
 {
@@ -69,6 +72,7 @@ MULTICAM (skill phim-multicam): segment thêm "audioSrc": "nguon/tieng-chu.wav",
 """
 import argparse
 import json
+import time
 import os
 import re
 import shlex
@@ -81,15 +85,29 @@ PREVIEW_SIZES = {"ngang": (854, 480), "doc": (480, 854)}
 
 # --- Chống lệch hình-tiếng (bản vá 2026-09-05, 2026-09-17) --------------------
 # Đổi TOOL_VERSION mỗi khi sửa logic encode → mọi cache .sig cũ tự vô hiệu.
-TOOL_VERSION = "2026-09-30.r1"  # r1: insert_part tự cắt đuôi tiếng AAC, role intro/outro cho bookends
-AV_TOL = 0.06       # hình và tiếng lệch nhau quá 2 khung hình (30fps) là LỖI
+TOOL_VERSION = "2026-09-30.r6"  # r1: insert_part tự cắt đuôi tiếng AAC, role intro/outro cho bookends
+# CONCAT_REV: đổi khi sửa bước GHÉP hoặc FINALIZE (không đụng cách encode từng part) - chỉ vô hiệu cache body,
+# không bắt encode lại các part đã xong. Sửa cách encode part thì đổi TOOL_VERSION.
+CONCAT_REV = "c8"  # c7: concat.txt ghi duration chính xác n/fps mỗi part; c8: đo loudness nghiêm ngặt, map insert chính xác
+AV_TOL = 0.06       # THÀNH PHẨM (tiếng AAC, độ dài hạt 21 ms): hình và tiếng lệch quá 2 khung là LỖI
+AV_TOL_PCM = 0.004  # part và thân phim (tiếng PCM, đúng từng mẫu): lệch quá 4 ms là LỖI.
+                    # Ngưỡng 0,06 từng bỏ lọt part hình dài hơn tiếng đúng 1 khung (33 ms), cộng dồn qua 200 part
+                    # thành lệch 0,1-0,2 s (lớp lỗi "lệch hình-tiếng cộng dồn", AIM Ngũ Tài 2026-09-30).
 DUR_TOL = 0.15      # part dài/ngắn hơn dự kiến quá mức này là LỖI
 
 
 def stream_durations(path):
     """Thời lượng THEO TỪNG STREAM (giây): (video, audio); None nếu thiếu stream."""
-    p = sh(["ffprobe", "-v", "quiet", "-print_format", "json",
-            "-show_format", "-show_streams", path])
+    # ổ gắn từ máy chủ có lúc chưa thấy file vừa ghi: thử lại vài lần trước khi báo lỗi
+    for _try in range(6):
+        try:
+            p = sh(["ffprobe", "-v", "quiet", "-print_format", "json",
+                    "-show_format", "-show_streams", path])
+            break
+        except RuntimeError:
+            if _try == 5:
+                raise
+            time.sleep(1.5)
     info = json.loads(p.stdout)
     fmt_d = float(info.get("format", {}).get("duration") or 0)
     v = a = None
@@ -116,11 +134,12 @@ def file_stamp(path):
         return None
 
 
-def check_av(path, expected=None, label="", raise_on_fail=True, dur_tol=DUR_TOL):
+def check_av(path, expected=None, label="", raise_on_fail=True, dur_tol=DUR_TOL, tol=None):
     """BẤT BIẾN của xưởng: mọi file video trung gian và thành phẩm phải có
     hình = tiếng (≤ AV_TOL) và, nếu biết trước, = thời lượng dự kiến (≤ dur_tol).
     Sai → ném lỗi với chẩn đoán (hoặc trả False nếu raise_on_fail=False)."""
     label = label or os.path.basename(path)
+    tol = AV_TOL if tol is None else tol
     try:
         v, a = stream_durations(path)
     except Exception as e:  # noqa: BLE001
@@ -132,7 +151,7 @@ def check_av(path, expected=None, label="", raise_on_fail=True, dur_tol=DUR_TOL)
         problems.append("thiếu stream HÌNH")
     if a is None:
         problems.append("thiếu stream TIẾNG")
-    if v is not None and a is not None and abs(v - a) > AV_TOL:
+    if v is not None and a is not None and abs(v - a) > tol:
         problems.append(f"HÌNH {v:.3f}s ≠ TIẾNG {a:.3f}s (lệch {v - a:+.3f}s)")
     if expected is not None and v is not None and abs(v - expected) > dur_tol:
         problems.append(f"hình {v:.3f}s ≠ dự kiến {expected:.3f}s (lệch {v - expected:+.3f}s)")
@@ -257,10 +276,22 @@ class Assembler:
                 "-video_track_timescale", "90000",
                 "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-ac", "2"]
 
+    def part_enc_args(self):
+        """Part trung gian: hình như enc_args, TIẾNG PCM (không có độ trễ mồi của AAC) trong mov để ghép
+        đúng mẫu; tiếng nén AAC một lần duy nhất ở bước ghép/finalize."""
+        v = self.enc_args()
+        i = v.index("-c:a")
+        return v[:i] + ["-c:a", "pcm_s16le", "-ar", "48000", "-ac", "2", "-f", "mov"]
+
+    def _exact(self, dur):
+        """(số khung, số mẫu tiếng 48 kHz, thời lượng) của một part dài ~dur giây: hình và tiếng dài BẰNG NHAU."""
+        n = max(1, round(dur * self.fps))
+        return n, int(round(n * 48000 / self.fps)), n / self.fps
+
     def vf_normalize(self, focus=0.5):
         tar = self.w / self.h
         return (
-            f"fps={self.fps},"
+            f"fps={self.fps}:start_time=0,"
             f"crop='min(iw,ih*{tar:.6f})':'min(ih,iw/{tar:.6f})':'(iw-ow)*{focus}':'(ih-oh)*0.5',"
             f"scale={self.w}:{self.h},setsar=1,format=yuv420p"
         )
@@ -325,7 +356,9 @@ class Assembler:
         (thường là B-roll) cắt thẳng sang insert kế tiếp nhưng lời nói cần tắt êm, không cụt tiếng."""
         idx = len(self.parts)
         out = os.path.join(self.tmp, f"part-{idx:03d}.mp4")
-        dur = t_out - t_in
+        # Độ dài part = số khung nguyên: hình và tiếng dài đúng bằng nhau, ghép không lệch dần
+        # (thử tổng hợp 2026-09-30: part hình 4.667 s / tiếng 4.650 s khiến concat lệch hình-tiếng tới 80 ms)
+        n_fr, n_smp, dur = self._exact(t_out - t_in)
         layout = layout or "mat"
         if video_from:
             layout = "mat"  # B-roll thay hình → không ghép slide
@@ -345,13 +378,13 @@ class Assembler:
                                video_from=video_from, broll_from=broll_from, preview=self.preview,
                                mau=mau, layout=layout, slide=slide, slide_zoom=slide_zoom, theme=theme,
                                audio_src=a_path, audio_in=audio_in)
-        if self._cache_hit(out, dur, sig) and check_av(out, dur, label=os.path.basename(out) + " (cache)", raise_on_fail=False):
+        if self._cache_hit(out, dur, sig) and check_av(out, dur, label=os.path.basename(out) + " (cache)", raise_on_fail=False, tol=AV_TOL_PCM):
             print(f"    (dùng lại part-{idx:03d}.mp4 đã encode)", flush=True)
             self.parts.append(out)
             return dur
 
-        af = self.af_normalize()
-        fade_v = ""
+        af = self.af_normalize() + f",atrim=end_sample={n_smp}"
+        fade_v = f",tpad=stop_mode=clone:stop_duration=0.2,trim=end_frame={n_fr}"
         if fade_in > 0:
             fade_v += f",fade=t=in:st=0:d={fade_in}:color={self.fade_color}"
             af += f",afade=t=in:st=0:d={fade_in}"
@@ -440,7 +473,7 @@ class Assembler:
                         cmd += ["-loop", "1", "-framerate", str(self.fps), "-i", mask_for(fs)]
                         i_mf, n_in = n_in, n_in + 1
                         ar = fs["w"] / fs["h"]
-                        fc += (f"[0:v]{mau}fps={self.fps},{self._crop_to(ar, focus)},"
+                        fc += (f"[0:v]{mau}fps={self.fps}:start_time=0,{self._crop_to(ar, focus)},"
                                f"scale={fs['w']}:{fs['h']},setsar=1{self.vf_grade()},format=rgba[f0];"
                                f"[{i_mf}:v]format=gray[mf];[f0][mf]alphamerge[fa];"
                                f"[{i_khung}:v][sa]overlay={ss['x']}:{ss['y']}[t1];"
@@ -467,9 +500,9 @@ class Assembler:
                 tail += f"scale={self.w}:{self.h},setsar=1,"
             fc += f"[v{k}]{tail}format=yuv420p{fade_v}[v];[{a_idx}:a]{af}[a]"
             cmd += ["-filter_complex", fc, "-map", "[v]", "-map", "[a]"]
-        cmd += ["-t", f"{dur:.3f}"] + self.enc_args() + [out]
+        cmd += ["-t", f"{dur + 0.3:.3f}"] + self.part_enc_args() + [out]
         sh(cmd)
-        check_av(out, dur, label=os.path.basename(out))
+        check_av(out, dur, label=os.path.basename(out), tol=AV_TOL_PCM)
         self._cache_save(out, sig)
         self.parts.append(out)
         return dur
@@ -477,7 +510,7 @@ class Assembler:
     def vf_normalize_full(self, focus, W, H):
         """Chuẩn hóa về khung thật WxH (bố cục slide luôn ghép ở 1920x1080 rồi mới thu về preview)."""
         tar = W / H
-        return (f"fps={self.fps},"
+        return (f"fps={self.fps}:start_time=0,"
                 f"crop='min(iw,ih*{tar:.6f})':'min(ih,iw/{tar:.6f})':'(iw-ow)*{focus}':'(ih-oh)*0.5',"
                 f"scale={W}:{H},setsar=1,format=yuv420p")
 
@@ -532,35 +565,39 @@ class Assembler:
         """Đồ họa chèn (intro/outro/infographic). Thêm audio im lặng nếu thiếu."""
         idx = len(self.parts)
         out = os.path.join(self.tmp, f"part-{idx:03d}.mp4")
-        dur = probe_duration(src)
+        # dur = số khung nguyên / fps NGAY TỪ ĐẦU (cả nhánh cache): ghi thời lượng dò từ file (vd 4.054 s) vào
+        # map.json làm mọi mốc sau đó trôi (đã gặp: 89 ms sau 11 thẻ chèn, do-dong-bo.py báo tiếng lệch +103 ms
+        # dù phim đúng), vì part thật luôn dài n/fps (4.0667 s).
+        n_fr, n_smp, dur = self._exact(probe_duration(src))
         self._map_add("insert", src, 0.0, dur, dur)
         sig = self._cache_sig(kind="insert", src=src, preview=self.preview)
-        if self._cache_hit(out, dur, sig) and check_av(out, dur, label=os.path.basename(out) + " (cache)", raise_on_fail=False):
+        if self._cache_hit(out, dur, sig) and check_av(out, dur, label=os.path.basename(out) + " (cache)", raise_on_fail=False, tol=AV_TOL_PCM):
             print(f"    (dùng lại part-{idx:03d}.mp4 đã encode)", flush=True)
             self.parts.append(out)
             return dur
-        vf = self.vf_normalize()
+        vf = self.vf_normalize() + f",tpad=stop_mode=clone:stop_duration=0.2,trim=end_frame={n_fr}"
+        af_i = self.af_normalize() + f",atrim=end_sample={n_smp}"
         cmd = ["ffmpeg", "-hide_banner", "-y", "-i", src]
         if has_audio(src):
-            cmd += ["-vf", vf, "-af", self.af_normalize()]
+            cmd += ["-vf", vf, "-af", af_i]
         else:
-            cmd += ["-f", "lavfi", "-t", f"{dur:.3f}",
+            cmd += ["-f", "lavfi", "-t", f"{dur + 0.3:.3f}",
                     "-i", "anullsrc=r=48000:cl=stereo",
-                    "-vf", vf, "-map", "0:v", "-map", "1:a"]
-        cmd += ["-t", f"{dur:.3f}"] + self.enc_args() + [out]
+                    "-vf", vf, "-af", af_i, "-map", "0:v", "-map", "1:a"]
+        cmd += ["-t", f"{dur + 0.3:.3f}"] + self.part_enc_args() + [out]
         sh(cmd)
         # Chốt lại pha mux thứ hai (remux -c:v copy -c:a aac): bộ mã AAC có thể
         # để lại đuôi thừa ~0.02-0.06s ở TIẾNG bất kể cờ -t/atrim phía trên đã
         # ép ở bước encode chính (lớp lỗi 'lệch hình-tiếng ngầm', đã xác minh
         # atrim filter KHÔNG loại được đuôi này - phải cắt lại sau khi mux xong).
         v_real, a_real = stream_durations(out)
-        if v_real is not None and a_real is not None and abs(v_real - a_real) > AV_TOL:
+        if v_real is not None and a_real is not None and abs(v_real - a_real) > AV_TOL_PCM:
             print(f"    (đồ họa chèn có đuôi tiếng thừa {a_real - v_real:+.3f}s - đã cắt tiếng về bằng hình)", flush=True)
             fixed = out + ".fix.mp4"
             sh(["ffmpeg", "-hide_banner", "-y", "-i", out, "-t", f"{v_real:.6f}",
-                "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", fixed])
+                "-c:v", "copy", "-c:a", "pcm_s16le", "-f", "mov", fixed])
             os.replace(fixed, out)
-        check_av(out, dur, label=os.path.basename(out))
+        check_av(out, dur, label=os.path.basename(out), tol=AV_TOL_PCM)
         self._cache_save(out, sig)
         self.parts.append(out)
         return dur
@@ -737,13 +774,18 @@ class Assembler:
             "src": os.path.relpath(src, self.project) if src else None,
             "in": round(t_in, 3), "out": round(t_out, 3),
             "video_from": os.path.relpath(video_from, self.project) if video_from else None,
-            "start": round(start, 3), "end": round(start + dur, 3), "dur": round(dur, 3),
+            "start": round(start, 3), "end": round(start + dur, 3), "dur": round(dur, 6),
         })
 
     def write_time_map(self):
         """<thành phẩm>.map.json: dùng để tính lại phụ đề/chapter theo mốc thành phẩm."""
         if not getattr(self, "time_map", None):
             return
+        _sum_map = sum(m["dur"] for m in self.time_map)
+        _sum_real = getattr(self, "sum_parts", None)
+        if _sum_real is not None and abs(_sum_map - _sum_real) > 0.005:
+            raise RuntimeError(f"[NGHIỆM THU] map.json lệch thành phẩm: tổng dur trong bản đồ {_sum_map:.4f}s "
+                               f"≠ tổng part đo được {_sum_real:.4f}s (mọi mốc phụ đề/chương sau đó sẽ trôi)")
         f = os.path.splitext(self.out_file)[0] + ".map.json"
         with open(f, "w", encoding="utf-8") as fh:
             json.dump({"_ghi_chu": "start/end = mốc trong thành phẩm; in/out = mốc trong file nguồn. "
@@ -828,6 +870,31 @@ class Assembler:
             t_cursor += d
         return t_cursor
 
+    def _concat_exact(self, lst, body):
+        """Ghép part KHÔNG qua bộ ghép tiếng của ffmpeg (concat demuxer + aresample làm
+        trôi/mất vài chục ms): hình ghép copy (-an), tiếng nối thẳng từng mẫu PCM của mỗi
+        part (mỗi part đã đúng n mẫu = n khung), rồi gộp lại, vẫn PCM; AAC mã hoá MỘT lần
+        ở finalize."""
+        vpart = os.path.join(self.tmp, "body_v.mp4")
+        raw = os.path.join(self.tmp, "body_a.raw")
+        sh(["ffmpeg", "-hide_banner", "-y", "-f", "concat", "-safe", "0", "-i", lst,
+            "-an", "-c:v", "copy", "-f", "mov", vpart])
+        with open(raw, "wb") as fh:
+            for p in self.parts:
+                for _t in range(6):
+                    r = subprocess.run(["ffmpeg", "-hide_banner", "-v", "error", "-i", p, "-vn",
+                                        "-f", "s16le", "-ar", "48000", "-ac", "2", "pipe:1"],
+                                       stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                    if r.returncode == 0 and r.stdout:
+                        break
+                    time.sleep(1.5)
+                else:
+                    raise RuntimeError(f"không đọc được tiếng part {p}: {r.stderr.decode(errors='ignore')[-300:]}")
+                fh.write(r.stdout)
+        sh(["ffmpeg", "-hide_banner", "-y", "-i", vpart, "-f", "s16le", "-ar", "48000", "-ac", "2",
+            "-i", raw, "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "pcm_s16le",
+            "-f", "mov", body])
+
     def concat(self, expected):
         """Ghép các part bằng GIẢI MÃ + MÃ HOÁ LẠI một lần (hình + tiếng).
         TRƯỚC khi ghép: kiểm từng part hình = tiếng. SAU khi ghép: body phải
@@ -857,7 +924,7 @@ class Assembler:
         for p in self.parts:
             v, a = stream_durations(p)
             rows.append((os.path.basename(p), v, a))
-            if v is None or a is None or abs(v - a) > AV_TOL:
+            if v is None or a is None or abs(v - a) > AV_TOL_PCM:
                 bad.append(os.path.basename(p))
         total_parts = sum(r[1] or 0 for r in rows)
         if bad:
@@ -873,15 +940,37 @@ class Assembler:
 
         lst = os.path.join(self.tmp, "concat.txt")
         with open(lst, "w", encoding="utf-8") as f:
-            for p in self.parts:
+            for p, r in zip(self.parts, rows):
                 f.write("file '" + os.path.abspath(p).replace("'", r"'\''") + "'\n")
+                # Thời lượng CHÍNH XÁC n/fps: nếu để concat demuxer đọc từ mvhd (làm tròn mili giây), mỗi ranh
+                # giới lệch tới 0,67 ms và cộng dồn thành vài ms giữa hình và tiếng (đã gặp: +6,7 ms sau 64 part).
+                _n = round((r[1] or 0) * self.fps)
+                f.write(f"duration {_n / self.fps:.9f}\n")
+        for _w in range(20):   # ổ gắn từ máy chủ: đợi file danh sách hiện ra trước khi gọi ffmpeg
+            if os.path.exists(lst) and os.path.getsize(lst) > 0:
+                break
+            time.sleep(1.0)
         body = os.path.join(self.tmp, "body.mp4")
-        sh(["ffmpeg", "-hide_banner", "-y", "-f", "concat", "-safe", "0",
-            "-i", lst, "-vf", f"fps={self.fps}", "-af",
-            "aresample=async=1:first_pts=0,aformat=sample_rates=48000:channel_layouts=stereo",
-            "-t", f"{total_parts:.3f}"] + self.enc_args() + [body])
-        check_av(body, total_parts, label="body (sau ghép + mã hoá lại)",
-                 dur_tol=0.1 + 0.01 * len(self.parts))
+        time.sleep(2.0)
+        import hashlib
+        _sig = hashlib.md5((open(lst, encoding="utf-8").read() + str(self.enc_args()) + str(self.fps)
+                            + f"{total_parts:.3f}" + TOOL_VERSION + CONCAT_REV).encode()).hexdigest()
+        _sigf = body + ".sig"
+        _cached = (os.path.exists(body) and os.path.getsize(body) > 1_000_000 and os.path.exists(_sigf)
+                   and open(_sigf).read().strip() == _sig)
+        if _cached:
+            print("    (dùng lại body đã ghép)", flush=True)
+        for _try in range(4 if not _cached else 0):
+            try:
+                self._concat_exact(lst, body)
+                open(_sigf, "w").write(_sig)
+                break
+            except RuntimeError as e:
+                if "No such file" not in str(e) or _try == 3:
+                    raise
+                time.sleep(3.0)
+        check_av(body, total_parts, label="body (sau ghép)",
+                 dur_tol=0.02, tol=AV_TOL_PCM)
         return body
 
     def finalize(self, body):
@@ -941,22 +1030,58 @@ class Assembler:
         else:
             cmd += ["-map", "0:a"]
         cmd += ["-vn", "-c:a", "pcm_s16le", "-ar", "48000", "-ac", "2", mix]
-        sh(cmd)  # lượt 0: trộn nhạc (nếu có) ra wav
+        import hashlib
+        _msig = hashlib.md5((" ".join(cmd) + f"{os.path.getsize(body)}" + TOOL_VERSION).encode()).hexdigest()
+        _msigf = mix + ".sig"
+        if (os.path.exists(mix) and os.path.getsize(mix) > 1_000_000 and os.path.exists(_msigf)
+                and open(_msigf).read().strip() == _msig):
+            print("    (dùng lại mix nhạc đã trộn)", flush=True)
+        else:
+            sh(cmd)  # lượt 0: trộn nhạc (nếu có) ra wav
+            open(_msigf, "w").write(_msig)
 
-        # Lượt 1: đo loudness
-        p = subprocess.run(
-            ["ffmpeg", "-hide_banner", "-i", mix,
-             "-af", "loudnorm=I=-14:TP=-1.5:LRA=11:print_format=json", "-f", "null", "-"],
-            capture_output=True, text=True,
-        )
-        try:
-            m = json.loads("{" + p.stderr.rsplit("{", 1)[1])
-            ln = (f"loudnorm=I=-14:TP=-1.5:LRA=11:linear=true:"
-                  f"measured_I={m['input_i']}:measured_TP={m['input_tp']}:"
-                  f"measured_LRA={m['input_lra']}:measured_thresh={m['input_thresh']}:"
-                  f"offset={m['target_offset']}")
-        except Exception:
-            ln = "loudnorm=I=-14:TP=-1.5:LRA=11"
+        # Ổ gắn từ máy chủ có độ trễ: ffmpeg đo từng báo "No such file" ngay sau khi mix.wav vừa ghi. Đợi file hiện ra.
+        for _w in range(40):
+            if os.path.exists(mix) and os.path.getsize(mix) > 1_000_000:
+                break
+            time.sleep(1.0)
+
+        # Lượt 1: đo loudness (cache theo chữ ký mix: đo cả buổi dài ~50 s, trùng lệnh lặp mỗi lượt 180 s).
+        # CHỈ cache kết quả đo hợp lệ; đo hỏng thì thử lại, hết lần thì DỪNG (trước đây lỗi đo bị cache và lặng lẽ
+        # rơi về chuẩn hoá một lượt: phim ra -15.2 và -16.3 LUFS thay vì -14, xem docs/BAI-HOC.md).
+        _lnf = mix + ".ln"
+        _cached_ln = ""
+        if os.path.exists(_lnf) and os.path.exists(_msigf):
+            _c = open(_lnf).read().split("\n", 1)
+            if _c[0] == _msig and len(_c) > 1 and '"input_i"' in _c[1]:
+                _cached_ln = _c[1]
+        if _cached_ln:
+            class _P:  # giả kết quả subprocess từ cache
+                stderr = _cached_ln
+            p = _P()
+            print("    (dùng lại số đo loudness)", flush=True)
+        else:
+            for _try in range(5):
+                p = subprocess.run(
+                    ["ffmpeg", "-hide_banner", "-i", mix,
+                     "-af", "loudnorm=I=-14:TP=-1.5:LRA=11:print_format=json", "-f", "null", "-"],
+                    capture_output=True, text=True,
+                )
+                if '"input_i"' in p.stderr:
+                    break
+                time.sleep(3.0)
+            else:
+                raise RuntimeError("[NGHIỆM THU] không đo được loudness của bản trộn (ffmpeg): "
+                                   + p.stderr[-300:].strip())
+            try:
+                open(_lnf, "w").write(_msig + "\n" + p.stderr)
+            except OSError:
+                pass
+        m = json.loads("{" + p.stderr.rsplit("{", 1)[1])
+        ln = (f"loudnorm=I=-14:TP=-1.5:LRA=11:linear=true:"
+              f"measured_I={m['input_i']}:measured_TP={m['input_tp']}:"
+              f"measured_LRA={m['input_lra']}:measured_thresh={m['input_thresh']}:"
+              f"offset={m['target_offset']}")
 
         # Lượt 2: áp chuẩn hóa, ghép với video (copy, không encode lại)
         sh(["ffmpeg", "-hide_banner", "-y", "-i", body, "-i", mix,
@@ -1000,7 +1125,7 @@ class Assembler:
         check_av(self.out_file, getattr(self, "sum_parts", None), label="THÀNH PHẨM",
                  dur_tol=0.1 + 0.01 * len(self.parts))
         with open(os.path.splitext(self.out_file)[0] + ".nghiem-thu.json", "w", encoding="utf-8") as fh:
-            json.dump({"file": os.path.basename(self.out_file), "tool_version": TOOL_VERSION,
+            json.dump({"file": os.path.basename(self.out_file), "tool_version": TOOL_VERSION + "+" + CONCAT_REV,
                        "parts": len(self.parts), "hinh": round(fv or 0, 3), "tieng": round(fa or 0, 3),
                        "tong_part": round(getattr(self, "sum_parts", 0) or 0, 3),
                        "ket_luan": "ĐẠT: hình = tiếng = tổng part"}, fh, ensure_ascii=False, indent=1)
@@ -1010,7 +1135,7 @@ class Assembler:
         print(f"✓ Xong: {self.out_file}")
         print(f"  Thời lượng {int(final_d // 60)}m{final_d % 60:04.1f}s | {size:.0f} MB")
         # Dọn file tạm: VM không cho xóa file trên mount → giải phóng bằng truncate
-        for p in self.parts + [os.path.join(self.tmp, "body.mp4")]:
+        for p in self.parts + [os.path.join(self.tmp, "body.mp4"), os.path.join(self.tmp, "body_v.mp4"), os.path.join(self.tmp, "body_a.raw")]:
             for f in (p, p + ".sig"):
                 try:
                     os.remove(f)

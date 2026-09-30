@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="vi" data-theme="dem" data-khung="ngang" data-ben="phai">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thở hộp</title>
+<!-- canh-kit -->
+<!--
+  Cảnh mẫu kiểu chèn "thẻ nổi cạnh người nói": chụp với --alpha, ghép bằng overlay.
+  Thẻ nằm một bên khung (data-ben="phai" hoặc "trai" trên thẻ html), nửa kia để trống cho mặt người nói.
+  Soi trên khung hình thật: node tools/canh.mjs anh <cảnh> --alpha --xem-tren <khung.jpg>
+  Chữ ký của cảnh: chấm sáng đi quanh hình vuông, cạnh đang thở sáng lên, số đếm 1-4 theo nhịp.
+-->
+<style>
+  .the-noi { position: absolute; padding: calc(var(--u) * 3.4); display: flex; flex-direction: column; gap: calc(var(--u) * 2.2);
+    background: color-mix(in srgb, var(--nen-2) 92%, transparent); backdrop-filter: blur(6px); }
+  :root[data-khung='ngang'][data-ben='phai'] .the-noi { right: calc(var(--u) * 6); }
+  :root[data-khung='ngang'][data-ben='trai'] .the-noi { left: calc(var(--u) * 6); }
+  :root[data-khung='ngang'] .the-noi { top: calc(var(--u) * 12); width: calc(var(--u) * 64); height: calc(var(--u) * 76); }
+  :root[data-khung='doc'] .the-noi { left: calc(var(--u) * 6); right: calc(var(--u) * 6); top: calc(var(--u) * 92); height: calc(var(--u) * 74); }
+  .the-noi .tieu-de { font-size: calc(var(--u) * 6); }
+  .the-noi svg { flex: 1; width: 100%; min-height: 0; overflow: visible; }
+  .canh-chu { font-size: 34px; font-weight: 600; }
+  .dem-so { font-size: 120px; font-weight: 800; }
+</style>
+</head>
+<body>
+<div class="san">
+  <div class="the the-noi" id="the">
+    <div><span class="kicker vai-ketqua" id="kicker">Thực hành ngay</span></div>
+    <h2 class="tieu-de" id="tieude">Thở <em class="vai-chinh">hộp</em> <span class="ghi">[box breathing]</span></h2>
+    <svg viewBox="0 0 600 470" preserveAspectRatio="xMidYMid meet">
+      <rect id="vuong-mo" x="150" y="60" width="300" height="300" fill="none" stroke="var(--chu-mo)" stroke-opacity="0.5" stroke-width="3"/>
+      <path id="c0" d="M 150 360 L 150 60" fill="none" stroke-width="7" stroke-linecap="round"/>
+      <path id="c1" d="M 150 60 L 450 60" fill="none" stroke-width="7" stroke-linecap="round"/>
+      <path id="c2" d="M 450 60 L 450 360" fill="none" stroke-width="7" stroke-linecap="round"/>
+      <path id="c3" d="M 450 360 L 150 360" fill="none" stroke-width="7" stroke-linecap="round"/>
+      <text id="n0" x="118" y="214" text-anchor="end" class="canh-chu">hít vào</text>
+      <text id="n1" x="300" y="36" text-anchor="middle" class="canh-chu">giữ</text>
+      <text id="n2" x="482" y="214" text-anchor="start" class="canh-chu">thở ra</text>
+      <text id="n3" x="300" y="410" text-anchor="middle" class="canh-chu">giữ</text>
+      <text id="so" x="300" y="250" text-anchor="middle" class="dem-so" fill="var(--c-chinh)">1</text>
+      <g id="cham"><circle r="15" fill="var(--c-chinh)" class="phat-sang vai-chinh"/><circle r="6" fill="#fff"/></g>
+      <text id="duoi" x="300" y="460" text-anchor="middle" font-size="24" fill="var(--chu-phu)">mỗi cạnh 4 nhịp đếm, lặp lại 4 vòng</text>
+    </svg>
+  </div>
+</div>
+<script>
+CANH.canh({
+  thoiLuong: 20,
+  khung: ['ngang', 'doc'],
+  ve(t, K) {
+    const {p, hien, $} = K;
+    hien('#the', p(t, 0, 0.8), {x: K.$('html').dataset.ben === 'trai' ? -40 : 40, y: 0});
+    hien('#kicker', p(t, 0.4, 0.6), {y: 10});
+    hien('#tieude', p(t, 0.6, 0.8), {y: 16});
+    $('#vuong-mo').style.opacity = p(t, 1.0, 0.6);
+    $('#duoi').style.opacity = p(t, 1.6, 0.6);
+    const t0 = 2.0;                        // bắt đầu vòng thở: mỗi cạnh 4 giây
+    const tt = Math.max(0, t - t0);
+    const canh = Math.floor(tt / 4) % 4, trong = (tt % 4) / 4;
+    const vong = Math.floor(tt / 16);
+    for (let i = 0; i < 4; i++) {
+      const c = $('#c' + i), n = $('#n' + i);
+      const xong = vong > 0 || i < canh;   // cạnh đã đi qua trong vòng này giữ nét mờ
+      const dang = t >= t0 && i === canh;
+      c.setAttribute('stroke', 'var(--c-chinh)');
+      c.style.opacity = t < t0 ? 0 : dang ? 1 : xong ? 0.28 : 0;
+      K.ve(c, dang ? K.E.deu(trong) : xong ? 1 : 0);
+      n.setAttribute('fill', dang ? 'var(--chu)' : 'var(--chu-mo)');
+      n.style.opacity = p(t, 1.2 + i * 0.15, 0.5);
+    }
+    const dau = K.diem('#c' + canh, t < t0 ? 0 : trong);
+    $('#cham').setAttribute('transform', `translate(${dau.x} ${dau.y})`);
+    $('#cham').style.opacity = p(t, t0 - 0.3, 0.3);
+    const so = $('#so');
+    so.textContent = String(Math.min(4, Math.floor((tt % 4)) + 1));
+    so.style.opacity = t < t0 ? 0 : 0.35 + 0.65 * (1 - (tt % 1));
+  }
+});
+</script>
+</body>
+</html>

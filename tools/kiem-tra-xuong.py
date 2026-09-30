@@ -5,8 +5,8 @@
     python3 tools/kiem-tra-xuong.py [--co-slide] [--giu] [--chi-tai-lieu]
 
 Tạo nguồn giả bằng ffmpeg (màn test + tiếng sine), soạn timeline có đủ các
-kỹ thuật chính (cắt, fade, overlay alpha, B-roll, insert, tuỳ chọn bố cục slide
-và multicam audioSrc), rồi chạy đúng đường thật: assemble.py --kiem-tra →
+kỹ thuật chính (cắt, fade, overlay alpha, B-roll, B-roll cảnh minh hoạ thu vào góc,
+insert, tuỳ chọn bố cục slide và multicam audioSrc), rồi chạy đúng đường thật: assemble.py --kiem-tra →
 assemble.py --preview → nghiem-thu.py video. Thoát mã 0 = ĐẠT.
 
 Dự án thử nằm ở du-an/_kiem-tra-tu-dong/ (xoá được). Không cần model, không cần mạng.
@@ -72,10 +72,22 @@ def main():
              "-c:v", "libx264", "-preset", "ultrafast", "-c:a", "aac", "-shortest",
              os.path.join(proj, "nguon", "goc2.mp4")])
 
+    brolls = [{"src": "nguon/broll.mp4", "at": 8.0, "duration": 3.0, "from": 2.0}]
+    # cảnh minh hoạ kiểu "người nói thu vào góc": canh-ghep.py đặt nguồn thật vào ô của cảnh, ra một B-roll
+    if os.path.isfile(os.path.join(TOOLS, "canh-ghep.py")):
+        print("→ thử ghép cảnh minh hoạ thu vào góc (canh-ghep.py pip)", flush=True)
+        sh(ff + ["-f", "lavfi", "-i", "color=c=0x0e1230:size=640x360:rate=30", "-t", "2",
+                 "-c:v", "libx264", "-preset", "ultrafast", "-pix_fmt", "yuv420p",
+                 os.path.join(proj, "do-hoa", "canh-pip-nen.mp4")])
+        with open(os.path.join(proj, "do-hoa", "do-hoa-manifest.json"), "w", encoding="utf-8") as f:
+            json.dump({"canh-pip-nen.mp4": {"pip": {"x": 24, "y": 190, "w": 256, "h": 144, "r": 12}}}, f)
+        sh([sys.executable, os.path.join(TOOLS, "canh-ghep.py"), "pip", os.path.join(proj, "do-hoa", "canh-pip-nen.mp4"),
+            os.path.join(proj, "nguon", "chinh.mp4"), "--at", "11.5", "--out", os.path.join(proj, "do-hoa", "canh-pip.mp4")])
+        brolls.append({"src": "do-hoa/canh-pip.mp4", "at": 11.5, "duration": 2.0, "from": 0})
     segs = [
         {"type": "video", "src": "nguon/chinh.mp4", "in": 2.0, "out": 14.0, "snap": False,
          "fadeIn": 0.5, "overlay": {"src": "do-hoa/lt.webm", "at": 1.0},
-         "broll": [{"src": "nguon/broll.mp4", "at": 8.0, "duration": 3.0, "from": 2.0}]},
+         "broll": brolls},
         {"type": "insert", "src": "do-hoa/intro.mp4"},
         {"type": "video", "src": "nguon/chinh.mp4", "in": 20.0, "out": 28.0, "snap": False,
          "fadeOut": 0.5, "overlay": [{"src": "do-hoa/lt.webm", "at": 0.5},
@@ -131,6 +143,10 @@ def main():
     p = subprocess.run([sys.executable, "tools/nghiem-thu.py", "video", out, "--khung", "ngang", "--nhap", "--anh"], text=True)
     if p.returncode != 0:
         raise SystemExit("! nghiem-thu.py báo KHÔNG ĐẠT trên dự án thử - xưởng CHƯA an toàn")
+    print("→ kiem-dong-bo.py (đồng bộ hình-tiếng tuyệt đối: dựng thử chớp/click)", flush=True)
+    p = subprocess.run([sys.executable, os.path.join(TOOLS, "kiem-dong-bo.py")], text=True)
+    if p.returncode != 0:
+        raise SystemExit("! kiem-dong-bo.py KHÔNG ĐẠT - assemble.py hiện hành làm lệch hình-tiếng, KHÔNG dựng thật")
     print(f"\n✓ DỰNG THỬ ĐẠT trên máy này. Thư mục thử: {proj}/ (xoá được).")
     if not tai_lieu_dat:
         raise SystemExit("! Phần máy ĐẠT nhưng cổng kiểm tài liệu KHÔNG ĐẠT (xem LỖI ở đầu) - sửa tài liệu rồi chạy lại")

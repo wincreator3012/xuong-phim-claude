@@ -1,6 +1,6 @@
 ---
 name: "phim-do-hoa"
-description: "Tạo, chỉnh sửa và render đồ họa video Remotion minimalist cho người dùng - intro, outro, thẻ chuyển phần, infographic động (danh sách, trích dẫn, con số, các bước), bảng tên và chữ nổi nền trong suốt, hình ẩn dụ vẽ nét - từ studio trong thư mục \"xuong-phim-claude\". Kích hoạt khi user yêu cầu \"làm intro\", \"làm outro\", \"tạo infographic\", \"làm bảng tên\", \"thẻ chuyển phần\", \"render đồ họa\", \"đổi màu/font/brand đồ họa video\", \"thêm kiểu animation mới\", \"sửa template Remotion\", hoặc bất kỳ yêu cầu đồ họa chuyển động cho video nào - kể cả khi user chỉ mô tả \"cần cái hình động minh họa 4 bước cho đoạn này\". Cũng kích hoạt khi cần cập nhật logo hoặc brand.json cho hệ thống phim. KHÔNG dùng cho dựng video hoàn chỉnh (phim-dung-bai), video chỉ có giọng ghi âm (phim-infomotion), phim hoạt hình tự sự (phim-hoat-hoa) hay thiết kế tĩnh, poster (canvas-design)."
+description: "Tạo, chỉnh sửa và render đồ họa video Remotion minimalist cho người dùng - intro, outro, thẻ chuyển phần, infographic động (danh sách, trích dẫn, con số, các bước), bảng tên và chữ nổi nền trong suốt, hình ẩn dụ vẽ nét - từ studio trong thư mục \"xuong-phim-claude\". Kích hoạt khi user yêu cầu \"làm intro\", \"làm outro\", \"tạo infographic\", \"làm bảng tên\", \"thẻ chuyển phần\", \"render đồ họa\", \"đổi màu/font/brand đồ họa video\", \"thêm kiểu animation mới\", \"sửa template Remotion\", hoặc bất kỳ yêu cầu đồ họa chuyển động cho video nào - kể cả khi user chỉ mô tả \"cần cái hình động minh họa 4 bước cho đoạn này\". Cũng kích hoạt khi cần cập nhật logo hoặc brand.json cho hệ thống phim. KHÔNG dùng cho dựng video hoàn chỉnh (phim-dung-bai), cảnh minh hoạ vẽ riêng giải thích cơ chế, sơ đồ động, explainer (phim-canh-minh-hoa), video chỉ có giọng ghi âm (phim-infomotion), phim hoạt hình tự sự (phim-hoat-hoa) hay thiết kế tĩnh, poster (canvas-design)."
 ---
 
 # Đồ họa Remotion minimalist
@@ -30,6 +30,8 @@ Minimalist, tĩnh tại, "thở". Chi tiết tông, màu, chữ: `phong-cach/PHO
 | LowerThird | bảng tên người nói | webm alpha |
 | YNiem, YCanh | ẩn dụ vẽ nét (một khái niệm) và cảnh vẽ tay tám kỹ thuật chuyển động, chủ yếu cho infomotion; bản nổi mặc định canh giữa, khi dựng clip hỏi người dùng có muốn đổi vị trí không | mp4 toàn khung hoặc webm alpha nổi |
 
+Cảnh minh hoạ vẽ riêng cho một ý (sơ đồ cơ chế, so sánh, mô phỏng, phong cách explainer) không làm bằng studio này mà bằng trang web thời gian ảo của `do-hoa-chung/canh-kit/`, theo skill phim-canh-minh-hoa; studio giữ đồ họa nhận diện dùng lại.
+
 Studio KHÔNG có composition `Caption`. Đồ họa nổi (Benefits, LowerThird, YNiem/YCanh nổi) ghép bằng trường `overlay` của `tools/assemble.py`; đồ họa toàn khung bằng `insert` hoặc `broll` (xem `_chung/timeline-va-dung.md`).
 
 ## Render đồ họa (việc thường gặp nhất)
@@ -56,4 +58,4 @@ Hình ẩn dụ mới cho YNiem (slug) hay YCanh (variant): kèm một mục tro
 - Đổi màu, tagline, social trong `brand/brand.json` ảnh hưởng mọi dự án về sau: xác nhận với người dùng trước; nhu cầu một dự án thì ghi đè trong job.
 - Chức danh, tagline trên clip là chỗ hay bị góp ý lặp lại: nguồn chuẩn là `phong-cach/PHONG-CACH.md` mục 1. Góp ý sửa câu chữ lần thứ hai là tín hiệu sửa NGUỒN MẶC ĐỊNH (brand.json, defaultProps) và ghi vào sổ tay góp ý của PHONG-CACH, không chỉ sửa job đang làm.
 
-<!-- ban-nguon: phim-do-hoa 2026-09-30 8d8e9d80 -->
+<!-- ban-nguon: phim-do-hoa 2026-09-30 810fe86c -->

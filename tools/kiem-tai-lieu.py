@@ -45,6 +45,7 @@ BO_QUA_DAU = ("du-an/", "nguon/", "transcript/", "do-hoa/", "xuat-nhap/", "xuat-
               "studio/public/brand/", "nhac-nen/rieng/",
               "references/<", "PROXY", "os.", "props.", "palettes.", "brand.", "job.")
 BO_QUA_DAU += ("do-hoa-chung/the-gioi-hoat-hoa/", "studio/src/hoat-hoa/")
+BO_QUA_DAU += ("dang-tai/", "khung/")  # thư mục gói đăng tải bên trong một dự án (skill phim-dang-tai)
 KY_TU_MAU = set("<>{}*|$=,:;()[]'\"")
 # tệp, thư mục chỉ sinh ra khi dùng (cài đặt, dự án đầu tiên): vắng mặt không phải lỗi
 SINH_KHI_DUNG = ("nhac-nen/THU-VIEN.md", "do-hoa-chung/an-du-y-niem.json", "tools/.cai-dat.json", "tools/pylib",

@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="vi" data-theme="dem" data-khung="ngang">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cửa sổ dung nạp</title>
+<!-- canh-kit -->
+<!--
+  Cảnh mẫu của canh-kit: sơ đồ cơ chế "cửa sổ dung nạp" (Siegel, 1999).
+  Mốc (giây) giả định theo một câu nói mẫu; dự án thật lấy mốc từ transcript.
+  Chữ ký của cảnh: cửa sổ NỚI RỘNG, cùng một cơn sóng từ "vượt ngưỡng" thành "vẫn trong tầm".
+-->
+<style>
+  .dau { position: absolute; display: flex; flex-direction: column; gap: calc(var(--u) * 2.2); }
+  .so-do { position: absolute; padding: calc(var(--u) * 1.6); }
+  .so-do svg { width: 100%; height: 100%; display: block; overflow: visible; }
+  .ket { position: absolute; display: flex; flex-direction: column; gap: calc(var(--u) * 1.4); }
+  .ket p { margin: 0; font-size: calc(var(--u) * 3.1); line-height: 1.35; font-weight: 500; text-wrap: pretty; }
+  .ket p b { color: var(--c-tot); font-weight: 700; }
+
+  :root[data-khung='ngang'] .dau { left: calc(var(--u) * 7); top: calc(var(--u) * 14); width: calc(var(--u) * 54); }
+  :root[data-khung='ngang'] .so-do { left: calc(var(--u) * 67); top: calc(var(--u) * 14); width: calc(var(--u) * 108); height: calc(var(--u) * 70); }
+  :root[data-khung='ngang'] .ket { left: calc(var(--u) * 7); bottom: calc(var(--u) * 16); width: calc(var(--u) * 54); }
+
+  :root[data-khung='doc'] .dau { left: calc(var(--u) * 7); top: calc(var(--u) * 9); width: calc(var(--u) * 86); }
+  :root[data-khung='doc'] .tieu-de { font-size: calc(var(--u) * 11); }
+  :root[data-khung='doc'] .phu-de { font-size: calc(var(--u) * 3.7); }
+  :root[data-khung='doc'] .so-do { left: calc(var(--u) * 5); top: calc(var(--u) * 54); width: calc(var(--u) * 90); height: calc(var(--u) * 98); }
+  :root[data-khung='doc'] .ket { left: calc(var(--u) * 7); top: calc(var(--u) * 156); width: calc(var(--u) * 86); }
+  :root[data-khung='doc'] .ket p { font-size: calc(var(--u) * 3.9); }
+  :root[data-khung='doc'] .nguon { font-size: calc(var(--u) * 2.3); }
+
+  /* kiểu chèn "thu vào góc": ô chừa chỗ cho hình anh thay chỗ câu kết */
+  :root[data-khung='ngang'] .o-pip { left: calc(var(--u) * 7); top: calc(var(--u) * 55); width: calc(var(--u) * 54); height: calc(var(--u) * 30.4); }
+  :root[data-khung='doc'] .o-pip { left: calc(var(--u) * 30); top: calc(var(--u) * 154); width: calc(var(--u) * 40); height: calc(var(--u) * 22.5); }
+
+  .vung-chu { font-weight: 700; font-size: 30px; }
+  .vung-phu { font-size: 21px; }
+  .chip-chu { font-size: 23px; font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="san">
+  <div class="dau">
+    <div><span class="kicker vai-chinh" id="kicker">Nguyên lý</span></div>
+    <h1 class="tieu-de" id="tieude">Cửa sổ <em class="vai-tot">dung nạp</em></h1>
+    <p class="phu-de" id="phude">Vùng kích hoạt mà trong đó ta vẫn nghĩ, cảm và kết nối được với người khác</p>
+  </div>
+
+  <div class="the so-do" id="card">
+    <svg id="svg" preserveAspectRatio="xMidYMid meet">
+      <defs><clipPath id="khung-bd"><rect id="clip-r" x="0" y="0" rx="16"/></clipPath></defs>
+      <g clip-path="url(#khung-bd)">
+        <rect id="vung-tren" x="0" y="0" fill="var(--c-xau)" fill-opacity="0.10"/>
+        <rect id="vung-giua" x="0" fill="var(--c-tot)" fill-opacity="0.16"/>
+        <rect id="vung-duoi" x="0" fill="var(--c-khac)" fill-opacity="0.10"/>
+        <line id="nguong-tren" x1="0" stroke="var(--c-tot)" stroke-width="2" stroke-dasharray="8 8" stroke-opacity="0.8"/>
+        <line id="nguong-duoi" x1="0" stroke="var(--c-tot)" stroke-width="2" stroke-dasharray="8 8" stroke-opacity="0.8"/>
+      </g>
+
+      <g id="nhan-tren"><text x="28" y="0" class="vung-chu" fill="var(--c-xau)">Tăng kích hoạt <tspan class="vung-phu" fill="var(--chu-phu)" font-weight="400">[hyperarousal]</tspan></text>
+        <text x="28" y="34" class="vung-phu" fill="var(--chu-phu)">lo âu, bùng nổ, phản ứng</text></g>
+      <g id="nhan-giua"><text id="nhan-giua-t" y="0" text-anchor="end" class="vung-chu" fill="var(--c-tot)">Cửa sổ dung nạp <tspan class="vung-phu" fill="var(--chu-phu)" font-weight="400">[window of tolerance]</tspan></text></g>
+      <g id="nhan-duoi"><text x="28" y="0" class="vung-chu" fill="var(--c-khac)">Giảm kích hoạt <tspan class="vung-phu" fill="var(--chu-phu)" font-weight="400">[hypoarousal]</tspan></text>
+        <text x="28" y="34" class="vung-phu" fill="var(--chu-phu)">tê liệt, tách rời, trống rỗng</text></g>
+
+      <path id="song" class="phat-sang vai-chinh" fill="none" stroke="var(--chu)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      <g id="dau-song"><circle r="11" fill="var(--c-chinh)" class="phat-sang vai-chinh"/><circle r="5" fill="#fff"/></g>
+
+      <g id="dinh">
+        <circle id="dinh-vong1" r="16" fill="none" stroke-width="3"/>
+        <circle id="dinh-vong2" r="16" fill="none" stroke-width="2"/>
+        <circle id="dinh-cham" r="9"/>
+      </g>
+      <g id="chip-vuot"><rect rx="12" height="46" fill="var(--nen-3)" stroke="var(--c-xau)" stroke-opacity="0.6"/><text x="18" y="31" class="chip-chu" fill="var(--c-xau)">vượt ngưỡng</text></g>
+      <g id="chip-trong"><rect rx="12" height="46" fill="var(--nen-3)" stroke="var(--c-tot)" stroke-opacity="0.6"/><text x="18" y="31" class="chip-chu" fill="var(--c-tot)">vẫn trong tầm</text></g>
+
+      <g id="dieu-hoa">
+        <path id="mui-ten" fill="none" stroke="var(--c-chinh)" stroke-width="4" stroke-linecap="round"/>
+        <path id="mui-ten-dau" fill="none" stroke="var(--c-chinh)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+        <g id="chip-dh"><rect rx="12" height="46" fill="var(--nen-3)" stroke="var(--c-chinh)" stroke-opacity="0.6"/><text x="18" y="31" class="chip-chu" font-weight="600" fill="var(--c-chinh)">thở chậm, cảm nhận thân</text></g>
+      </g>
+      <text id="truc-x" text-anchor="end" font-size="20" fill="var(--chu-mo)">thời gian →</text>
+    </svg>
+  </div>
+
+  <div class="o-pip" id="pip"></div>
+
+  <div class="ket an-khi-pip" id="ket">
+    <p>Nới rộng cửa sổ: cùng một cơn sóng, ta vẫn <b>ở lại được</b> với trải nghiệm</p>
+    <span class="nguon">Khái niệm của Daniel J. Siegel (1999)</span>
+  </div>
+</div>
+
+<script>
+// Hệ toạ độ sơ đồ: ngang 1000 x 620, dọc 700 x 900 (dọc hẹp hơn nên chữ trong sơ đồ to hơn trên điện thoại)
+let VW = 1000, VH = 620, pDinh = 0.5, dinh = {x: 0, y: 0};
+const X = (x) => x * VW / 1000;          // x viết trên thang 0-1000
+const Y = (y) => y * VH / 620;           // y viết trên thang 0-620
+function yCua(x) {                       // mức kích hoạt theo thời gian, thang 0-620
+  const bien = 36 - 18 / (1 + Math.exp(-(x - 620) / 30));
+  return 310 + bien * Math.sin(x / 55) - 150 * Math.exp(-Math.pow((x - 520) / 48, 2));
+}
+
+CANH.canh({
+  thoiLuong: 15,
+  khung: ['ngang', 'doc'],
+  chuanBi(K) {
+    if (K.khung === 'doc') { VW = 700; VH = 900; }
+    const $ = K.$;
+    $('#svg').setAttribute('viewBox', `0 0 ${VW} ${VH}`);
+    $('#clip-r').setAttribute('width', VW); $('#clip-r').setAttribute('height', VH);
+    for (const id of ['#vung-tren', '#vung-giua', '#vung-duoi']) $(id).setAttribute('width', VW);
+    for (const id of ['#nguong-tren', '#nguong-duoi']) $(id).setAttribute('x2', VW);
+    $('#nhan-giua-t').setAttribute('x', VW - 26);
+    $('#truc-x').setAttribute('x', VW - 24); $('#truc-x').setAttribute('y', VH - 18);
+    let d = '';
+    for (let x = 20; x <= 980; x += 4) d += (x === 20 ? 'M' : 'L') + X(x).toFixed(1) + ' ' + Y(yCua(x)).toFixed(1) + ' ';
+    $('#song').setAttribute('d', d);
+    dinh = {x: X(520), y: Y(yCua(520))};
+    for (const id of ['#dinh-vong1', '#dinh-vong2', '#dinh-cham']) { $(id).setAttribute('cx', dinh.x); $(id).setAttribute('cy', dinh.y); }
+    const path = $('#song'), L = path.getTotalLength();
+    for (let i = 0; i <= 1000; i++) { if (path.getPointAtLength(L * i / 1000).x >= dinh.x) { pDinh = i / 1000; break; } }
+    // mũi tên điều hoà: từ trên đỉnh cong xuống vùng giữa, bên phải đỉnh
+    const doc = K.khung === 'doc';
+    const ax = X(doc ? 620 : 600), ay = doc ? 166 : Y(150), bx = X(650), by = Y(268);
+    $('#mui-ten').setAttribute('d', `M ${ax} ${ay} C ${ax + X(55)} ${ay + Y(20)}, ${bx + X(20)} ${by - Y(50)}, ${bx} ${by}`);
+    $('#mui-ten-dau').setAttribute('d', `M ${bx - 14} ${by - 16} L ${bx} ${by + 3} L ${bx + 14} ${by - 18}`);
+    for (const id of ['#chip-vuot', '#chip-trong', '#chip-dh']) {
+      const g = $(id), w = g.querySelector('text').getComputedTextLength() + 36;
+      g.querySelector('rect').setAttribute('width', w.toFixed(0));
+      g.__w = w;
+    }
+  },
+  ve(t, K) {
+    const {p, hien, lerp, $} = K;
+    // 1. tiêu đề: từng lớp theo lời
+    hien('#kicker', p(t, 0.2, 0.7), {y: 14});
+    hien('#tieude', p(t, 0.5, 0.9), {y: 26});
+    hien('#phude', p(t, 1.3, 0.9), {y: 18});
+    // 2. thẻ sơ đồ, rồi ba vùng lần lượt
+    hien('#card', p(t, 2.0, 0.9), {y: 30, s: 0.97});
+    const vg = p(t, 2.5, 0.7), vt = p(t, 3.0, 0.7), vd = p(t, 3.5, 0.7);
+    // 3. chữ ký: cửa sổ nới rộng
+    const mo = p(t, 10.4, 1.6, K.E.vaora);
+    const T = Y(lerp(230, 140, mo)), B = Y(lerp(390, 480, mo));
+    $('#vung-tren').setAttribute('height', T);
+    $('#vung-giua').setAttribute('y', T); $('#vung-giua').setAttribute('height', B - T);
+    $('#vung-duoi').setAttribute('y', B); $('#vung-duoi').setAttribute('height', VH - B);
+    for (const [id, y] of [['#nguong-tren', T], ['#nguong-duoi', B]]) { $(id).setAttribute('y1', y); $(id).setAttribute('y2', y); }
+    for (const id of ['#vung-giua', '#nguong-tren', '#nguong-duoi']) $(id).style.opacity = vg;
+    $('#vung-tren').style.opacity = vt; $('#vung-duoi').style.opacity = vd;
+    const dat = (id, x, y) => { const g = $(id); g.setAttribute('transform', `translate(0 ${y})`); g.style.opacity = x; };
+    dat('#nhan-tren', vt, K.khung === 'doc' ? 46 : T / 2 - 8);   // dọc: nhãn lên đỉnh vùng, nhường chỗ cho chip
+    dat('#nhan-giua', vg, B - 22);                       // góc dưới phải cửa sổ, tránh đường sóng
+    dat('#nhan-duoi', vd, B + (VH - B) / 2 - 8);
+    $('#truc-x').style.opacity = vd;
+
+    // 4. sóng kích hoạt chạy đều như thời gian trôi
+    const t0 = 4.2, dai = 5.4;
+    const ps = K.clamp((t - t0) / dai);
+    K.ve('#song', ps);
+    const dau = K.diem('#song', ps);
+    const g = $('#dau-song');
+    g.setAttribute('transform', `translate(${dau.x} ${dau.y}) scale(${1 + K.song(t, 1.6, 0.08)})`);
+    g.style.opacity = t < t0 ? 0 : 1;
+
+    // 5. chạm đỉnh: vòng lan, chip "vượt ngưỡng"; sau khi nới rộng đổi thành "vẫn trong tầm"
+    const tDinh = t0 + dai * pDinh;
+    const pd = p(t, tDinh, 0.5);
+    const doiChip = p(t, 11.3, 0.6);
+    const mau = doiChip > 0.5 ? 'var(--c-tot)' : 'var(--c-xau)';
+    $('#dinh').style.opacity = pd;
+    $('#dinh-cham').setAttribute('fill', mau);
+    for (const [id, tt] of [['#dinh-vong1', 0], ['#dinh-vong2', 0.8]]) {
+      const x = t < tDinh + tt ? 0 : (((t - tDinh - tt) % 1.6) + 1.6) % 1.6 / 1.6;
+      const c = $(id);
+      c.setAttribute('r', 12 + x * 34); c.setAttribute('stroke', mau); c.style.opacity = (1 - x) * pd;
+    }
+    const cv = $('#chip-vuot'), ct = $('#chip-trong');
+    cv.setAttribute('transform', `translate(${dinh.x - cv.__w - 34} ${dinh.y - 40 - (1 - pd) * 12})`);
+    cv.style.opacity = pd * (1 - doiChip);
+    ct.setAttribute('transform', `translate(${dinh.x - ct.__w - 34} ${dinh.y - 40 + (1 - doiChip) * 12})`);
+    ct.style.opacity = doiChip;
+
+    // 6. điều hoà: mũi tên kéo về, chip cách làm; lui đi trước khi cửa sổ nới
+    const tat = 1 - p(t, 10.0, 0.5);
+    K.ve('#mui-ten', p(t, tDinh + 0.9, 0.9, K.E.vaora));
+    $('#mui-ten').style.opacity = tat;
+    $('#mui-ten-dau').style.opacity = Math.min(p(t, tDinh + 1.6, 0.3), tat);
+    const cd = $('#chip-dh'), pc = p(t, tDinh + 1.2, 0.7);
+    const cx = Math.min(X(670), VW - cd.__w - 16);
+    const cy = K.khung === 'doc' ? 108 : Y(150) - 70;  // dọc: chip nằm giữa nhãn vùng trên và đỉnh sóng
+    cd.setAttribute('transform', `translate(${cx} ${cy + (1 - pc) * 14})`);
+    cd.style.opacity = pc * tat;
+
+    // 7. câu đọng lại và nguồn (kiểu chèn thu vào góc: ô hình anh hiện ngay từ đầu, thay chỗ câu kết)
+    hien('#ket', p(t, 12.3, 1.0), {y: 20});
+    hien('#pip', p(t, 0, 0.5), {y: 0, s: 0.96});
+  }
+});
+</script>
+</body>
+</html>

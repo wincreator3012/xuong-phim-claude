@@ -1,4 +1,4 @@
-# Phần dùng chung cho mười một skill phim-*
+# Phần dùng chung cho mười hai skill phim-*
 
 Những gì mọi skill phim đều cần, ghi ở đúng một chỗ để các skill không chép lại và không kéo mỗi nơi một hướng. Skill chỉ ghi phần riêng của thể loại và trỏ về đây bằng đường dẫn đầy đủ `skills/_chung/<file>.md` trong thư mục xưởng.
 

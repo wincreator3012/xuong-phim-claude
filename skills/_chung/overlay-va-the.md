@@ -3,6 +3,7 @@
 ## Chọn kỹ thuật: overlay, B-roll hay thẻ toàn màn hình
 
 - Hỏi trước: đoạn này có phải cắt cảnh không, hay chỉ cần một lớp chữ đè lên. Lời cần liền mạch thì dùng `overlay` (một lần encode, không có mối nối). `broll` chỉ khi phải đổi hẳn sang cảnh quay khác. Thẻ toàn màn hình (`insert`) chỉ ở ranh giới chuyển phần thật.
+- Đoạn giải thích cần một sơ đồ động vẽ riêng: cảnh minh hoạ (skill phim-canh-minh-hoa) với bốn kiểu chèn. Thẻ nổi cạnh người nói là `overlay` (theo mọi quy tắc không che mặt dưới đây); toàn khung, nền là khung hình mờ và người nói thu vào góc là `broll` với `at` theo mốc nguồn.
 - Chủ động rà transcript và đề xuất overlay cùng phương án cắt cho ba loại nội dung: tên chương trình, chuyên đề hay framework; các bước hay cấu phần; key message.
 - Thời lượng hiện overlay theo nội dung: lớn hơn giữa thời gian người nói bàn về ý đó và thời gian đọc chữ, cộng 1-2 giây.
 

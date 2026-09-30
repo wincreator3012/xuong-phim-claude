@@ -134,6 +134,24 @@ def cmd_video(args):
         except Exception:
             pass
 
+    # 2b. Đồng bộ hình-tiếng TUYỆT ĐỐI trên phim thật (so với nguồn tại nhiều mốc; bắt lệch cục bộ và lệch cộng dồn
+    # mà so thời lượng tổng không thấy). Cần <file>.map.json và nguồn ở dự án cha của thư mục xuất.
+    mp0 = os.path.splitext(path)[0] + ".map.json"
+    if os.path.isfile(mp0) and not args.khong_dong_bo:
+        try:
+            r = subprocess.run([sys.executable, os.path.join(os.path.dirname(os.path.abspath(__file__)), "do-dong-bo.py"),
+                                path, "--mau", "10"], capture_output=True, text=True, timeout=170)
+            tong = [ln.strip() for ln in r.stdout.splitlines() if ln.strip().startswith("Tổng:")]
+            kl = [ln.strip() for ln in r.stdout.splitlines() if ln.strip().startswith("ĐO ĐỒNG BỘ")]
+            if r.returncode == 0:
+                kq.dat("Đồng bộ hình-tiếng so với nguồn (do-dong-bo.py)", tong[0] if tong else "")
+            elif r.returncode == 1:
+                kq.loi("Đồng bộ hình-tiếng so với nguồn KHÔNG ĐẠT", (kl[0] if kl else r.stdout[-300:]))
+            else:
+                kq.canh("Đồng bộ hình-tiếng: không đủ mốc đo được", kl[0] if kl else r.stdout[-200:])
+        except Exception as e:  # noqa: BLE001
+            kq.canh("Không chạy được do-dong-bo.py", str(e)[:200])
+
     # 3. Khung hình, fps, codec
     if v:
         w, h = int(v["width"]), int(v["height"])
@@ -333,6 +351,7 @@ def main():
     v.add_argument("--nhap", action="store_true", help="bản nháp 480p")
     v.add_argument("--fps", type=float, default=30)
     v.add_argument("--anh", action="store_true", help="xuất ảnh lưới 12 khung để soi mắt")
+    v.add_argument("--khong-dong-bo", action="store_true", help="bỏ qua bước đo đồng bộ hình-tiếng so với nguồn (do-dong-bo.py)")
     t = sub.add_parser("transcript")
     t.add_argument("project")
     t.add_argument("--nguon", default=None)

@@ -11,6 +11,12 @@ Whisper chạy ngay trên máy qua sherpa-onnx: video và giọng nói không r�
 - `sherpa-onnx-whisper-small/`: dự phòng khi cần rất nhanh (`--model small`).
 - `sherpa-onnx-whisper-large-v3/` (large-v3 int8, khoảng 1,7 GB): chất lượng cao nhất, chỉ chạy trên máy Mac thật đủ RAM; không tải sẵn, tải theo mục cuối với TÊN là `large-v3`.
 
+## Dò khuôn mặt cho thumbnail
+
+- `face_detection_yunet_2023mar.onnx` (YuNet, OpenCV Zoo, giấy phép MIT, khoảng 230 KB): `tools/chon-khung-thumbnail.py` dùng để lọc khung hình có mặt người. Thiếu tệp thì tải về đúng thư mục này:
+  `curl -L -o tools/models/face_detection_yunet_2023mar.onnx https://github.com/opencv/opencv_zoo/raw/main/models/face_detection_yunet/face_detection_yunet_2023mar.onnx`
+- Cần OpenCV có `cv2.FaceDetectorYN` (OpenCV từ 4.8); VM Cowork đã có sẵn.
+
 ## Chạy ở đâu, model nào
 
 1. **Ưu tiên: gỡ băng trên Mac bằng large-v3** (cần tải `sherpa-onnx-whisper-large-v3/` trước; chưa có thì tool tự lùi về turbo và ghi rõ trong log). VM Cowork chỉ có khoảng 3-4 GB RAM nên large-v3 chết lặng trong VM (hết bộ nhớ, không báo lỗi). Máy Mac thật đủ RAM. Claude xếp việc bằng `python3 tools/hang-doi-go-bang.py them "<file>" --out-dir "<thư mục transcript>"`, người dùng bấm đúp `Go bang tren Mac.command` ở thư mục gốc, Terminal chạy lần lượt mọi việc đang chờ rồi báo "Gỡ băng xong". Claude đọc `python3 tools/hang-doi-go-bang.py trang-thai`, sau đó vẫn chạy `nghiem-thu.py transcript` như mọi lần.

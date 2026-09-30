@@ -321,15 +321,14 @@ def refill_long(shots, locks, angles, wide, snap, max_hold=32.0):
         pos = sh_["start"]
         while sh_["end"] - pos > max_hold:
             cut = None
-            for step in range(0, int(sh_["end"] - pos - 24)):
-                for base in (pos + 20 + step, pos + 20 - step):
-                    if base < pos + 12 or base > sh_["end"] - 8:
-                        continue
-                    t = snap(base, 0.5)
-                    if free(t - 0.3, t + 4.0):
-                        cut = t
-                        break
-                if cut:
+            cands = sorted((pos + 12 + 0.5 * i for i in range(int((sh_["end"] - pos - 20) / 0.5) + 1)),
+                           key=lambda x: abs(x - (pos + 22)))
+            for base in cands:
+                t = snap(base, 0.5)
+                if t < pos + 10 or t > sh_["end"] - 8:
+                    continue
+                if free(t - 0.3, t + 3.6 + (k % 3) * 0.4):
+                    cut = t
                     break
             if cut is None:
                 break
@@ -340,6 +339,43 @@ def refill_long(shots, locks, angles, wide, snap, max_hold=32.0):
                         "ly_do": "phản ứng người nghe (chèn sau khoá overlay)" if react != wide else "góc toàn xen giữa lượt dài (chèn sau khoá overlay)"})
             pos, k = r_end, k + 1
         out.append({**sh_, "start": round(pos, 2)})
+    return out
+
+
+def fix_long_reactions(shots, bounds, max_react=5.0):
+    """Khoá overlay có thể kéo một cú xen (phản ứng/toàn) từ 3 s thành 8-23 s trong lúc người kia đang nói.
+    Cú xen dài quá max_react được trả về cho người nói (nhập vào cú cận liền trước); refill_long sẽ chèn
+    lại cú xen ngắn ở chỗ trống nếu cú cận thành quá dài. Không nhập vắt qua ranh giới session (thẻ chương)."""
+    def is_react(x):
+        return x["ly_do"].startswith("phản ứng") or x["ly_do"].startswith("góc toàn xen giữa lượt dài")
+    bset = set(round(b, 2) for b in bounds)
+    out = []
+    for sh_ in shots:
+        if (is_react(sh_) and sh_["end"] - sh_["start"] > max_react and out
+                and not is_react(out[-1]) and out[-1]["goc"] != sh_["goc"]
+                and abs(out[-1]["end"] - sh_["start"]) < 0.05):
+            out[-1]["end"] = sh_["end"]
+            out[-1]["ly_do"] += " (cú xen dài bị khoá overlay: trả về người nói)"
+            continue
+        if (out and out[-1]["goc"] == sh_["goc"] and abs(out[-1]["end"] - sh_["start"]) < 0.05
+                and round(sh_["start"], 2) not in bset and out[-1]["ly_do"].startswith("cận người nói")
+                and sh_["ly_do"].startswith("cận người nói")):
+            out[-1]["end"] = sh_["end"]
+            continue
+        out.append(sh_)
+    return out
+
+
+def split_at_boundaries(shots, bounds):
+    """Cú cắt phải nằm đúng trên ranh giới session (chỗ chèn thẻ chương); tách cú vắt qua ranh giới."""
+    out = []
+    for sh_ in shots:
+        cur = sh_
+        for b in sorted(bounds):
+            if cur["start"] + 0.05 < b < cur["end"] - 0.05:
+                out.append({**cur, "end": round(b, 2)})
+                cur = {**cur, "start": round(b, 2)}
+        out.append(cur)
     return out
 
 
@@ -611,6 +647,8 @@ def main():
     ap.add_argument("--cua-so", default=None, help="A-B: chỉ dàn góc trong quãng này của trục chung")
     ap.add_argument("--hau-to", default="", help="hậu tố tên file đầu ra, ví dụ clip1")
     ap.add_argument("--gioi-han", type=float, default=150.0, help="giây tối đa mỗi lượt đo chuyển động")
+    ap.add_argument("--session-file", default=None, help="JSON [{start,ten,phu,the}] tự chia session theo thẻ chương "
+                    "(the=false: mở đầu, không có thẻ); ghi đè việc tự chia của split_sessions")
     args = ap.parse_args()
     project = args.project.rstrip("/")
     mc = load_json(os.path.join(project, "multicam.json"))
@@ -667,8 +705,22 @@ def main():
         segs = [x for x in segs if x["end"] > lo and x["start"] < hi]
         print(f"  cửa sổ {fmt(lo)} - {fmt(hi)} ({(hi - lo) / 60:.1f} phút)")
     sfx = f"-{args.hau_to}" if args.hau_to else ""
-    sessions = [{"start": lo, "end": hi, "tu_khoa": [], "cau_mo": "", "ten": ""}] if args.khong_session \
-        else split_sessions(segs, hi, args.phut, lo)
+    if args.session_file:
+        fp = args.session_file if os.path.isabs(args.session_file) else os.path.join(project, args.session_file)
+        raw = sorted(load_json(fp, []), key=lambda x: x["start"])
+        raw = [x for x in raw if lo <= x["start"] < hi]
+        if not raw or raw[0]["start"] > lo + 0.01:
+            raw.insert(0, {"start": lo, "ten": "", "the": False})
+        sessions = []
+        for i, x in enumerate(raw):
+            end = raw[i + 1]["start"] if i + 1 < len(raw) else hi
+            sessions.append({"start": round(x["start"], 2), "end": round(end, 2), "tu_khoa": [], "cau_mo": "",
+                             "ten": x.get("ten", ""), "phu": x.get("phu", ""), "the": x.get("the", True),
+                             "chuong": x.get("chuong", x.get("ten", ""))})
+        print(f"  session theo {os.path.basename(fp)}: {len(sessions)} phần")
+    else:
+        sessions = [{"start": lo, "end": hi, "tu_khoa": [], "cau_mo": "", "ten": ""}] if args.khong_session \
+            else split_sessions(segs, hi, args.phut, lo)
     for i, s in enumerate(sessions, 1):
         s["so"] = i
     json.dump(sessions, open(os.path.join(out_dir, f"session{sfx}.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
@@ -721,7 +773,10 @@ def main():
         warns += w
         shots = enforce_holds(shots, snap)
         if mode == "podcast":
+            shots = fix_long_reactions(shots, [x["start"] for x in sessions[1:]])
             shots = refill_long(shots, locks, angles, wide, snap)
+    if len(sessions) > 1:
+        shots = split_at_boundaries(shots, [x["start"] for x in sessions[1:]])
     tl_segs = absorb_short(to_segments(shots, mc, audio_src, fallback, audio_off), mc)
     if locks:
         warns += attach_overlays(tl_segs, locks)
@@ -731,11 +786,13 @@ def main():
     final_segs, jobs, chapters = [], [], []
     if len(sessions) > 1:
         for s in sessions:
-            title_file = f"do-hoa/ngang/session-{s['so']:02d}.mp4"
-            final_segs.append({"type": "insert", "src": title_file, "chapter": f"Session {s['so']}: <tên>"})
-            jobs.append({"comp": "SectionTitle", "out": f"session-{s['so']:02d}.mp4",
-                         "props": {"title": s["ten"] or f"<tên session {s['so']}>",
-                                   "subtitle": f"Phần {s['so']}", "durationInSeconds": 4}})
+            if s.get("the", True):
+                title_file = f"do-hoa/ngang/session-{s['so']:02d}.mp4"
+                final_segs.append({"type": "insert", "src": title_file,
+                                   "chapter": s.get("chuong") or f"Session {s['so']}: <tên>"})
+                jobs.append({"comp": "SectionTitle", "out": f"session-{s['so']:02d}.mp4",
+                             "props": {"title": s["ten"] or f"<tên session {s['so']}>",
+                                       "kicker": s.get("phu") or f"Phần {s['so']}", "durationInSeconds": 4}})
             final_segs += [x for x in tl_segs if s["start"] <= x["_truc"][0] < s["end"]]
     else:
         final_segs = tl_segs

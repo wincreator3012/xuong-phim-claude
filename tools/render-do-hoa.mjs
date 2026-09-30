@@ -11,10 +11,13 @@
 //   "jobs": [
 //     {"comp": "Intro", "out": "intro.mp4",
 //      "props": {"title": "…", "subtitle": "…", "durationInSeconds": 6}},
-//     {"comp": "LowerThird", "out": "lt.webm", "alpha": true, "props": {…}}
+//     {"comp": "LowerThird", "out": "lt.webm", "alpha": true, "props": {…}},
+//     {"comp": "Thumbnail", "out": "thumb-1.jpg", "still": true, "aspect": "ngang", "props": {…}}
 //   ]
 // }
 // - "comp" không cần hậu tố -ngang/-doc: script tự thêm theo "aspect".
+// - "still": true → ảnh tĩnh (jpg/png) bằng "remotion still", kiểm kích thước và giới hạn 2 MB.
+// - "aspect" trong từng job ghi đè "aspect" chung (một job thumbnail có cả bản ngang lẫn dọc).
 // - "alpha": true → xuất webm nền trong suốt (vp8 + yuva420p) để phủ lên video.
 //   Mặc định đi đường nhanh: chuỗi PNG + ffmpeg libvpx (xem chú thích trong vòng lặp).
 // Cờ: --lam-lai (render lại cả job đã có), --gioi-han <giây> (dừng gọn khi hết giờ, thoát mã 2,
@@ -72,12 +75,14 @@ if (spec.brandFile) {
 
 // "assets": các file (logo, QR…) copy vào studio/public/brand/ trước khi render.
 // Đường dẫn tương đối so với file job.
+// Mục dạng {"from": "<đường dẫn>", "as": "<tên trong public/brand>"} để đổi tên (ảnh khung thumbnail).
 for (const asset of spec.assets ?? []) {
-  const src = path.resolve(path.dirname(jobFile), asset);
-  const dst = path.join(studioDir, 'public', 'brand', path.basename(asset));
+  const from = typeof asset === 'string' ? asset : asset.from;
+  const src = path.resolve(path.dirname(jobFile), from);
+  const dst = path.join(studioDir, 'public', 'brand', typeof asset === 'string' ? path.basename(asset) : asset.as);
   fs.mkdirSync(path.dirname(dst), {recursive: true});
   fs.copyFileSync(src, dst);
-  console.log(`→ Asset: ${path.basename(asset)}`);
+  console.log(`→ Asset: ${path.basename(dst)}`);
 }
 
 // Nghiệm thu ngay sau render (bản vá 2026-09-05): đo file bằng ffprobe, so với
@@ -112,7 +117,7 @@ const failures = [];
 
 // Nếu brand có logo, file logo phải nằm ở studio/public/brand/
 for (const job of spec.jobs) {
-  const compId = `${job.comp}-${aspect}`;
+  const compId = `${job.comp}-${job.aspect ?? aspect}`; // job được ghi đè khung riêng (vd thumbnail ngang + dọc)
   const props = {theme, brand, ...(job.props ?? {})};
   const propsFile = path.join(outDir, `.props-${job.comp}-${Date.now()}.json`);
   fs.writeFileSync(propsFile, JSON.stringify(props));
@@ -129,7 +134,7 @@ for (const job of spec.jobs) {
   ];
   // Bỏ qua job đã render đúng props (cho phép chạy lại nhiều lượt khi mỗi lượt gọi tool bị giới hạn
   // thời gian): so dấu vân tay props với manifest và file còn đó. --lam-lai để ép render lại.
-  const propsHash = crypto.createHash('sha1').update(JSON.stringify({compId, props, alpha: !!job.alpha})).digest('hex');
+  const propsHash = crypto.createHash('sha1').update(JSON.stringify({compId, props, alpha: !!job.alpha, still: !!job.still})).digest('hex');
   const prev = manifest[path.basename(outFile)];
   if (!forceAll && prev && prev.propsHash === propsHash && !prev.error && prev.ok !== false &&
       fs.existsSync(outFile) && fs.statSync(outFile).size > 1000) {
@@ -143,7 +148,13 @@ for (const job of spec.jobs) {
     continue;
   }
   console.log(`→ Render ${compId} → ${path.basename(outFile)}`);
-  if (job.alpha && hasLibvpx && !slowAlpha) {
+  if (job.still) {
+    // Ảnh tĩnh (thumbnail): "remotion still", jpg chất lượng 90 (YouTube giới hạn 2 MB khi tải từ điện thoại)
+    const isPng = /\.png$/i.test(outFile);
+    execFileSync('npx', ['remotion', 'still', 'src/index.ts', compId, outFile, `--props=${propsFile}`, '--log=error',
+      ...(isPng ? ['--image-format=png'] : ['--image-format=jpeg', `--jpeg-quality=${job.jpegQuality ?? 90}`])],
+    {cwd: studioDir, stdio: 'inherit'});
+  } else if (job.alpha && hasLibvpx && !slowAlpha) {
     // Đường nhanh cho alpha (2026-09-29): Remotion encode vp8 alpha bằng một luồng, một lower-third
     // 4.5 s mất ~90 s trên máy 2 lõi. Render chuỗi PNG (~10 s) rồi để ffmpeg libvpx realtime encode
     // (~5 s) cho cùng kết quả vp8 + yuva420p (alpha_mode=1), nhanh ~6 lần.
@@ -171,6 +182,20 @@ for (const job of spec.jobs) {
   fs.unlinkSync(propsFile);
 
   // Nghiệm thu file vừa render
+  if (job.still) {
+    const m = probeOut(outFile);
+    const bytes = fs.existsSync(outFile) ? fs.statSync(outFile).size : 0;
+    const entry = {comp: compId, still: true, propsHash, width: m.width, height: m.height, bytes};
+    const probs = [];
+    if (m.error || !bytes) probs.push('không đọc được ảnh');
+    if (bytes > 2 * 1024 * 1024) probs.push(`nặng ${(bytes / 1048576).toFixed(2)} MB, vượt 2 MB (hạ jpegQuality)`);
+    entry.ok = probs.length === 0;
+    manifest[path.basename(outFile)] = entry;
+    fs.writeFileSync(manifestFile, JSON.stringify(manifest, null, 1));
+    if (probs.length) failures.push(`${job.out}: ${probs.join('; ')}`);
+    else console.log(`   ✓ ${path.basename(outFile)}: ${m.width}x${m.height}, ${(bytes / 1024).toFixed(0)} KB`);
+    continue;
+  }
   const m = probeOut(outFile);
   const expected = job.props?.durationInSeconds ?? null;
   const entry = {comp: compId, durationInSeconds: expected, propsHash, ...m};

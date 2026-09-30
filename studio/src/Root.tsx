@@ -1,5 +1,5 @@
 import React from 'react';
-import {Composition, Folder} from 'remotion';
+import {Composition, Folder, Still} from 'remotion';
 import {loadFonts} from './fonts';
 import {Intro, IntroProps, introDefaults} from './components/Intro';
 import {Outro, OutroProps, outroDefaults} from './components/Outro';
@@ -30,6 +30,7 @@ import {
 import {Benefits, BenefitsProps, benefitsDefaults} from './components/Benefits';
 import {YNiem, YNiemProps, yNiemDefaults, yNiemSuggestedSeconds} from './components/YNiem';
 import {YCanh, YCanhProps, yCanhDefaults, yCanhSuggestedSeconds} from './components/YCanh';
+import {Thumbnail, ThumbnailProps, thumbnailDefaults} from './components/Thumbnail';
 
 loadFonts();
 
@@ -195,6 +196,14 @@ export const RemotionRoot: React.FC = () => {
             calculateMetadata={({props}) => ({
               durationInFrames: durationOf(props, yCanhSuggestedSeconds(props.variant)),
             })}
+          />
+          {/* Ảnh bìa tĩnh: render bằng "still" (job có "still": true trong render-do-hoa.mjs) */}
+          <Still
+            id={`Thumbnail-${suffix}`}
+            component={Thumbnail}
+            width={width}
+            height={height}
+            defaultProps={thumbnailDefaults as ThumbnailProps}
           />
         </Folder>
       ))}

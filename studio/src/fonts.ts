@@ -50,6 +50,7 @@ export const loadFonts = () => {
     ['Be Vietnam Pro', 'be-vietnam-pro-latin-400-normal.woff2', '400'],
     ['Be Vietnam Pro', 'be-vietnam-pro-latin-500-normal.woff2', '500'],
     ['Be Vietnam Pro', 'be-vietnam-pro-latin-600-normal.woff2', '600'],
+    ['Be Vietnam Pro', 'be-vietnam-pro-latin-700-normal.woff2', '700'], // chữ thumbnail
   ];
   for (const [family, file, weight] of sets) {
     loadOne(family, file, weight, RANGE_LATIN);

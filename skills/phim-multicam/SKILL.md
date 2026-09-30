@@ -79,27 +79,30 @@ Ghép `timeline.json`: segments từ `timeline-multicam-nhap.json` sau khi chỉ
 
 Như phim-dung-bai Bước 6 (cổng `nghiem-thu.py video` bắt buộc, ảnh lưới, mối nối theo `map.json`), thêm ba kiểm riêng của multicam:
 
-1. **Khớp hình-tiếng qua góc**: chọn 3 cú cắt xa nhau (đầu, giữa, cuối, ưu tiên cú cắt sang file thứ hai của một góc), trích 1 khung ngay sau cắt và nghe 2 giây tiếng quanh đó; miệng mở đúng lúc có tiếng, không có cảm giác tiếng trước hình. Nếu lệch một phía cố định → offset file đó sai; lệch tăng dần về cuối → drift, tách segment ngắn hơn.
+1. **Khớp hình-tiếng qua góc**: chạy `python3 tools/do-dong-bo.py "du-an/<tên>/xuat-nhap/<file>.mp4" --mau 24` (cổng `nghiem-thu.py video` đã tự gọi bản 10 mốc). Nó đo tiếng và hình của thành phẩm so với đúng nguồn của từng part (tiếng chủ theo `audio_in` của map), trải khắp phim gồm cả góc toàn, hai cận, và file thứ hai của một góc. Đọc theo ba khả năng: tiếng lệch khỏi 0 → mốc hay nối tiếng có lỗi (lỗi của công cụ dựng); tiếng đúng mà hình lệch ổn định ở MỘT góc → offset hoặc nguồn của góc đó sai (soát lại `multicam.json`, `multicam-khop.py`); trôi dần về cuối → drift của máy, tách segment ngắn hơn. Sau đó mới nghe thử bằng tai 2 giây quanh 3 cú cắt xa nhau: miệng mở đúng lúc có tiếng.
+   Sai số hợp lệ còn lại là dưới một khung hình (nguồn 29.97 fps ra 30 fps); lệch trên 50 ms là KHÔNG ĐẠT.
+   Nếu cận ảo cắt từ góc toàn (không có máy cận thật ở một quãng), tiếng và hình của cận ảo vẫn tính theo trục chung; đo riêng một mốc của cận ảo như mọi góc khác.
 2. **Nhịp cắt**: đọc `map.json`, không có part hình < 3 giây trừ khi cố ý (phản ứng 2.5-3.5 giây), không có part > 35 giây trong podcast; mở mỗi session bằng toàn.
 3. **Thẻ session**: đúng tên đã duyệt, đủ 4 giây (manifest đồ họa), chapter khớp mốc.
 
 Báo kết quả kèm tỉ lệ góc (ví dụ "cận người dẫn 47%, cận khách 38%, toàn 15%, 42 cú cắt, trung bình 18 giây/cú") và dòng "nghiệm thu máy: ĐẠT".
 
-Sau khi giao, nếu user đăng YouTube: soạn mô tả chuẩn tìm kiếm cho từng clip. Mốc chương tính bằng tool, không cộng tay:
+Sau khi giao: làm gói đăng tải cho từng clip theo skill phim-dang-tai (tiêu đề, mô tả YouTube, status Facebook, thumbnail hai gương mặt), không chờ user nhắc. Mốc chương của podcast tính bằng tool, không cộng tay:
 
 ```
 python3 tools/chuong-youtube.py --map "du-an/<tên>/xuat-hoan-chinh/<video>.map.json" \
     --chuong "du-an/<tên>/chuong-clipN.json" --ket "Lời mời ..."
 ```
 
-`chuong-clipN.json` là `[{"t": <giây trục chung>, "ten": "..."}]`, lấy thẳng từ mốc pill trong kế hoạch overlay; tool quy về mốc video đã dựng qua `audio_in` của map, tự áp luật YouTube (chương đầu 0:00, mỗi chương từ 10 giây, tối thiểu 3 chương; chương quá sát bị gộp và báo lại) và thêm chương outro. Mô tả gồm: 1-2 câu đầu chứa từ khoá chính (phần hiện trong kết quả tìm kiếm), những điều người xem nhận được, chương, khách mời với chức danh nguyên văn, lời mời kèm link, một câu hỏi mở mời bình luận, 3-8 hashtag; thêm danh sách tags cho ô Tags. Chi tiết transcript không chắc (tên người kể một câu chuyện, tên riêng nghe không rõ) thì viết trung tính và báo user kiểm, không đoán.
+`chuong-clipN.json` là `[{"t": <giây trục chung>, "ten": "..."}]`, lấy thẳng từ mốc pill trong kế hoạch overlay; tool quy về mốc video đã dựng qua `audio_in` của map, tự áp luật YouTube (chương đầu 0:00, mỗi chương từ 10 giây, tối thiểu 3 chương; chương quá sát bị gộp và báo lại) và thêm chương outro. Chương trùng với thẻ session thì lấy `<video>.chapters.txt` mà assemble đã ghi làm gốc (mốc đúng đầu thẻ) và chỉ thêm chương outro: `chuong-youtube.py` quy mốc NỘI DUNG nên rơi sau thẻ, trễ chừng 4 giây. Cách viết mô tả, status và thumbnail: skill phim-dang-tai. Chi tiết transcript không chắc (tên người kể một câu chuyện, tên riêng nghe không rõ) thì viết trung tính và báo user kiểm, không đoán.
 
 ## Ghi nhớ
 
-- Một podcast 20 phút ba góc 4K đã chạy trọn quy trình: khớp → proxy → transcript → người nói theo hình → kế hoạch overlay → dàn góc có khoá → dựng hai clip → mô tả YouTube; mỗi bước chạy lặp được trong lượt gọi 180 giây nhờ cache, không cần tiến trình nền.
+- Một podcast 20 phút ba góc 4K đã chạy trọn quy trình: khớp → proxy → transcript → người nói theo hình → kế hoạch overlay → dàn góc có khoá → dựng hai clip → gói đăng tải; mỗi bước chạy lặp được trong lượt gọi 180 giây nhờ cache, không cần tiến trình nền.
 - Đổi luật cắt (ngưỡng lượt nói, khoảng giữ, tần suất phản ứng): sửa hằng trong `plan_podcast`/`plan_lecture` của `tools/multicam-dan.py`; đổi thuật toán khớp: `tools/multicam-khop.py`; mọi mốc đều trên trục chung, chỉ `to_segments` mới quy về file góc.
 - Podcast có 3 người trở lên vẫn chạy: mỗi người một thư mục cận; góc toàn càng cần khi nhiều người chồng lời.
 - Clip ngắn dọc cắt từ buổi multicam: dùng phim-clip-ngan với `src` là góc cận người nói và `audioSrc` tiếng chủ như trên, `cropFocus` theo người.
+- Phim multicam là nơi lỗi công cụ dựng lộ rõ nhất (hàng trăm part, mỗi part một mốc cắt lẻ so với lưới khung của nguồn 29.97 fps): trước khi dựng bản chính của một dự án mới, chắc rằng `python3 tools/kiem-dong-bo.py` ĐẠT trên đúng phiên bản `assemble.py` đang dùng. Khi user báo lệch hình-tiếng, phân định lỗi nguồn hay lỗi dựng bằng `do-dong-bo.py` trước khi đoán (kinh nghiệm: nguồn đúng, lỗi ở công cụ dựng, `docs/BAI-HOC.md` chủ đề "Đồng bộ hình tiếng").
 - Sửa skill này theo `skills/_chung/bao-tri-skill.md`; bài học mới vào `docs/BAI-HOC.md` chủ đề "Multicam".
 
-<!-- ban-nguon: phim-multicam 2026-09-30 ecaf4468 -->
+<!-- ban-nguon: phim-multicam 2026-09-30 17c9d7ae -->

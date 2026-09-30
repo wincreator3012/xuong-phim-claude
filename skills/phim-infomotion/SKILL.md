@@ -15,6 +15,8 @@ Ba nguyên tắc xuyên suốt (nền tảng nghiên cứu trong `skills/phim-in
 
 **Ranh giới với phim-hoat-hoa.** Cùng nguồn là file voice, cùng pipeline gỡ băng, chia nhịp ý và từ điển ẩn dụ, nhưng khác ngôn ngữ hình: skill này là đồ họa thông tin tối giản trên nền phẳng (nhãn, danh sách, con số, ẩn dụ nét đơn `YNiem`/`YCanh`); phim-hoat-hoa dựng một thế giới hoạt hình có bối cảnh, nhân vật, mô-típ. Người dùng thả file voice mà chưa nói rõ loại nào thì hỏi một câu trước Bước 1. Mục từ điển do phim-hoat-hoa thêm có trường `nguon: "hoat-hoa"`.
 
+**Hai giọng hình, chọn theo nội dung (người dùng chốt 2026-10-01).** Giọng NÉT: ẩn dụ vẽ nét tối giản `YNiem`/`YCanh` trên nền phẳng, từ điển ẩn dụ, hợp ý niệm chiêm nghiệm (câu thúc, khởi sinh, căn tính). Giọng SƠ ĐỒ: cảnh minh hoạ vẽ riêng theo skill phim-canh-minh-hoa (nhãn nhỏ, tiêu đề có cụm tô màu, thẻ, sơ đồ lớn dần theo lời, màu theo vai, họ Đêm xanh mặc định), hợp cơ chế, quy trình, so sánh, số liệu, nhịp thực hành. Chọn giọng ở "Khung hình chung" của kịch bản; một video được trộn khi nội dung đổi tính chất, nhưng nền của hai giọng phải cùng một màu (giọng nét dùng theme tối cùng tông, hoặc cảnh sơ đồ dùng họ theo theme của video) để chuyển cảnh không giật màu.
+
 Đọc trước: `skills/_chung/van-hanh.md` (đọc gì, hai nơi chạy lệnh, truyền file, chữ và chức danh), `skills/_chung/timeline-va-dung.md`, `skills/_chung/nghiem-thu-dung-y.md`, `skills/phim-do-hoa/SKILL.md` (render, thêm component), `docs/BAI-HOC.md` chủ đề "Infomotion và hình vẽ ẩn dụ". Mẫu kịch bản, timeline, job JSON, lệnh tạo nền và schema từ điển: `skills/phim-infomotion/references/mau-kich-ban.md`.
 
 ## Hai lối vào
@@ -56,7 +58,8 @@ Gắn cho mỗi nhịp MỘT trong năm loại (đọc hiểu nội dung, không
 | Khái niệm trừu tượng | từ, cụm không có nghĩa đen (mắc kẹt, buông bỏ, gắn kết...) | tra từ điển → `YNiem` (một ẩn dụ vẽ nét) hoặc `YCanh` (cảnh vẽ tay riêng); `Benefits` 1 mục khi chỉ cần chữ |
 | Thuật ngữ, định nghĩa cố định | tên framework, cấu phần được liệt kê (các bước, cấu phần có tên riêng...) | `InfoSteps` (nhãn ngắn có thứ tự) / `InfoList` (mệnh đề dài) / `Benefits` hiện dần theo lời |
 | Bước, tiến trình | "đầu tiên... rồi... cuối cùng", nguyên nhân kết quả | `InfoSteps`, hoặc `Benefits` `revealAt` đúng lúc nói |
-| Số liệu, so sánh | con số, phần trăm, hơn kém | `InfoStat` (một con số) / `InfoList` (nhiều mục); chart động chỉ tạo khi hai dự án cùng cần |
+| Số liệu, so sánh | con số, phần trăm, hơn kém | `InfoStat` (một con số) / `InfoList` (nhiều mục); so sánh có chuyển động hay số liệu cần đối chiếu: cảnh minh hoạ (khuôn "So sánh hai cách", "Con số có đối chiếu") |
+| Cơ chế, quá trình (giọng sơ đồ) | "khi... thì...", một thứ biến đổi qua các trạm, một ngưỡng, một vòng lặp, một nhịp thực hành | cảnh minh hoạ theo khuôn ở `skills/phim-canh-minh-hoa/references/nguyen-ly-canh.md` mục 4; một cảnh phủ trọn nhịp, lớn dần theo lời |
 | Câu nhấn, chuyển ý | câu chuyển ý, cảm xúc, mở, kết, câu hỏi để ngỏ | giữ hình nhịp trước lắng lại (kéo dài ô), hoặc câu đắt nhất thành `InfoQuote`/`Benefits` 1 mục; nền trơn chỉ khi có ý đồ, ghi `Hình: KHÔNG - <lý do>` |
 
 Kho hình có sẵn: `YNiem` tra hình theo `slug` trong `studio/src/y-niem/index.ts`; `YCanh` có tám variant đặt theo kỹ thuật chuyển động (`hub-branches`, `filling-grid`, `radiant-sun`, `rising-moon`, `growing-bars`, `tick-cluster`, `clock-sweep`, `growing-flame`); đặc tả ở `hinh-tuong-hoa.md` mục 4. Ẩn dụ đã duyệt dùng đúng như từ điển ghi; cần hình mới thì thêm variant hoặc slug theo mục "Thêm component mới" của phim-do-hoa và đưa người dùng duyệt như mọi ẩn dụ mới. Studio không có composition `Caption`.
@@ -81,7 +84,7 @@ Người dùng góp ý trên chữ; sửa tới khi người dùng nói duyệt.
 
 ### Bước 6 - Render đồ họa, soạn timeline, dựng nháp
 
-- **Job JSON** theo mẫu, mỗi nhịp một job, `durationInSeconds` = đúng độ dài nhịp (đo từ mốc thật; cộng đệm 0,5-1 giây nếu nhịp sau không có hình). Đồ họa toàn khung (InfoList, InfoSteps, InfoStat, InfoQuote, YNiem toàn khung) render mp4 nền cùng màu nền; đồ họa nổi (Benefits, YNiem nổi, YCanh nổi) render webm `alpha: true`. Nhiều job gộp chung một job JSON để chạy tuần tự.
+- **Job JSON** theo mẫu, mỗi nhịp một job, `durationInSeconds` = đúng độ dài nhịp (đo từ mốc thật; cộng đệm 0,5-1 giây nếu nhịp sau không có hình). Đồ họa toàn khung (InfoList, InfoSteps, InfoStat, InfoQuote, YNiem toàn khung) render mp4 nền cùng màu nền; đồ họa nổi (Benefits, YNiem nổi, YCanh nổi) render webm `alpha: true`. Nhiều job gộp chung một job JSON để chạy tuần tự. Nhịp giọng sơ đồ: mỗi nhịp một file `du-an/<tên>/canh/NN-<ten>.html`, `thoiLuong` bằng đúng độ dài nhịp, chụp bằng `node tools/canh.mjs chup` (toàn khung ra mp4 vào `broll`; thẻ nổi `--alpha` vào `overlay`), soi `kiem` và `người dùng` trước theo skill phim-canh-minh-hoa.
 - **Render** `node tools/render-do-hoa.mjs <job.json> --studio <đường dẫn tuyệt đối>`; đo ngay thời lượng thật từng file bằng `ffprobe`. Lịch đồ họa nối liền dựa trên số đo này, không dựa trên `durationInSeconds` danh nghĩa.
 - **Tạo hình**: đồ họa nổi canh giữa (mặc định của component), lấp phần lớn khung, giàu chi tiết (5-10 chi tiết chuyển động mỗi hình), mỗi nhịp một kỹ thuật chuyển động. Làm chậm trong ô đã khoá thì tính ngân sách khung riêng từng cảnh; ẩn dụ bị chê hay chồng lấn thì thiết kế lại cả khối. Chi tiết và con số: `hinh-tuong-hoa.md` mục 6.
 - **Timeline** (mẫu trong references): mỗi chương MỘT segment `type: video` cắt từ `nen-<khung>.mp4` (tiếng voice đi liền); đồ họa toàn khung vào `broll` với `at` theo trục nguồn và `duration` đúng; đồ họa nổi vào `overlay` (list) với `at` TƯƠNG ĐỐI so với `in`. Overlay chỉ hiện ở quãng TRƯỚC B-roll đầu tiên của segment (`--kiem-tra` cảnh báo khi vi phạm): chương có đồ họa nổi xen sau đồ họa toàn khung thì tách chương thành nhiều sub-segment liền mạch tại điểm kết thúc mỗi đồ họa toàn khung (`out` đoạn trước = `in` đoạn sau), overlay tính `at` từ `in` của sub-segment chứa nó. Mốc kết thúc khối trước bằng đúng mốc bắt đầu khối sau. Hai đồ họa toàn khung liên tiếp chuyển liền mạch trên cùng màu nền (quy tắc 5 giây của phim có người nói không áp ở đây). Intro (`insert`, `"role": "intro"`) sau nhịp mở đầu nếu có câu móc, outro cuối. Nhạc theo `_chung/timeline-va-dung.md`.
@@ -117,4 +120,4 @@ Nguyên tắc chung ở `_chung/van-hanh.md` và bảng từng khâu ở QUY-TRI
 - Hình vẽ bằng code theo brand; không dùng ảnh hay clip do AI tạo. Giọng máy chỉ làm bản tạm ở Lối vào B, không bao giờ vào bản giao.
 - Nghiệm thu máy VÀ cặp "hình - câu đang nói" là bắt buộc trước khi báo "xong".
 
-<!-- ban-nguon: phim-infomotion 2026-09-30 3735b26d -->
+<!-- ban-nguon: phim-infomotion 2026-09-30 e2ead305 -->

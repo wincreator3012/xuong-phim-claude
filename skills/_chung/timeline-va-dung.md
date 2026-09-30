@@ -43,6 +43,14 @@ Schema đầy đủ của `timeline.json` nằm trong docstring đầu `tools/as
 - Không để nhạc nghe rõ giai điệu hơn lời. Track Kevin MacLeod kèm dòng ghi công CC-BY trong mô tả video.
 - Tiếng nền cảnh thật (`volumeDb`): khoảng -12 là điểm khởi đầu, nghe lại từng dự án rồi hạ hay nâng.
 
+## Đồng bộ hình-tiếng: điều phải nhớ
+
+- Cổng máy so thời lượng hình với tiếng, không so với NGUỒN, nên hai cổng đo tuyệt đối là bắt buộc: `python3 tools/kiem-dong-bo.py` (dựng thử chớp/click; chạy sau MỖI lần sửa `assemble.py` và trước khi dựng thật) và `python3 tools/do-dong-bo.py "<phim>.mp4"` (đo thành phẩm so với nguồn tại 10-12 mốc; `nghiem-thu.py video` tự gọi). Phim multicam hay nhiều part: đọc dòng "trôi ... ms/phút", lệch tích luỹ mới là loại người xem nhận ra ở đoạn sau của phim.
+- Sai số còn lại của phim đạt: tiếng khớp nguồn tuyệt đối (0 ms), hình trong một khung (nguồn 29.97 fps ra 30 fps, mốc cắt lẻ). Hình chậm hơn tiếng dưới 45 ms không nhận ra được; vượt 50 ms là KHÔNG ĐẠT.
+- Mỗi part đúng n khung và đúng n×48000/fps mẫu tiếng; ghép bằng nối mẫu PCM, AAC một lần ở cuối. Không tự gõ lại lệnh ghép bằng `concat` cùng `aresample`, không đặt `-t` làm tròn thời gian bằng tay, không thêm bước mã hoá AAC trung gian.
+- `map.json` lưu `dur` 6 chữ số; mốc suy ra từ nó (chương, phụ đề, mốc kiểm) đúng tới mili giây. Bản dựng cũ trước 2026-09-30 có `dur` làm tròn 3 chữ số: mốc cuối phim có thể lệch tới 0,1 giây so với bản đúng.
+- Nghi lệch sau khi đổi bất cứ gì ở cắt hay ghép: chạy `kiem-dong-bo.py` (có `--assemble <bản cũ>` để so). Chi tiết và bài học: `docs/BAI-HOC.md` chủ đề "Đồng bộ hình tiếng".
+
 ## Sau khi dựng: dùng `map.json`
 
 `<thành phẩm>.map.json` ghi mốc thật từng part trên thành phẩm. Mọi mốc suy ra (phụ đề, chương YouTube bằng `tools/chuong-youtube.py`, nhãn đoạn bằng `tools/nhan-doan.py`, mốc trích khung nghiệm thu) tính từ đây: cue có `in ≤ t < out` thì mốc mới `start + (t - in)`; mốc tuyệt đối của một overlay = `part.start + overlay.at`. Không cộng trừ tay.

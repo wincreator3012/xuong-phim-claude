@@ -25,10 +25,12 @@ Xưởng làm việc bằng nguyên lý, không bằng khuôn. Mọi quyết đ�
 | "cắt clip ngắn", "Reels", "Shorts", "TikTok", "teaser" | `skills/phim-clip-ngan/` |
 | "podcast hai người", "nhiều góc quay", nguon có nhiều thư mục con | `skills/phim-multicam/` |
 | "làm intro", "infographic", "bảng tên", "sửa đồ họa" | `skills/phim-do-hoa/` |
+| "cảnh minh hoạ", "minh hoạ động cho đoạn này", "dùng hình này làm nền mờ", B-roll giải thích cơ chế, quy trình, số liệu | `skills/phim-canh-minh-hoa/` (mỗi cảnh là một trang web có thời gian ảo, xem trực tiếp được, chụp từng khung ra video; bốn kiểu chèn vào bài giảng; phim-dung-bai và phim-infomotion gọi skill này) |
 | "gỡ băng", "phụ đề", "transcript" | `skills/phim-transcript/` |
 | "tìm hình minh hoạ", "cần ảnh cho đoạn này" | `skills/phim-tu-lieu/` |
 | "màu bị bạc", "hai góc lệch màu", "da không đẹp" | `skills/phim-mau-sac/` |
 | "phim tài liệu", "phóng sự phỏng vấn", "phim giới thiệu dự án/chương trình", "sắp có sự kiện muốn làm phim", "phỏng vấn ai, hỏi gì", "cần quay cảnh trám nào", nhiều file phỏng vấn nhiều người | `skills/phim-tai-lieu-phong-van/` (hai pha: Kế hoạch ghi hình trước quay, kịch bản thực tế sau quay; gọi phim-dung-bai/phim-do-hoa ở bước dựng) |
+| "mô tả YouTube", "status Facebook", "thumbnail", "chuẩn bị đăng"; và TỰ CHẠY mỗi khi một clip vừa vào `xuat-hoan-chinh/` | `skills/phim-dang-tai/` (ba tiêu đề, mô tả YouTube có chương, status Facebook, ba thumbnail từ khung hình thật; cổng `tools/dang-tai.py kiem`) |
 
 ## Cách làm việc với người dùng mới
 
@@ -36,7 +38,7 @@ Xưởng làm việc bằng nguyên lý, không bằng khuôn. Mọi quyết đ�
 - Người dùng chỉ phải làm vài việc: thả file vào đúng thư mục, bấm link tải khi được nhờ, bấm đúp `Go bang tren Mac.command` khi được nhờ gỡ băng large-v3 trên Mac, xem bản nháp và góp ý. Mọi lệnh khác Claude tự chạy
 - Hỏi ít, mỗi lượt tối đa 4 câu, luôn có mặc định lấy từ PHONG-CACH.md. Hai chốt duyệt cố định: phương án cắt và overlay (trước khi dựng), bản nháp 480p (trước bản chính). Phim tài liệu phỏng vấn có thêm hai chốt trên giấy: Kế hoạch ghi hình (trước khi quay) và kịch bản thực tế có ước tính thời lượng (trước khi dựng). Người dùng vắng mặt: chọn mặc định, ghi rõ giả định, làm tiếp
 - Báo tiến độ ngắn khi việc chạy lâu (gỡ băng bài dài, xuất bản chính), nói rõ đang chờ máy chứ không phải chờ người dùng
-- Kết mỗi dự án bằng: file nằm ở `du-an/<tên>/xuat-hoan-chinh/`, thời lượng, dung lượng, dòng ghi công nhạc (nếu dùng track CC-BY), và câu "nghiệm thu máy: ĐẠT"
+- Kết mỗi dự án bằng: file nằm ở `du-an/<tên>/xuat-hoan-chinh/`, thời lượng, dung lượng, dòng ghi công nhạc (nếu dùng track CC-BY), và câu "nghiệm thu máy: ĐẠT"; rồi làm luôn gói đăng tải (skill phim-dang-tai) mà không chờ người dùng nhắc
 
 ## Quy tắc cứng
 

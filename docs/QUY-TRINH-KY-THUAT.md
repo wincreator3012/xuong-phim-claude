@@ -19,7 +19,7 @@ Bài học mới sau mỗi dự án ghi vào `docs/BAI-HOC.md` đúng chủ đ�
 
 Hệ thống dựng video cho người dùng: cắt ghép bài giảng, clip ngắn, podcast nhiều góc, phim tài liệu phỏng vấn, infomotion, hoạt hình; intro, outro và đồ họa minimalist bằng Remotion; nhạc nền; xuất 16:9 và 9:16. Nguyên tắc phân công: **video nặng xử lý trên máy của người dùng (`device_bash` + ffmpeg), đồ họa Remotion render trong sandbox đám mây** (đồ họa không chứa hình người), gỡ băng chạy trên máy (dữ liệu không rời máy).
 
-Mười hai skill trong `skills/` là quy trình chuẩn của từng loại việc: phim-thiet-lap (cài đặt và phong cách lần đầu), phim-dung-bai, phim-clip-ngan, phim-do-hoa, phim-transcript, phim-tu-lieu, phim-bai-giang-slide, phim-multicam, phim-mau-sac, phim-tai-lieu-phong-van, phim-infomotion, phim-hoat-hoa. Việc nào dùng skill nào: bảng trong `CLAUDE.md`. Phần dùng chung cho mọi skill nằm ở `skills/_chung/` (`van-hanh.md`: hai máy, truyền file, chức danh, khi hỏng, khép dự án; `timeline-va-dung.md`; `overlay-va-the.md`; `nghiem-thu-dung-y.md`; `bao-tri-skill.md`). Skill sửa ở `skills/`; tham chiếu tới references luôn ghi đủ đường dẫn `skills/<skill>/references/<file>.md`.
+Mười bốn skill trong `skills/` là quy trình chuẩn của từng loại việc: phim-thiet-lap (cài đặt và phong cách lần đầu), phim-dung-bai, phim-clip-ngan, phim-do-hoa, phim-canh-minh-hoa, phim-transcript, phim-tu-lieu, phim-bai-giang-slide, phim-multicam, phim-mau-sac, phim-tai-lieu-phong-van, phim-infomotion, phim-hoat-hoa, phim-dang-tai. Việc nào dùng skill nào: bảng trong `CLAUDE.md`. Phần dùng chung cho mọi skill nằm ở `skills/_chung/` (`van-hanh.md`: hai máy, truyền file, chức danh, khi hỏng, khép dự án; `timeline-va-dung.md`; `overlay-va-the.md`; `nghiem-thu-dung-y.md`; `bao-tri-skill.md`). Skill sửa ở `skills/`; tham chiếu tới references luôn ghi đủ đường dẫn `skills/<skill>/references/<file>.md`.
 
 ## Bản đồ tài nguyên chuẩn
 
@@ -31,16 +31,18 @@ Vận dụng những gì đã có thay vì làm lại.
 | Bộ logo và thương hiệu | `brand/logo/`, `brand/brand.json` | `render-do-hoa.mjs` tự đồng bộ logo; đổi bộ logo bằng props `logos` theo dự án |
 | Tên, chức danh, từ ngữ, tông hình | `phong-cach/PHONG-CACH.md` | mọi chữ trên hình; chức danh lấy nguyên văn ở đây hoặc bảng nhân vật của dự án |
 | Thư viện nhạc và hiệu ứng đã kiểm định bản quyền (có LUFS, `gainDb` gợi ý từng track) | `nhac-nen/`, `hieu-ung/`, danh mục `thu-vien/AM-THANH.md`, kiểm kê `nhac-nen/THU-VIEN.md` (sinh bằng `tools/nhap-am-thanh.py`), nhạc riêng ở `nhac-nen/rieng/` | mọi nhạc nền và SFX; không dùng nhạc ngoài thư viện trừ nhạc riêng người dùng đưa |
-| 22 composition đồ họa: Intro, Outro, SectionTitle, InfoList, InfoQuote, InfoStat, InfoSteps, LowerThird, Benefits, YNiem, YCanh, mỗi loại hai khung ngang/dọc | `studio/` | mọi đồ họa động. KHÔNG có `Caption`: một dòng chữ nổi = Benefits một mục `showIndex:false`, `wrap:true`. Benefits có `position` top/bottom (mặc định)/left/right, `wrap`, `scale`, `edgeInset`; màu pill theo `palette.accent`. YNiem, YCanh nổi mặc định canh giữa (khi dựng hỏi người dùng có muốn đổi) |
+| 24 composition: 22 đồ họa động (Intro, Outro, SectionTitle, InfoList, InfoQuote, InfoStat, InfoSteps, LowerThird, Benefits, YNiem, YCanh, mỗi loại hai khung ngang/dọc) và `Thumbnail` ảnh tĩnh ngang/dọc | `studio/` | mọi đồ họa động. KHÔNG có `Caption`: một dòng chữ nổi = Benefits một mục `showIndex:false`, `wrap:true`. Benefits có `position` top/bottom (mặc định)/left/right, `wrap`, `scale`, `edgeInset`; màu pill theo `palette.accent`. YNiem, YCanh nổi mặc định canh giữa (khi dựng hỏi người dùng có muốn đổi) |
 | Từ điển ẩn dụ hình ảnh (chưa có sẵn: tạo ở dự án infomotion đầu tiên) | `do-hoa-chung/an-du-y-niem.json`; slug YNiem ở `studio/src/y-niem/index.ts` | infomotion, hoạt hình: tra trước khi sáng tạo, ghi mục mới ngay sau khi người dùng duyệt; slug YNiem và mục từ điển phải khớp hai chiều |
 | Màu sắc | `tools/mau-sac.py` (`kham`, `soi`), đơn màu `du-an/<x>/mau-sac.json` được `assemble.py` tự áp | khám mọi nguồn ở bước khảo sát (skill phim-mau-sac); HDR bắt buộc tonemap; đa số kết luận đạt, không chỉnh |
-| Công cụ pipeline | `tools/`: `mediainfo.py`, `transcribe.py`, `hang-doi-go-bang.py`, `assemble.py`, `nghiem-thu.py`, `render-do-hoa.mjs`, `uoc-luong.py`, `nhan-doan.py`, `chuong-youtube.py`, `slide-nguon.py`, `slide-khop.py`, `bo-cuc-slide.py`, `multicam-khop.py`, `multicam-proxy.py`, `multicam-dan.py`, `kiem-tra-xuong.py`, `kiem-tai-lieu.py`, `cai-dat.py`, `tai-chat-lieu.py`, `nhap-am-thanh.py`; model trong `tools/models/`, thư viện trong `tools/pylib/` | theo quy trình từng skill |
+| Công cụ pipeline | `tools/`: `mediainfo.py`, `transcribe.py`, `hang-doi-go-bang.py`, `assemble.py`, `nghiem-thu.py`, `render-do-hoa.mjs`, `uoc-luong.py`, `nhan-doan.py`, `chuong-youtube.py`, `slide-nguon.py`, `slide-khop.py`, `bo-cuc-slide.py`, `multicam-khop.py`, `multicam-proxy.py`, `multicam-dan.py`, `kiem-tra-xuong.py`, `kiem-dong-bo.py`, `do-dong-bo.py`, `kiem-tai-lieu.py`, `chon-khung-thumbnail.py`, `dang-tai.py`, `canh.mjs`, `canh-ghep.py`, `cai-dat.py`, `tai-chat-lieu.py`, `nhap-am-thanh.py`; model trong `tools/models/`, thư viện trong `tools/pylib/` | theo quy trình từng skill |
 | Cổng nghiệm thu tự động | `tools/nghiem-thu.py`, `assemble.py --kiem-tra`, `render-do-hoa.mjs` tự đo | bắt buộc trước khi báo "xong" - mục "Phòng ngừa lớp lỗi ngầm" |
 | Tư liệu minh họa theo dự án | `du-an/<x>/tu-lieu/`, `TU-LIEU.md` (skill phim-tu-lieu tạo); nguồn đã thẩm định ở `thu-vien/HINH-ANH.md` | đọc `TU-LIEU.md` khi soạn timeline; ảnh qua Ken Burns thành insert hoặc B-roll |
 | Dự án mẫu và kiểm thử | `du-an/_mau/` (cấu trúc, job, timeline mẫu), `du-an/_kiem-tra-tu-dong/` (dựng thử sau khi sửa tool) | tham khảo cấu trúc; sau mỗi lần sửa tool chạy `python3 tools/kiem-tra-xuong.py` (dựng lại `_kiem-tra-tu-dong` qua cổng nghiệm thu), bắt buộc khi đổi `TOOL_VERSION` |
 | Bài giảng có slide | `tools/slide-nguon.py`, `tools/slide-khop.py`, `do-hoa-chung/bo-cuc/`, trường `layout`/`slide` trong timeline | khi nguồn có slide - mục "Bài giảng có slide" |
 | Multicam | `tools/multicam-khop.py`, `tools/multicam-proxy.py`, `tools/multicam-dan.py`, trường `audioSrc`/`audioIn` | khi nguồn có nhiều thư mục góc - mục "Multicam" |
 | Phim tài liệu phỏng vấn | skill phim-tai-lieu-phong-van, mẫu hồ sơ `references/mau-ho-so.md`, mẫu `du-an/_mau/tai-lieu-phong-van/` | khi người dùng mô tả sự kiện sắp quay (Pha 1) hoặc thả nhiều file phỏng vấn (Pha 2) |
+| Gói đăng tải (tiêu đề, mô tả YouTube, status Facebook, thumbnail) | skill phim-dang-tai, `tools/chon-khung-thumbnail.py` (dò mặt bằng `tools/models/face_detection_yunet_2023mar.onnx`), `tools/dang-tai.py` (`job`, `kiem`), composition `Thumbnail` | tự làm ngay khi một clip vào `xuat-hoan-chinh/`; kết quả ở `du-an/<x>/dang-tai/<video>/` |
+| Cảnh minh hoạ (sơ đồ động vẽ riêng từng ý, trang web thời gian ảo chụp ra video) | skill phim-canh-minh-hoa; bộ thiết kế `do-hoa-chung/canh-kit/` (runtime, hệ màu theo vai ba họ Đêm xanh, Than đồng, Giấy mực, font nhúng, cảnh mẫu, khuôn trang phòng thử); `tools/canh.mjs` (sandbox: kiem, người dùng, phong-thu, chup), `tools/canh-ghep.py` (máy: khung nền mờ, ghép người nói vào góc) | B-roll giải thích trong bài giảng (bốn kiểu chèn) và giọng hình sơ đồ của infomotion |
 | Infomotion | skill phim-infomotion, `references/mau-kich-ban.md`, `references/hinh-tuong-hoa.md` | khi nguồn là file âm thanh không có hình |
 
 ## Môi trường
@@ -62,6 +64,7 @@ Việc duy nhất chạy trên Mac thật: gỡ băng large-v3. Claude xếp vi�
 ### Sandbox đám mây (`Bash`, x86_64, 2 lõi, 8 GB RAM)
 
 - node 22, ffmpeg 6.1, Chromium có sẵn. Remotion dùng bản headless shell `/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell` (đã cấu hình trong `studio/remotion.config.ts`); bản `/opt/pw-browsers/chromium` là Chrome mới, không chạy old-headless với Remotion.
+- Cảnh minh hoạ HTML (`tools/canh.mjs`) chạy bằng Playwright cài toàn cục trong sandbox (thiếu thì `npm i -g playwright@1.56.0`) với Chromium mặc định của Playwright trong `/opt/pw-browsers`; không cần `npm ci` studio. Đo thật: cảnh 15 giây 1080p nền đặc chụp khoảng 35 giây với 2 luồng.
 - Tiến trình nền trong sandbox sống qua nhiều lượt gọi (`nohup ... & disown`, theo dõi bằng `tail` log).
 - Sandbox là tạm: mỗi phiên dựng lại từ máy (mục "Khởi động phiên mới"). Máy là bản gốc; file nào sửa ở sandbox (nhất là `.tsx`) phải commit về máy ngay.
 - Không có sandbox đám mây (Claude chạy thẳng trên máy của người dùng): render Remotion ngay trên máy, các bước khác giữ nguyên.
@@ -83,9 +86,9 @@ Việc duy nhất chạy trên Mac thật: gỡ băng large-v3. Claude xếp vi�
 ## Khởi động phiên mới
 
 1. Đọc `CLAUDE.md`, file này, `phong-cach/PHONG-CACH.md`; xem `brand/brand.json`.
-2. Sandbox: stage từ máy toàn bộ `studio/` (không có `node_modules`, thứ chỉ tồn tại ở sandbox), `tools/render-do-hoa.mjs`, `brand/brand.json` và logo cần dùng.
+2. Sandbox: stage từ máy toàn bộ `studio/` (không có `node_modules`, thứ chỉ tồn tại ở sandbox), `tools/render-do-hoa.mjs`, `brand/brand.json` và logo cần dùng. Dự án có cảnh minh hoạ: stage thêm `tools/canh.mjs`, cả `do-hoa-chung/canh-kit/` và `du-an/<x>/canh/`, giữ nguyên cấu trúc thư mục tương đối (công cụ tìm kit theo đường dẫn so với chính nó).
 3. `cd <studio> && npm ci` (khoảng 40 giây, `package-lock.json` đã ghim phiên bản). Chạy trong lúc máy làm bước 5 (mục "Hai làn song song").
-4. Kiểm: `npx tsc --noEmit` sạch và `npx remotion compositions src/index.ts` liệt kê đúng 22 composition.
+4. Kiểm: `npx tsc --noEmit` sạch và `npx remotion compositions src/index.ts` liệt kê đúng 24 composition (22 đồ họa động, 2 Thumbnail tĩnh).
 5. Máy: `python3 tools/cai-dat.py --trang-thai` (sherpa-onnx, model, ffmpeg); thiếu gì thì theo skill phim-thiet-lap.
 
 ## Quy trình một dự án
@@ -100,6 +103,7 @@ Khung chung; từng loại việc theo skill tương ứng.
 6. **Bản nháp**: `python3 tools/assemble.py --project "du-an/<x>" --preview --out "<tên>-<khung>-nhapN"` rồi nghiệm thu và gửi người dùng duyệt.
 7. **Bản chính**: bỏ `--preview`, `--out "<tên>-<khung>"`. Bài dài gọi lặp y nguyên lệnh (tự resume).
 8. **Giao**: bản đạt nghiệm thu (và đã burn phụ đề nếu là clip dọc) copy sang `xuat-hoan-chinh/`. Báo tên file, đúng thư mục `xuat-hoan-chinh/`, thời lượng, dung lượng, kèm chapters nếu có.
+9. **Đăng tải** (tự làm, không chờ nhắc): skill phim-dang-tai. Chọn khung mặt bằng `python3 tools/chon-khung-thumbnail.py --map <video>.map.json` (rồi `--quanh kNN`), soạn `dang-tai.json` và `thumbnail.json`, `python3 tools/dang-tai.py job` rồi render thumbnail ở sandbox bằng `render-do-hoa.mjs --lam-lai` (job `"still": true`), cuối cùng `python3 tools/dang-tai.py kiem` ĐẠT và nhìn `soi-thumbnail.jpg`. Báo cùng lượt với bước 8.
 
 ## timeline.json: những điều phải nhớ
 
@@ -120,10 +124,13 @@ Bối cảnh: một bất biến của hệ (hình = tiếng ở mọi file trun
 
 **Bốn nguyên tắc**
 
-1. Bất biến phải được ĐO ở mọi bước: từng part sau encode, thân phim sau ghép, thành phẩm sau finalize đều qua `check_av()` (hình = tiếng trong 0,06 giây, bằng thời lượng dự kiến trong 0,15 giây). Đồ họa render xong tự đo. Transcript qua `nghiem-thu.py transcript`.
+1. Bất biến phải được ĐO ở mọi bước: từng part sau encode, thân phim sau ghép, thành phẩm sau finalize đều qua `check_av()`: part và thân phim (tiếng PCM, đúng từng mẫu) hình = tiếng trong 4 ms và tổng đúng dự kiến trong 0,02 giây; thành phẩm (AAC, hạt 21 ms) trong 0,06 giây. Ngưỡng 0,06 giây chỉ hợp cho AAC: áp cho part từng bỏ lọt part lệch đúng một khung, cộng dồn qua 200 part thành lệch 0,1-0,2 giây. Đồ họa render xong tự đo. Transcript qua `nghiem-thu.py transcript`.
 2. Không có nhánh sửa ngầm: sai là dừng với bảng chẩn đoán. Hạ ngưỡng, bắt ngoại lệ rồi bỏ qua, "gần đúng là được" đều bị cấm.
-3. Cache phải biết code và dữ liệu đã đổi: chữ ký `.sig` gồm `TOOL_VERSION` và kích cỡ, mtime mọi file nguồn liên quan; part lấy từ cache vẫn qua `check_av()`. Muốn ép dựng lại một part: thu `part-*.mp4` và `.sig` của nó về 0 byte bằng `open(f, "w").close()` (đây là ghi, không cần quyền xoá). Sửa logic encode thì đổi `TOOL_VERSION` (hằng số đầu `tools/assemble.py`) rồi chạy `python3 tools/kiem-tra-xuong.py` (dựng lại `du-an/_kiem-tra-tu-dong` qua cổng nghiệm thu).
-4. Kiểm cấu hình trước khi tốn thời gian: `assemble.py --kiem-tra` bắt lỗi timeline (file thiếu, mốc vượt nguồn, nhầm hai hệ mốc, B-roll chồng nhau, insert đầu phim thiếu role) trong một giây.
+3. Cache phải biết code và dữ liệu đã đổi: chữ ký `.sig` gồm `TOOL_VERSION` và kích cỡ, mtime mọi file nguồn liên quan; part lấy từ cache vẫn qua `check_av()`. Muốn ép dựng lại một part: thu `part-*.mp4` và `.sig` của nó về 0 byte bằng `open(f, "w").close()` (đây là ghi, không cần quyền xoá). Sửa logic encode thì đổi `TOOL_VERSION` (hằng số đầu `tools/assemble.py`) rồi chạy `python3 tools/kiem-tra-xuong.py` (dựng lại `du-an/_kiem-tra-tu-dong` qua cổng nghiệm thu, và chạy `kiem-dong-bo.py`: bắt buộc ĐẠT trước khi dựng thật).
+4. Đồng bộ phải được đo TUYỆT ĐỐI, không chỉ so thời lượng: `tools/kiem-dong-bo.py` dựng nguồn giả có chớp trắng và tiếng click đúng cùng một khung, cắt tại mốc lẻ, rồi đo "tiếng - hình" từng sự kiện trên thành phẩm (mỗi cặp trong ±40 ms, trôi dưới 15 ms mỗi phút). Nó là bài kiểm hồi quy [regression] của `assemble.py`: mọi lần sửa logic encode, ghép hay finalize phải chạy lại. `tools/do-dong-bo.py` làm cùng việc trên phim thật (so thành phẩm với nguồn tại 10-12 mốc); `nghiem-thu.py video` tự gọi nó khi có `map.json`.
+5. Kiểm cấu hình trước khi tốn thời gian: `assemble.py --kiem-tra` bắt lỗi timeline (file thiếu, mốc vượt nguồn, nhầm hai hệ mốc, B-roll chồng nhau, insert đầu phim thiếu role) trong một giây.
+
+**Bổ sung 2026-09-30 (`CONCAT_REV` c8)**: (a) `concat.txt` luôn ghi `duration` chính xác n/fps từng part; (b) map ghi dur frame-exact của insert và `write_time_map` dừng khi tổng dur map lệch tổng part quá 5 ms; (c) finalize đo loudness nghiêm ngặt, cache `.ln` chỉ nhận kết quả có `input_i`, không rơi về loudnorm một lượt. Sửa ghép hay finalize thì đổi `TOOL_VERSION` hoặc `CONCAT_REV`, chạy `kiem-tra-xuong.py`, rồi mới dựng thật.
 
 **Công cụ**
 
@@ -131,7 +138,9 @@ Bối cảnh: một bất biến của hệ (hình = tiếng ở mọi file trun
 |---|---|
 | Kiểm timeline trước khi dựng | `python3 tools/assemble.py --project "du-an/<x>" --kiem-tra` |
 | Dựng (tự kiểm từng part, thân phim, thành phẩm; ghi `.map.json`, `.nghiem-thu.json`) | `python3 tools/assemble.py --project "du-an/<x>" [--preview] --out "<tên>"` |
-| Nghiệm thu thành phẩm (hình = tiếng, LUFS, khung, im lặng, hình đứng, ảnh lưới) | `python3 tools/nghiem-thu.py video "<file.mp4>" --khung ngang\|doc [--nhap] --anh` |
+| Kiểm đồng bộ hình-tiếng tuyệt đối của `assemble.py` (dựng thử chớp/click, hồi quy) | `python3 tools/kiem-dong-bo.py` (`--assemble <bản khác>` để thử một bản cũ) |
+| Đo đồng bộ trên phim thật (thành phẩm so với nguồn, trôi theo thời gian) | `python3 tools/do-dong-bo.py "<file.mp4>" [--mau 12]` (nghiệm thu tự gọi) |
+| Nghiệm thu thành phẩm (hình = tiếng, đồng bộ so với nguồn, LUFS, khung, im lặng, hình đứng, ảnh lưới) | `python3 tools/nghiem-thu.py video "<file.mp4>" --khung ngang\|doc [--nhap] --anh` |
 | Nghiệm thu transcript (Whisper bỏ đoạn, mốc đảo) | `python3 tools/nghiem-thu.py transcript "du-an/<x>" [--nguon <tên file>]` |
 | Nghiệm thu đồ họa đã render | `python3 tools/nghiem-thu.py do-hoa "du-an/<x>/do-hoa"` |
 | Kiểm giấy kịch bản (thời lượng, độ phủ infomotion) | `python3 tools/uoc-luong.py "du-an/<x>/KICH-BAN-<...>.md" [--muc-tieu 5-6p] [--khoang-hinh 8]` |
@@ -140,12 +149,12 @@ Bối cảnh: một bất biến của hệ (hình = tiếng ở mọi file trun
 
 **Quy ước báo cáo**: chưa có dòng "nghiệm thu máy: ĐẠT" thì chưa được nói "xong". Ảnh lưới `<file>.luoi.jpg` là bước soi mắt, chạy SAU cổng máy, không thay cổng máy. Overlay đồng bộ lời nói cần thêm lớp thứ hai: trích khung tại mốc từng overlay (theo `map.json`) và đối chiếu với câu transcript đang nói ở đúng khung đó.
 
-**Giới hạn của cổng máy**: `check_av()` so thời lượng tổng; lệch căn chỉnh cục bộ tại từng mối nối có thể vẫn ĐẠT. Khi nghi lệch hình tiếng sau khi đổi bất cứ gì ở bước ghép, rà khoảng cách gói bằng `ffprobe -select_streams a:0 -show_entries packet=pts_time -of csv=p=0` tại các mốc ranh giới đoạn đọc từ `map.json`.
+**Giới hạn của cổng máy**: `check_av()` so thời lượng (hình với tiếng của cùng một file), nên không thấy lệch căn chỉnh so với NGUỒN. Hai công cụ trên bù chỗ đó; sai số còn lại của một phim đạt là dưới một khung hình (nguồn 29.97 fps ra 30 fps), tiếng khớp tuyệt đối. Khi người xem báo lệch dù cổng đạt: chạy `do-dong-bo.py --mau 24` (mốc dày hơn) rồi rà khoảng cách gói bằng `ffprobe -select_streams a:0 -show_entries packet=pts_time -of csv=p=0` tại ranh giới đoạn đọc từ `map.json`. Công cụ đo tự viết phải thử trên nguồn biết trước đáp án (`docs/BAI-HOC.md` chủ đề "Đồng bộ hình tiếng").
 
 ## Việc chạy dài hơn 180 giây
 
 - **`assemble.py` tự resume**: mỗi part encode xong lưu kèm `.sig`. Lượt gọi bị ngắt thì gọi lại Y NGUYÊN lệnh (cùng `--out`) nhiều lần tới khi thấy "✓ Xong"; part đã đúng tự bỏ qua.
-- Bước ghép và finalize không có resume. Khi một lượt 180 giây không đủ cho hai bước này: stage các `part-*.mp4` đã encode và nhạc lên sandbox (tới 600 giây mỗi lệnh), chạy lại đúng lệnh ghép và finalize chép từ `assemble.py`, rồi commit về `xuat-nhap/` (file lớn theo mục "Truyền file hai chiều"). `map.json` và chapters không phụ thuộc độ phân giải hay CRF nên dùng lại được số liệu của bản nháp preview cùng timeline. Không dùng preset `ultrafast` để thoát kẹt trừ khi người dùng chấp nhận file nặng hơn nhiều.
+- Bước ghép và finalize có cache từng chặng (thân phim theo `.sig`, mix nhạc, số đo loudness) nên phim dài cũng chạy được bằng cách gọi lại y nguyên lệnh nhiều lượt; nhưng chạy xong bản cuối thì `.tam/` bị thu về 0 byte, gọi lại sau đó là dựng lại từ đầu. Khi một chặng vẫn vượt 180 giây: stage các `part-*.mp4` đã encode và nhạc lên sandbox (tới 600 giây mỗi lệnh), chạy lại đúng hàm ghép (`_concat_exact`: hình copy và tiếng nối thẳng từng mẫu PCM) và finalize chép từ `assemble.py`, không tự gõ lại lệnh `concat` với `aresample` (cách cũ làm lệch hình-tiếng), rồi commit về `xuat-nhap/` (file lớn theo mục "Truyền file hai chiều"). `map.json` và chapters không phụ thuộc độ phân giải hay CRF nên dùng lại được số liệu của bản nháp preview cùng timeline. Không dùng preset `ultrafast` để thoát kẹt trừ khi người dùng chấp nhận file nặng hơn nhiều.
 - **`render-do-hoa.mjs`**: đường alpha mặc định là PNG + ffmpeg libvpx (nhanh khoảng sáu lần encoder vp8 của Remotion); `--gioi-han <giây>` dừng gọn và thoát mã 2 để chạy lặp. Render tuần tự, không song song hai job trong sandbox 2 lõi.
 - **Gỡ băng**: large-v3 trên Mac không bị giới hạn 180 giây. Turbo trong VM: script + `timeout 170` + log, gọi lặp đọc tiến độ; file dài hơn 90 phút tách audio thành khúc 30 phút, cộng offset khi ghép, kiểm mốc ở ranh giới khúc.
 - Việc dài khác trên máy không có resume: ghi lệnh vào script trong dự án, chạy `timeout 170 bash du-an/<x>/.tam/run.sh >> du-an/<x>/.tam/run.log 2>&1; tail -5 du-an/<x>/.tam/run.log`, script tự bỏ qua bước đã xong.

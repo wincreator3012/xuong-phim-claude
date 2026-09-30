@@ -43,6 +43,7 @@ Xưởng làm việc bằng nguyên lý, không bằng khuôn. Mọi quyết đ�
 - Phương án cắt và overlay duyệt trước khi dựng; nháp 480p duyệt trước bản chính. Infomotion và phim tài liệu có thêm cổng duyệt trên giấy.
 - Chưa có "nghiệm thu máy: ĐẠT" thì chưa nói "xong" (chi tiết: `skills/_chung/nghiem-thu-dung-y.md`).
 - Báo giao: tên file, đúng thư mục `xuat-hoan-chinh/`, thời lượng, dung lượng, chapters nếu có, dòng ghi công nhạc nếu dùng track CC-BY.
+- Clip vừa vào `xuat-hoan-chinh/` thì làm luôn gói đăng tải theo skill phim-dang-tai (ba tiêu đề và mô tả YouTube, status Facebook, ba thumbnail từ khung hình thật, qua `tools/dang-tai.py kiem`), không chờ người dùng nhắc; báo cùng lượt với báo giao.
 
 ## Khi một khâu hỏng
 
