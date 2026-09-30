@@ -150,6 +150,16 @@ Xưởng này được rút ra từ hơn một tháng dựng clip thật (bài g
 
 **Thư mục người dùng thường cấm xoá**: file tạm, khung kiểm tra để trong thư mục nhà của VM; lỡ tạo trong thư mục xưởng thì chuyển vào `_to_delete/` và báo người dùng.
 
+**`git status` trong VM Cowork để lại `.git/index.lock` rỗng không xoá được** (thư mục người dùng cấm xoá mặc định), làm lần commit sau của người dùng bị git chặn. Chỉ đọc trạng thái repo bằng `GIT_OPTIONAL_LOCKS=0 git status`; lỡ để lại khoá thì xin quyền xoá đúng file đó rồi xoá ngay.
+
+## Về học từ dây chuyền khác (2026-09-30)
+
+**Tách việc nghĩ và việc tính, kể cả trên giấy.** Một dây chuyền phim tự động khác (nhận chủ đề, trả video sau khoảng 26 phút, không người duyệt giữa chừng) để mô hình viết kịch bản nhưng giao mọi phép tính nhịp cảnh và mốc phụ đề cho script đọc thời lượng thật của file. Xưởng này đã làm vậy ở khâu dựng (`map.json`, `nhan-doan.py`) nhưng vẫn cộng tay ở khâu giấy, đúng chỗ từng sinh ra bản nháp 9 phút so với mục tiêu 5-6 phút. Từ đó có `tools/uoc-luong.py`: con số trên kịch bản do script cộng, mật độ hình do script đếm.
+
+**Kiểm chứng dữ kiện là một cổng, không phải một thói quen.** Dây chuyền đó dừng hẳn khi tiêu đề sai hay chưa kiểm được, đưa bằng chứng và ba lựa chọn cho người yêu cầu. Phim giới thiệu dự án cho nhà tài trợ càng cần điều này: một con số sai trên màn hình làm mất uy tín nhanh hơn mọi lỗi dựng. Điểm khác được giữ: ở xưởng này lời nhân vật và giọng người dùng là chất liệu thật, không sửa; chỉ quyết định có đưa dữ kiện lên đồ họa hay không.
+
+**Học cơ chế, không học cách bù.** Dây chuyền tự động có những cách bù hợp với mục tiêu tốc độ của nó (clip lỗi thì mượn cảnh kề, hình do AI tạo thay cảnh thật, giọng máy thay giọng người). Xưởng này giữ nguyên tắc sai là dừng, mọi cách bù phải thành lựa chọn của người dùng; chất liệu thật và giọng thật là bản sắc, không phải chi phí cần giảm. Những gì đáng học là cơ chế: cổng kiểm chứng, dòng "khi hỏng" cho từng khâu, bảng thời gian đo thật, hai làn chạy song song, một khung hình chung chốt một lần cho cả video.
+
 ## Về infomotion (video dựng hoàn toàn từ đồ hoạ, không có cảnh quay)
 
 **Ngân sách khung phải tính riêng từng cảnh khi một ô timeline có `durationInSeconds` LOCKED.** Một dự án "chậm nhịp vẽ lại toàn bộ 50%" tưởng chỉ cần nhân một hệ số chung, nhưng mỗi ô timeline có tổng số khung cố định (giữ để không phá lịch overlay đã kiểm chứng không hở khung) - ô dư khung nhiều chậm được gần trọn, ô eo hẹp chỉ chậm được một phần. Tính `budget = durationInFrames - khung dành cho fade-out - biên an toàn` cho TỪNG cảnh, không áp một số chung; mốc hiện nhãn chữ và thời lượng hiện chữ cũng phải tính lại theo đúng ngân sách còn lại.

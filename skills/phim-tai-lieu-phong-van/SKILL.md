@@ -7,11 +7,12 @@ description: Làm phim tài liệu ngắn dựa trên phỏng vấn [interview-b
 
 Mục tiêu: từ một dự án hay sự kiện có thật, làm ra một phim ngắn (thường 4-7 phút, kèm bản gọn 60-90 giây khi cần) trong đó nhiều nhân vật kể MỘT câu chuyện, minh hoạ bằng hình ảnh thật, khiến người xem hiểu và muốn đồng hành. Khác với bài giảng một người (phim-dung-bai), ở đây lời nói đến từ nhiều file quay riêng biệt và ý nghĩa của phim nằm ở cách dệt các giọng lại với nhau.
 
-Ba nguyên tắc xuyên suốt:
+Bốn nguyên tắc xuyên suốt:
 
 1. **Dệt giọng theo chủ đề, không theo người.** Không phát hết lời người này rồi tới người kia. Mỗi hồi truyện mượn đúng câu của đúng người, xen hình ảnh thật. Bốn góc nhìn cộng hưởng thành một câu chuyện.
 2. **Người thụ hưởng ở trung tâm; cảm xúc trước, số liệu sau.** Khoảng 80% thời lượng là câu chuyện con người, 20% là con số (và con số hiện bằng đồ họa, không đọc suông). Tổ chức và nhà tài trợ ở vai bối cảnh, không ở vai nhân vật chính.
 3. **Phẩm giá và đồng thuận.** Không đóng khung ai theo hướng thương hại, không kể "người hùng cứu giúp", không dàn dựng người khác kể điều không thuộc đời thật của họ. Đồng thuận bằng văn bản, trẻ em qua phụ huynh hoặc nhà trường. Danh mục "điều không nói, không hiện" lập từ đầu và giữ tới cuối.
+4. **Chữ trên màn hình phải kiểm được; lời nhân vật giữ nguyên.** Mọi dữ kiện hiện thành đồ họa (con số, năm, tên tổ chức, chức danh, trích dẫn, tên tác giả của một mô hình hay công cụ) có nguồn đối chiếu ghi ngay trong kịch bản thực tế. Nhân vật nói lệch dữ kiện thì không sửa lời họ, không dựng cho họ nói khác đi, không đè chữ đúng lên lời sai: chọn một trong ba cách ở Bước 2.3. Hình do AI tạo không thay cho hình thật về người, nơi chốn hay sự kiện của dự án; phim chỉ dùng hình quay thật, ảnh tư liệu có nguồn, hoặc đồ họa mà người xem nhìn vào là biết là đồ họa.
 
 Đọc trước: `docs/QUY-TRINH-KY-THUAT.md` (môi trường, cổng nghiệm thu, hai hệ mốc thời gian) và `phong-cach/PHONG-CACH.md` (giọng, chữ trên màn hình, chức danh nguyên văn). Mẫu các file hồ sơ ở `references/mau-ho-so.md`; nền tảng kể chuyện, kỹ thuật phỏng vấn, định lượng cảnh trám và đạo đức ở `references/ke-chuyen-phong-van.md`.
 
@@ -107,7 +108,7 @@ Viết `KIEM-KE-NGUON.md` theo mẫu, phần quan trọng nhất là **bảng đ
 
 ### Bước 2.2 - Đọc transcript như biên tập viên
 
-Đọc trọn transcript từng người một lượt trước khi cắt. Đánh dấu soundbite [selects] cho từng hồi kèm mốc `start`-`end`, chấm ba mức: đắt (giữ gần nguyên văn), dùng được (có thể rút gọn), dự phòng. Tiêu chí câu đắt: cụ thể, có hình ảnh trong lời, có cảm xúc thật, đứng một mình vẫn hiểu. Ghi riêng **khoảnh khắc đắt nhất của cả phim** (thường là một câu chuyện nhỏ có lời thoại) để dành cho vị trí đẹp nhất ở hồi 3 và giữ hình người nói suốt đoạn đó. Tìm câu hỏi neo và câu kết THẬT trong lời nhân vật (thay cho câu dự kiến nếu lời thật hay hơn). Ghi các cụm nhạy phải cắt (tên riêng, chi tiết trong danh mục không nói) kèm mốc, và chất lượng tiếng từng bite.
+Đọc trọn transcript từng người một lượt trước khi cắt. Đánh dấu soundbite [selects] cho từng hồi kèm mốc `start`-`end`, chấm ba mức: đắt (giữ gần nguyên văn), dùng được (có thể rút gọn), dự phòng. Tiêu chí câu đắt: cụ thể, có hình ảnh trong lời, có cảm xúc thật, đứng một mình vẫn hiểu. Ghi riêng **khoảnh khắc đắt nhất của cả phim** (thường là một câu chuyện nhỏ có lời thoại) để dành cho vị trí đẹp nhất ở hồi 3 và giữ hình người nói suốt đoạn đó. Tìm câu hỏi neo và câu kết THẬT trong lời nhân vật (thay cho câu dự kiến nếu lời thật hay hơn). Ghi các cụm nhạy phải cắt (tên riêng, chi tiết trong danh mục không nói) kèm mốc, và chất lượng tiếng từng bite. Ghi riêng mọi **dữ kiện kiểm được** trong lời (con số, năm, tên chương trình, tên người hay tổ chức được nhắc, trích dẫn) kèm mốc, nhất là những câu có thể thành đồ họa: đây là đầu vào cho cột "Kiểm chứng" ở Bước 2.3.
 
 ### Bước 2.3 - Kịch bản thực tế [paper edit]
 
@@ -122,11 +123,13 @@ Viết `KICH-BAN-THUC-TE.md` theo mẫu: khung ba hồi đã điều chỉnh the
 - Đoạn đắt nhất: ít cắt, ít đồ họa, giữ mặt người nói; cảnh trám chỉ dùng khi lời nhắc tới một hình ảnh cụ thể có sẵn trong nguồn.
 - Cảnh sự kiện (ký kết) đặt ở chỗ lời nói về cam kết, không rải khắp phim.
 
-Cuối kịch bản bắt buộc có: **tổng thời lượng ước tính** theo hồi (cộng các bite và cầu nối); nếu vượt mục tiêu quá 30% thì đề xuất ngay hai phương án (bản đầy đủ và bản gọn, ghi rõ bỏ bite nào) để user chọn TRƯỚC khi dựng, không dựng bản dài rồi cắt qua nhiều vòng; **danh sách quyết định cần user**: tên phim cho thẻ tiêu đề, người tổ chức hay người quay có xuất hiện trong phim không, overlay nào không có câu nói tương ứng trong lời (callout biên tập) và đặt ở đâu vì sao, cụm nhạy nào đã cắt; **cảnh trám còn thiếu** và cách bù (quay bổ sung với mô tả cụ thể theo Bước 1.4, ảnh tĩnh qua Ken Burns theo phim-tu-lieu, hay đồ họa).
+**Cổng kiểm chứng.** Mỗi dòng có đồ họa mang dữ kiện ghi nguồn đối chiếu vào cột "Kiểm chứng": tài liệu của tổ chức (tên file, trang), trang web chính thức, văn bản ký kết, `PHONG-CACH.md` cho chức danh nguyên văn, hoặc người có thẩm quyền đã xác nhận (ai, ngày nào). Dữ kiện công khai thì tra web và ghi đường dẫn; không tìm ra thì ghi "chưa kiểm được", không để trống. Callout biên tập (overlay không có câu nói tương ứng) cũng phải có nguồn. Dữ kiện chưa kiểm được hoặc lệch nguồn không lên đồ họa; đưa vào danh sách quyết định kèm bằng chứng và ba cách để user chọn: (1) nhờ tổ chức hoặc chính nhân vật xác nhận, rồi mới hiện dữ kiện đã kiểm; (2) giữ lời nói nguyên văn nhưng đồ họa không lặp lại dữ kiện đó; (3) bỏ câu, thay bằng một bite khác cùng ý. Không tự chọn thay user.
+
+Cuối kịch bản bắt buộc có: **tổng thời lượng ước tính** theo hồi (không cộng tay: `python3 tools/uoc-luong.py "du-an/<x>/KICH-BAN-THUC-TE.md"` cộng cột Dài theo hồi, so với mục tiêu và soi cột Kiểm chứng); nếu vượt mục tiêu quá 30% thì đề xuất ngay hai phương án (bản đầy đủ và bản gọn, ghi rõ bỏ bite nào) để user chọn TRƯỚC khi dựng, không dựng bản dài rồi cắt qua nhiều vòng; **danh sách quyết định cần user**: tên phim cho thẻ tiêu đề, dữ kiện chưa kiểm được hoặc lệch nguồn (kèm bằng chứng và ba cách của Cổng kiểm chứng), người tổ chức hay người quay có xuất hiện trong phim không, overlay nào không có câu nói tương ứng trong lời (callout biên tập) và đặt ở đâu vì sao, cụm nhạy nào đã cắt; **cảnh trám còn thiếu** và cách bù (quay bổ sung với mô tả cụ thể theo Bước 1.4, ảnh tĩnh qua Ken Burns theo phim-tu-lieu, hay đồ họa).
 
 ### Cổng duyệt 2 - Kịch bản thực tế
 
-User đọc `KICH-BAN-THUC-TE.md` trong khoảng mười phút mà không cần mở video, trả lời các quyết định, sửa gì cứ nói. Được duyệt mới dựng.
+Trước khi trình, `uoc-luong.py` phải báo "KIỂM GIẤY: ĐẠT", hoặc mọi điểm "CẦN XEM" đã nằm trong danh sách quyết định. User đọc `KICH-BAN-THUC-TE.md` trong khoảng mười phút mà không cần mở video, trả lời các quyết định, sửa gì cứ nói. Được duyệt mới dựng.
 
 ### Bước 2.4 - Dựng nháp
 
@@ -153,6 +156,16 @@ User góp ý chủ yếu theo nhãn ổn định (A/B/T/M) tra trong `NHAN-DOAN.
 ### Bước 2.6 - Bản chính và bàn giao
 
 Xuất 1080p với `--out` tường minh, `nghiem-thu.py video` ĐẠT, lưới khung hình đọc lại lần cuối, copy vào `xuat-hoan-chinh/`. Báo user: tên file, thời lượng, dung lượng, danh sách chương, dòng ghi công nhạc nếu dùng track CC-BY, "nghiệm thu máy: ĐẠT". Đề xuất bước tiếp: bản gọn 60-90 giây cho mạng xã hội bằng phim-clip-ngan (cắt từ đoạn đắt nhất, câu hỏi neo, hình sự kiện); bản riêng cho từng đối tác nếu họ cần dùng logo riêng; gửi nhân vật xem trước nếu đã hứa ở Bước 1.5. Cập nhật `HO-SO-PHIM.md` trạng thái hoàn tất và những gì đã học, bài học kỹ thuật đáng giữ ghi vào `docs/BAI-HOC.md`.
+
+## Khi một khâu hỏng
+
+Nguyên tắc chung và mẫu câu báo ở mục "Khi một khâu hỏng" của `QUY-TRINH-KY-THUAT.md`: thử lại tối đa một lần sau khi đã sửa nguyên nhân; không có cách bù ngầm; báo bằng lời thường khâu nào dừng, phần nào vẫn giữ, cần user làm gì. Riêng thể loại này:
+
+- Gỡ băng một file phỏng vấn không qua `nghiem-thu.py transcript`: gỡ lại cửa sổ rộng quanh chỗ hỏng; hai lần cho kết quả khác hẳn nhau thì dừng đoạn đó, nhờ user nghe tại mốc cụ thể. Các file phỏng vấn khác vẫn làm tiếp.
+- Cảnh trám thiếu hoặc bị khoá thời lượng: không kéo dài bằng khung đứng, không lặp clip, không thay bằng hình do AI tạo; ghi vào "Cảnh trám còn thiếu" với ba cách bù (quay bổ sung theo mô tả Bước 1.4, ảnh tĩnh có nguồn, đồ họa) để user chọn.
+- Dữ kiện không kiểm được: không phải lỗi kỹ thuật, là một quyết định của user (Cổng kiểm chứng ở Bước 2.3).
+- Một đồ họa render lỗi: dừng riêng dòng đó, các dòng khác vẫn làm; không thay bằng đồ họa khác nội dung khi chưa hỏi.
+- Dựng không qua `check_av()` hoặc `nghiem-thu.py video`: dừng, đọc bảng chẩn đoán, không giao nháp lỗi.
 
 ## Khi kết thúc mỗi phiên
 

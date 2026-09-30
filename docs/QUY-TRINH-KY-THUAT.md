@@ -11,7 +11,7 @@
 | 18 composition đồ họa (Intro, Outro, SectionTitle, InfoList, InfoQuote, InfoStat, InfoSteps, LowerThird, Benefits, mỗi cái ngang và dọc) | `studio/` (Remotion) | mọi đồ họa động; không có composition "Caption": câu caption nổi bật = Benefits một mục, `showIndex:false`, `wrap:true`; minh họa khái niệm/số liệu ưu tiên infographic hơn ảnh tải |
 | Thư viện âm thanh | danh mục kiểm định `thu-vien/AM-THANH.md` + `am-thanh.json`; file thật và LUFS đo thật ở `nhac-nen/THU-VIEN.md` (sinh bởi `tools/nhap-am-thanh.py`) | mọi nhạc nền và hiệu ứng; không dùng nhạc ngoài danh mục trừ nhạc riêng người dùng ở `nhac-nen/rieng/` |
 | Nguồn hình minh hoạ | `thu-vien/HINH-ANH.md` | skill phim-tu-lieu, tải theo từng dự án vào `du-an/<x>/tu-lieu/` + `TU-LIEU.md` |
-| Bộ công cụ pipeline | `tools/`: `mediainfo.py`, `transcribe.py`, `assemble.py` (timeline → thành phẩm), `nghiem-thu.py`, `render-do-hoa.mjs`, `mau-sac.py`, `slide-nguon.py`, `slide-khop.py`, `bo-cuc-slide.py`, `multicam-khop.py`, `multicam-proxy.py`, `multicam-dan.py`, `chuong-youtube.py`; cài đặt `cai-dat.py`, `kiem-tra-xuong.py`, `tai-chat-lieu.py`, `nhap-am-thanh.py` | theo quy trình từng skill; docstring đầu mỗi file là tài liệu tham số |
+| Bộ công cụ pipeline | `tools/`: `mediainfo.py`, `transcribe.py`, `assemble.py` (timeline → thành phẩm), `nghiem-thu.py`, `render-do-hoa.mjs`, `mau-sac.py`, `slide-nguon.py`, `slide-khop.py`, `bo-cuc-slide.py`, `multicam-khop.py`, `multicam-proxy.py`, `multicam-dan.py`, `chuong-youtube.py`, `uoc-luong.py` (kiểm giấy kịch bản trước khi dựng); cài đặt `cai-dat.py`, `kiem-tra-xuong.py`, `tai-chat-lieu.py`, `nhap-am-thanh.py` | theo quy trình từng skill; docstring đầu mỗi file là tài liệu tham số |
 | Thư viện Python và model | `tools/pylib/` (numpy, sherpa-onnx, pillow, python-pptx), `tools/models/` (silero VAD + whisper) | các tool tự thêm `pylib` vào `sys.path`; không cần PYTHONPATH |
 | Hệ màu sắc | `tools/mau-sac.py kham\|soi` + đơn màu `du-an/<x>/mau-sac.json` mà `assemble.py` tự áp | skill phim-mau-sac; HDR (color_transfer smpte2084/arib-std-b67) bắt buộc tonemap; đa số kết luận đạt-không-chỉnh |
 | Bài giảng có slide (5 bố cục) | `tools/slide-nguon.py`, `tools/slide-khop.py`, `do-hoa-chung/bo-cuc/` (sinh bởi `bo-cuc-slide.py`, màu theo brand.json), trường `layout`/`slide` trong timeline | skill phim-bai-giang-slide |
@@ -87,6 +87,7 @@ Một bất biến của hệ (hình = tiếng ở mọi file trung gian) từng
 
 | Việc | Lệnh (từ gốc xưởng) |
 |---|---|
+| Kiểm giấy kịch bản (thời lượng theo hồi, mật độ hình, cột kiểm chứng) | `python3 tools/uoc-luong.py "du-an/<x>/KICH-BAN-<...>.md" [--muc-tieu 5-6p]` |
 | Kiểm timeline | `python3 tools/assemble.py --project "du-an/<x>" --kiem-tra` |
 | Dựng (tự kiểm từng part, body, thành phẩm; ghi `.map.json`, `.nghiem-thu.json`) | `python3 tools/assemble.py --project "du-an/<x>" [--preview]` |
 | Nghiệm thu thành phẩm | `python3 tools/nghiem-thu.py video "<file.mp4>" --khung ngang\|doc [--nhap] --anh` |
@@ -96,6 +97,50 @@ Một bất biến của hệ (hình = tiếng ở mọi file trung gian) từng
 | Kiểm xưởng sau khi sửa tool | `python3 tools/kiem-tra-xuong.py --co-slide` |
 
 Quy ước báo cáo: chưa có dòng "nghiệm thu máy: ĐẠT" thì chưa được nói "xong". Ảnh lưới là bước soi mắt, chạy SAU cổng máy, không thay cho cổng máy.
+
+## Khi một khâu hỏng
+
+Mỗi khâu có sẵn cách xử lý khi hỏng, để Claude không phải nghĩ lại mỗi lần và người dùng luôn biết chuyện gì đang xảy ra. Ba nguyên tắc:
+
+1. Tìm nguyên nhân, sửa, rồi thử lại tối đa một lần. Lần thứ hai vẫn hỏng thì dừng khâu đó.
+2. Không có cách bù ngầm. Kéo dài bằng khung đứng, mượn cảnh kề, thay hình khác nội dung, hạ ngưỡng nghiệm thu: mọi cách bù đều phải hiện ra thành một lựa chọn kèm lý do để người dùng chọn.
+3. Hỏng một phần không kéo cả dự án dừng theo: phần độc lập vẫn làm tiếp, phần đã xong vẫn giữ (cache part, file trung gian, job JSON).
+
+| Khâu | Hỏng thường gặp | Tự làm | Dừng và báo khi |
+|---|---|---|---|
+| Đưa file từ máy lên sandbox | lỗi `untrusted_device`, quá thời gian | file lớn: trích phần cần trên máy trước, stage riêng file lớn nhất | `untrusted_device`: không thử lại, nhờ người dùng đăng nhập lại app Claude |
+| Gỡ băng | model chết lặng vì hết bộ nhớ; rớt cụm ở ranh giới lô 28 giây; hallucination khi có tạp âm | dùng `turbo`, chia mảnh; gỡ lại cửa sổ rộng quanh chỗ hỏng | hai lần gỡ cùng đoạn cho kết quả khác hẳn nhau: nhờ người dùng nghe tại mốc cụ thể |
+| Render đồ họa (sandbox) | treo không có log, `tsc` lỗi, file ngắn hơn dự kiến | kiểm khoá Chrome mồ côi, gộp job chạy tuần tự, render lại đúng thời lượng | sau một lần sửa vẫn lỗi: báo đồ họa nào, đề xuất hình thay để người dùng chọn |
+| Dựng (`assemble.py`) | lượt gọi quá 180 giây; `check_av()` không đạt | gọi lại y nguyên (resume); concat hoặc finalize kẹt thì chia đôi danh sách part | `check_av()` không đạt: dừng, đọc bảng chẩn đoán, không encode lại cho qua |
+| Nghiệm thu (`nghiem-thu.py`) | LUFS, true peak, khung, hình đứng | true peak vượt khi LUFS đã đúng: thêm `alimiter` ở bước cuối; lỗi khác: sửa ở gốc rồi dựng lại | chưa ĐẠT thì không giao, không nói "xong" |
+| Đưa file về máy | ghi nhầm bản cũ; file lớn hơn 20 MB | mỗi lần sửa dùng tên staged mới, so `md5sum` hai phía; file lớn `split -b 19m` rồi nối lại trên máy | md5 vẫn lệch: báo, không chạy tiếp trên file lệch |
+| Kết nối với máy | máy ngủ, mất kết nối | làm tiếp phần làm được trong sandbox | cần file trên máy: nói rõ lúc này không với tới máy và cần gì |
+
+Mẫu câu báo, bằng lời thường, không thuật ngữ kỹ thuật: "Đang dừng ở khâu <gỡ băng / làm đồ họa / dựng nháp / kiểm bản xuất> vì <chuyện gì, một câu>. Phần đã xong vẫn giữ nguyên. <Việc cần người dùng làm, cụ thể> hoặc <cách đang thử, khoảng bao lâu>."
+
+## Thời gian đo thật
+
+Bảng này để Claude báo tiến độ bằng số đo thật ("còn khoảng X phút, đang chờ máy chứ không chờ bạn") thay vì đoán. Đo bằng `date +%s` trước và sau lệnh, hoặc thời gian ghi trong log; không ghi số ước lượng vào bảng. Sau mỗi dự án thêm hoặc sửa một dòng. Việc chưa có số đo thì báo với người dùng là ước lượng.
+
+| Việc | Quy mô | Nơi chạy | Đo được | Nguồn |
+|---|---|---|---|---|
+| Khởi động studio (`npm install`) | mỗi phiên một lần | sandbox | khoảng 40 giây | mục "Khởi động phiên" |
+| Proxy 4K sang 1080p | mỗi góc máy | máy (VM 4 lõi) | khoảng 0,4 lần thời gian thực | skill phim-multicam |
+| Dựng part (`assemble.py`) | bài khoảng 10 phút | máy | xong trong hai lượt gọi (mỗi lượt tối đa 180 giây) | `docs/BAI-HOC.md`, mục hạ tầng |
+| Gỡ băng (`transcribe.py`, turbo) | mỗi 10 phút tiếng | máy | chưa đo | |
+| Render đồ họa đục (mp4) | một đồ họa 10-15 giây | sandbox | chưa đo | |
+| Render đồ họa nổi (webm alpha) | một đồ họa 10-15 giây | sandbox | chưa đo (đường PNG + libvpx nhanh hơn encoder vp8 của Remotion) | |
+| Xuất bản chính 1080p và nghiệm thu | mỗi 10 phút phim | máy | chưa đo | |
+
+## Hai làn song song: máy và sandbox
+
+Máy và sandbox là hai nơi chạy độc lập nên làm cùng lúc được. Tiến trình nền trong `Bash` của sandbox sống qua nhiều lượt gọi (`nohup ... & disown`, theo dõi bằng `tail` log), còn `device_bash` trên máy chạy đồng bộ từng lượt. Vì vậy: khởi động việc dài ở sandbox trước, rồi làm việc của máy trong lúc chờ.
+
+- Khởi động phiên: sandbox `npm install` trong lúc máy chạy `cai-dat.py --trang-thai` và `mediainfo.py`.
+- Sau cổng duyệt kịch bản: sandbox render đồ họa theo job đã duyệt, trong lúc máy khám màu, làm proxy, soạn `timeline.json`.
+- Vòng góp ý: sandbox render lại riêng các đồ họa bị góp ý, trong lúc máy sửa `timeline.json` cho các điểm góp ý không dính đồ họa.
+
+Không chạy song song: hai job render trong cùng sandbox (2 CPU, kẹt nhau); hai việc mà việc sau cần kết quả việc trước (kịch bản cần transcript đạt, dựng cần đồ họa đã về máy). Trước khi dựng, luôn kiểm đồ họa đã commit về máy đủ file và `ffprobe` đúng thời lượng.
 
 ## Hai hệ mốc thời gian trong timeline.json (nguồn nhầm lẫn kinh điển)
 
@@ -149,6 +194,8 @@ Khác mọi skill khác: không có cảnh quay để cắt, nguồn chỉ là m
 Cả hai component nhận `floating`/`position` như các đồ hoạ nổi khác trong xưởng; `position: 'center'` là mặc định khi `floating` (canh giữa cả hai trục thay vì dồn lên một cạnh). Kích thước `floating` đã kiểm chứng qua dự án thật: icon `unit*58`, nhãn `unit*6.0`/`unit*3.9` - ngưỡng dưới, không nhỏ hơn khi không có lý do cụ thể.
 
 Quy trình đầy đủ (tám bước, ba nguyên tắc xuyên suốt, cách chọn ẩn dụ, ngân sách khung khi ô timeline LOCKED): `skills/phim-infomotion/SKILL.md`.
+
+Cập nhật 2026-09-30: kịch bản infomotion có thêm "Khung hình chung" ở đầu file (chốt một lần tại Cổng 1, mọi job kế thừa), dòng "Thấy gì:" lời thường cho mỗi nhịp có hình, dòng "Kiểm chứng:" cho mọi hình mang dữ kiện, và kiểm giấy bằng `tools/uoc-luong.py` trước khi trình. Lối vào B cho phép duyệt kịch bản chữ trước khi ghi âm; giọng máy chỉ làm bản tạm, bản giao luôn là giọng thật.
 
 
 Cập nhật 2026-09-20 (từ một vòng tinh chỉnh không chờ góp ý bằng số của dự án tham chiếu): cắt câu là việc làm nhiều vòng, rút `in`/`out` sát dần qua các nháp bằng cách neo `silencedetect` vào khoảng lặng gần cụm cần bỏ; mở đầu nên là chuỗi 3-4 cảnh động ngắn nối tiếp, không phải một cảnh động đơn kéo dài; đồ họa nhận diện `LowerThird` (thông tin về NGƯỜI) và pill `Benefits` (thông tin về Ý) là hai lớp bắt buộc tách biệt, không thay thế nhau; thẻ chuyển `SectionTitle` dùng `kicker` (tên dự án, lặp lại xuyên suốt) + `title` (tên hồi) làm quy ước chuẩn. Chi tiết và lý do trong `skills/phim-tai-lieu-phong-van/references/ke-chuyen-phong-van.md` mục 1, 4, 6, 7.

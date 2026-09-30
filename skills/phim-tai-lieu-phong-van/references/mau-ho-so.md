@@ -170,8 +170,11 @@ Nguyên tắc: dệt giọng theo chủ đề; tối thiểu chỉnh sửa lời
 2. <Người tổ chức> có xuất hiện không: đề xuất <không / có ở đâu>, vì <lý do>
 3. Overlay không có câu nói tương ứng: "<chữ>" đặt tại <mốc> vì <cùng nhóm ý với...>
 4. Cụm đã cắt vì nhạy: <mốc, nội dung>
+5. Dữ kiện chưa kiểm được hoặc lệch nguồn: <nhãn dòng, dữ kiện nhân vật nói, nguồn nói gì> - đề xuất cách <1 xác nhận / 2 giữ lời, không lên đồ họa / 3 thay bite>
 
 ## Thời lượng ước tính
+Bảng này lấy từ `python3 tools/uoc-luong.py "du-an/<x>/KICH-BAN-THUC-TE.md" --muc-tieu <mục tiêu>`, không cộng tay; chạy lại sau mỗi lần sửa dòng dựng.
+
 | Phần | Ước tính | Mục tiêu |
 |---|---|---|
 | Mở | 25s | 25s |
@@ -185,14 +188,16 @@ Vượt mục tiêu <..%>. Phương án A (đầy đủ, 8m40s): giữ nguyên. 
 
 Cột "Nhãn" gán MỘT LẦN ở đây và giữ nguyên qua mọi vòng nháp sau (xem quy ước ở `references/ke-chuyen-phong-van.md` mục 8): `A<n>` cho đoạn lời liên tục (phỏng vấn hoặc phát biểu sự kiện), `T<n>` cho cảnh trám độc lập dùng làm cầu nối (không phủ lên lời ai), `M<n>` cho từng cảnh trong chuỗi mở đầu nhiều cảnh trước A1. Cảnh trám PHỦ LÊN lời của một dòng A thì không có dòng riêng - ghi vào cột "Cảnh trám phủ" của chính dòng A đó (mã B<n>.<m> tự sinh theo thứ tự khi dựng, không cần gán tay).
 
-| Nhãn | # | Hồi | Nguồn | in - out (câu đầu ... câu cuối) | Dài | Lời (rút gọn) | Cảnh trám phủ | Đồ họa | Ghi chú |
-|---|---|---|---|---|---|---|---|---|---|
-| M1 | 1 | Mở | canh-tram/học sinh chơi | 0.0-1.7 | 1.7s | | | | cảnh động mở phim |
-| A1 | 2 | Mở | phong-van/<NV1> | 129.8-153.6 ("Ngày trước..." ... "gom lại dạy học") | 24s | "<trích>" | toàn cảnh trường 129.8-134.0 (→ B1.1) | pill "<con số>" tại 0.3 | câu móc; cắt cụm nhạy tại 138.3 bằng khoảng lặng |
-| - | 3 | Mở | do-hoa/intro | insert | 5s | | | thẻ tiêu đề | ép tiếng = hình sau render |
-| A2 | 4 | 1 | phong-van/<NV1> | 10.5-38.5 | 28s | "<trích>" | học sinh ngồi nghe 16.0 +7s (→ B2.1) | | snap |
-| T1 | 5 | cầu nối | canh-tram/<...> ×2 | | 2.5s + 2.8s | | | | fade 0.15 |
-| ... | | | | | | | | | |
+Cột "Kiểm chứng" bắt buộc cho mọi dòng có đồ họa mang dữ kiện (con số, năm, tên, chức danh, trích dẫn): ghi nguồn đối chiếu, hoặc "chưa kiểm được" rồi đưa vào mục 5 của danh sách quyết định. Dòng không có dữ kiện để trống.
+
+| Nhãn | # | Hồi | Nguồn | in - out (câu đầu ... câu cuối) | Dài | Lời (rút gọn) | Cảnh trám phủ | Đồ họa | Kiểm chứng | Ghi chú |
+|---|---|---|---|---|---|---|---|---|---|---|
+| M1 | 1 | Mở | canh-tram/học sinh chơi | 0.0-1.7 | 1.7s | | | | | cảnh động mở phim |
+| A1 | 2 | Mở | phong-van/<NV1> | 129.8-153.6 ("Ngày trước..." ... "gom lại dạy học") | 24s | "<trích>" | toàn cảnh trường 129.8-134.0 (→ B1.1) | pill "<con số>" tại 0.3 | <báo cáo năm của tổ chức, trang 4> | câu móc; cắt cụm nhạy tại 138.3 bằng khoảng lặng |
+| - | 3 | Mở | do-hoa/intro | insert | 5s | | | thẻ tiêu đề | | ép tiếng = hình sau render |
+| A2 | 4 | 1 | phong-van/<NV1> | 10.5-38.5 | 28s | "<trích>" | học sinh ngồi nghe 16.0 +7s (→ B2.1) | bảng tên <NV1> | chức danh nguyên văn đã chốt | snap |
+| T1 | 5 | cầu nối | canh-tram/<...> ×2 | | 2.5s + 2.8s | | | | | fade 0.15 |
+| ... | | | | | | | | | | |
 
 Khi dựng `timeline.json` ở Bước 2.4, chép đúng nhãn ở cột đầu vào trường `"label"` của segment tương ứng (segment nào không có nhãn ở đây, ví dụ dòng đồ họa insert, thì không gán `"label"`); một dòng bị tách thành nhiều sub-segment khi dựng thì TẤT CẢ sub-segment mang chung một nhãn.
 

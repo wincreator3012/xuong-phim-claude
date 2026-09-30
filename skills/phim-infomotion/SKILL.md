@@ -15,6 +15,11 @@ Ba nguyên tắc xuyên suốt:
 
 Đọc trước: `docs/QUY-TRINH-KY-THUAT.md` ở gốc xưởng (môi trường, cổng nghiệm thu, hai hệ mốc thời gian), `skills/phim-do-hoa/SKILL.md` (ngôn ngữ thiết kế, cách render, cách thêm component mới), `phong-cach/PHONG-CACH.md` (chức danh nguyên văn, từ ngữ phải viết đúng, quy tắc chữ trên màn hình).
 
+## Hai lối vào
+
+- **Lối vào A - đã có bản ghi âm** (chuẩn): đi từ Bước 1.
+- **Lối vào B - có bài viết hoặc dàn ý, chưa ghi âm**: chia nhịp và viết `KICH-BAN-INFOMOTION.md` ngay trên chữ, mốc tạm tính theo tốc độ nói thật của chính người dùng (số từ mỗi phút đo từ transcript một dự án cũ; chưa có thì 130 từ/phút và ghi là giả định), mọi mốc ghi rõ "tạm". Duyệt ẩn dụ, cấu trúc và dữ kiện trên chữ (Cổng duyệt 1), rồi người dùng ghi âm theo đúng kịch bản đã duyệt. Có file thật thì quay về Bước 2, thay mọi mốc tạm bằng mốc thật từ transcript và chạy lại kiểm giấy trước khi render. Nếu phiên có sẵn giọng đọc máy [text-to-speech], được dùng giọng máy làm bản giọng tạm để tự nghe nhịp hoặc dựng một bản phác động [animatic] nội bộ; giọng máy không bao giờ vào bản giao: bản giao luôn là giọng thật của người dùng.
+
 ## Cấu trúc dự án
 
 ```
@@ -72,6 +77,14 @@ Với mỗi nhịp loại "khái niệm trừu tượng" hoặc "thuật ngữ c
 
 Đầu file: thông điệp lõi một câu, khung ngang/dọc, theme, tổng thời lượng và số nhịp. Rồi mỗi nhịp một khối: mốc thật, lời nói nguyên văn (rút gọn nếu dài), loại, ẩn dụ (đã có / mới), hình thức và props chính, ghi chú. Cuối file: danh sách ẨN DỤ MỚI chờ duyệt, danh sách nhịp không có hình và lý do, kiểm tra mật độ (số hình / tổng phút), và câu hỏi cần người dùng quyết định (tên video, câu kết, có QR không). Nội dung dài hơn 5 phút: chia chương, đề xuất `SectionTitle` giữa các chương và `chapter` trong timeline.
 
+Ba thứ mọi kịch bản phải có thêm:
+
+- **Khung hình chung** ở đầu file, chốt một lần tại Cổng duyệt 1 để mọi nhịp cùng một dáng: theme, màu nhấn chính, họ hình chủ đạo (vẽ nét `YNiem`, cảnh `YCanh`, infographic), nhịp chuyển động (mặc định chậm theo brand), vị trí mặc định của đồ họa nổi. Mọi job kế thừa khung này; nhịp nào lệch khung thì ghi lý do ngay ở nhịp đó.
+- **Dòng "Thấy gì:"** cho mỗi nhịp có hình: một câu lời thường tả người xem thấy gì trên màn hình, không dùng tên component hay tên prop, để người dùng duyệt được mà không cần biết studio.
+- **Dòng "Kiểm chứng:"** cho mỗi nhịp mà hình mang dữ kiện (con số, năm, tên nghiên cứu, tên tác giả, trích dẫn; loại "số liệu/so sánh" luôn cần): ghi nguồn (tác giả, năm, đường dẫn hoặc DOI) đã tra được. Mô hình hay công cụ của người khác được nhắc tới thì ghi tên tác giả trên hình. Lời trong bản ghi âm lệch với nguồn thì không sửa lời bằng chữ đè lên; đưa vào câu hỏi cuối file ba cách để người dùng chọn: (1) ghi âm lại riêng câu đó rồi thay vào đúng mốc trên nền; (2) giữ lời, hình không lặp lại dữ kiện; (3) cắt câu.
+
+Trước khi trình, chạy `python3 tools/uoc-luong.py "du-an/<x>/KICH-BAN-INFOMOTION.md"`: tool tự đếm hình, mật độ, khe nền giữa hai đồ họa toàn khung và dòng "Kiểm chứng:" còn thiếu. Kết quả phải là "KIỂM GIẤY: ĐẠT", hoặc mỗi điểm "CẦN XEM" có lý do ghi trong kịch bản (ví dụ người dùng chủ động nới trần mật độ cho một đoạn).
+
 Tiêu chí bản kịch bản đạt: người dùng đọc 10-15 phút không cần mở gì khác là hình dung được video; mọi ẩn dụ mới đánh dấu rõ; không nhịp nào dày hơn 1 hình / 8 giây; mỗi khối có mốc thật (không phải ước lượng). Với loại hình lần đầu xuất hiện trong dự án, render MỘT still (`npx remotion still`) kèm theo để người dùng thấy dáng hình, không render video.
 
 Người dùng góp ý trên chữ; sửa tới khi họ nói duyệt. Ngay sau khi duyệt: ghi mọi ẩn dụ mới vào `an-du-y-niem.json` (tạo file mới dạng `{}` nếu chưa có) TRƯỚC khi render, không để cuối dự án.
@@ -111,6 +124,15 @@ Component mới chỉ khi có trường hợp thật không gì biểu đạt đ
 - **Bẫy dấu tiếng Việt khi ghi file bằng heredoc hai bước** (`cat > file << 'EOF' ... EOF` rồi mới chạy): có thể lặng lẽ làm phẳng/mất dấu tiếng Việt ở bước THỰC THI dù nội dung đọc lại từ nguồn trông đúng. Cách an toàn: ghi file một bước bằng `python3 <<'PYEOF' ... PYEOF` hoặc dùng công cụ `Write`/`Edit`, mở file bằng `io.open(path, 'a', encoding='utf-8')` khi cần nối thêm - và LUÔN đọc lại nội dung vừa ghi để xác nhận dấu còn nguyên trước khi coi là xong.
 - Ngân sách khung, mật độ chi tiết tối thiểu (5-10 chi tiết chuyển động một cảnh `YCanh`), và kích thước `floating` (`unit*58`/`unit*6.0`/`unit*3.9`) trong mục "Hai thành phần đồ hoạ" ở trên là kết quả một dự án thật đã qua nhiều vòng góp ý - không hạ xuống dưới các mốc đó khi bắt đầu dự án mới trừ khi người dùng chủ động yêu cầu.
 
+## Khi một khâu hỏng
+
+Nguyên tắc chung và mẫu câu báo ở mục "Khi một khâu hỏng" của `QUY-TRINH-KY-THUAT.md`: thử lại tối đa một lần sau khi đã sửa nguyên nhân; không có cách bù ngầm; báo bằng lời thường. Riêng thể loại này:
+
+- Transcript trên nền không qua `nghiem-thu.py transcript`: gỡ lại cửa sổ rộng quanh chỗ hỏng; chưa có transcript đạt thì chưa lên kịch bản, vì mọi mốc dựa vào nó.
+- Một hình mới không vẽ được sau một lần sửa (still lỗi, `tsc` không sạch): dừng riêng nhịp đó, báo người dùng và đề xuất thay bằng một hình đã có trong kho hoặc `Benefits` nhãn chữ. Đây là một lựa chọn đưa người dùng duyệt lại, không tự thay sau khi kịch bản đã duyệt.
+- Một job render lỗi hoặc ra file ngắn hơn nhịp: không kéo dài bằng khung đứng, không đẩy file ngắn vào timeline; render lại đúng `durationInSeconds`, các job khác vẫn chạy.
+- Dựng không qua `check_av()` hoặc `nghiem-thu.py video`: dừng, đọc bảng chẩn đoán, không giao nháp lỗi.
+
 ## Quy tắc cứng
 
 - Không render video trước cổng 1; still mẫu được phép.
@@ -124,3 +146,5 @@ Component mới chỉ khi có trường hợp thật không gì biểu đạt đ
 - Đồ hoạ nổi không che nhau về thời gian trong cùng segment; hai đồ hoạ toàn khung liên tiếp cách nhau tối thiểu 5 giây nền hoặc gộp thành một.
 - Nghiệm thu máy VÀ đọc lại transcript quanh mốc là bắt buộc trước khi báo "xong"; `--out` tường minh từ nháp đầu.
 - `device_bash` trên máy người dùng chạy đồng bộ, không có tiến trình nền qua nhiều lượt gọi; sandbox đám mây chỉ 2 CPU nên không render đồ hoạ song song nhiều job.
+- Kiểm giấy bằng `tools/uoc-luong.py` trước Cổng duyệt 1; mọi hình mang dữ kiện có dòng "Kiểm chứng:"; lời lệch nguồn không sửa bằng chữ đè, người dùng chọn một trong ba cách.
+- Hình vẽ bằng code theo brand; không dùng ảnh hay clip do AI tạo. Giọng máy chỉ làm bản tạm ở Lối vào B, không bao giờ vào bản giao.
