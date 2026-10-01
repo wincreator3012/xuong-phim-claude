@@ -50,13 +50,23 @@ Nói tự nhiên, nêu rõ thư mục dự án và kết quả mong muốn. Vài
 **Phim tài liệu phỏng vấn, sau khi quay**
 > Đã quay xong theo kế hoạch, source trong du-an/phim-du-an-x/nguon. Gỡ băng, đối chiếu với kế hoạch rồi viết kịch bản thực tế cho tôi duyệt trước khi dựng.
 
+**Cảnh minh hoạ cho đoạn đang giải thích**
+> Trong du-an/bai-1, đoạn phút 6:20 tới 7:05 tôi giải thích vòng lặp căng thẳng và hồi phục. Làm một cảnh minh hoạ động cho đoạn đó, lấy một khung hình của chính đoạn quay làm nền mờ.
+
+Bốn kiểu chèn để chọn: toàn khung, nền là khung hình mờ, thẻ nổi cạnh bạn (vẫn thấy mặt), bạn thu vào góc nhỏ. Không nói rõ thì Claude đề xuất kiểu hợp từng đoạn ở bảng phương án và gửi một trang xem thử để bạn duyệt chuyển động trước khi render. Gửi kèm một hình mẫu phong cách bạn thích cũng được.
+
 **Chỉ có file ghi âm, muốn video giải thích**
 > Trong du-an/bai-4 có file ghi âm bài nói 6 phút. Làm video infomotion khung ngang, hình minh hoạ theo từng ý tôi nói.
 
-Mặc định hình phủ kín, nền trống không quá 1 giây. Muốn thoáng hơn thì nói rõ.
+Mặc định hình phủ kín, nền trống không quá 1 giây. Muốn thoáng hơn thì nói rõ. Đoạn nói về cơ chế, quy trình, số liệu, Claude dùng cảnh minh hoạ kiểu sơ đồ; đoạn chiêm nghiệm dùng nét vẽ ẩn dụ tối giản.
 
 **Phim hoạt hình từ lời nói hay một câu chuyện**
 > Từ file ghi âm trong du-an/chuyen-1, làm phim hoạt hình khoảng 90 giây có một nhân vật và cảnh vẽ tay, kết bằng một câu hỏi mở.
+
+**Gói đăng tải**
+> Soạn tiêu đề, mô tả YouTube và status Facebook cho clip du-an/bai-1/xuat-hoan-chinh/bai-1-ngang.mp4, kèm ba thumbnail.
+
+Sau mỗi clip dựng trong xưởng, Claude tự làm bước này mà không cần nhắc; câu trên dùng cho clip cũ hay clip dựng ở nơi khác.
 
 **Chỉ gỡ băng**
 > Gỡ băng clip trong du-an/bai-3, cho tôi file SRT và bản text.
@@ -76,6 +86,7 @@ Bạn không cần nhớ tên skill hay tên công cụ. Claude nhận ra loại
 3. **Phương án cắt và nhãn** (bạn duyệt lần 1): một bảng ghi đoạn nào giữ, đoạn nào bỏ, vì sao, và các chỗ định chèn nhãn từ khoá, thẻ chuyển phần, cảnh trám. Sửa gì cứ nói
 4. **Đồ họa và bản nháp** (bạn duyệt lần 2): Claude render intro, outro, nhãn, rồi dựng bản nháp 480p vào `xuat-nhap/`. Mở xem trên máy, góp ý về nhịp, bố cục, chỗ nào chữ hiện sai lúc. Lặp tới khi ưng
 5. **Bản chính**: xuất 1080p, máy đo hình khớp tiếng, âm lượng chuẩn, không khoảng đen, rồi Claude nhìn ảnh lưới 12 khung. Đạt thì copy vào `xuat-hoan-chinh/` và báo bạn: tên file, thời lượng, dung lượng, danh sách chương (nếu có), dòng ghi công nhạc cần dán vào mô tả video (nếu dùng track CC-BY)
+6. **Gói đăng tải**: ngay sau đó Claude soạn trong `du-an/<tên>/dang-tai/` ba phương án tiêu đề, mô tả YouTube, status Facebook và ba thumbnail từ khung hình thật; bạn chọn, sửa, rồi chép dán khi đăng
 
 Clip 10 phút trọn quy trình thường mất 30-60 phút kể cả thời gian bạn duyệt. Bản chính của bài dài (1-3 giờ) xuất trong một tới vài giờ; để máy chạy.
 
@@ -101,8 +112,10 @@ Nhạc chỉ lấy từ thư viện đã kiểm định (`nhac-nen/THU-VIEN.md`)
 
 **Whisper nghe sai thuật ngữ, tên riêng.** Bổ sung từ đó vào mục 4 của `PHONG-CACH.md` ("từ ngữ phải viết đúng"), Claude sẽ đối chiếu mỗi lần gỡ băng. Nếu đang dùng turbo, nhờ Claude gỡ băng lại bằng large-v3 trên Mac.
 
+**Cảnh minh hoạ báo thiếu Playwright hay Chromium.** Cảnh minh hoạ được chụp trong sandbox của Claude, nơi thường có sẵn hai thứ này. Nếu Claude chạy thẳng trên máy bạn, nói "cài Playwright cho cảnh minh hoạ"; Claude cài `playwright` và trình duyệt Chromium đi kèm (cần mạng, khoảng 150 MB).
+
 **Muốn kiểm xem xưởng còn khoẻ không** (sau khi cập nhật repo hay đổi máy): nói "chạy kiểm tra xưởng". Claude chạy một bản dựng thử nhỏ qua cổng nghiệm thu.
 
 ## Cập nhật xưởng
 
-Tải bản mới của repo và chép đè các thư mục `tools/`, `studio/`, `skills/`, `docs/`, `thu-vien/` cùng hai file `Go bang tren Mac.command` và `CLAUDE.md` ở thư mục gốc lên bản cũ; giữ nguyên `phong-cach/`, `brand/`, `nhac-nen/`, `hieu-ung/`, `du-an/` và, trong `do-hoa-chung/`, từ điển ẩn dụ `an-du-y-niem.json`, thư mục `do-hoa-chung/the-gioi-hoat-hoa/` (nếu có) cùng hai preset bạn đã sửa. Nếu bạn đã làm phim infomotion hay hoạt hình (có hình vẽ riêng trong `studio/src/y-niem/` hoặc `studio/src/hoat-hoa/`), nhờ Claude cập nhật `studio/` thay vì chép đè. Sau đó nói "chạy kiểm tra xưởng". Nếu dùng `git`, `git pull` làm việc này gọn hơn; các thư mục riêng của bạn đã được để ngoài theo dõi (`.gitignore`) trừ `phong-cach/PHONG-CACH.md` và `brand/brand.json`, hai file bạn nên giữ bản của mình khi có xung đột.
+Tải bản mới của repo và chép đè các thư mục `tools/`, `studio/`, `skills/`, `docs/`, `thu-vien/` cùng hai file `Go bang tren Mac.command` và `CLAUDE.md` ở thư mục gốc lên bản cũ; giữ nguyên `phong-cach/`, `brand/`, `nhac-nen/`, `hieu-ung/`, `du-an/` và, trong `do-hoa-chung/` (chép đè `do-hoa-chung/canh-kit/` được; cảnh riêng của bạn nằm trong `du-an/<tên>/canh/`), từ điển ẩn dụ `an-du-y-niem.json`, thư mục `do-hoa-chung/the-gioi-hoat-hoa/` (nếu có) cùng hai preset bạn đã sửa. Nếu bạn đã làm phim infomotion hay hoạt hình (có hình vẽ riêng trong `studio/src/y-niem/` hoặc `studio/src/hoat-hoa/`), nhờ Claude cập nhật `studio/` thay vì chép đè. Sau đó nói "chạy kiểm tra xưởng". Nếu dùng `git`, `git pull` làm việc này gọn hơn; các thư mục riêng của bạn đã được để ngoài theo dõi (`.gitignore`) trừ `phong-cach/PHONG-CACH.md` và `brand/brand.json`, hai file bạn nên giữ bản của mình khi có xung đột.

@@ -36,6 +36,8 @@ Theme mặc định: `[sáng (light) | tối (dark)]`. Bảng màu cụ thể n�
 
 Hình ảnh nên tránh: `[ví dụ: không dùng ảnh stock có người lạ; không dùng hiệu ứng nảy]`
 
+Họ màu cho cảnh minh hoạ giải thích (skill phim-canh-minh-hoa): `[dem (Đêm xanh: nền xanh đêm, nhấn xanh trời và hổ phách, mặc định) | than (nền than, nhấn đồng ấm) | giay (nền giấy ngà, nhấn lục trầm)]`. Cả một dự án dùng một họ màu.
+
 ## 4. Chữ trên màn hình
 
 - Kiểu viết hoa tiêu đề: `[sentence case (chỉ viết hoa chữ đầu) | FULL-CAP cho kicker ngắn]` - mặc định của xưởng là sentence case, không Title Case

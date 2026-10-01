@@ -12,7 +12,7 @@ Bản thân tôi không có nhu cầu với clip hình ảnh hay âm thanh do AI
 
 ## Bạn nhận được gì
 
-- **Mười một năng lực dựng phim** đóng thành quy trình chuẩn [skill] cho Claude: dựng bài giảng chuyên gia trình bày trước máy quay; bài giảng có slide (xen mặt, slide, hoặc cả hai theo bố cục tối ưu); clip ngắn dọc có phụ đề; podcast và buổi quay nhiều máy (tự đồng bộ bằng âm thanh, tự chuyển góc theo người nói); đồ họa động tối giản; video giải thích bằng đồ họa thông tin [infomotion] chỉ từ một file ghi âm, không cần lên hình; phim hoạt hình vẽ bằng code có nhân vật và cảnh, hình tượng hoá lời nói hay một câu chuyện (kèm bộ lệnh để tự làm hoặc chia sẻ, phương pháp kế thừa từ bộ lệnh phim "Nhà" của Đặng Hữu Sơn); gỡ băng tiếng Việt chạy ngay trên máy (video không rời máy bạn); tìm hình và tư liệu minh hoạ phù hợp nội dung, đã kiểm định bản quyền; căn chỉnh màu cơ bản khi thật cần; phim tài liệu phỏng vấn nhiều nhân vật giới thiệu một dự án hay sự kiện (Claude giúp lên kế hoạch ghi hình - phỏng vấn ai, hỏi gì, quay cảnh trám nào - trước khi quay, rồi viết kịch bản thực tế từ tư liệu thật và dựng)
+- **Mười ba năng lực dựng phim** đóng thành quy trình chuẩn [skill] cho Claude: dựng bài giảng chuyên gia trình bày trước máy quay; bài giảng có slide (xen mặt, slide, hoặc cả hai theo bố cục tối ưu); clip ngắn dọc có phụ đề; podcast và buổi quay nhiều máy (tự đồng bộ bằng âm thanh, tự chuyển góc theo người nói); đồ họa động tối giản; cảnh minh hoạ giải thích kiểu explainer (sơ đồ cơ chế, quy trình, so sánh, số liệu lớn dần theo lời nói, Claude vẽ riêng từng cảnh như một trang web chuyển động rồi chụp từng khung ra video), chèn làm cảnh trám cho bài giảng theo bốn kiểu: toàn khung, nền là khung hình mờ của chính đoạn quay, thẻ nổi cạnh người nói, người nói thu vào góc; video giải thích bằng đồ họa thông tin [infomotion] chỉ từ một file ghi âm, không cần lên hình; phim hoạt hình vẽ bằng code có nhân vật và cảnh, hình tượng hoá lời nói hay một câu chuyện (kèm bộ lệnh để tự làm hoặc chia sẻ, phương pháp kế thừa từ bộ lệnh phim "Nhà" của Đặng Hữu Sơn); gỡ băng tiếng Việt chạy ngay trên máy (video không rời máy bạn); tìm hình và tư liệu minh hoạ phù hợp nội dung, đã kiểm định bản quyền; căn chỉnh màu cơ bản khi thật cần; phim tài liệu phỏng vấn nhiều nhân vật giới thiệu một dự án hay sự kiện (Claude giúp lên kế hoạch ghi hình - phỏng vấn ai, hỏi gì, quay cảnh trám nào - trước khi quay, rồi viết kịch bản thực tế từ tư liệu thật và dựng); gói đăng tải tự soạn sau mỗi clip (ba phương án tiêu đề, mô tả YouTube có chương, status Facebook bằng giọng của bạn, ba thumbnail dựng từ khung hình thật của clip)
 - **Một bước thiết lập phong cách** khoảng 30 phút: Claude hỏi bạn là ai, dạy gì, cho ai, thích cảm giác nào (bốn mẫu để chọn hoặc mô tả riêng), rồi điền tên, chức danh, màu sắc, nhạc, thông điệp kết vào chỗ đã chừa sẵn. Mọi clip sau đó mang đúng dấu ấn của bạn và đổi được bằng một câu nói
 - **Thư viện chất liệu sạch**: danh mục nhạc nền và hiệu ứng đã kiểm từng trang nguồn (dùng thương mại mọi nền tảng, không Content ID), tải về theo mẫu phong cách bạn chọn; danh mục nguồn hình miễn phí và quy tắc giấy phép
 - **Cổng nghiệm thu tự động**: hình khớp tiếng tới 2 khung hình, âm lượng chuẩn -14 LUFS, không khoảng đen, không đứng hình. Claude không được nói "xong" khi máy chưa báo đạt
@@ -37,11 +37,11 @@ xuong-phim-claude/
 ├── Go bang tren Mac.command ← bấm đúp để gỡ băng large-v3 trên Mac (khi Claude nhờ)
 ├── phong-cach/            ← PHONG-CACH.md: bản đồ phong cách của BẠN; mau/: 4 mẫu khởi đầu
 ├── brand/                 ← brand.json (tên, chức danh, bảng màu) + logo/ (thả logo vào đây)
-├── skills/                ← 12 quy trình chuẩn cho Claude (thiết lập + 11 năng lực dựng phim)
+├── skills/                ← 14 quy trình chuẩn cho Claude (thiết lập + 13 năng lực dựng phim)
 ├── docs/                  ← tài liệu kỹ thuật cho Claude: môi trường, bài học từ dự án thật
 ├── thu-vien/              ← danh mục nhạc/hiệu ứng/hình đã kiểm định (không chứa file, tải lúc cài)
 ├── nhac-nen/  hieu-ung/   ← file âm thanh tải về, theo nhóm công dụng
-├── do-hoa-chung/          ← preset intro/outro dùng chung, bố cục slide
+├── do-hoa-chung/          ← preset intro/outro dùng chung, bố cục slide, canh-kit/ (bộ thiết kế cảnh minh hoạ)
 ├── studio/                ← đồ họa động Remotion (Claude quản lý)
 ├── tools/                 ← công cụ pipeline + cài đặt (Claude quản lý)
 └── du-an/                 ← mỗi clip một thư mục: nguon/ → xuat-hoan-chinh/
@@ -49,7 +49,7 @@ xuong-phim-claude/
 
 ## Cách nó chạy (cho người tò mò)
 
-Video của bạn được xử lý ngay trên máy bạn bằng ffmpeg trong máy ảo của Cowork; gỡ băng bằng Whisper chạy tại máy (sherpa-onnx: model turbo trong máy ảo, hoặc large-v3 trên Mac khi bạn bấm đúp `Go bang tren Mac.command`), nên footage không rời máy. Đồ họa động (intro, outro, thẻ, nhãn từ khoá) là các thành phần Remotion tối giản, render trong sandbox của Claude rồi ghép về. Mọi bước nặng đều tự nối tiếp khi bị ngắt, mọi file trung gian đều được đo hình khớp tiếng, và một bộ bài học từ các dự án thật (`docs/BAI-HOC.md`) giúp Claude không lặp lại lỗi cũ.
+Video của bạn được xử lý ngay trên máy bạn bằng ffmpeg trong máy ảo của Cowork; gỡ băng bằng Whisper chạy tại máy (sherpa-onnx: model turbo trong máy ảo, hoặc large-v3 trên Mac khi bạn bấm đúp `Go bang tren Mac.command`), nên footage không rời máy. Đồ họa động (intro, outro, thẻ, nhãn từ khoá) là các thành phần Remotion tối giản, render trong sandbox của Claude rồi ghép về. Cảnh minh hoạ là trang web có thời gian ảo: cùng một file vừa xem chạy trực tiếp trên trình duyệt để bạn duyệt chuyển động thật, vừa được tua tới từng khung trong Chromium không giao diện rồi ghép bằng ffmpeg, nên máy chậm chỉ làm render lâu hơn chứ không rớt khung. Kiểu chèn cần hình quay thật (nền mờ, người nói thu vào góc) được ghép ngay trên máy bạn. Mọi bước nặng đều tự nối tiếp khi bị ngắt, mọi file trung gian đều được đo hình khớp tiếng, và một bộ bài học từ các dự án thật (`docs/BAI-HOC.md`) giúp Claude không lặp lại lỗi cũ.
 
 ## Yêu cầu
 
@@ -61,7 +61,7 @@ Video của bạn được xử lý ngay trên máy bạn bằng ffmpeg trong m�
 
 ## Giấy phép
 
-Mã nguồn và tài liệu: MIT (xem `LICENSE`). Font Lora và Be Vietnam Pro: SIL Open Font License. Nhạc và hiệu ứng KHÔNG nằm trong repo; danh mục ghi rõ giấy phép từng track (Pixabay Content License, hoặc CC-BY 4.0 của Kevin MacLeod cần ghi công).
+Mã nguồn và tài liệu: MIT (xem `LICENSE`). Font Lora, Be Vietnam Pro và JetBrains Mono: SIL Open Font License (bản nhúng cho cảnh minh hoạ nằm trong `do-hoa-chung/canh-kit/fonts/` kèm giấy phép). Phần nguyên lý thiết kế cảnh minh hoạ có tham khảo bộ skill "faceless explainer" của HyperFrames (HeyGen, Apache 2.0); xưởng không dùng mã của dự án đó. Nhạc và hiệu ứng KHÔNG nằm trong repo; danh mục ghi rõ giấy phép từng track (Pixabay Content License, hoặc CC-BY 4.0 của Kevin MacLeod cần ghi công).
 
 ## Tác giả
 
