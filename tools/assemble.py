@@ -38,6 +38,10 @@ timeline.json:
      "cropFocus": 0.5,                // khung dọc: tâm crop ngang (0=trái, 1=phải)
      "chapter": "Tên chương",        // tùy chọn, để tạo chapters.txt
      "overlay": {"src": "do-hoa/ngang/lt.webm", "at": 1.0},  // bảng tên alpha
+                                      // overlay thêm "duration": giây hiện trên hình khác độ dài file
+                                      // (dài hơn: giữ khung tại "giu", mặc định giữa file; ngắn hơn: bỏ
+                                      // một quãng từ "giu"); hoạt cảnh vào và ra của thẻ giữ nguyên
+     "volumeDb": 0,                   // tuỳ chọn: tăng/giảm tiếng của riêng đoạn này (dB)
      "broll": [{"src": "nguon/broll.mp4", "at": 30.0, "duration": 6.0, "from": 0}]
     },                                 // "at" theo thời gian TRONG FILE NGUỒN
     {"type": "insert", "src": "do-hoa/ngang/info-01.mp4"},
@@ -85,7 +89,7 @@ PREVIEW_SIZES = {"ngang": (854, 480), "doc": (480, 854)}
 
 # --- Chống lệch hình-tiếng (bản vá 2026-09-05, 2026-09-17) --------------------
 # Đổi TOOL_VERSION mỗi khi sửa logic encode → mọi cache .sig cũ tự vô hiệu.
-TOOL_VERSION = "2026-09-30.r6"  # r1: insert_part tự cắt đuôi tiếng AAC, role intro/outro cho bookends
+TOOL_VERSION = "2026-10-01.r8"  # r8: vi mờ 5 ms ở mép part có tiếng không liền với part kề (chống tiếng bụp ở mối cắt); r7: overlay "duration" (giữ/bớt khung giữa), volumeDb của đoạn, audioIn multicam theo từng quãng B-roll; r1: insert_part tự cắt đuôi tiếng AAC, role intro/outro cho bookends
 # CONCAT_REV: đổi khi sửa bước GHÉP hoặc FINALIZE (không đụng cách encode từng part) - chỉ vô hiệu cache body,
 # không bắt encode lại các part đã xong. Sửa cách encode part thì đổi TOOL_VERSION.
 CONCAT_REV = "c8"  # c7: concat.txt ghi duration chính xác n/fps mỗi part; c8: đo loudness nghiêm ngặt, map insert chính xác
@@ -93,6 +97,7 @@ AV_TOL = 0.06       # THÀNH PHẨM (tiếng AAC, độ dài hạt 21 ms): hình
 AV_TOL_PCM = 0.004  # part và thân phim (tiếng PCM, đúng từng mẫu): lệch quá 4 ms là LỖI.
                     # Ngưỡng 0,06 từng bỏ lọt part hình dài hơn tiếng đúng 1 khung (33 ms), cộng dồn qua 200 part
                     # thành lệch 0,1-0,2 s (lớp lỗi "lệch hình-tiếng cộng dồn", AIM Ngũ Tài 2026-09-30).
+VI_MO = 0.005       # giây: vi mờ tiếng ở mối cắt không liền (r8)
 DUR_TOL = 0.15      # part dài/ngắn hơn dự kiến quá mức này là LỖI
 
 
@@ -346,7 +351,7 @@ class Assembler:
                  fade_out_audio=0.0,
                  overlay=None, video_from=None, broll_from=0.0,
                  layout="mat", slide=None, slide_zoom=None,
-                 audio_src=None, audio_in=None):
+                 audio_src=None, audio_in=None, volume_db=0.0, vi_mo=(False, False)):
         """Cắt [t_in, t_out] từ src thành một phần chuẩn hóa.
         video_from: nếu đặt → video lấy từ file khác (B-roll), audio vẫn từ src.
         layout/slide: bố cục bài giảng có slide (xem docs/QUY-TRINH-KY-THUAT.md mục "Bài giảng có slide").
@@ -377,13 +382,15 @@ class Assembler:
                                fade_in=fade_in, fade_out=fade_out, fade_out_audio=fade_out_audio, overlay=overlay,
                                video_from=video_from, broll_from=broll_from, preview=self.preview,
                                mau=mau, layout=layout, slide=slide, slide_zoom=slide_zoom, theme=theme,
-                               audio_src=a_path, audio_in=audio_in)
+                               audio_src=a_path, audio_in=audio_in, volume_db=volume_db, vi_mo=list(vi_mo))
         if self._cache_hit(out, dur, sig) and check_av(out, dur, label=os.path.basename(out) + " (cache)", raise_on_fail=False, tol=AV_TOL_PCM):
             print(f"    (dùng lại part-{idx:03d}.mp4 đã encode)", flush=True)
             self.parts.append(out)
             return dur
 
         af = self.af_normalize() + f",atrim=end_sample={n_smp}"
+        if volume_db:
+            af += f",volume={float(volume_db):.2f}dB"
         fade_v = f",tpad=stop_mode=clone:stop_duration=0.2,trim=end_frame={n_fr}"
         if fade_in > 0:
             fade_v += f",fade=t=in:st=0:d={fade_in}:color={self.fade_color}"
@@ -394,6 +401,12 @@ class Assembler:
         if fade_out_audio > 0 and fade_out <= 0:
             # chỉ mờ tiếng, giữ hình cắt thẳng (xem docstring)
             af += f",afade=t=out:st={max(0, dur - fade_out_audio):.3f}:d={fade_out_audio}"
+        # vi mờ: mép nào tiếng không nối liền part kề (cắt bỏ một quãng, đổi file, giáp đồ họa chèn) thì mờ
+        # VI_MO giây để sóng về 0, không kêu "bụp"; mép đã có mờ dài hơn thì thôi (Descript làm tương tự)
+        if vi_mo[0] and fade_in <= 0:
+            af += f",afade=t=in:st=0:d={VI_MO}"
+        if vi_mo[1] and fade_out <= 0 and fade_out_audio <= 0:
+            af += f",afade=t=out:st={max(0, dur - VI_MO):.4f}:d={VI_MO}"
 
         cmd = ["ffmpeg", "-hide_banner", "-y"]
         overlays = (overlay if isinstance(overlay, list) else [overlay]) if overlay else []
@@ -487,10 +500,24 @@ class Assembler:
                 dec = {"vp8": "libvpx", "vp9": "libvpx-vp9"}.get(codec)
                 if dec:
                     cmd += ["-c:v", dec]
-                cmd += ["-itsoffset", f"{at:.3f}", "-i", ov_src]
                 # nền đang ở 1920x1080 (bố cục slide) hoặc kích cỡ xuất (mat) - scale overlay cho khớp
                 ovW, ovH = (self.bo_cuc()["size"] if layout != "mat" else (self.w, self.h))
-                fc += f"[{n_in}:v]scale={ovW}:{ovH}[ov{k}];"
+                keo = self._keo_overlay(ov, ov_src)
+                if keo is None:
+                    cmd += ["-itsoffset", f"{at:.3f}", "-i", ov_src]
+                    fc += f"[{n_in}:v]scale={ovW}:{ovH}[ov{k}];"
+                else:
+                    # đổi thời lượng thẻ: [0, H] + (giữ khung H thêm X giây | bỏ quãng [H, H+X]) + phần còn lại
+                    cmd += ["-i", ov_src]
+                    giu, them = keo
+                    dau = f"[oa{k}]trim=end={giu:.3f},setpts=PTS-STARTPTS"
+                    if them > 0:
+                        dau += f",tpad=stop_mode=clone:stop_duration={them:.3f}"
+                        sau = f"[ob{k}]trim=start={giu:.3f},setpts=PTS-STARTPTS"
+                    else:
+                        sau = f"[ob{k}]trim=start={giu - them:.3f},setpts=PTS-STARTPTS"
+                    fc += (f"[{n_in}:v]split=2[oa{k}][ob{k}];{dau}[oc{k}];{sau}[od{k}];"
+                           f"[oc{k}][od{k}]concat=n=2:v=1:a=0,setpts=PTS+{at:.3f}/TB,scale={ovW}:{ovH}[ov{k}];")
                 fc += f"[v{k}][ov{k}]overlay=0:0:eof_action=pass[v{k + 1}];"
                 n_in += 1
                 k += 1
@@ -506,6 +533,23 @@ class Assembler:
         self._cache_save(out, sig)
         self.parts.append(out)
         return dur
+
+    def _keo_overlay(self, ov, ov_src):
+        """Overlay có "duration" khác độ dài file: trả (điểm giữ H, số giây thêm; âm là bớt), không thì None.
+        Thẻ của xưởng có hoạt cảnh vào và ra ở hai đầu, giữa file đứng yên: giữ hay bớt ở giữa không chạm
+        hoạt cảnh. "giu" cho phép chọn điểm khác (giây trong file overlay)."""
+        if ov.get("duration") is None:
+            return None
+        n = probe_duration(ov_src)
+        d = float(ov["duration"])
+        if abs(d - n) < 0.5 / self.fps:
+            return None
+        giu = float(ov.get("giu", n / 2))
+        giu = min(max(giu, 0.1), max(0.1, n - 0.1))
+        them = d - n
+        if them < 0:
+            them = -min(-them, max(0.0, n - giu - 0.2))   # không bớt lấn vào hoạt cảnh kết
+        return giu, them
 
     def vf_normalize_full(self, focus, W, H):
         """Chuẩn hóa về khung thật WxH (bố cục slide luôn ghép ở 1920x1080 rồi mới thu về preview)."""
@@ -709,9 +753,11 @@ class Assembler:
                 elif at >= first_span_end > 0:
                     warns.append(f"{tag} overlay: at={at} rơi vào quãng B-roll đầu tiên "
                                  f"(overlay chỉ phủ lên phần đầu của đoạn, tới {first_span_end:.2f}s)")
+                if o.get("duration") is not None and float(o["duration"]) < 0.3:
+                    errs.append(f"{tag} overlay: duration={o['duration']} quá ngắn (tối thiểu 0,3 s)")
                 if osrc:
                     try:
-                        od = probe_duration(osrc)
+                        od = float(o["duration"]) if o.get("duration") is not None else probe_duration(osrc)
                         if at + od > first_span_end + 0.05:
                             warns.append(f"{tag} overlay: {os.path.basename(osrc)} dài {od:.1f}s, "
                                          f"bắt đầu {at}s → bị cắt tại {first_span_end:.2f}s")
@@ -794,9 +840,41 @@ class Assembler:
         print(f"  → bản đồ thời gian: {f}")
 
     # ---------- toàn bộ timeline ----------
+    def _in_out(self, seg):
+        """Điểm vào/ra thật của một đoạn video (đã hút khoảng lặng nếu snap)."""
+        src = self.resolve(seg["src"])
+        t_in = float(seg.get("in", 0))
+        t_out = float(seg.get("out") or probe_duration(src))
+        if seg.get("snap", True):
+            sil = load_silences(self.project, src)
+            if sil:
+                t_in = snap_point(t_in, sil, "in")
+                t_out = snap_point(t_out, sil, "out")
+        return t_in, t_out
+
+    def _tieng_doan(self):
+        """Cho từng segment: (file tiếng, mốc tiếng đầu, mốc tiếng cuối) hoặc None với insert.
+        Dùng để biết mối nối nào tiếng chạy liền (không vi mờ) và mối nào bị cắt (vi mờ)."""
+        ra = []
+        for seg in self.tl.get("segments", []):
+            if seg.get("type", "video") == "insert":
+                ra.append(None)
+                continue
+            t_in, t_out = self._in_out(seg)
+            if seg.get("audioSrc"):
+                a0 = float(seg.get("audioIn") or 0.0)
+                ra.append((os.path.normpath(self.resolve(seg["audioSrc"])), a0, a0 + (t_out - t_in)))
+            else:
+                ra.append((os.path.normpath(self.resolve(seg["src"])), t_in, t_out))
+        return ra
+
     def build_parts(self):
         t_cursor = 0.0
         rel = self.resolve
+        tieng = self._tieng_doan()
+
+        def lien(x, y):
+            return x is not None and y is not None and x[0] == y[0] and abs(x[2] - y[1]) < 0.002
 
         if self.tl.get("intro"):
             print("  + intro", flush=True)
@@ -818,13 +896,10 @@ class Assembler:
                 continue
 
             src = rel(seg["src"])
-            t_in = float(seg.get("in", 0))
-            t_out = float(seg.get("out") or probe_duration(src))
-            if seg.get("snap", True):
-                sil = load_silences(self.project, src)
-                if sil:
-                    t_in = snap_point(t_in, sil, "in")
-                    t_out = snap_point(t_out, sil, "out")
+            t_in, t_out = self._in_out(seg)
+            segs_all = self.tl.get("segments", [])
+            lien_truoc = i > 0 and lien(tieng[i - 1], tieng[i])
+            lien_sau = i + 1 < len(segs_all) and lien(tieng[i], tieng[i + 1])
             focus = float(seg.get("cropFocus", 0.5))
             fade_in = float(seg.get("fadeIn", 0))
             fade_out = float(seg.get("fadeOut", 0))
@@ -860,7 +935,11 @@ class Assembler:
                     broll_from=float(binfo.get("from", 0)) if kind == "broll" else 0.0,
                     layout=seg.get("layout", "mat"), slide=seg.get("slide"),
                     slide_zoom=seg.get("slideZoom"),
-                    audio_src=seg.get("audioSrc"), audio_in=seg.get("audioIn"),
+                    audio_src=seg.get("audioSrc"),
+                    # multicam: tiếng chủ chạy liền theo hình, mỗi quãng con (cắt bởi B-roll) bắt đầu đúng chỗ
+                    audio_in=(float(seg.get("audioIn") or 0.0) + (a - t_in)) if seg.get("audioSrc") else None,
+                    volume_db=float(seg.get("volumeDb") or 0.0),
+                    vi_mo=(first and not lien_truoc, last and not lien_sau),
                 )
 
         if self.tl.get("outro"):

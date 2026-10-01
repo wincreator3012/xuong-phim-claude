@@ -31,6 +31,7 @@ Xưởng làm việc bằng nguyên lý, không bằng khuôn. Mọi quyết đ�
 | "màu bị bạc", "hai góc lệch màu", "da không đẹp" | `skills/phim-mau-sac/` |
 | "phim tài liệu", "phóng sự phỏng vấn", "phim giới thiệu dự án/chương trình", "sắp có sự kiện muốn làm phim", "phỏng vấn ai, hỏi gì", "cần quay cảnh trám nào", nhiều file phỏng vấn nhiều người | `skills/phim-tai-lieu-phong-van/` (hai pha: Kế hoạch ghi hình trước quay, kịch bản thực tế sau quay; gọi phim-dung-bai/phim-do-hoa ở bước dựng) |
 | "mô tả YouTube", "status Facebook", "thumbnail", "chuẩn bị đăng"; và TỰ CHẠY mỗi khi một clip vừa vào `xuat-hoan-chinh/` | `skills/phim-dang-tai/` (ba tiêu đề, mô tả YouTube có chương, status Facebook, ba thumbnail từ khung hình thật; cổng `tools/dang-tai.py kiem`) |
+| "mở bàn dựng", "tôi tự chỉnh", "tôi chỉnh xong rồi", "dựng bằng lời", "bỏ chữ thừa"; timeline có trường `_chinhTay` | `skills/phim-ban-dung/` (Bàn dựng người dùng tự tinh chỉnh trên Chrome, có thẻ Lời để bỏ chữ bằng cách bôi đen; Claude chuẩn bị mốc lời, dựng lại, nghiệm thu; timeline đã chỉnh tay là nguồn sự thật) |
 
 ## Cách làm việc với người dùng mới
 
@@ -50,6 +51,7 @@ Xưởng làm việc bằng nguyên lý, không bằng khuôn. Mọi quyết đ�
 6. Một góp ý lặp lại lần thứ hai là tín hiệu sửa NGUỒN MẶC ĐỊNH (brand.json, preset, defaultProps), không chỉ sửa dự án đang làm; ghi vào "Sổ tay góp ý" cuối PHONG-CACH.md
 7. Bài học kỹ thuật đáng giữ sau mỗi dự án ghi vào `docs/BAI-HOC.md` (ngắn: chuyện gì, gốc rễ, quy tắc); sửa skill thì sửa thẳng `skills/<tên>/SKILL.md`, trường `description` của skill là mô tả kích hoạt, không ghi changelog vào đó; sửa xong chạy `python3 tools/kiem-tai-lieu.py` (YAML, đường dẫn, tên skill, kho ẩn dụ) phải ĐẠT
 8. Footage của người dùng không rời máy họ, trừ vài khung hình để xem khi cần
+9. Timeline có trường `_chinhTay` là timeline người dùng đã tự chỉnh trên Bàn dựng: đó là nguồn sự thật. Không sinh lại nó từ kế hoạch, kịch bản hay phương án cũ; mọi sửa của Claude làm thẳng trên file và giữ nguyên chỉnh tay. Bàn dựng không thay hai chốt duyệt và cổng nghiệm thu
 
 ## Kiểm nhanh trạng thái xưởng
 

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bàn dựng</title>
+<link rel="stylesheet" href="/app/ban-dung.css">
+</head>
+<body>
+<header class="dau">
+  <div class="thuong-hieu">Bàn dựng</div>
+  <button id="ten-du-an" class="ten-du-an" title="Mở timeline khác">chưa mở timeline</button>
+  <span id="trang-thai" class="nhat"></span>
+  <div class="gian"></div>
+  <button id="chip-kiem" class="chip on" title="Lỗi và chỗ cần xem">ổn</button>
+  <button id="nut-hoan" class="nut" disabled title="Hoàn tác (Cmd+Z)">Hoàn tác</button>
+  <button id="nut-lai" class="nut" disabled title="Làm lại (Cmd+Shift+Z)">Làm lại</button>
+  <span id="trang-luu" class="trang-luu">Đã lưu</span>
+  <button id="nut-luu" class="nut" disabled title="Lưu (Cmd+S)">Lưu</button>
+</header>
+<main class="giua">
+  <section class="vung-xem">
+    <div class="khung-san">
+      <div id="san" class="san">
+        <div class="lop-den"></div>
+        <div class="nhan-san"></div>
+      </div>
+    </div>
+    <div class="dieu-khien">
+      <button id="nut-dau" class="nut nho" title="Về đầu (Home)">Đầu</button>
+      <button id="nut-lui" class="nut nho" title="Ranh giới trước (↑)">‹ Ranh</button>
+      <button id="nut-phat" class="nut phat" title="Phát / dừng (Space)">Phát</button>
+      <button id="nut-toi" class="nut nho" title="Ranh giới sau (↓)">Ranh ›</button>
+      <span id="dong-ho" class="dong-ho">0:00.00 / 0:00.00</span>
+    </div>
+  </section>
+  <aside class="cot-phai">
+    <div class="tab-phai"><button data-tab="loi" class="dang">Lời</button><button data-tab="thuoc">Thuộc tính</button></div>
+    <div id="khung-loi" class="khung-loi"></div>
+    <aside id="thuoc-tinh" class="thuoc-tinh" style="display:none"></aside>
+  </aside>
+</main>
+<div class="thanh-cong-cu">
+  <button id="nut-tach" class="nut nho" title="Tách đoạn tại đầu đọc (S)">Tách (S)</button>
+  <button id="nut-xoa" class="nut nho" title="Xoá mục đang chọn (Delete)">Xoá</button>
+  <div class="gian"></div>
+  <button id="nut-nho" class="nut nho" title="Thu nhỏ (-)">−</button>
+  <button id="nut-vua" class="nut nho" title="Vừa khung (Shift+Z)">Vừa khung</button>
+  <button id="nut-to" class="nut nho" title="Phóng to (=)">+</button>
+  <button id="nut-phim" class="nut nho" title="Phím tắt (?)">Phím tắt</button>
+</div>
+<section id="dong-thoi-gian" class="dong-thoi-gian"></section>
+<div id="toasts" class="toasts"></div>
+<script type="module" src="/app/js/app.js"></script>
+</body>
+</html>

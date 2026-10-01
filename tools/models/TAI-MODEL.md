@@ -17,6 +17,17 @@ Whisper chạy ngay trên máy qua sherpa-onnx: video và giọng nói không r�
   `curl -L -o tools/models/face_detection_yunet_2023mar.onnx https://github.com/opencv/opencv_zoo/raw/main/models/face_detection_yunet/face_detection_yunet_2023mar.onnx`
 - Cần OpenCV có `cv2.FaceDetectorYN` (OpenCV từ 4.8); VM Cowork đã có sẵn.
 
+## Mốc âm tiết cho Bàn dựng và Dựng bằng lời
+
+`tools/moc-tu.py` dùng hai model, đều giấy phép Apache 2.0, chạy trong VM (cần `onnxruntime` trong `tools/pylib/`): `python3 tools/cai-dat.py` tự tải cả hai (khoảng 350 MB tải về; bỏ qua bằng `--khong-loi` nếu không dùng Bàn dựng).
+
+- `sherpa-onnx-zipformer-vi-int8-2025-04-20/` (khoảng 75 MB, VietASR, huấn luyện khoảng 70.000 giờ tiếng Việt, bản gốc `zzasdf/viet_iter3_pseudo_label`): chép nguyên văn, giữ từ đệm.
+- `sherpa-onnx-omnilingual-asr-300M-ctc-int8-2025-11-12/` (khoảng 365 MB, Meta Omnilingual ASR): căn khớp chữ vào tiếng theo khung 20 ms.
+
+Tải lại khi thiếu (thay TÊN, chạy lặp tới khi đủ dung lượng rồi `tar xjf`; thư mục omnilingual giải nén có tên `sherpa-onnx-omnilingual-asr-1600-languages-300M-ctc-int8-2025-11-12`, đổi tên cho khớp và chỉ cần giữ `model.int8.onnx`, `tokens.txt`, `LICENSE`):
+
+    timeout 160 curl -sL -C - -o TÊN.tar.bz2 https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/TÊN.tar.bz2
+
 ## Chạy ở đâu, model nào
 
 1. **Ưu tiên: gỡ băng trên Mac bằng large-v3** (cần tải `sherpa-onnx-whisper-large-v3/` trước; chưa có thì tool tự lùi về turbo và ghi rõ trong log). VM Cowork chỉ có khoảng 3-4 GB RAM nên large-v3 chết lặng trong VM (hết bộ nhớ, không báo lỗi). Máy Mac thật đủ RAM. Claude xếp việc bằng `python3 tools/hang-doi-go-bang.py them "<file>" --out-dir "<thư mục transcript>"`, người dùng bấm đúp `Go bang tren Mac.command` ở thư mục gốc, Terminal chạy lần lượt mọi việc đang chờ rồi báo "Gỡ băng xong". Claude đọc `python3 tools/hang-doi-go-bang.py trang-thai`, sau đó vẫn chạy `nghiem-thu.py transcript` như mọi lần.

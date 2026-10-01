@@ -90,6 +90,18 @@ Bạn không cần nhớ tên skill hay tên công cụ. Claude nhận ra loại
 
 Clip 10 phút trọn quy trình thường mất 30-60 phút kể cả thời gian bạn duyệt. Bản chính của bài dài (1-3 giờ) xuất trong một tới vài giờ; để máy chạy.
 
+## Tự tay chỉnh nhỏ bằng Bàn dựng
+
+Khi bản nháp chỉ còn vài chỗ nhỏ (bỏ một tiếng "ờ" ở đầu đoạn, cho nhãn hiện lâu hơn một chút, nhạc nhỏ đi), bạn có thể tự chỉnh thay vì mô tả cho Claude:
+
+1. Bấm đúp `Mo ban dung.command` ở thư mục xưởng. Chrome tự mở trang Bàn dựng; giữ cửa sổ Terminal mở trong lúc chỉnh.
+2. Chọn timeline cần chỉnh. Phía dưới là các kênh: chương, đồ họa nổi, B-roll, hình chính (có chữ bạn nói trong từng khối), tiếng lời, nhạc nền.
+3. Kéo mép khối để tỉa hoặc đổi thời lượng nhãn, kéo thân khối để đổi chỗ, bấm S để tách tại đầu đọc, bấm vào khối để chỉnh số liệu ở thẻ "Thuộc tính". Bấm ? để xem phím tắt. Sai thì Cmd+Z.
+4. Bỏ chữ thừa: mở thẻ "Lời", bôi đen chữ rồi bấm Delete; chữ mờ hoặc gạch là phần chưa dùng hay đã bỏ, bôi đen rồi Enter để lấy lại. Hai chữ nói liền một hơi thì trang hỏi bạn bỏ thêm hay giữ lại cho khỏi gượng.
+5. Bấm Lưu (Cmd+S), rồi nói với Claude "tôi chỉnh xong rồi". Claude dựng lại bản nháp và kiểm như mọi lần; bản cũ luôn được cất lại.
+
+Lần đầu dùng với một dự án, Claude cần vài phút chuẩn bị mốc lời (`tools/moc-tu.py`). Khung xem trong Bàn dựng là xem nhanh: bố cục slide, chỉnh màu, phụ đề và độ to chuẩn chỉ có ở bản dựng thật.
+
 ## Góp ý sao cho Claude sửa đúng
 
 Nói theo mốc thời gian trên bản bạn đang xem: "ở 2:14 nhãn hiện sớm quá, phải lúc tôi nói xong từ 'ba bước'", "từ 7:10 tới 7:40 lộn thứ tự". Mốc bạn đọc trên bản render đáng tin hơn mọi suy luận của Claude. Góp ý về chữ (chức danh, tên chương trình, thuật ngữ) Claude sẽ sửa tận gốc để clip sau không lặp lại, và ghi vào "Sổ tay góp ý" cuối `phong-cach/PHONG-CACH.md`.

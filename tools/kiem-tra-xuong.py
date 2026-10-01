@@ -48,6 +48,9 @@ def main():
         tai_lieu_dat = subprocess.run([sys.executable, os.path.join(TOOLS, "kiem-tai-lieu.py")]).returncode == 0
     if args.chi_tai_lieu:
         raise SystemExit(0 if tai_lieu_dat else 1)
+    print("→ quy tắc điểm cắt Dựng bằng lời (ban_dung_loi.py, dữ liệu tổng hợp)", flush=True)
+    if not kiem_cat_loi():
+        raise SystemExit("! ban_dung_loi.py đặt điểm cắt khác mốc đã kiểm - xem dòng ✗ ở trên")
 
     proj = os.path.join("du-an", "_kiem-tra-tu-dong")
     for d in ("nguon", "do-hoa"):
@@ -89,11 +92,15 @@ def main():
          "fadeIn": 0.5, "overlay": {"src": "do-hoa/lt.webm", "at": 1.0},
          "broll": brolls},
         {"type": "insert", "src": "do-hoa/intro.mp4"},
+        # overlay "duration": thẻ đầu kéo dài 4 → 4,5 s (giữ khung giữa), thẻ sau rút 4 → 2,5 s; volumeDb -6
         {"type": "video", "src": "nguon/chinh.mp4", "in": 20.0, "out": 28.0, "snap": False,
-         "fadeOut": 0.5, "overlay": [{"src": "do-hoa/lt.webm", "at": 0.5},
-                                     {"src": "do-hoa/lt.webm", "at": 5.0}]},
+         "fadeOut": 0.5, "volumeDb": -6,
+         "overlay": [{"src": "do-hoa/lt.webm", "at": 0.5, "duration": 4.5},
+                     {"src": "do-hoa/lt.webm", "at": 5.0, "duration": 2.5}]},
+        # multicam có B-roll: tiếng chủ phải chạy liền qua B-roll (audioIn từng quãng = 10 + (đầu quãng - 3))
         {"type": "video", "src": "nguon/goc2.mp4", "in": 3.0, "out": 9.0, "snap": False,
-         "audioSrc": "nguon/chinh.mp4", "audioIn": 10.0},
+         "audioSrc": "nguon/chinh.mp4", "audioIn": 10.0,
+         "broll": [{"src": "nguon/broll.mp4", "at": 5.0, "duration": 1.5, "from": 0}]},
     ]
     co_bo_cuc = os.path.isfile(os.path.join("do-hoa-chung", "bo-cuc", "bo-cuc.json"))
     if args.co_slide and co_bo_cuc:
@@ -143,6 +150,12 @@ def main():
     p = subprocess.run([sys.executable, "tools/nghiem-thu.py", "video", out, "--khung", "ngang", "--nhap", "--anh"], text=True)
     if p.returncode != 0:
         raise SystemExit("! nghiem-thu.py báo KHÔNG ĐẠT trên dự án thử - xưởng CHƯA an toàn")
+    print("→ kiểm các trường r7 (overlay duration, volumeDb, audioIn multicam qua B-roll)", flush=True)
+    if not kiem_r7(proj, out):
+        raise SystemExit("! Trường overlay duration / volumeDb / audioIn multicam chưa đúng - xem dòng ✗ ở trên")
+    print("→ kiểm vi mờ ở mối nối (r8)", flush=True)
+    if not kiem_vi_mo(out):
+        raise SystemExit("! Vi mờ ở mối nối chưa đúng - xem dòng ✗ ở trên")
     print("→ kiem-dong-bo.py (đồng bộ hình-tiếng tuyệt đối: dựng thử chớp/click)", flush=True)
     p = subprocess.run([sys.executable, os.path.join(TOOLS, "kiem-dong-bo.py")], text=True)
     if p.returncode != 0:
@@ -150,6 +163,147 @@ def main():
     print(f"\n✓ DỰNG THỬ ĐẠT trên máy này. Thư mục thử: {proj}/ (xoá được).")
     if not tai_lieu_dat:
         raise SystemExit("! Phần máy ĐẠT nhưng cổng kiểm tài liệu KHÔNG ĐẠT (xem LỖI ở đầu) - sửa tài liệu rồi chạy lại")
+
+
+def kiem_r7(proj, out):
+    """Đo trên thành phẩm thử: (1) audioIn multicam từng quãng, (2) volumeDb -6 làm đoạn nhỏ hơn khoảng 6 dB,
+    (3) thẻ kéo dài còn hiện sau mốc file gốc hết, thẻ rút ngắn đã tắt trước mốc file gốc hết."""
+    import re
+    ok = True
+    mp = os.path.splitext(out)[0] + ".map.json"
+    parts = json.load(open(mp, encoding="utf-8"))["parts"]
+    mc = [p for p in parts if p.get("audio_src")]
+    for p in mc:
+        can = round(10.0 + (p["in"] - 3.0), 3)
+        if abs(p["audio_in"] - can) > 0.002:
+            print(f"  ✗ multicam part {p['part']}: audio_in {p['audio_in']} (cần {can})")
+            ok = False
+    if len(mc) < 3:
+        print(f"  ✗ multicam có B-roll phải ra 3 part, thấy {len(mc)}")
+        ok = False
+    chinh = [p for p in parts if p["kind"] == "cut" and p["src"].endswith("chinh.mp4") and not p.get("audio_src")]
+    def muc(a, b):
+        r = subprocess.run(["ffmpeg", "-hide_banner", "-ss", f"{a:.3f}", "-t", f"{b - a:.3f}", "-i", out,
+                            "-af", "volumedetect", "-f", "null", "-"], capture_output=True, text=True)
+        m = re.search(r"mean_volume: (-?[\d.]+) dB", r.stderr)
+        return float(m.group(1)) if m else None
+    p1 = next(p for p in chinh if abs(p["in"] - 2.0) < 0.01)
+    p3 = next(p for p in chinh if abs(p["in"] - 20.0) < 0.01)
+    v1, v3 = muc(p1["start"] + 1.0, p1["start"] + 4.0), muc(p3["start"] + 1.0, p3["start"] + 4.0)
+    if v1 is None or v3 is None or not (4.5 <= v1 - v3 <= 7.5):
+        print(f"  ✗ volumeDb -6: mức đoạn thường {v1} dB, đoạn -6 dB {v3} dB (cần chênh 4,5-7,5)")
+        ok = False
+    else:
+        print(f"  ✓ volumeDb -6: chênh {v1 - v3:.1f} dB")
+    # thẻ: ô trắng của lt.webm ở 40..340 x 260..320 (khung 640x360); đo sáng giữa ô trên khung xuất
+    def sang(t):
+        r = subprocess.run(["ffmpeg", "-hide_banner", "-v", "error", "-ss", f"{t:.3f}", "-i", out, "-frames:v", "1",
+                            "-vf", "scale=640:360,crop=200:30:90:275,format=gray", "-f", "rawvideo", "-"],
+                           capture_output=True)
+        b = r.stdout
+        return sum(b) / len(b) if b else 0
+    s0 = p3["start"]
+    do = {"thẻ 1 kéo dài, sau 4,5 s (file gốc đã hết)": (sang(s0 + 4.7), True),
+          "thẻ 2 rút ngắn, sau 7,5 s": (sang(s0 + 7.7), False),
+          "thẻ 2 đang hiện": (sang(s0 + 6.0), True)}
+    for ten, (v, phai_hien) in do.items():
+        hien = v > 215
+        print(f"  {'✓' if hien == phai_hien else '✗'} {ten}: độ sáng ô thẻ {v:.0f}")
+        ok = ok and hien == phai_hien
+    return ok
+
+
+def kiem_cat_loi():
+    """Dựng một lời nói tổng hợp (âm tiết 0,22 s; khe lặng, thung năng lượng, chữ dính liền, từ đệm kéo dài)
+    rồi so điểm cắt của ban_dung_loi.py với mốc đã kiểm (Pha 2 Bàn dựng, 2026-10-01)."""
+    sys.path.insert(0, TOOLS)
+    import ban_dung_loi as L
+    nl = [38] * 3001
+    def dat(a, b, v):
+        for i in range(int(round(a * 100)), int(round(b * 100))):
+            if 0 <= i < len(nl):
+                nl[i] = v
+    cau = ["xin chào các bạn ờ hôm nay chúng ta sẽ nói về cách dựng phim".split(),
+           "thì ờ đây là một thử nghiệm nhỏ à để kiểm tra bàn dựng".split()]
+    vong = ["hep", "hep", "lang", "hep", "gat", "hep", "lang"]
+    tu, t, ci = [], 1.0, 0
+    for c in cau:
+        for n, w in enumerate(c):
+            d = 0.36 if w in ("ờ", "à", "á") else 0.22
+            dat(t, t + d, 80)
+            tu.append({"w": w, "s": round(t + 0.02, 3), "e": round(t + d - 0.06, 3), "c": 0.95, "k": 0})
+            e0 = t + d
+            if w == "thì":
+                kieu = "gat"
+            elif n == len(c) - 1:
+                kieu = "cau"
+            else:
+                kieu = vong[ci % len(vong)]
+                ci += 1
+            if kieu == "gat":
+                t = e0
+            elif kieu == "hep":
+                dat(e0, e0 + 0.03, 62)
+                t = e0 + 0.03
+            elif kieu == "lang":
+                t = e0 + 0.15
+            else:
+                t = e0 + 0.45
+    loi = L.Loi(tu, bytes(nl), -62.0)
+    can = [("vào trước 'nay' (bỏ 'ờ hôm')", loi.diem_vao(6), 2.72, "hep"),
+           ("ra sau 'phim'", loi.diem_ra(14), 5.48, "lang"),
+           ("vào trước 'đây' (bỏ 'thì ờ')", loi.diem_vao(17), 6.33, "hep"),
+           ("vào trước 'ờ'", loi.diem_vao(4), 2.11, "hep")]
+    ok = True
+    for ten, kq, t_can, loai in can:
+        dung = abs(kq["t"] - t_can) < 0.001 and kq["loai"] == loai
+        ok = ok and dung
+        print(f"  {'✓' if dung else '✗'} {ten}: {kq['t']} ({kq['loai']}), cần {t_can} ({loai})")
+    gat = loi.khe(4)["loai"] == "gat"
+    print(f"  {'✓' if gat else '✗'} 'ờ' và 'hôm' dính liền: {loi.khe(4)['loai']}")
+    return ok and gat
+
+
+def kiem_vi_mo(out):
+    """Mối nối tiếng KHÔNG liền (cắt bỏ một quãng, đổi file, giáp đồ họa chèn) phải có vi mờ: năng lượng
+    1 ms sát mối nối nhỏ hơn hẳn năng lượng 12-30 ms bên cạnh. Mối nối tiếng liền (tách đoạn, B-roll,
+    đổi góc multicam cùng tiếng chủ) phải giữ nguyên. Đo trên thành phẩm (tiếng sine của nguồn giả)."""
+    import array
+    import math
+    parts = json.load(open(os.path.splitext(out)[0] + ".map.json", encoding="utf-8"))["parts"]
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-i", out, "-map", "0:a", "-ac", "1", "-ar", "48000",
+                          "-f", "f32le", "-"], capture_output=True).stdout
+    a = array.array("f")
+    a.frombytes(raw)
+
+    def rms(t0, t1):
+        x = a[int(round(t0 * 48000)):int(round(t1 * 48000))]
+        return math.sqrt(sum(v * v for v in x) / max(1, len(x)))
+
+    def tieng(p):
+        if p["kind"] != "cut":
+            return None
+        if p.get("audio_src"):
+            return (p["audio_src"], p["audio_in"], p["audio_in"] + (p["out"] - p["in"]))
+        return (p["src"], p["in"], p["out"])
+    ok, dem = True, 0
+    for p, q in zip(parts, parts[1:]):
+        x, y = tieng(p), tieng(q)
+        lien = x is not None and y is not None and x[0] == y[0] and abs(x[2] - y[1]) < 0.002
+        t = q["start"]
+        for ten, ref, sat in (("trước", rms(t - 0.03, t - 0.012), rms(t - 0.0012, t - 0.0002)),
+                              ("sau", rms(t + 0.012, t + 0.03), rms(t + 0.0002, t + 0.0012))):
+            if ref < 1e-3:
+                continue
+            r = sat / ref
+            dung = r > 0.8 if lien else r < 0.5
+            dem += 1
+            if not dung:
+                ok = False
+                print(f"  ✗ mối nối part {p['part']}→{q['part']} ({'liền' if lien else 'không liền'}), phía {ten}: tỉ lệ {r:.2f}")
+    if ok:
+        print(f"  ✓ vi mờ đúng ở {dem} mép mối nối")
+    return ok
 
 
 if __name__ == "__main__":

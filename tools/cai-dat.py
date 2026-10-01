@@ -8,6 +8,7 @@ Cách dùng (từ bất kỳ đâu, script tự tìm gốc xưởng):
     python3 tools/cai-dat.py --model small   # model nhận dạng nhỏ hơn (nhanh, kém chính xác hơn)
     python3 tools/cai-dat.py --model khong   # bỏ qua model (không gỡ băng tại máy)
     python3 tools/cai-dat.py --khong-thu     # bỏ bước dựng thử cuối
+    python3 tools/cai-dat.py --khong-loi     # bỏ hai model mốc lời của Bàn dựng (khoảng 450 MB)
 
 Mỗi bước tự bỏ qua nếu đã xong. Bước tải model có thể cần chạy lại nhiều lần
 (mỗi lần tải tiếp tối đa ~150 giây rồi thoát mã 2 = "chưa xong, chạy lại y nguyên").
@@ -16,8 +17,9 @@ Mỗi bước tự bỏ qua nếu đã xong. Bước tải model có thể cần
 
 Các bước:
   1. Kiểm công cụ hệ thống: ffmpeg/ffprobe (bắt buộc), python3, node (tuỳ chọn)
-  2. Thư viện Python vào tools/pylib (numpy, sherpa-onnx, pillow, python-pptx)
-  3. Model nhận dạng giọng nói vào tools/models (silero VAD + Whisper)
+  2. Thư viện Python vào tools/pylib (numpy, sherpa-onnx, onnxruntime, pillow, python-pptx)
+  3. Model nhận dạng giọng nói vào tools/models (silero VAD + Whisper), rồi hai model mốc lời cho
+     Bàn dựng và Dựng bằng lời (zipformer tiếng Việt chép nguyên văn, omnilingual CTC căn mốc; Apache 2.0)
   4. Sinh khung/mask bố cục bài giảng có slide (do-hoa-chung/bo-cuc)
   5. Tạo thư mục thư viện và dự án
   6. Dựng thử một dự án tổng hợp nhỏ qua cổng nghiệm thu (tools/kiem-tra-xuong.py)
@@ -53,6 +55,7 @@ VAD_FILE = "silero_vad.onnx"
 PIP_PACKAGES = [
     ("numpy", "numpy"),
     ("sherpa_onnx", "sherpa-onnx"),
+    ("onnxruntime", "onnxruntime"),
     ("PIL", "pillow"),
     ("pptx", "python-pptx"),
 ]
@@ -280,6 +283,63 @@ def b3_model(model, ngan_sach):
     return {"vad": True, "whisper": model}
 
 
+# Model mốc lời cho Bàn dựng (tools/moc-tu.py): tên thư mục đích, tệp tar, cỡ, các tệp cần giữ
+MO_HINH_LOI = [
+    {"dir": "sherpa-onnx-zipformer-vi-int8-2025-04-20", "tar": "sherpa-onnx-zipformer-vi-int8-2025-04-20.tar.bz2",
+     "bytes": 60181038, "giu": ["encoder-epoch-12-avg-8.int8.onnx", "decoder-epoch-12-avg-8.onnx",
+                                "joiner-epoch-12-avg-8.int8.onnx", "tokens.txt"],
+     "mo_ta": "zipformer tiếng Việt (VietASR, Apache 2.0) - chép nguyên văn, giữ từ đệm"},
+    {"dir": "sherpa-onnx-omnilingual-asr-300M-ctc-int8-2025-11-12",
+     "tar": "sherpa-onnx-omnilingual-asr-1600-languages-300M-ctc-int8-2025-11-12.tar.bz2",
+     "bytes": 292571207, "giu": ["model.int8.onnx", "tokens.txt", "LICENSE"],
+     "mo_ta": "omnilingual-asr 300M CTC (Meta, Apache 2.0) - căn mốc từng âm tiết"},
+]
+
+
+def b3b_mo_hinh_loi(ngan_sach):
+    """Hai model cho Bàn dựng; cùng cách tải nối tiếp và giải nén theo lượt như bước 3."""
+    buoc("3b", "Model mốc lời cho Bàn dựng và Dựng bằng lời")
+    xong = True
+    for m in MO_HINH_LOI:
+        d = os.path.join(MODELS, m["dir"])
+        marker = os.path.join(d, ".hoan-tat")
+        if os.path.isfile(marker):
+            ok(f"{m['dir']} đã có")
+            continue
+        tar_path = os.path.join(MODELS, m["tar"])
+        t0 = time.time()
+        co = os.path.getsize(tar_path) if os.path.isfile(tar_path) else 0
+        if co < m["bytes"]:
+            print(f"  → tải {m['tar']} ({m['bytes'] / 1e6:.0f} MB) - {m['mo_ta']}", flush=True)
+            if not _tai_tiep(MODEL_URL + m["tar"], tar_path, m["bytes"], ngan_sach):
+                co = os.path.getsize(tar_path) if os.path.isfile(tar_path) else 0
+                print(f"\n⏳ Đã tải {co / 1e6:.0f}/{m['bytes'] / 1e6:.0f} MB. CHƯA XONG - chạy lại y nguyên lệnh này để tải tiếp.")
+                raise SystemExit(2)
+        if ngan_sach - (time.time() - t0) < min(90, ngan_sach * 0.6):
+            print("\n⏳ Đã tải xong, CHƯA giải nén - chạy lại y nguyên lệnh này để giải nén.")
+            raise SystemExit(2)
+        print(f"  → giải nén {m['dir']}…", flush=True)
+        os.makedirs(d, exist_ok=True)
+        with tarfile.open(tar_path, "r:bz2") as t:
+            for mem in t.getmembers():
+                base = os.path.basename(mem.name)
+                if mem.isfile() and base in m["giu"]:
+                    mem.name = base
+                    t.extract(mem, d)
+        thieu = [g for g in m["giu"] if not os.path.isfile(os.path.join(d, g))]
+        if thieu:
+            canh_bao(f"{m['dir']}: thiếu {thieu} sau khi giải nén - xoá thư mục đó rồi chạy lại")
+            xong = False
+            continue
+        open(marker, "w").write(time.strftime("%Y-%m-%d %H:%M"))
+        try:
+            os.remove(tar_path)
+        except OSError:
+            open(tar_path, "w").close()
+        ok(f"{m['dir']} sẵn sàng")
+    return xong
+
+
 # ------------------------------------------------------------------ bước 4
 def b4_bo_cuc():
     buoc(4, "Khung và mask bố cục bài giảng có slide (do-hoa-chung/bo-cuc)")
@@ -331,6 +391,7 @@ def in_trang_thai(tt):
     print(f"  python libs : " + (", ".join(f"{k}{'' if v else ' (THIẾU)'}" for k, v in tv.items()) or "chưa cài"))
     md = tt.get("model", {})
     print(f"  model       : " + (f"whisper-{md.get('whisper')} + VAD" if md.get("whisper") else "chưa có"))
+    print(f"  mốc lời     : {'có (Bàn dựng, Dựng bằng lời)' if tt.get('mo_hinh_loi') else 'chưa'}")
     print(f"  bố cục slide: {'có' if tt.get('bo_cuc') else 'chưa'}")
     print(f"  dựng thử    : {'ĐẠT ' + str(tt.get('dung_thu_luc', '')) if tt.get('dung_thu') else 'chưa'}")
     print(f"  cập nhật    : {tt.get('cap_nhat', '-')}")
@@ -340,6 +401,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--model", default="turbo", choices=["turbo", "small", "khong"])
     ap.add_argument("--khong-thu", action="store_true", help="bỏ bước dựng thử")
+    ap.add_argument("--khong-loi", action="store_true", help="bỏ hai model mốc lời của Bàn dựng")
     ap.add_argument("--trang-thai", action="store_true", help="chỉ in trạng thái")
     ap.add_argument("--thoi-gian", type=int, default=150, help="ngân sách giây cho bước tải model mỗi lần chạy")
     args = ap.parse_args()
@@ -357,6 +419,9 @@ def main():
     ghi_trang_thai(tt)
     tt["model"] = b3_model(args.model, args.thoi_gian)   # có thể SystemExit(2) = chạy lại
     ghi_trang_thai(tt)
+    if not args.khong_loi:
+        tt["mo_hinh_loi"] = b3b_mo_hinh_loi(args.thoi_gian)   # có thể SystemExit(2) = chạy lại
+        ghi_trang_thai(tt)
     tt["bo_cuc"] = b4_bo_cuc()
     ghi_trang_thai(tt)
     b5_thu_muc()
