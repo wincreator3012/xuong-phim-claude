@@ -1,6 +1,6 @@
 ---
 name: "phim-clip-ngan"
-description: "Cắt clip ngắn Reels/Shorts/TikTok hoặc clip quảng bá 30-180 giây (khung dọc 9:16 hoặc ngang) từ bài giảng, podcast, buổi nói chuyện, phim đã có trong thư mục \"xuong-phim-claude\" - chọn đoạn có hook, dựng hook-trước-intro, bảng tên cho người nói, burn phụ đề, nghiệm thu tự động. Kích hoạt khi user nói \"cắt clip ngắn\", \"làm Reels\", \"Shorts\", \"TikTok\", \"clip dọc\", \"clip quảng bá chương trình\", \"cắt đoạn hay nhất\", \"làm teaser\", \"bản gọn 60-90 giây\". KHÔNG dùng để dựng bài dài hoàn chỉnh (phim-dung-bai), dàn góc podcast nhiều máy (phim-multicam), hay phim tài liệu phỏng vấn (phim-tai-lieu-phong-van)."
+description: "Cắt clip ngắn Reels/Shorts/TikTok hoặc clip quảng bá 30-180 giây (khung dọc 9:16 hoặc ngang) từ bài giảng, podcast, buổi nói chuyện, phim đã có trong thư mục \"xuong-phim-claude\" - chọn đoạn có hook, dựng hook-trước-intro, bảng tên cho người nói, kèm cảnh minh hoạ vẽ theo lời khi ý cần hình, burn phụ đề, nghiệm thu tự động. Kích hoạt khi user nói \"cắt clip ngắn\", \"làm Reels\", \"Shorts\", \"TikTok\", \"clip dọc\", \"clip quảng bá chương trình\", \"cắt đoạn hay nhất\", \"làm teaser\", \"bản gọn 60-90 giây\". KHÔNG dùng để dựng bài dài hoàn chỉnh (phim-dung-bai), dàn góc podcast nhiều máy (phim-multicam), hay phim tài liệu phỏng vấn (phim-tai-lieu-phong-van)."
 ---
 
 # Clip ngắn cho Reels, Shorts và quảng bá
@@ -18,6 +18,8 @@ Nghề khác với dựng bài dài: bài dài phục vụ người đã ngồi 
 1. **Móc [hook]**: câu đầu tiên khiến người lạ dừng tay - một câu hỏi trúng nỗi băn khoăn, một khẳng định ngược trực giác, một con số, hoặc mở đầu một câu chuyện. Ý hay nhưng câu mở yếu thì tìm trong đoạn một câu đắt đưa lên đầu (cắt câu đó làm segment hook, có thể kèm dải chữ Benefits một mục hiện nguyên văn câu) rồi mới vào lời giảng.
 2. **Thân trọn vẹn**: một ý duy nhất được giảng trọn - người chưa xem bài dài vẫn hiểu ("như phần trước mình nói" là dấu loại).
 3. **Kết mở**: câu chốt tự nhiên của chính lời giảng; lời mời để outro lo, không ép lời giảng thành lời mời chào.
+
+Thêm hai điều khi sàng đoạn: đoạn phải TỰ ĐỨNG được với người lạ (câu "hồi nãy người dùng X nói", tên người thứ ba chưa giới thiệu là dấu cần xử lý: cắt vào sau câu đó hoặc chọn điểm vào khác), và lập luận có hình dạng luận đề, ví dụ cụ thể, khái quát thì short có sức nhất, hình minh hoạ cũng đi theo đúng hình dạng đó. Con số người nói ước lượng tại chỗ giữ trong lời nhưng không đưa lên chữ. Chi tiết và ví dụ ba short đã làm: `skills/phim-clip-ngan/references/clip-co-minh-hoa.md` mục 1.
 
 Độ dài: ưu tiên 45-90 giây; clip quảng bá chương trình có thể 60-180 giây. Trình bảng: mốc nguồn, câu hook, ý chính, độ dài dự kiến, khung đề xuất (dọc, ngang). Chờ người dùng chọn.
 
@@ -42,6 +44,8 @@ Nháp tăng số mỗi vòng để không ghi đè bản người dùng đang xe
 - **Đồ họa dọc** từ preset `do-hoa-chung/preset-intro-outro-doc.json`; outro clip ngắn 5-6 giây một dòng lời mời, có QR thì 8-9 giây. `render-do-hoa.mjs` thoát mã 1 thì sửa job, không dùng file sai.
 - **Nhạc**: `full` + duck, track và `gainDb` theo từng track trong `thu-vien/AM-THANH.md`; nhạc là lớp năng lượng nền, không lấn lời.
 - **Nhịp cắt**: được phép sát hơn bài dài, bỏ mọi khoảng thở trên 0,8 giây trừ khoảng lặng có chủ đích trước câu chốt.
+- **Điểm kết là chữ cuối của ý đã trọn**, rồi outro lên ngay. Mốc cuối của cue hay của đoạn nhận dạng thường kéo sang nửa câu kế tiếp, nên chốt bằng đường bao năng lượng 10-20 ms của chính thành phẩm: khoảng trũng 0,05-0,15 giây ngay sau chữ cuối, `fadeOut` 0,05 giây. Người dùng nghe ra "câu thừa" thì đó là lỗi cắt, không phải gu: rút `out`, bớt phần giữ cuối của cảnh bằng `overlay.duration` kèm `giu`, sửa cue cuối, dựng, burn, nghiệm thu lại.
+- **Cảnh minh hoạ trong clip ngắn** (khi lời là một lập luận có ví dụ hay quy trình): một chủ thể hình biến hình xuyên suốt theo lời, lấy đúng ví dụ người nói nêu; mặt ở nửa trên, thẻ ở nửa dưới, cảnh bắt đầu sau LowerThird, chừa 1-2 giây giữ yên cuối cảnh. Nguyên lý và nhịp làm việc: `skills/phim-clip-ngan/references/clip-co-minh-hoa.md` mục 3-5; cách vẽ: skill phim-canh-minh-hoa.
 - Hai hệ mốc và các điểm hay nhầm khác: `_chung/timeline-va-dung.md`. assemble tự kiểm hình = tiếng từng part và thành phẩm, dừng khi KHÔNG ĐẠT: đọc bảng chẩn đoán, tìm nguyên nhân rồi mới chạy lại.
 
 ## Bước 3 - phụ đề (mặc định CÓ cho clip dọc)
@@ -49,19 +53,20 @@ Nháp tăng số mỗi vòng để không ghi đè bản người dùng đang xe
 Phần lớn người lướt không bật tiếng: clip dọc mặc định burn phụ đề, trừ khi người dùng từ chối.
 
 1. Tính mốc phụ đề từ SRT gốc bằng `<clip>.map.json` (cue có `in ≤ t < out` → `start + (t - in)`), không tự cộng trừ thời lượng thẻ chèn.
-2. Soát lời theo transcript thật, sửa lỗi nhận dạng và thuật ngữ, ngắt dòng tối đa khoảng 38 ký tự, 1-2 dòng mỗi cue.
+2. Soát lời theo transcript thật, sửa lỗi nhận dạng và thuật ngữ; cue theo hơi nói, nhóm cân bằng, ưu tiên ngắt ở dấu câu, khoảng 28 ký tự mỗi dòng trên điện thoại (tối đa 38), 1-2 dòng. Chỗ nhận dạng chưa chắc liệt kê cho người dùng nghe lại.
 3. Burn bằng file `.ass` có `PlayResX`/`PlayResY` đúng độ phân giải thật (không dùng `force_style` nhiều key); mẫu `.ass`, lệnh burn, font và cách đo MarginV: `references/phu-de-ass.md`.
 4. Kiểm hai khung tại mốc có cue bằng output-seek (`-ss` sau `-i`) trước khi burn cả clip.
 
-File đã burn là bản HOÀN CHỈNH: ghi vào `du-an/<x>/xuat-hoan-chinh/<slug>-doc.mp4`. Burn là một lượt encode mới nên phải qua cổng nghiệm thu lần nữa.
+File đã burn là bản HOÀN CHỈNH: ghi vào `du-an/<x>/xuat-hoan-chinh/<slug>-doc.mp4`. Burn là một lượt encode mới nên phải qua cổng nghiệm thu lần nữa. Burn và chuẩn hoá âm lượng làm trong cùng một lượt ffmpeg (chuỗi lệnh mẫu và mức `volume` điểm xuất phát: `references/phu-de-ass.md` mục 4); đo lại trước khi báo.
 
 ## Bước 4 - nghiệm thu
 
 1. Cổng máy trên file CUỐI trong `xuat-hoan-chinh/`: `python3 tools/nghiem-thu.py video "<file>" --khung doc --anh` phải ĐẠT (hình = tiếng trong 0,06 giây, -14 ± 1 LUFS, true peak không quá -1 dB, 1080x1920, 30 fps, không im lặng hay hình đứng bất thường).
 2. Xem khung ĐẦU TIÊN của ảnh lưới: hook đọc được ngay, không bị logo hay giao diện nền tảng che, phụ đề cách mép dưới đủ xa; thứ tự hook → intro → thân → outro đúng.
 3. Phụ đề: 2-3 khung tại mốc có cue, đối chiếu lời đang nói.
-4. Thời lượng đúng giới hạn nền tảng người dùng nhắm (Shorts tối đa 3 phút, Reels ưu tiên dưới 90 giây); tên file rõ `<slug>-doc.mp4`.
+4. Đầu và cuối: nghe lại mối nối hook sang intro và chữ cuối của thân trước outro (đường bao năng lượng tụt gọn, không còn nửa câu), khung cuối của cảnh minh hoạ ở trạng thái đầy đủ.
+5. Thời lượng đúng giới hạn nền tảng người dùng nhắm (Shorts tối đa 3 phút, Reels ưu tiên dưới 90 giây); tên file rõ `<slug>-doc.mp4`.
 
-Báo kết quả kèm dòng "nghiệm thu máy: ĐẠT". Một bài giảng tốt thường ra 3-5 clip: sau khi người dùng duyệt clip đầu, đề nghị dựng loạt còn lại cùng format cho đồng đều.
+Báo kết quả kèm dòng "nghiệm thu máy: ĐẠT" và danh sách ngắn các điểm cần người dùng nghe lại (chữ nhận dạng chưa chắc, con số người nói ước lượng, chức danh, chỗ đã cắt bỏ tham chiếu ngoài clip). Một bài giảng tốt thường ra 3-5 clip: sau khi người dùng duyệt clip đầu, đề nghị dựng loạt còn lại cùng format cho đồng đều.
 
-<!-- ban-nguon: phim-clip-ngan 2026-09-30 11d333f5 -->
+<!-- ban-nguon: phim-clip-ngan 2026-10-03 5c8975ad -->

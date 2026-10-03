@@ -34,6 +34,17 @@ Cảnh con N (...-hết): ý đã đủ; giữ yên cho người xem đọc (chu
 
 Chữ ký chuyển động của cảnh thường rơi vào cảnh con quan trọng nhất (lúc người dùng nói ý chính). Cảnh dài hơn 12 giây mà không có điểm nhắc mới thì tách thành hai cảnh, hoặc cho chủ thể một chuyển động sống thật (sóng chạy tiếp, chấm đi vòng tiếp), không lắc lư khung.
 
+### Một chủ thể xuyên suốt, biến hình theo lập luận
+
+Rút từ ba short một clip giới thiệu chương trình.0 (2026-10), được người dùng đánh giá rất tốt. Khi lời là một lập luận (luận đề, ví dụ, khái quát) hay một quy trình, cảnh hay nhất không phải chuỗi hình rời mà là MỘT chủ thể hình đi cùng lời từ đầu đến cuối và biến hình khi lời đổi nhịp: sân bóng mini sáng dần từng cầu thủ; hai cột "người giống mình" và "người khó chịu" rồi bảy vị trí Dream Team; thẻ khung "skill làm slide" tự điền từng mục, thu nhỏ vào hộp AI, ra một slide, rồi đóng gói thành bộ skill dùng cho nhiều slide. Người xem có một thứ để theo bằng mắt trong lúc tai nghe, và sự biến hình chính là cách hình "nói" ý: cái gì vào, cái gì ra, cái gì gói lại.
+
+- **Nội dung hình là ví dụ người nói nêu**, đúng từng mục, đúng thứ tự họ nhắc (bộ mã màu, ba loại phông chữ, ít chữ, sơ đồ quen dùng); mỗi mục hiện đúng lúc được gọi tên, kèm một dấu xác nhận nhỏ. Hình không thêm ý và không đoán.
+- **Ba nhịp là điểm xuất phát:** chất liệu hiện hay được điền theo lời; vận hành (đi vào, biến đổi, đi ra, kèm nhãn "vào" và "ra" khi lời nói tiêu chuẩn vào và ra); khái quát hay đóng gói. Khoảnh khắc khái quát đặt đúng lúc lời nói tới ý chính và là chữ ký của cảnh (phương trình "khung chuyên môn = skill AI, nhìn từ phía AI", gói có băng "đã đóng gói", cả đội sáng đủ). Lời ngắn hơn thì ít nhịp hơn.
+- **Chủ thể nhỏ lại để nhường chỗ chứ không biến mất:** thẻ gốc thu về góc khi AI lên rồi trở lại ở cuối, nên người xem nhận ra "đây vẫn là cái thẻ đó". Cỡ sau khi thu vẫn phải đọc được trên điện thoại.
+- **Cảnh liền mạch qua các điểm cắt.** Thân ghép từ nhiều đoạn thì mỗi cảnh phát lại sự kiện của cảnh trước (7C: tám cảnh), thân liên tục thì một cảnh dài.
+- **Mỗi cảnh nên chừa 1-2 giây giữ yên ở cuối:** người dùng có thể rút đuôi thân sau khi duyệt, và khi đó chỉ cần bớt đoạn giữ bằng `overlay.duration` kèm `giu` (`references/viet-canh.md` mục 5) thay vì render lại.
+- **Cỡ:** nhân vật chính lớn ngay từ đầu (thẻ khoảng 80% bề ngang khung dọc, chữ từ 30 px); cỡ nhỏ lọt thỏm giữa khoảng trống là lỗi hay gặp nhất ở bản đầu và đã phải làm lại một lần.
+
 ## 4. Mười một khuôn cảnh
 
 Mỗi khuôn là một hình dạng đã có chữ ký chuyển động; chọn khuôn theo vai của ý, thay nội dung, giữ chữ ký. Không khuôn nào hợp thì tự dựng từ các chuyển động ở mục 6, vẫn theo chuỗi cảnh con.

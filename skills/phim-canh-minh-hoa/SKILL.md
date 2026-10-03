@@ -13,11 +13,12 @@ Mục tiêu: những đoạn người dùng GIẢI THÍCH (một cơ chế, mộ
 
 Đọc trước: `skills/_chung/van-hanh.md`, `skills/_chung/overlay-va-the.md`, `skills/_chung/nghiem-thu-dung-y.md`; nguyên lý thiết kế, mười một khuôn cảnh, bố cục, màu, chuyển động, danh sách cấm: `skills/phim-canh-minh-hoa/references/nguyen-ly-canh.md`; hợp đồng runtime, khung file, lệnh, bốn kiểu chèn kèm mẫu timeline: `skills/phim-canh-minh-hoa/references/viet-canh.md`. Hai cảnh mẫu đã kiểm: `do-hoa-chung/canh-kit/mau/cua-so-dung-nap.html` (sơ đồ toàn khung, có ô chừa góc) và `do-hoa-chung/canh-kit/mau/the-noi-tho-hop.html` (thẻ nổi nền trong suốt).
 
-## Ba nguyên tắc xuyên suốt
+## Bốn nguyên tắc xuyên suốt
 
 1. **Cảnh lớn dần theo lời, không dồn ra đầu cảnh rồi đứng.** Mỗi cảnh là một chuỗi cảnh con, mỗi cảnh con mở đúng lúc lời người dùng nhắc tới phần đó (mốc lấy từ transcript). Lỗi làm cảnh giống slide là hiện hết trong một phần tư đầu rồi đứng yên. Hết ý thì giữ yên cho người xem đọc, không lắc lư cho có.
 2. **Mỗi cảnh một chữ ký chuyển động.** Một khoảnh khắc sơ đồ tự "nói" ý chính (cửa sổ nới rộng, chấm sáng đi quanh hình vuông, hai làn so sánh cùng chạy rồi một làn rớt khung). Chọn khuôn cảnh trước, giữ chữ ký của khuôn, thay nội dung.
 3. **Hình không nói điều người dùng không nói.** Chữ trên hình là cụm nhấn trích từ lời, không chép lại cả câu; dữ kiện có nguồn; mô hình của người khác ghi tên tác giả ngay trên cảnh.
+4. **Khi lời là một lập luận hay quy trình, một chủ thể hình đi cùng lời và biến hình theo nó** (thẻ tự điền rồi đi qua AI rồi đóng gói; sân bóng sáng dần từng cầu thủ), thay vì chuỗi hình rời. Nội dung hình là đúng ví dụ người nói nêu, đúng thứ tự họ nhắc; khoảnh khắc khái quát là chữ ký của cảnh. Nguyên lý và ví dụ: `skills/phim-canh-minh-hoa/references/nguyen-ly-canh.md` mục 3 phần "Một chủ thể xuyên suốt".
 
 ## Quy trình
 
@@ -44,7 +45,7 @@ Loại cảnh lần đầu xuất hiện trong dự án, hoặc người dùng m
 
 ### Bước 3 - Viết file cảnh
 
-`du-an/<x>/canh/NN-<ten>.html`, bắt đầu từ cảnh mẫu gần nhất. Mốc để ở MỘT đối tượng hằng số đầu script, tính `t trong cảnh = mốc nguồn - mốc bắt đầu cảnh`. Viết cả hai khung khi dự án có cả ngang lẫn dọc: dọc không phải bản cắt của ngang, là bố cục riêng (xếp chồng, chữ to hơn, trục toạ độ sơ đồ hẹp hơn). Theo luật tất định ở `viet-canh.md` mục 1.
+`du-an/<x>/canh/NN-<ten>.html`, bắt đầu từ cảnh mẫu gần nhất. Mốc để ở MỘT đối tượng hằng số đầu script, tính `t trong cảnh = mốc nguồn - mốc bắt đầu cảnh`. Viết cả hai khung khi dự án có cả ngang lẫn dọc: dọc không phải bản cắt của ngang, là bố cục riêng (xếp chồng, chữ to hơn, trục toạ độ sơ đồ hẹp hơn). Theo luật tất định ở `viet-canh.md` mục 1. Chừa 1-2 giây giữ yên ở cuối cảnh để sau này rút đuôi thân vẫn không phải chụp lại.
 
 ### Bước 4 - Soi trước khi chụp
 
@@ -52,7 +53,7 @@ Trong sandbox (dựng theo mục "Khởi động phiên mới" của `docs/QUY-T
 
 1. `node tools/canh.mjs kiem <cảnh>` phải báo "KIỂM TẤT ĐỊNH: ĐẠT".
 2. `node tools/canh.mjs người dùng <cảnh> --t <các mốc cảnh con> --khung <khung đích>` rồi NHÌN contact sheet: chữ Việt đủ dấu, không tràn, không đè nhau, cỡ chữ đọc được trên điện thoại (khung dọc soi riêng).
-3. Thẻ nổi: soi thêm trên khung hình thật bằng `--alpha --xem-tren <khung.jpg>` (khung trích từ nguồn trên máy), gương mặt người dùng phải trống hoàn toàn ở trạng thái đầy đủ nhất của thẻ.
+3. Thẻ nổi: soi thêm trên khung hình thật bằng `--alpha --xem-tren <khung.jpg>` (khung trích từ nguồn trên máy), gương mặt người dùng phải trống hoàn toàn ở trạng thái đầy đủ nhất của thẻ. Nền trong suốt phải thử bằng khung ghép thật, vì theme có thể đè nền đặc lên (đã gặp).
 
 ### Bước 5 - Chụp và đưa về máy
 
@@ -79,7 +80,7 @@ Góp ý của người dùng ghi `SO-GOP-Y.md` theo mốc; góp ý về cả h�
 - Thẻ nổi và ô người nói không bao giờ che mặt; kiểm trên khung hình thật.
 - Footage không rời máy: sandbox chỉ nhận vài khung hình tĩnh (nền mờ, soi thẻ nổi); ghép đoạn quay thật chạy trên máy bằng `canh-ghep.py`.
 - Hình vẽ bằng code; không dùng ảnh hay clip AI tạo để thay hình thật về người, nơi chốn, sự kiện.
-- Thời lượng cảnh bằng đúng ô trong timeline, đo bằng manifest hay `ffprobe`; không kéo dài bằng khung đứng.
+- Thời lượng cảnh khớp ô trong timeline, đo bằng manifest hay `ffprobe`; không kéo dài bằng khung đứng. Ô bị rút ngắn sau khi chụp thì bớt bằng `overlay.duration` kèm `giu`, không chạm hoạt cảnh.
 - Chưa qua cổng nghiệm thu của skill gọi thì chưa báo "xong".
 
-<!-- ban-nguon: phim-canh-minh-hoa 2026-09-30 df03bc48 -->
+<!-- ban-nguon: phim-canh-minh-hoa 2026-10-03 5e71977b -->

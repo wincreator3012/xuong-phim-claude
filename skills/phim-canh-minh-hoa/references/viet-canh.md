@@ -118,6 +118,8 @@ python3 tools/canh-ghep.py khung "du-an/<x>/nguon/bai.mp4" --at 840.0 --out "du-
  "overlay": [{"src": "do-hoa/ngang/canh-04-tho-hop.webm", "at": 14.6}]}
 ```
 
+**Thân bị rút ngắn sau khi đã chụp cảnh (cảnh dài hơn ô còn lại).** Thêm `duration` (độ dài mong muốn, giây) và `giu` (mốc trong file overlay để giữ khung rồi bớt, nên chọn lúc cảnh đã lắng cuối) vào overlay; công cụ bớt ở quanh `giu` mà không chạm hoạt cảnh kết (tối đa tới `n - giu - 0,2` giây). Ví dụ cảnh 37,5 giây vào ô 36,46 giây: `{"src": "...canh-01.webm", "at": 4.7, "duration": 36.46, "giu": 36.2}`. Soi khung cuối sau khi dựng lại để chắc cảnh còn ở trạng thái đầy đủ.
+
 **Người nói thu vào góc.** Chụp `--pip` (cảnh hiện ô `.o-pip`, manifest ghi toạ độ ô), commit về máy, rồi trên máy đặt đoạn quay thật vào ô; clip ra (không tiếng) vào `broll` với cùng `at`.
 
 ```
@@ -140,4 +142,7 @@ python3 tools/canh-ghep.py pip "du-an/<x>/do-hoa/ngang/canh-05-vong-lap-pip-nen.
 | Cảnh treo "không báo sẵn sàng" | lỗi JavaScript, thiếu `CANH.canh(...)` | `dong-goi` ra file, mở xem lỗi trong log của lệnh |
 | Chữ Việt hiện font dự phòng | font chưa nạp hoặc tên họ font sai | chỉ dùng họ có trong `do-hoa-chung/canh-kit/fonts/fonts.css`; runtime chờ `document.fonts.ready` |
 | Clip thu vào góc lệch ô hay méo | chụp thiếu `--pip`, hoặc nguồn khác tỉ lệ | chụp lại với `--pip`, hoặc truyền `--o x,y,w,h,r` |
+| Scale hoặc toạ độ ra NaN ở vài mốc | hàm dựng khối trả về đối tượng thiếu trường (ví dụ mất `tick`, `tLab` của một dòng) rồi `ve()` đọc trường đó | trả đủ mọi trường mà `ve()` dùng; kiểm bằng `canh.mjs người dùng` ở mốc có mục đó |
+| Hai dấu kiểm hay nhãn đè nhau | đặt theo toạ độ ước lượng, không đo | đo bề rộng chữ trong `chuanBi` rồi xếp theo số đo; dàn hàng với khoảng cách cố định |
+| Webm alpha ra nền đặc che mặt | theme đặt `--nen` đè lên chế độ trong suốt | thêm `:root[data-theme='...'][data-alpha='1'] { --nen: transparent }`; luôn kiểm bằng khung ghép thật |
 | Thẻ nổi che mặt ở trạng thái đầy đủ | chọn bên theo khung đầu đoạn | soi `--xem-tren` ở khung có người nói lệch nhất trong đoạn, đổi `data-ben` |

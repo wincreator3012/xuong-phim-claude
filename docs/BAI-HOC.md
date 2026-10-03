@@ -80,6 +80,10 @@ Bài học là lý do để hiểu vì sao một cách làm từng đúng với 
 - **cropFocus không phải hằng số của một file nguồn:** các đoạn cắt quay ở tư thế khác nhau cần giá trị riêng. Chỉnh theo góp ý "còn mất tay phía X": vẽ biên cửa sổ crop của nhiều giá trị lên khung CHƯA crop để thấy ngay hướng và biên độ cần pan. (dự án thật, 2026-09-21)
 - **Bài giảng có slide: `ca-hai` là mặc định cho mọi slide còn đọc được ở 73% khung; `slide` toàn khung chỉ khi kiểm đọc thật thất bại** (người dùng thấy toàn khung "nhìn chán", muốn giữ người nói trên hình). `ca-hai` thành bố cục chủ đạo thì kiểm cropFocus rải đều trong từng đoạn. (dự án thật, 2026-09-22)
 
+- **Điểm kết của short là chữ cuối của ý đã trọn, không phải mốc cuối của cue hay đoạn nhận dạng:** cue và Whisper kéo sang nửa câu kế tiếp, người dùng nghe ra "câu thừa" ngay còn máy không thấy. Chốt bằng đường bao năng lượng của chính thành phẩm (khoảng trũng 0,05-0,15 giây sau chữ cuối), fadeOut 0,05 giây; người dùng yêu cầu rút đuôi (7C bỏ "nhưng mà", Skill AI dừng sau "nhiều") thì đổi `out`, bớt phần giữ cuối của cảnh bằng `overlay.duration` kèm `giu`, sửa cue cuối, dựng, burn, nghiệm thu lại. (dự án thật, 2026-10-03)
+- **Short cắt từ cuộc đối thoại phải tự đứng được:** bỏ câu nhắc "hồi nãy người dùng X nói" bằng cách vào sau câu đó; con số người nói ước lượng tại chỗ ("90-100%") giữ trong lời nhưng không lên hình, thumbnail, mô tả, và hỏi người dùng giữ hay cắt. (dự án thật, 2026-10-03)
+- **Gọi short bằng slug và nội dung, không chỉ số thứ tự:** "S5" của người dùng là short thứ tư trong kế hoạch; hỏi một câu bằng nội dung thay vì đoán. (dự án thật, 2026-10-03)
+
 ## 6. Nhạc và âm thanh
 
 - **`gainDb` theo từng track và từng chế độ** (full khác bookends) trong `thu-vien/AM-THANH.md`; `duck:true` là sidechain nên gainDb full có thể cao hơn trực giác. (dự án thật, 2026-08-31)
@@ -88,6 +92,8 @@ Bài học là lý do để hiểu vì sao một cách làm từng đúng với 
 - **Cắt ở chỗ không có khoảng lặng thật:** tính năng lượng ngắn hạn (cửa sổ 20 ms, `wave` + numpy) trên 4-6 giây quanh điểm nghi, cắt vào GIỮA khoảng trũng. Cắt giữa câu Whisper để né một cụm từ: ước lượng theo tỷ lệ ký tự, `silencedetect -30dB:d=0.1` trên cửa sổ 3-4 giây, đặt `snap:false`. (dự án thật, 2026-08-30)
 - **True peak vượt khi LUFS đã đúng: chỉ thêm `alimiter` ở bước cuối** (`alimiter=limit=<hệ số>:attack=5:release=50:level=disabled`), dò hệ số qua vài lượt đo lại; không mix lại. (dự án thật, 2026-09-21)
 - **Nghi "bụp" ở điểm cắt: đo RMS cửa sổ 10 ms quanh mốc cắt** (từng thấy vọt 0,08 lên 0,56); đoạn kết là B-roll cắt sang đồ họa sáng thì dùng `fadeOutAudio` (chỉ mờ tiếng) thay cho `fadeOut` (mờ cả hình về đen, sinh chớp đen). (dự án thật, 2026-09-21)
+- **Tiếng gốc có crest khoảng 20 dB (đoạn to đoạn nhỏ chênh nhiều) làm chuẩn hoá -14 LUFS rơi -16 hoặc vượt true peak:** nén và giới hạn nhẹ trước thành `nguon/tieng-chu-nen.wav` rồi trỏ `audioSrc` vào đó. (dự án thật, 2026-10-01)
+- **Cache đo âm lượng `.tam/mix.wav.ln` có chữ ký không gồm nội dung tiếng:** đổi nguồn tiếng (hoặc nén lại) mà không làm rỗng file `.ln` thì bản ra lệch (-12,9 LUFS dù đã sửa); làm rỗng file đó rồi chạy lại. (dự án thật, 2026-10-01)
 
 ## 7. Gỡ băng
 
@@ -107,6 +113,8 @@ Bài học là lý do để hiểu vì sao một cách làm từng đúng với 
 - **Transcript thô trước khi lên phụ đề phải hiệu đính theo ngữ cảnh** ("di văn" là "di dân", "sân tồn" là "sinh tồn"); không burn nguyên văn máy nhận. (dự án thật, 2026-09-21)
 - **Cue phụ đề trùng quá nửa thời gian với LowerThird hay pill thì cả cue dùng style nâng cao** (`Raised`), không cắt nhỏ cue cho khít. (dự án thật, 2026-09-21)
 - **Font trong `.ass` bị rơi về DejaVu Sans** khi style xin weight 400 mà file chỉ có SemiBold: thêm file Regular/Bold thật hoặc khai đúng weight của file có sẵn; xem log `fontselect` khi burn. (dự án thật, 2026-09-21)
+
+- **Cue theo hơi nói, nhóm cân bằng, khoảng 28 ký tự mỗi dòng trên điện thoại:** chia thuần theo tỉ lệ ký tự trong cụm dài lệch vài phần mười giây và để lẻ chữ; ASR file đã dựng lấy ranh giới cụm, nhóm cân bằng ưu tiên dấu câu, chữ soát tay. Burn và chuẩn hoá âm lượng trong cùng một lượt ffmpeg (acompressor, volume, alimiter); `volume` 2,5 dB cho -15,1 LUFS (không đạt), 3,7 dB cho -14,6; luôn đo lại. (dự án thật, 2026-10-03)
 
 ## 9. Đồ họa Remotion và render
 
@@ -144,6 +152,8 @@ Bài học là lý do để hiểu vì sao một cách làm từng đúng với 
 - **Lập kế hoạch pill và bảng tên TRƯỚC khi dàn góc** (`--khoa`), để điểm cắt tránh vùng overlay và bảng tên luôn nằm trên cận đúng người. (dự án thật, 2026-09-29) **[máy]**
 - **Nguồn 4K nặng: làm proxy 1080p đã căn sẵn trước,** mọi phân tích chạy trên proxy. (dự án thật, 2026-09-29)
 - **Một buổi quay có thể thành nhiều clip độc lập:** chia theo chủ đề trên transcript, mỗi clip dàn góc riêng trong cửa sổ của nó (`--cua-so`, `--hau-to`), có intro riêng, bảng tên hiện lại lần đầu mỗi người nói trong clip. (dự án thật, 2026-09-30)
+- **Proxy 4K sang 1080p chạy cỡ 1x thời lượng mỗi khúc:** chia khúc khoảng 10 phút mỗi lượt gọi 180 giây; `--cau-hinh` dùng đường dẫn tuyệt đối khi nguồn ở ổ ngoài; `multicam-dan.py` đọc `--nguoi-noi`, `--khoa`, `--session-file` theo đường dẫn tương đối so với thư mục dự án. (dự án thật, 2026-10-01)
+- **Nhận người nói bằng chuyển động hình sai khi người nghe cười hay gật nhiều:** sửa tay `luot-noi.json` đối chiếu cue trong transcript, rồi dàn lại; chuỗi pill khoá dài có thể để lại cú trên 40 giây nên thêm cú phản ứng người nghe vào khoảng trống. (dự án thật, 2026-10-01)
 
 ## 13. Truyền file và hạ tầng
 
@@ -164,10 +174,14 @@ Bài học là lý do để hiểu vì sao một cách làm từng đúng với 
 - **Cảnh toàn podcast hai người không hợp bố cục toàn ảnh có chữ một bên:** hai mặt cách nhau quá xa, không chừa được chỗ cho chữ; dùng cận từng người (chia đôi, ô vòm). Mặt lệch trái trong khung gốc thì đặt chữ bên phải thay vì phóng ảnh rất lớn. (dự án thật, 2026-10-01)
 - **Transcript đầy đủ của bản đã dựng là nguyên liệu của bước đăng tải:** dự án thật chỉ còn các mảnh trong `transcript/.tam/`; giữ lại transcript của bản đã dựng tới khi đăng xong. (dự án thật, 2026-10-01)
 - **Cache ghi dở khi lượt gọi bị ngắt để lại JSON hỏng mà VM không xoá được:** ghi ra tệp tạm rồi `os.replace`, đọc hỏng thì chấm lại từ đầu. (dự án thật, 2026-10-01)
+- **Nhạc Pixabay không bắt buộc ghi công;** chỉ track CC-BY (MacLeod) mới đặt `nhac_ccby`. Dòng ghi công cho track Pixabay chỉ là tự nguyện. Cổng sentence case chặn cả tên clip người dùng đặt ("Hành trình" viết hoa): đổi chữ thường và ghi vào `ghi_chu_kiem`. (dự án thật, 2026-10-01)
+
+- **Short khái niệm: thumbnail dùng chính thuật ngữ người nói** ("Skill AI là gì?", "Khung chuyên môn từ phía AI", "Đóng gói tiêu chuẩn của bạn"), cùng một khuôn mặt cho ba phương án để thử nghiệm đo đúng thông điệp; dòng dài nhất 8-10 ký tự (ba dòng cũng được khi ý cần). Tiêu đề đặt từ khoá trong khoảng 60-70 ký tự đầu. Clip cắt lại sau khi đã có gói: sửa độ dài trong `ghi_chu_kiem`, chạy `dang-tai.py kiem` lại. (dự án thật, 2026-10-03)
 
 ## 14. Màu
 
 - **Số liệu lệch kênh phụ thuộc bối cảnh, mắt quyết:** "trội kênh G" trên năm clip hoá ra là cây cỏ trong khung; so chéo lệch màu giữa các nguồn chỉ đáng xử lý khi chúng cắt qua lại cùng cảnh. Đa số clip đạt không chỉnh; HDR bắt buộc tonemap, kiểm từng file bằng `color_transfer`, không đoán theo thiết bị. (nghiệm thu màu, 2026-08)
+- **Đa góc: cảnh toàn tối hơn hai cảnh cận dù cùng sắc (tường p50 196 so với 222-224):** khám phải so p50 tường giữa các góc trước khi dựng, vì `mau-sac.py kham` chỉ quét file nằm thẳng trong `nguon/` chứ không quét thư mục con từng góc. Đơn bậc 2 riêng cho `toan.mp4`: `curves=master='0/0 0.25/0.32 0.5/0.61 0.77/0.87 1/1',eq=saturation=1.04`; thêm `colorbalance` ấm làm áo khoác xám của người nói ngả nâu nên bỏ. Mức nâng vượt trần gamma của skill nhưng người dùng yêu cầu rõ và khung toàn không cháy. (dự án thật, 2026-10-01)
 
 ## 16. Cảnh minh hoạ HTML
 
@@ -175,6 +189,8 @@ Bài học là lý do để hiểu vì sao một cách làm từng đúng với 
 - **Chữ đang chuyển động nằm trên lớp compositing riêng nên khử răng cưa khác chữ tĩnh:** cùng một mốc, tua thẳng và chạy tuần tự lệch nhau vài điểm ảnh (khoảng 44 dB). `hien()` trả phần tử về trạng thái tĩnh khi đã lắng (bỏ transform, opacity) để hai đường ra cùng điểm ảnh; `canh.mjs kiem` coi lệch từ 40 dB trở lên là khử răng cưa, dưới 40 dB là trạng thái phụ thuộc lịch sử tua (lỗi thật). (dự án thật, 2026-10-01) **[máy]** `canh.mjs kiem`
 - **Chụp nền đặc bằng JPEG chất lượng 95 nhanh gần gấp đôi PNG** (15 giây 1080p: 80 giây xuống 34 giây, 2 luồng), sau H.264 CRF 17 mắt không phân biệt; nền trong suốt vẫn phải PNG. (dự án thật, 2026-10-01) **[máy]** `canh.mjs chup`
 - **Ghép người nói vào ô của cảnh chạy trên máy, không ở sandbox:** footage không rời máy; sandbox chụp cảnh có ô `.o-pip` và ghi toạ độ ô vào manifest, `canh-ghep.py pip` trên máy cắt, bo góc, đặt nguồn thật vào đúng ô (ffmpeg 4.4 của VM chạy được, 6 giây mất khoảng 1 giây). (dự án thật, 2026-10-01) **[máy]** `kiem-tra-xuong.py` dựng thử một B-roll kiểu này
+
+- **Cảnh minh hoạ trong short hay nhất khi là một chủ thể xuyên suốt biến hình theo lời** (sân bóng sáng dần, hai cột rồi bảy vị trí, thẻ khung đi qua AI ra slide rồi đóng gói), nội dung lấy đúng ví dụ người nói nêu, khoảnh khắc khái quát đặt đúng lúc lời nói ý chính; người dùng khen cách làm này ở cả ba short. Hàm dựng khối phải trả đủ trường mà `ve()` dùng (thiếu `tick`/`tLab` gây NaN), cỡ lớn từ đầu (bản đầu thẻ nhỏ lọt thỏm phải làm lại), chừa 1-2 giây giữ cuối cảnh. Nguyên lý: `skills/phim-canh-minh-hoa/references/nguyen-ly-canh.md` mục 3; clip có minh hoạ: `skills/phim-clip-ngan/references/clip-co-minh-hoa.md`. (dự án thật, 2026-10-03)
 
 ## 17. Bàn dựng và dựng bằng lời
 
