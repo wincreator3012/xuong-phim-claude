@@ -9,7 +9,7 @@ Xưởng làm việc bằng nguyên lý, không bằng khuôn. Mọi quyết đ�
 ## Thứ tự đọc ở đầu mỗi phiên
 
 1. File này
-2. `phong-cach/PHONG-CACH.md`: bản đồ phong cách của người dùng (tên, chức danh nguyên văn, mẫu màu, nhạc, quy tắc chữ, sổ tay góp ý). Còn dấu `[...]` chưa điền, hoặc chưa có `tools/.cai-dat.json` → chạy skill `skills/phim-thiet-lap/SKILL.md` trước mọi việc khác
+2. `phong-cach/PHONG-CACH.md`: bản đồ phong cách của người dùng (tên, chức danh nguyên văn, mẫu màu, nhạc, quy tắc chữ, sổ tay góp ý). Còn dấu `[...]` chưa điền, hoặc chưa có `tools/.cai-dat.json` → chạy skill `skills/phim-thiet-lap/SKILL.md` trước mọi việc khác. Đã thiết lập nhưng `python3 tools/cai-dat.py --trang-thai` báo chưa giới thiệu xưởng → làm phần giới thiệu (Bước 5b của skill đó) trước khi nhận việc đầu tiên: người dùng mới phải hiểu xưởng làm được gì cho họ và dùng sao cho hiệu quả
 3. `docs/QUY-TRINH-KY-THUAT.md`: môi trường, bản đồ tài nguyên, quy ước chất lượng, cổng nghiệm thu, hai hệ mốc thời gian
 4. SKILL.md của việc đang làm (bảng dưới), cùng các file dùng chung trong `skills/_chung/` mà skill trỏ tới. Skill là quy trình chuẩn đã được kiểm chứng qua nhiều dự án thật; làm theo skill, không tự nghĩ lại quy trình. `docs/BAI-HOC.md` khi gặp tình huống lạ
 
@@ -17,11 +17,11 @@ Xưởng làm việc bằng nguyên lý, không bằng khuôn. Mọi quyết đ�
 
 | Người dùng nói | Skill |
 |---|---|
-| "thiết lập", "bắt đầu", "đổi màu/logo/chức danh mặc định", lần đầu dùng | `skills/phim-thiet-lap/` |
+| "thiết lập", "bắt đầu", "đổi màu/logo/chức danh mặc định", lần đầu dùng; "xưởng làm được gì", "giới thiệu xưởng", "hướng dẫn tôi cách dùng", "mới vào chưa biết làm gì" | `skills/phim-thiet-lap/` (giới thiệu có hệ thống: `references/gioi-thieu-xuong.md`) |
 | "dựng bài giảng", "cắt bài này", "ghép intro outro", thả clip vào `nguon/` | `skills/phim-dung-bai/` (quy trình chủ lực; đọc cả `references/bien-tap.md`) |
 | "infomotion", "làm video từ audio", "explainer video", chỉ có file ghi âm không có video quay mặt | `skills/phim-infomotion/` (đồ họa thông tin tối giản; không có cảnh quay để cắt - hình tự nghĩ ra từ lời nói, dùng component `YNiem`/`YCanh`) |
 | "phim hoạt hình", "hoạt hình có nhân vật", "kể chuyện bằng hoạt hình", "hoạt hình từ file voice", "mega prompt làm phim" | `skills/phim-hoat-hoa/` (thế giới hoạt hình vẽ bằng code có nhân vật, cảnh, mô-típ; có file ghi âm mà chưa rõ muốn infomotion hay hoạt hình thì hỏi một câu) |
-| "bài giảng có slide", có PPTX/PDF/ảnh slide cạnh video | `skills/phim-bai-giang-slide/` |
+| "bài giảng có slide", có PPTX/PDF/ảnh slide cạnh video; keynote, talk, sự kiện có khán giả tại chỗ | `skills/phim-bai-giang-slide/` (clip sự kiện: đọc thêm `references/clip-giang-san-khau.md`) |
 | "cắt clip ngắn", "Reels", "Shorts", "TikTok", "teaser" | `skills/phim-clip-ngan/` |
 | "podcast hai người", "nhiều góc quay", nguon có nhiều thư mục con | `skills/phim-multicam/` |
 | "làm intro", "infographic", "bảng tên", "sửa đồ họa" | `skills/phim-do-hoa/` |
@@ -38,6 +38,7 @@ Xưởng làm việc bằng nguyên lý, không bằng khuôn. Mọi quyết đ�
 - Nói lời thường. Không nhắc ffmpeg, Remotion, LUFS, timeline, sandbox trừ khi người dùng hỏi. "Đang gỡ băng lời giảng", "đang dựng bản nháp", "đang kiểm hình có khớp tiếng không" là đủ
 - Người dùng chỉ phải làm vài việc: thả file vào đúng thư mục, bấm link tải khi được nhờ, bấm đúp `Go bang tren Mac.command` khi được nhờ gỡ băng large-v3 trên Mac, xem bản nháp và góp ý. Mọi lệnh khác Claude tự chạy
 - Hỏi ít, mỗi lượt tối đa 4 câu, luôn có mặc định lấy từ PHONG-CACH.md. Hai chốt duyệt cố định: phương án cắt và overlay (trước khi dựng), bản nháp 480p (trước bản chính). Phim tài liệu phỏng vấn có thêm hai chốt trên giấy: Kế hoạch ghi hình (trước khi quay) và kịch bản thực tế có ước tính thời lượng (trước khi dựng). Người dùng vắng mặt: chọn mặc định, ghi rõ giả định, làm tiếp
+- Người dùng mới hoặc hỏi "xưởng làm được gì": giới thiệu có hệ thống theo `skills/phim-thiet-lap/references/gioi-thieu-xuong.md` (sáu chặng, mỗi lượt một chặng, kết bằng một câu hỏi), cá nhân hoá theo `PHONG-CACH.md`; chỉ nói điều xưởng thật sự có và nói thẳng điều chưa làm được. Cách dùng hiệu quả nhất nằm ở `HUONG-DAN.md`
 - Báo tiến độ ngắn khi việc chạy lâu (gỡ băng bài dài, xuất bản chính), nói rõ đang chờ máy chứ không phải chờ người dùng
 - Kết mỗi dự án bằng: file nằm ở `du-an/<tên>/xuat-hoan-chinh/`, thời lượng, dung lượng, dòng ghi công nhạc (nếu dùng track CC-BY), và câu "nghiệm thu máy: ĐẠT"; rồi làm luôn gói đăng tải (skill phim-dang-tai) mà không chờ người dùng nhắc
 
@@ -52,7 +53,8 @@ Xưởng làm việc bằng nguyên lý, không bằng khuôn. Mọi quyết đ�
 7. Bài học kỹ thuật đáng giữ sau mỗi dự án ghi vào `docs/BAI-HOC.md` (ngắn: chuyện gì, gốc rễ, quy tắc); sửa skill thì sửa thẳng `skills/<tên>/SKILL.md`, trường `description` của skill là mô tả kích hoạt, không ghi changelog vào đó; sửa xong chạy `python3 tools/kiem-tai-lieu.py` (YAML, đường dẫn, tên skill, kho ẩn dụ) phải ĐẠT
 8. Footage của người dùng không rời máy họ, trừ vài khung hình để xem khi cần
 9. Timeline có trường `_chinhTay` là timeline người dùng đã tự chỉnh trên Bàn dựng: đó là nguồn sự thật. Không sinh lại nó từ kế hoạch, kịch bản hay phương án cũ; mọi sửa của Claude làm thẳng trên file và giữ nguyên chỉnh tay. Bàn dựng không thay hai chốt duyệt và cổng nghiệm thu
+10. Không lớp phủ nào (chữ, pill, bảng tên, slide thẻ) được che mặt BẤT KỲ AI trong khung, kể cả người ngồi hoặc đứng phía sau người nói. Chọn kiểu hiện không chồng lên cảnh quay (`ca-hai`, `mat`, vùng khung trống) hoặc bỏ lớp phủ; nghiệm thu bằng cách nhìn khung thật tại mọi mốc có lớp phủ
 
 ## Kiểm nhanh trạng thái xưởng
 
-`python3 tools/cai-dat.py --trang-thai` (máy người dùng). Chưa cài → phim-thiet-lap. Sau khi sửa bất kỳ tool nào → `python3 tools/kiem-tra-xuong.py --co-slide` phải ĐẠT.
+`python3 tools/cai-dat.py --trang-thai` (máy người dùng). Chưa cài hoặc chưa giới thiệu xưởng → phim-thiet-lap. Sau khi sửa bất kỳ tool nào → `python3 tools/kiem-tra-xuong.py --co-slide` phải ĐẠT.

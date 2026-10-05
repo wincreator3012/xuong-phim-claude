@@ -9,6 +9,7 @@ Cách dùng (từ bất kỳ đâu, script tự tìm gốc xưởng):
     python3 tools/cai-dat.py --model khong   # bỏ qua model (không gỡ băng tại máy)
     python3 tools/cai-dat.py --khong-thu     # bỏ bước dựng thử cuối
     python3 tools/cai-dat.py --khong-loi     # bỏ hai model mốc lời của Bàn dựng (khoảng 450 MB)
+    python3 tools/cai-dat.py --danh-dau gioi-thieu   # ghi dấu "đã giới thiệu xưởng cho người dùng" (Claude gọi sau buổi giới thiệu)
 
 Mỗi bước tự bỏ qua nếu đã xong. Bước tải model có thể cần chạy lại nhiều lần
 (mỗi lần tải tiếp tối đa ~150 giây rồi thoát mã 2 = "chưa xong, chạy lại y nguyên").
@@ -394,6 +395,7 @@ def in_trang_thai(tt):
     print(f"  mốc lời     : {'có (Bàn dựng, Dựng bằng lời)' if tt.get('mo_hinh_loi') else 'chưa'}")
     print(f"  bố cục slide: {'có' if tt.get('bo_cuc') else 'chưa'}")
     print(f"  dựng thử    : {'ĐẠT ' + str(tt.get('dung_thu_luc', '')) if tt.get('dung_thu') else 'chưa'}")
+    print(f"  giới thiệu  : {'đã giới thiệu xưởng cho người dùng' if tt.get('da_gioi_thieu') else 'CHƯA (sau khi thiết lập xong, Claude giới thiệu xưởng: skills/phim-thiet-lap/references/gioi-thieu-xuong.md)'}")
     print(f"  cập nhật    : {tt.get('cap_nhat', '-')}")
 
 
@@ -403,11 +405,17 @@ def main():
     ap.add_argument("--khong-thu", action="store_true", help="bỏ bước dựng thử")
     ap.add_argument("--khong-loi", action="store_true", help="bỏ hai model mốc lời của Bàn dựng")
     ap.add_argument("--trang-thai", action="store_true", help="chỉ in trạng thái")
+    ap.add_argument("--danh-dau", choices=["gioi-thieu"], help="ghi dấu một mốc đã xong rồi thoát (không cài gì)")
     ap.add_argument("--thoi-gian", type=int, default=150, help="ngân sách giây cho bước tải model mỗi lần chạy")
     args = ap.parse_args()
 
     os.chdir(ROOT)
     tt = doc_trang_thai()
+    if args.danh_dau == "gioi-thieu":
+        tt["da_gioi_thieu"] = True
+        ghi_trang_thai(tt)
+        print("✓ Đã ghi dấu: xưởng đã được giới thiệu cho người dùng.")
+        return
     if args.trang_thai:
         in_trang_thai(tt)
         return

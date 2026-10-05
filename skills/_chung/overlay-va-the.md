@@ -9,9 +9,10 @@
 
 ## Không che mặt, kiểm ở trạng thái tích luỹ
 
-- Thứ tự ưu tiên cho mọi chữ, pill, đồ họa đè lên hình người nói: (1) không che cả người lẫn mặt nếu tránh được; (2) buộc đánh đổi thì tuyệt đối không che mặt, chấp nhận che một phần thân.
+- Thứ tự ưu tiên cho mọi chữ, pill, đồ họa đè lên hình người nói: (1) không che cả người lẫn mặt nếu tránh được; (2) buộc đánh đổi thì tuyệt đối không che mặt, chấp nhận che một phần thân. "Mặt" là mặt BẤT KỲ AI trong khung: người nói chính, người ngồi hoặc đứng phía sau (khán phòng, sân khấu), người đang được gửi hình lên slide. Khung có người ở nền thì không dùng kiểu thẻ chồng lên cảnh quay (ví dụ `mat-chinh`); chọn `ca-hai`, `mat` hoặc vùng khung trống, hay bỏ hẳn lớp phủ ít quan trọng.
 - Benefits nhiều mục tích luỹ thành một khối lớn dần (mục cũ thu nhỏ, không biến mất): kiểm ở khung CUỐI của chuỗi, chồng lên khung hình THẬT của nguồn, không phải nền màu đặc.
 - Trước khi chọn vị trí, trích một khung ở đúng đoạn sẽ overlay để xem người nói nằm đâu.
+- Nghiệm thu: trích khung thật tại MỌI mốc có lớp phủ và nhìn từng khung, cả hai mép trên, không chỉ vài mốc đại diện (clip sân khấu 40 phút có 29 mốc).
 
 ## Vị trí pill Benefits theo thể loại
 

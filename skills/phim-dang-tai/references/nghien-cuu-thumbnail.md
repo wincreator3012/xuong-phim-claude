@@ -72,6 +72,8 @@ Dữ liệu người làm nghề (tương quan, không phải nhân quả):
 
 Tránh: hình hay chữ hứa điều video không có; mặt kinh ngạc diễn; chữ in hoa toàn bộ, "!!!", emoji; khung sợ hãi, "bị bỏ lại"; ghép cảnh, hình bịa (đúng thủ thuật mà nghiên cứu thumbnail gây hiểu lầm liệt kê); chữ Lora nét mảnh ở cỡ nhỏ; chữ màu đồng nhạt trên nền sáng; đặt thứ quan trọng ở góc phải dưới hay sát mép.
 
+- **Clip giảng trên sân khấu: xen cận mặt với khung rộng (người dùng chốt 2026-10-05).** Người trình bày góp ý cho thumbnail đầu tiên của một keynote: câu hỏi ẩn dụ khó hiểu, ảnh cận mặt không nói gì thêm, và nên có hình zoom out. Bản sau lấy tên khái niệm xuất hiện trên slide ("Bản đồ khuyến khích") và dùng khung rộng có chính slide ấy sau lưng người giảng; chữ và ảnh nói cùng một điều. Cận mặt giữ lợi thế gương mặt (kết nối, nhận diện ở cỡ 168 px); khung rộng giữ bối cảnh và bằng chứng của lời hứa. Chưa có số liệu thử nghiệm A/B, nên để YouTube [Test & Compare] đo.
+
 ## 5. Tài liệu tham khảo
 
 Adil, S., Lacoste-Badie, S., & Droulers, O. (2018). Face presence and gaze direction in print advertisements: How they influence consumer responses. An eye-tracking study. *Journal of Advertising Research, 58*(4). https://doi.org/10.2501/JAR-2018-004

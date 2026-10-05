@@ -35,6 +35,11 @@ Nói tự nhiên, nêu rõ thư mục dự án và kết quả mong muốn. Vài
 **Bài giảng có slide**
 > Trong du-an/bai-2 có video và file slide PDF. Dựng bài giảng ngang, chỗ nào tôi giải thích sơ đồ thì hiện slide, chỗ kể chuyện thì hiện mặt.
 
+**Bài nói trên sân khấu, có khán giả (keynote, talk, sự kiện)**
+> Dựng clip từ buổi nói trong du-an/keynote-1: có hai file quay 4K, file tiếng từ bàn âm thanh và file slide PPTX. Bắt đầu từ phút 3:14, dừng ở hết câu "...rất là hiệu quả". Bỏ phần nhắc việc tại chỗ. Hiện slide cạnh mặt tôi, không để chữ hay thẻ nào che mặt ai. Đăng YouTube.
+
+Người xem ở nhà không ngồi trong phòng, nên Claude sẽ đề xuất bỏ những gì chỉ có nghĩa tại chỗ (nhắc việc, hướng dẫn dùng tài liệu, bài tập tương tác) và bạn là người chốt. Quay sự kiện: nếu được, xin thêm file tiếng từ bàn âm thanh và file slide gốc; nguồn 4K nặng thì Claude làm bản xem nhẹ trước khi dựng.
+
 **Clip ngắn dọc cho Reels/Shorts**
 > Từ bài giảng du-an/bai-1, cắt hai clip dọc 60 giây có phụ đề, mỗi clip một ý trọn vẹn.
 
@@ -89,6 +94,38 @@ Bạn không cần nhớ tên skill hay tên công cụ. Claude nhận ra loại
 6. **Gói đăng tải**: ngay sau đó Claude soạn trong `du-an/<tên>/dang-tai/` ba phương án tiêu đề, mô tả YouTube, status Facebook và ba thumbnail từ khung hình thật; bạn chọn, sửa, rồi chép dán khi đăng
 
 Clip 10 phút trọn quy trình thường mất 30-60 phút kể cả thời gian bạn duyệt. Bản chính của bài dài (1-3 giờ) xuất trong một tới vài giờ; để máy chạy.
+
+## Dùng xưởng hiệu quả nhất
+
+Mười hai thói quen rút từ các dự án thật. Không cần nhớ hết: đọc một lần, quay lại khi thấy kết quả chưa ưng.
+
+**Trước khi quay và thả file**
+
+1. **Bắt đầu bằng một clip nhỏ có thật.** Chọn một đoạn 3-10 phút bạn sắp đăng, không chọn dự án lớn nhất. Làm trọn một vòng (nháp, bản chính, gói đăng tải) sẽ dạy bạn nhiều hơn đọc tài liệu, và những góp ý đầu tiên của bạn định hình xưởng cho mọi clip sau.
+2. **Quay cho dễ dựng.** Ngừng một nhịp giữa các ý và trước khi nói lại câu hỏng; nói câu chốt mạnh nhất ngay câu đầu nếu clip dành cho mạng xã hội; để mic gần nhất có thể. Quay sự kiện thì xin thêm file tiếng từ bàn âm thanh và file slide gốc.
+3. **Đặt tên thư mục và file rõ ràng.** Một dự án một thư mục trong `du-an/`, video và slide vào `nguon/`. Quay nhiều máy thì mỗi máy một thư mục con.
+
+**Khi nói yêu cầu**
+
+4. **Nói mục đích, người xem và nơi đăng trong một câu.** "Clip này đăng YouTube cho giảng viên mới dùng AI" giúp Claude quyết cắt gì, nhịp nào, tiêu đề ra sao; "clip này để gửi riêng cho nhà tài trợ" cho kết quả khác hẳn.
+5. **Chốt những gì bạn đã biết.** Điểm vào và điểm ra mong muốn, đoạn phải giữ nguyên, tên người hay số liệu không muốn xuất hiện. Mốc bạn chốt luôn thắng đề xuất của Claude.
+6. **Nhớ rằng người xem ở nhà không ngồi trong phòng.** Với bài nói có khán giả tại chỗ, để Claude đề xuất bỏ phần chỉ có nghĩa tại chỗ rồi bạn duyệt.
+
+**Khi duyệt**
+
+7. **Dành sức cho bảng phương án.** Sửa ở bảng chỉ mất một câu nói; sửa ở bản chính có thể mất cả giờ dựng lại. Đọc kỹ hai điều: đoạn nào bỏ, và chỗ nào định chèn chữ hay hình.
+8. **Góp ý theo mốc thời gian, bằng lời bạn thấy.** "Ở 14:20 chữ che mặt người ngồi sau tôi" đủ để Claude sửa; không cần thuật ngữ nào.
+9. **Chê một lần, rồi dặn "từ nay luôn...".** Claude ghi vào "Sổ tay góp ý" của `phong-cach/PHONG-CACH.md`, và góp ý nào lặp lại lần hai sẽ thành mặc định của xưởng. Quy tắc "không bao giờ để chữ, thẻ hay slide che mặt bất kỳ ai" đã trở thành luật cứng theo đúng cách đó.
+
+**Sau khi dựng**
+
+10. **Dùng gói đăng tải Claude soạn.** Ba tiêu đề, mô tả có chương, status Facebook và ba thumbnail khác nhau (cận mặt, khung rộng, chữ làm chủ). Bật "Thử nghiệm và so sánh" của YouTube để dữ liệu chọn giúp bạn.
+11. **Tái dùng một buổi quay cho nhiều clip.** Một buổi dài có thể thành bài đầy đủ, vài clip dọc ngắn cho Reels, một video infomotion từ chính giọng nói, mỗi cái một gói đăng tải. Nói với Claude ngay từ đầu bạn muốn những sản phẩm nào để nó chọn đoạn từ đầu.
+12. **Để máy chạy, giữ phiên mở, và nói "tiếp tục" khi bị ngắt.** Việc nặng (gỡ băng bài dài, bản chính hàng giờ) tự nối tiếp được. Thấy gì lạ thì nói "chạy kiểm tra xưởng".
+
+## Xưởng không làm gì
+
+Xưởng không tạo hình hay giọng nói bằng AI: mọi cảnh quay là của bạn, đồ họa và hoạt hình được vẽ bằng mã. Xưởng không thay bạn quyết định sáng tạo: hai chốt duyệt (phương án và bản nháp) luôn thuộc về bạn. Chất lượng đầu ra phụ thuộc nguồn: tiếng quá nhỏ hay ồn thì gỡ băng sai nhiều, hình quá tối thì khó cứu. Xưởng không tự đăng lên nền tảng nào; nó chuẩn bị đủ để bạn chép dán. Trên Windows xưởng dùng được nhưng cần Claude rà soát thêm.
 
 ## Tự tay chỉnh nhỏ bằng Bàn dựng
 

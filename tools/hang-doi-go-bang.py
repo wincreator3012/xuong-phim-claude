@@ -104,7 +104,7 @@ def cmd_trang_thai(a):
                 cho += 1
         else:
             cho += 1
-            print(f"[  chờ] {jid}  {job['input']}")
+            print(f"[  chờ] {jid}  {job.get('input', job.get('loai'))}")
     print(f"Còn {cho} việc chưa xong.")
 
 
@@ -118,10 +118,14 @@ def cmd_chay(a):
     may = f"{platform.system()} {platform.machine()}"
     for n, (jid, p, _) in enumerate(js, 1):
         job = load(p)
-        print(f"\n=== Việc {n}/{len(js)}: {job['input']} ===", flush=True)
-        cmd = [sys.executable, os.path.join(TOOLS_DIR, "transcribe.py"), os.path.join(ROOT, job["input"]),
-               "--out-dir", os.path.join(ROOT, job["out_dir"]), "--model", job.get("model", "auto"),
-               "--lang", job.get("lang", "vi")]
+        print(f"\n=== Việc {n}/{len(js)}: {job.get('input', job.get('loai'))} ===", flush=True)
+        if job.get("loai") == "proxy":
+            # việc loại "proxy": tạo proxy 1080p cho multicam trên Mac (giải mã 4K nhanh hơn VM nhiều lần)
+            cmd = [sys.executable, os.path.join(TOOLS_DIR, "proxy-mac.py"), p]
+        else:
+            cmd = [sys.executable, os.path.join(TOOLS_DIR, "transcribe.py"), os.path.join(ROOT, job["input"]),
+                   "--out-dir", os.path.join(ROOT, job["out_dir"]), "--model", job.get("model", "auto"),
+                   "--lang", job.get("lang", "vi")]
         t0 = time.time()
         model, last = job.get("model", "auto"), ""
         with open(os.path.join(LOGDIR, jid + ".log"), "w", encoding="utf-8") as log:

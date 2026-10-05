@@ -52,7 +52,9 @@ Trả lời tới đâu Claude ghi tới đó vào `phong-cach/PHONG-CACH.md`. S
 
 **Render thử intro để bạn xem (5 phút).** Claude dựng một intro và outro với tên, chức danh, màu của bạn, gửi ảnh cho bạn xem. Bạn góp ý về màu, chữ, logo; Claude sửa tới khi bạn ưng.
 
-Kết thúc, Claude tóm tắt đã làm gì và gợi ý câu để làm clip đầu tiên.
+**Buổi giới thiệu xưởng (khoảng 10 phút, Claude kể và bạn hỏi).** Cài xong, Claude không vội đưa bạn vào việc. Nó giải thích có hệ thống xưởng làm được gì cho bạn: một bản đồ các việc (dựng bài giảng, bài giảng có slide, clip ngắn cho mạng xã hội, podcast nhiều máy, cảnh minh hoạ, infomotion và phim hoạt hình, phim tài liệu, gói đăng tải), chọn ra hai ba việc hợp với loại clip bạn vừa kể, nói rõ xưởng không làm gì, và dặn các thói quen giúp dùng hiệu quả nhất (duyệt kế hoạch trước khi dựng, góp ý ở bản nháp, ghi phong cách một lần để dùng mãi). Bạn muốn xem lại lúc nào cũng được, chỉ cần hỏi "xưởng làm được gì" hoặc "dùng sao cho hiệu quả".
+
+Kết thúc, Claude tóm tắt đã làm gì và gợi ý câu để làm clip đầu tiên, chọn đúng loại clip hợp với bạn nhất.
 
 ## Bước 4: làm clip đầu tiên
 
@@ -72,6 +74,7 @@ Cách đặt yêu cầu cho từng loại clip, ví dụ câu nói, và xử lý
 - **Lần đầu trên một máy** có thể cần cấp thêm quyền (thư mục Downloads, cho phép trình duyệt tải nhiều file). Claude sẽ nhờ khi cần
 - **Dùng trên hai máy**: đặt thư mục xưởng vào iCloud Drive/Dropbox. Bộ nhận dạng giọng nói và thư viện nằm trong thư mục nên đồng bộ theo; trước khi dựng bài lớn, chờ file tải hết về máy đang ngồi (Finder không còn icon đám mây). File `Go bang tren Mac.command` tự cài môi trường riêng trên từng máy, nên lần đầu bấm trên máy mới sẽ chờ vài phút
 - **Gỡ băng chất lượng cao nhất trên Mac (tuỳ chọn).** Xưởng mặc định dùng model turbo. Muốn dùng large-v3, nhờ Claude tải theo `tools/models/TAI-MODEL.md` (khoảng 1,7 GB). Khi Claude nhờ, bấm đúp file `Go bang tren Mac.command` trong Finder; lần đầu trên mỗi máy cần mạng và mất vài phút. macOS chặn thì bấm chuột phải, chọn Open, rồi Open lần nữa. Chưa tải large-v3 thì xưởng tự dùng turbo
+- **Quay hình để dựng dễ hơn**: nói trước máy, để mặt rõ và sáng; quay liền một mạch, nghỉ vài giây giữa các ý để chỗ cắt rơi vào khoảng lặng; clip nói trên sân khấu thì giữ nguyên khuôn mặt người nói trên hình, xưởng không che mặt bằng bảng chữ hay đồ họa
 - **Muốn đổi phong cách** (màu, chức danh, nhạc): nói với Claude "đổi phong cách" và nêu điều muốn đổi. Không cần làm lại từ đầu
 
 ## Khi có gì không chạy

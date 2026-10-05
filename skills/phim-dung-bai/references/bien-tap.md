@@ -11,6 +11,8 @@ Người dựng là ai không quan trọng bằng việc mọi dự án cùng tu
 - Khoảnh khắc tự nhiên có chủ đích: câu hỏi tu từ, khoảng lặng mời người xem tự chiêm nghiệm (phân biệt với khoảng lặng do quên lời - nghe transcript và ngữ cảnh để nhận ra)
 - Lời mời thực hành, hướng dẫn từng bước
 
+- **Mốc vào/ra do người dùng chốt thắng mọi đề xuất của Claude.** Phần mở đầu hướng dẫn khán phòng cách dùng slide hay tài liệu tại chỗ không có giá trị với người xem YouTube: bỏ, bắt đầu từ chỗ nội dung mở ra và kết ở câu chốt tự nhiên người dùng chỉ định. Slide chỉ được nhắc thoáng qua thì không hiện trên clip. (một keynote có slide, 2026-10-04)
+
 ## Tiêu chí BỎ
 
 - Lần nói hỏng khi có lần nói lại tốt hơn (người tự quay thường nói lại 2-3 lần; chọn lần trôi chảy và có năng lượng tốt nhất, thường là lần cuối)

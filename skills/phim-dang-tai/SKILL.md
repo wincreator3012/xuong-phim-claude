@@ -44,7 +44,7 @@ Ghi ra (trong đầu hoặc nháp) bốn điều trước khi viết chữ nào:
 
 Schema và mẫu đầy đủ ở `skills/phim-dang-tai/references/mau-dang-tai.md`. Nguyên lý:
 
-- **Tiêu đề YouTube**: ba phương án khác nhau về cách vào (tóm ý, câu hỏi, cách làm), mỗi cái dưới 100 ký tự, từ khoá chính trong khoảng 60 ký tự đầu (điện thoại cắt sau đó), sentence case, không viết hoa toàn bộ, không emoji, không "!!". Tiêu đề tóm đúng nội dung thắng tiêu đề úp mở: người đọc thấy rõ mình sẽ nhận gì. Tiêu đề và chữ trên thumbnail bổ sung nhau, không lặp lại nhau.
+- **Tiêu đề YouTube**: ba phương án khác nhau về cách vào (tóm ý, câu hỏi, cách làm), mỗi cái dưới 100 ký tự, từ khoá chính trong khoảng 60 ký tự đầu (điện thoại cắt sau đó), sentence case, không viết hoa toàn bộ, không emoji, không "!!". Tiêu đề tóm đúng nội dung thắng tiêu đề úp mở: người đọc thấy rõ mình sẽ nhận gì. Câu chủ mở bằng khái niệm hay ý chính người xem hiểu ngay và có thể đang tìm, lấy tên từ chính slide hay lời người nói; ẩn dụ chỉ làm câu phụ (một keynote từng bị chê "vé lên tàu" là khó hiểu khi không có ảnh nào hỗ trợ). Tiêu đề và chữ trên thumbnail bổ sung nhau, không lặp lại nhau.
 - **Mô tả YouTube**: câu đầu tự đứng được và chứa từ khoá (chỉ vài dòng đầu hiện trước "Xem thêm"); hai ba đoạn ngắn nói ai nói gì, khung nào của ai (ghi tên tác giả mô hình, công cụ); chương; người trình bày với chức danh nguyên văn; lời mời của chương trình nếu có (một lần, không upsell lộ liễu); ghi công nhạc và tư liệu CC-BY; một câu hỏi mở thật mời người xem tự soi chiếu; 1-3 hashtag ở cuối.
 - **Thẻ YouTube**: 5-12 thẻ, tổng dưới 500 ký tự; thẻ chỉ đóng vai trò nhỏ, dùng cho cách gõ khác của từ khoá chính (một dạng không dấu, một dạng tiếng Anh nếu người ta thật sự tìm bằng tiếng Anh) và tên người trình bày.
 - **Status Facebook**: giọng người dùng, ngôi thứ nhất (xưng hô theo PHONG-CACH mục 8). Mở bằng một khoảnh khắc, một chi tiết thật trong clip (dòng đầu dưới khoảng 120 ký tự, vì điện thoại chỉ hiện hai ba dòng trước "Xem thêm"); thân hai đến bốn đoạn ngắn nói điều người xem nhận được, không tóm tắt cả clip; kết bằng một câu hỏi mở thật. Link YouTube và link chương trình để ở bình luận đầu; video tải thẳng lên Facebook; 0-3 hashtag. Clip dọc (Reels): status ba đến năm dòng.
@@ -68,6 +68,8 @@ python3 tools/chon-khung-thumbnail.py --map "<...>.map.json" --quanh k05 [--rong
 
 Stage `khung/quanh-k05.jpg` (cắt sát mặt, mỗi 0,25 giây) và chọn khung: mắt mở, nhìn thẳng (lời mời) hoặc nhìn về phía chữ; miệng khép hay cười thật, không khung đang nói dở miệng méo, không nháy mắt, không mờ vì chuyển động. Nét mặt ấm và điềm tĩnh, không diễn kinh ngạc. Không có ai trên hình (infomotion, hoạt hình): tool thoát mã 3, thumbnail dùng bố cục chữ làm chủ (`chu-chinh` không ảnh) hoặc một khung hình ẩn dụ trích từ chính clip.
 
+**Clip giảng trên sân khấu hay bục giảng (người đứng, có màn hình hoặc slide phía sau):** ngoài ứng viên cận mặt, luôn trích thêm khung RỘNG [zoom out] có cả người và màn hình, tốt nhất ở đoạn người giảng đang nói về một khái niệm mà slide sau lưng ghi đúng chữ của khái niệm ấy (hình và chữ nói cùng một điều). Quét mặt theo giây trong quãng đã chọn: `python3 tools/quet-mat-theo-giay.py "<nguồn gốc>.mp4" --tu <s> --den <s> --buoc 1.5 --cat x:y:w:h --ra <thư mục tạm>`; NHÌN lưới `quet-mat.jpg` để chọn nét mặt, rồi cắt khung từ nguồn gốc 4K bằng ffmpeg (`-ss <giây> -vf crop=w:h:x:y`) và ghi vào `khung/khung.json` (`loai: "rong"`, toạ độ mặt theo tỉ lệ ảnh). Một lượt gọi 120 giây chỉ quét khoảng 25-30 mốc ở 4K nên chia quãng ra nhiều lượt.
+
 ### 3b. Thiết kế ba phương án
 
 Ba phương án khác nhau ở **thông điệp**, không chỉ ở bố cục, để thử nghiệm A/B có nghĩa:
@@ -76,7 +78,9 @@ Ba phương án khác nhau ở **thông điệp**, không chỉ ở bố cục, 
 2. Khái niệm hay cách làm cốt lõi của clip ("Chia ra, rồi trừ bớt").
 3. Điều đọng lại, bài học của câu chuyện ("Đặt tài năng đúng chỗ").
 
-Giữ cùng một khuôn mặt (hoặc cùng cặp mặt) giữa các phương án khi muốn thử nghiệm đo đúng thông điệp. Chữ: 2-5 từ, bổ sung cho tiêu đề chứ không lặp, xuống dòng chủ động theo cụm nghĩa bằng `\n`, mỗi dòng khoảng 10 ký tự, một cụm tô màu nhấn (`accent`). Kicker (tên chuỗi, FULL-CAP nhỏ) chỉ dùng khi clip thuộc chuỗi chương trình người dùng vận hành; logo nhỏ ở góc trái dưới, không ở góc phải dưới (YouTube đè nhãn thời lượng ở đó).
+Giữ cùng một khuôn mặt (hoặc cùng cặp mặt) giữa các phương án khi muốn thử nghiệm đo đúng thông điệp. Riêng clip giảng trên sân khấu thì đổi cỡ khung giữa các phương án (cùng một người, khi cận khi xa; xem đoạn "Đa dạng cỡ khung" ngay dưới), thông điệp vẫn khác nhau ở chữ. Chữ: 2-5 từ, bổ sung cho tiêu đề chứ không lặp, xuống dòng chủ động theo cụm nghĩa bằng `\n`, mỗi dòng khoảng 10 ký tự, một cụm tô màu nhấn (`accent`). Kicker (tên chuỗi, FULL-CAP nhỏ) chỉ dùng khi clip thuộc chuỗi chương trình người dùng vận hành; logo nhỏ ở góc trái dưới, không ở góc phải dưới (YouTube đè nhãn thời lượng ở đó).
+
+**Đa dạng cỡ khung, nhất là clip giảng trên sân khấu (người dùng chốt 2026-10-05 sau góp ý của người trình bày):** trong ba phương án có ít nhất một cận mặt (`faceScale` 0.30-0.34) và ít nhất một khung rộng zoom out (`toan-anh` khoảng 0.13; `chia-doi` hay ô vòm khoảng 0.15-0.16), phương án còn lại cỡ vừa. Ảnh phải HỖ TRỢ chữ: chữ là tên khái niệm người xem hiểu ngay, ưu tiên đúng chữ đang hiện trên slide sau lưng; một câu hỏi ẩn dụ ("Bạn có vé lên tàu?") mà ảnh bên cạnh không nói gì về nó thì khó hiểu. Dòng chữ 12 ký tự không đạt 110 px ở khung chia đôi: ngắt ba dòng, hoặc đặt `headlineSize` sau khi đã nhìn ảnh render và thấy chữ còn vừa ô.
 
 Ba bố cục của composition `Thumbnail` (`studio/src/components/Thumbnail.tsx`), khung ngang 1920x1080 và dọc 1080x1920:
 
@@ -137,4 +141,4 @@ Báo người dùng trong cùng lượt với báo giao clip: đường dẫn `D
 - Người dùng chọn phương án, sửa chữ, hay chê một kiểu thumbnail: một dòng vào sổ tay góp ý của `phong-cach/PHONG-CACH.md`; lặp lần hai thì sửa mặc định (PHONG-CACH mục 8, `thumbnailDefaults` trong `Thumbnail.tsx`, mẫu trong `references/mau-dang-tai.md`).
 - Kết quả thử nghiệm A/B người dùng kể lại (phương án nào thắng, kiểu chữ nào): ghi vào `docs/BAI-HOC.md` chủ đề "Đăng tải" kèm tên clip; đủ nhiều thì chưng thành nguyên lý trong `references/nghien-cuu-thumbnail.md`.
 
-<!-- ban-nguon: phim-dang-tai 2026-09-30 3607a95e -->
+<!-- ban-nguon: phim-dang-tai 2026-10-05 ede2eb70 -->

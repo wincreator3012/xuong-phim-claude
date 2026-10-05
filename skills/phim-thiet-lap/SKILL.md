@@ -1,11 +1,11 @@
 ---
 name: phim-thiet-lap
-description: Thiết lập xưởng phim lần đầu cho một người dùng mới của repo xuong-phim-claude - cài môi trường và model bằng tools/cai-dat.py, phỏng vấn ngắn để điền phong-cach/PHONG-CACH.md và brand/brand.json theo một mẫu phong cách, tải nhạc và hiệu ứng theo mẫu, render thử intro/outro để duyệt. Kích hoạt khi user nói "thiết lập xưởng phim", "bắt đầu thiết lập", "cài đặt xưởng", "thiết lập phong cách", "cá nhân hoá xưởng phim", "đổi phong cách/màu/logo mặc định", hoặc khi thư mục xưởng chưa có tools/.cai-dat.json hay PHONG-CACH.md còn dấu [...] chưa điền.
+description: Thiết lập xưởng phim lần đầu cho một người dùng mới của repo xuong-phim-claude - cài môi trường và model bằng tools/cai-dat.py, phỏng vấn ngắn để điền phong-cach/PHONG-CACH.md và brand/brand.json theo một mẫu phong cách, tải nhạc và hiệu ứng theo mẫu, render thử intro/outro để duyệt. Kích hoạt khi user nói "thiết lập xưởng phim", "bắt đầu thiết lập", "cài đặt xưởng", "thiết lập phong cách", "cá nhân hoá xưởng phim", "đổi phong cách/màu/logo mặc định", hoặc khi thư mục xưởng chưa có tools/.cai-dat.json hay PHONG-CACH.md còn dấu [...] chưa điền. Cũng kích hoạt để GIỚI THIỆU XƯỞNG cho người mới (xưởng làm được gì, một dự án chạy thế nào, cách dùng hiệu quả) khi user nói "xưởng làm được gì", "giới thiệu xưởng", "hướng dẫn tôi cách dùng", "mới vào chưa biết làm gì", hoặc khi thiết lập vừa xong mà tools/.cai-dat.json chưa có da_gioi_thieu.
 ---
 
 # Thiết lập xưởng phim lần đầu
 
-Mục tiêu: sau 30-45 phút, người dùng (thường là giảng viên, chuyên gia mới dùng AI) có một xưởng chạy được trên máy của họ, mang tên, chức danh, màu sắc và nhạc đúng ý họ, và biết câu đầu tiên cần nói để dựng clip. Nguyên tắc: hỏi ít, mỗi lượt tối đa 4 câu, luôn có phương án mặc định hợp lý, giải thích bằng lời thường, không bắt người dùng đọc tài liệu kỹ thuật. Người dùng vắng mặt thì chọn mặc định và ghi rõ giả định vào PHONG-CACH.md.
+Mục tiêu: sau 40-55 phút, người dùng (thường là giảng viên, chuyên gia mới dùng AI) có một xưởng chạy được trên máy của họ, mang tên, chức danh, màu sắc và nhạc đúng ý họ, hiểu xưởng làm ra được gì cho họ và dùng sao cho hiệu quả, và biết câu đầu tiên cần nói để dựng clip. Nguyên tắc: hỏi ít, mỗi lượt tối đa 4 câu, luôn có phương án mặc định hợp lý, giải thích bằng lời thường, không bắt người dùng đọc tài liệu kỹ thuật. Người dùng vắng mặt thì chọn mặc định và ghi rõ giả định vào PHONG-CACH.md.
 
 ## Bước 0 - định vị
 
@@ -54,9 +54,19 @@ Hình minh hoạ không tải lúc này (theo từng dự án, skill phim-tu-lie
 
 Không có studio ở đâu cả (không sandbox, máy không có node): bỏ qua, ghi chú trong PHONG-CACH.md "chưa duyệt đồ họa thử", sẽ duyệt ở dự án đầu tiên.
 
-## Bước 5 - bàn giao
+## Bước 5 - giới thiệu xưởng và bàn giao
 
-Tóm tắt cho người dùng bằng 5-7 câu: đã cài gì, mẫu phong cách nào, nhạc nào đã có, cái gì còn treo (logo, track chưa tải). Kết bằng câu đầu tiên họ có thể nói để làm clip thật, ví dụ: "Tạo thư mục du-an/bai-1, tôi sẽ thả clip quay vào nguon, rồi dựng bài giảng ngang cho tôi". Nhắc: mọi thứ vừa chọn đều đổi được sau bằng một câu nói. Máy là Mac thật và muốn gỡ băng chất lượng cao nhất: tải thêm model large-v3 theo `tools/models/TAI-MODEL.md` (tuỳ chọn, khoảng 1,7 GB); chưa tải thì xưởng dùng turbo.
+Thiết lập xong mà người dùng chưa biết xưởng làm được gì cho họ thì xưởng chưa thật sự bàn giao. Làm hai việc theo thứ tự.
+
+**5a. Tóm tắt thiết lập (5-7 câu).** Đã cài gì, mẫu phong cách nào, nhạc nào đã có, cái gì còn treo (logo, track chưa tải). Máy là Mac thật và muốn gỡ băng chất lượng cao nhất: tải thêm model large-v3 theo `tools/models/TAI-MODEL.md` (tuỳ chọn, khoảng 1,7 GB); chưa tải thì xưởng dùng turbo. Nhắc: mọi thứ vừa chọn đều đổi được sau bằng một câu nói.
+
+**5b. Giới thiệu xưởng có hệ thống (khoảng 10 phút).** Đọc `skills/phim-thiet-lap/references/gioi-thieu-xuong.md` và làm theo sáu chặng: xưởng là gì và ba lời hứa; bản đồ năng lực (bạn đang có gì, xưởng làm ra gì); một dự án chạy thế nào; dùng hiệu quả nhất; giới hạn nói thẳng; chọn bước đầu tiên. Mỗi lượt một chặng, kết bằng một câu hỏi để người dùng chọn đi tiếp; cá nhân hoá bằng loại clip họ đã chọn ở Bước 2. Cuối chặng 6 chạy `python3 tools/cai-dat.py --danh-dau gioi-thieu` để lần sau không giới thiệu lại.
+
+Người dùng nói "để sau" hay vắng mặt: tóm tắt chặng 1 và 6 trong một tin nhắn, vẫn ghi dấu, và nói họ gọi lại bằng câu "giới thiệu lại xưởng". Kết bằng câu đầu tiên họ có thể nói để làm clip thật, ví dụ: "Tạo thư mục du-an/bai-1, tôi sẽ thả clip quay vào nguon, rồi dựng bài giảng ngang cho tôi".
+
+## Khi người dùng hỏi xưởng làm được gì (bất cứ lúc nào)
+
+Không cần chạy lại thiết lập. Chạy 5b (sáu chặng, hoặc chỉ chặng người dùng hỏi), cập nhật theo những gì đã có trong `PHONG-CACH.md` và các dự án trong `du-an/`. Người dùng cũ hỏi "nên làm gì tiếp" thì gợi ý theo dự án họ đã làm (ví dụ đã có bài giảng dài chưa có clip dọc thì đề xuất cắt clip ngắn).
 
 ## Khi người dùng muốn đổi phong cách về sau
 

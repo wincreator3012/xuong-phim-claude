@@ -1,6 +1,6 @@
 ---
 name: "phim-hoat-hoa"
-description: "Hình tượng hoá lời nói và câu chuyện thành phim hoạt hình vẽ bằng code theo phong cách của người dùng. Hai lối vào: TỪ GIỌNG NÓI (file voice của người dùng: gỡ băng, hiểu nội dung, hình tượng hoá từng nhịp ý thành cảnh hoạt hình có nhân vật, mô-típ, ẩn dụ, dựng khớp voice gốc) và TỪ HẠT TRUYỆN. Hai nhánh Canvas HTML và Remotion; hai chế độ SOẠN LỆNH và DỰNG. Kích hoạt khi user nói 'phim hoạt hình', 'hoạt hoạ', 'animation', 'hoạt hình từ file voice', 'hoạt hình hoá bài nói', 'clip kiểu phim Nhà', 'phim vẽ bằng code', 'mega prompt làm phim', hoặc thả file ghi âm kèm ý muốn có nhân vật, cảnh, câu chuyện bằng hình vẽ động. Voice mà muốn đồ họa thông tin tối giản thì dùng phim-infomotion. KHÔNG dùng cho đồ họa lẻ (phim-do-hoa) hay footage thật (phim-dung-bai, phim-clip-ngan)."
+description: "Hình tượng hoá lời nói và câu chuyện thành phim hoạt hình vẽ bằng code theo phong cách của người dùng. Hai lối vào: TỪ GIỌNG NÓI (file voice của người dùng: gỡ băng, hiểu nội dung, hình tượng hoá từng nhịp ý thành cảnh hoạt hình có nhân vật, mô-típ, ẩn dụ, dựng khớp voice gốc) và TỪ HẠT TRUYỆN. Hai nhánh Canvas HTML và Remotion; hai chế độ SOẠN LỆNH và DỰNG. Kích hoạt khi user nói 'phim hoạt hình', 'hoạt hoạ', 'animation', 'hoạt hình từ file voice', 'hoạt hình hoá bài nói', 'phim vẽ bằng code', 'mega prompt làm phim', hoặc thả file ghi âm kèm ý muốn có nhân vật, cảnh, câu chuyện bằng hình vẽ động. Voice mà muốn đồ họa thông tin tối giản thì dùng phim-infomotion. KHÔNG dùng cho đồ họa lẻ (phim-do-hoa) hay footage thật (phim-dung-bai, phim-clip-ngan)."
 ---
 
 # Phim hoạt hình vẽ bằng code: từ lời nói và câu chuyện
@@ -14,7 +14,7 @@ Hai lối vào:
 
 Quan hệ với phim-infomotion: dùng chung pipeline gỡ băng, cách chia nhịp ý và từ điển ẩn dụ `an-du-y-niem.json`. Khác ở ngôn ngữ hình: infomotion là đồ họa thông tin tối giản trên nền phẳng; skill này dựng một **thế giới hoạt hình** có không gian, nhân vật, mô-típ, ánh sáng, chuyển cảnh, mọi nhịp (kể cả nhịp liệt kê framework) đều được vẽ trong thế giới đó. Người dùng thả file voice mà chưa nói rõ thì hỏi một câu: "hoạt hình có nhân vật và cảnh" hay "đồ họa thông tin tối giản". Một dự án có thể lai: vài nhịp cần độ chính xác cao mượn component của infomotion, nhưng vẽ lại cùng chất giấy và nét.
 
-**Nguồn phương pháp:** kế thừa và khái quát hoá từ bộ lệnh phim "Nhà" của Đặng Hữu Sơn (70 giây, 20 cảnh, Canvas 2D cùng Claude). Khi công bố bộ lệnh hoặc phim làm theo phương pháp này, ghi nhận nguồn đó. Phần phong cách mặc định (tự sự chuyển hoá, chánh niệm, soma) là lớp tích hợp của tác giả gốc của xưởng (xem README); người dùng có phong cách riêng trong `phong-cach/PHONG-CACH.md` thì phong cách đó đi trước, chưa rõ thì hỏi.
+**Phong cách mặc định.** Phần phong cách (tự sự chuyển hoá, chánh niệm, soma) là lớp tích hợp của tác giả gốc của xưởng (xem README); người dùng có phong cách riêng trong `phong-cach/PHONG-CACH.md` thì phong cách đó đi trước, chưa rõ thì hỏi.
 
 Đọc trước khi dựng trong xưởng: `skills/_chung/van-hanh.md`, `skills/_chung/timeline-va-dung.md`, `skills/_chung/nghiem-thu-dung-y.md`, `skills/phim-do-hoa/SKILL.md` (thêm component), `do-hoa-chung/an-du-y-niem.json`, `thu-vien/AM-THANH.md`. Tài liệu tra cứu của skill (giữ số "Phần" như cũ để tham chiếu chéo không đổi):
 
@@ -34,7 +34,7 @@ Bản đầy đủ ở `nguyen-ly-va-phong-cach.md`. Những điều phải gi�
 
 - **Đặc tả bằng dữ liệu, không bằng tính từ** (hex, px, giây, BPM, LUFS). **Tất định**: `render(t)` thuần theo thời gian, PRNG có seed, cấm `Math.random()` trong vòng render. **Nhịp là dữ liệu**: bảng cue, hệ số `k`, âm thanh và caption neo theo cảnh. **Quy trình theo chặng, buộc dừng**; **bộ nhớ lỗi** là checklist Phần 8. Tách hằng số khỏi biến số.
 - **Một mô-típ biến đổi xuyên suốt** (qua ít nhất bốn trạng thái), **cấu trúc gương** cảnh mở và cảnh kết, **hình đọc được trong 0,3 giây**, bảng màu đóng, 4-5 kiểu chuyển cảnh mang nghĩa.
-- **Phong cách mặc định** khác phim "Nhà": cung mắc kẹt → dừng lại → nhận biết → nới ra → nảy mầm → tái hợp (không công thức thành công bề ngoài, không so sánh hơn kém); 8-12 cảnh cho 60-90 giây, có khoảng tĩnh; easing bezier(0.22, 1, 0.36, 1), không nảy; giấy ngà sạch; thân thể mang cảm xúc; kết bằng hình gương, câu hỏi mở thực sự, chữ ký của người dùng; trạng thái cuối giữ dấu vết trạng thái đầu.
+- **Phong cách mặc định**: cung mắc kẹt → dừng lại → nhận biết → nới ra → nảy mầm → tái hợp (không công thức thành công bề ngoài, không so sánh hơn kém); 8-12 cảnh cho 60-90 giây, có khoảng tĩnh; easing bezier(0.22, 1, 0.36, 1), không nảy; giấy ngà sạch; thân thể mang cảm xúc; kết bằng hình gương, câu hỏi mở thực sự, chữ ký của người dùng; trạng thái cuối giữ dấu vết trạng thái đầu.
 - **Soma và chánh niệm**: mỗi nhân vật có ít nhất hai trạng thái thân đọc được trong 0,3 giây; nhịp thở nền ở cảnh tĩnh (chu kỳ khoảng 10 giây, thở ra dài hơn); ít nhất một quãng 2-3 giây gần như im lặng; tối đa một tiếng chuông chánh niệm.
 - **Ẩn dụ là hành động thị giác**, không phải tên cảm xúc; tra từ điển trước, ẩn dụ mới đánh dấu "ẨN DỤ MỚI - cần duyệt", ghi vào từ điển ngay sau khi duyệt với `nguon: "hoat-hoa"`.
 - Framework của người dùng (mô hình, các bước có tên riêng...): luôn xác nhận cấu trúc với người dùng, không tự suy diễn nội dung.
@@ -170,6 +170,5 @@ Sau mỗi chặng: contact sheet (2 khung mỗi cảnh, ghép một lưới), t�
 - Không sửa `brand.json` mà chưa hỏi; bảng màu mở rộng chỉ thành mặc định sau khi người dùng duyệt.
 - Hình vẽ bằng code; không dùng ảnh hay hình do AI tạo. Giọng tổng hợp chỉ khi người dùng yêu cầu.
 - Nghiệm thu máy và soát bằng mắt là bắt buộc trước khi báo "xong".
-- Ghi nhận bộ lệnh phim "Nhà" của Đặng Hữu Sơn là nguồn phương pháp khi công bố.
 
 <!-- ban-nguon: phim-hoat-hoa 2026-09-30 9a70b073 -->

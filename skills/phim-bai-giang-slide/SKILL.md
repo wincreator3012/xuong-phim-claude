@@ -5,7 +5,7 @@ description: "Dựng clip bài giảng ngang có SLIDE trong thư mục \"xuong-
 
 # Bài giảng có slide: mặt, slide, hay cả hai
 
-Mở rộng của quy trình dựng bài (skill phim-dung-bai - vẫn áp dụng toàn bộ: Bước 0 nền tảng, transcript và cổng nghiệm thu transcript, phương án cắt, đồ họa, bản nháp, nghiệm thu máy bắt buộc). Skill này thêm đúng một lớp: quyết định người học NHÌN gì ở từng quãng lời giảng và dựng lớp hình đó. Chi tiết cơ sở nghiên cứu và bảng quy tắc đầy đủ ở `skills/phim-bai-giang-slide/references/bo-cuc-slide.md` (trong thư mục xưởng).
+Mở rộng của quy trình dựng bài (skill phim-dung-bai - vẫn áp dụng toàn bộ: Bước 0 nền tảng, transcript và cổng nghiệm thu transcript, phương án cắt, đồ họa, bản nháp, nghiệm thu máy bắt buộc). Skill này thêm đúng một lớp: quyết định người học NHÌN gì ở từng quãng lời giảng và dựng lớp hình đó. Chi tiết cơ sở nghiên cứu và bảng quy tắc đầy đủ ở `skills/phim-bai-giang-slide/references/bo-cuc-slide.md` (trong thư mục xưởng). Buổi nói chuyện có khán giả tại chỗ (keynote, talk, sự kiện): đọc thêm `skills/phim-bai-giang-slide/references/clip-giang-san-khau.md` (mốc vào/ra, nguồn nặng, lớp phủ không che mặt, clip dài, thumbnail).
 
 Nguyên tắc rút từ nghiên cứu (Wang & Antonenko 2017; Polat 2022; Alemdag 2022; meta-analysis ánh nhìn 2023; Guo, Kim & Rubin 2014; Mayer 2020): mặt giảng viên không tự nâng kết quả học nhưng nâng kết nối và hài lòng; khi nội dung dày, mặt chia chú ý; xen kẽ mặt và slide giữ người xem lâu hơn; đổi trạng thái hình theo NỘI DUNG lời nói, không theo vị trí trong bài. Vì vậy: nói cái gì cần đọc thì cho slide đủ lớn; nói cái gì cần cảm thì cho mặt; slide đơn giản thì cả hai.
 
@@ -18,7 +18,7 @@ Nguyên tắc rút từ nghiên cứu (Wang & Antonenko 2017; Polat 2022; Alemda
 | `mat` | mặt toàn khung | dẫn nhập, kể chuyện, chuyển ý, kết, lời mời - không có gì để đọc |
 | `ca-hai` | slide chính 73% + mặt nhỏ 4:5 góc dưới phải | MẶC ĐỊNH cho mọi slide đọc được ở 73% khung - đa số slide bài giảng thông thường (gạch đầu dòng, sơ đồ đơn, số liệu vừa, trích dẫn dài); mặt giữ hiện diện, dải dưới trống cho pill |
 | `slide` | slide toàn khung trên nền giấy | CHỈ khi đã thử `ca-hai` và kiểm đọc thật thất bại: bảng nhiều cột/hàng, sơ đồ dày chi tiết nhỏ, slide động/quay màn hình |
-| `mat-chinh` | mặt toàn khung + slide thẻ nhỏ góc trên phải | slide < 12 từ: tên khung, trích dẫn ngắn, một ảnh - người nói là chính |
+| `mat-chinh` | mặt toàn khung + slide thẻ nhỏ góc trên phải | slide < 12 từ: tên khung, trích dẫn ngắn, một ảnh - người nói là chính. KHÔNG dùng khi khung có người phía sau người nói (khán phòng, sân khấu): thẻ chồng lên cảnh quay và sẽ đè mặt họ |
 | `chia-doi` | mặt trái 816x900, slide phải 888x500 | cần thấy cử chỉ tay/biểu cảm cùng lúc với một hình đơn giản |
 
 Nhịp: đổi tại điểm ngắt hơi (`snap: true`), mỗi trạng thái tối thiểu 6 giây, slide toàn khung ít nhất bằng thời gian đọc hết chữ (2,5 từ/giây) cộng 1-2 giây; sau quãng slide dày quay về `mat` ít nhất một câu. Tín hiệu: `slideZoom: [x, y, w, h]` (tỉ lệ 0-1, chọn vùng gần 16:9) khi lời giảng chỉ vào một phần của slide dày.
@@ -60,7 +60,8 @@ Như phim-dung-bai Bước 6 (cổng `nghiem-thu.py video` bắt buộc, ảnh l
 1. Trên ảnh lưới và 1 frame mỗi bố cục: chữ slide đọc được ở cỡ điện thoại (thu ảnh về 480 ngang và nhìn) - không đọc được thì đổi `ca-hai` sang `slide` hoặc dùng `slideZoom`
 2. **Mặt trong ô nhỏ không cắt trán/cằm, đủ toàn thân khi có cử chỉ**: vì `ca-hai` giờ là bố cục mặc định (mục "Năm bố cục" trên), một dự án có thể có hàng chục đoạn `ca-hai` - kiểm `cropFocus` ở NHIỀU mốc rải đều trong TỪNG đoạn (không chỉ một khung đầu đoạn), nhìn cả hai mép trái-phải, đặc biệt khi người nói di chuyển/xoay người/đổi tư thế giữa đoạn. Kỹ thuật đo nhanh: trích khung hình CHƯA crop tại vài mốc trong đoạn, thử vài giá trị `cropFocus`, chọn giá trị giữ đủ người xuyên suốt; nếu người nói đổi vị trí lớn ngay trong một đoạn dài, tách thành nhiều segment `ca-hai` liên tiếp mỗi đoạn một `cropFocus` riêng thay vì ép một giá trị chung không sạch ở đâu cả
 3. Slide đúng mốc lời nói: mở `map.json`, với 2-3 slide quan trọng trích frame tại `start` của part và đọc lại câu transcript bao quanh
-4. Quãng `slide` đứng hình là cố ý (nghiem-thu đã bỏ cảnh báo theo `map.json`); quãng `mat`/`ca-hai` đứng hình là lỗi
+4. Quãng `slide` đứng hình là cố ý (nghiem-thu đã bỏ cảnh báo theo `map.json`); quãng `mat` đứng hình là lỗi. Quãng `ca-hai` có thể bị báo "hình đứng" khi slide tĩnh và người nói im lặng: đối chiếu `map.json`, xem khung, nếu đúng là slide tĩnh thì đó là dương tính giả, ghi một dòng vào báo cáo
+5. **Không lớp phủ nào che mặt bất kỳ ai** (người nói, người ngồi hoặc đứng phía sau, người đang được gửi hình lên slide): trích khung thật tại MỌI mốc có thẻ, pill hay bảng tên và nhìn từng khung, cả hai mép trên; không chỉ vài mốc đại diện. Có người che khuất thì đổi bố cục (`ca-hai`, `mat`) hoặc bỏ lớp phủ đó
 
 Báo kết quả kèm số quãng theo từng bố cục (ví dụ "mặt 40%, slide 25%, cả hai 35%") để user cảm được nhịp, và dòng "nghiệm thu máy: ĐẠT".
 
@@ -71,4 +72,4 @@ Báo kết quả kèm số quãng theo từng bố cục (ví dụ "mặt 40%, s
 - Khi user quay mặt và màn hình riêng, nhắc bắt đầu cả hai bằng một tín hiệu chung để đo `--lech`
 - Sửa skill này theo `skills/_chung/bao-tri-skill.md`; bài học mới vào `docs/BAI-HOC.md`
 
-<!-- ban-nguon: phim-bai-giang-slide 2026-09-30 353775b9 -->
+<!-- ban-nguon: phim-bai-giang-slide 2026-10-05 1c647d7a -->

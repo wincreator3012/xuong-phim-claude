@@ -10,13 +10,42 @@ Xưởng chạy êm nhất trên Mac chip Apple Silicon. Windows cũng dùng đ�
 
 Bản thân tôi không có nhu cầu với clip hình ảnh hay âm thanh do AI tạo ra nên không đưa năng lực đó vào xưởng; bạn tự bổ sung thêm nếu cần.
 
-## Bạn nhận được gì
+## Xưởng làm được gì cho bạn
 
-- **Mười bốn năng lực dựng phim** đóng thành quy trình chuẩn [skill] cho Claude: dựng bài giảng chuyên gia trình bày trước máy quay; bài giảng có slide (xen mặt, slide, hoặc cả hai theo bố cục tối ưu); clip ngắn dọc có phụ đề; podcast và buổi quay nhiều máy (tự đồng bộ bằng âm thanh, tự chuyển góc theo người nói); đồ họa động tối giản; cảnh minh hoạ giải thích kiểu explainer (sơ đồ cơ chế, quy trình, so sánh, số liệu lớn dần theo lời nói, Claude vẽ riêng từng cảnh như một trang web chuyển động rồi chụp từng khung ra video), chèn làm cảnh trám cho bài giảng theo bốn kiểu: toàn khung, nền là khung hình mờ của chính đoạn quay, thẻ nổi cạnh người nói, người nói thu vào góc; video giải thích bằng đồ họa thông tin [infomotion] chỉ từ một file ghi âm, không cần lên hình; phim hoạt hình vẽ bằng code có nhân vật và cảnh, hình tượng hoá lời nói hay một câu chuyện (kèm bộ lệnh để tự làm hoặc chia sẻ, phương pháp kế thừa từ bộ lệnh phim "Nhà" của Đặng Hữu Sơn); gỡ băng tiếng Việt chạy ngay trên máy (video không rời máy bạn); tìm hình và tư liệu minh hoạ phù hợp nội dung, đã kiểm định bản quyền; căn chỉnh màu cơ bản khi thật cần; phim tài liệu phỏng vấn nhiều nhân vật giới thiệu một dự án hay sự kiện (Claude giúp lên kế hoạch ghi hình - phỏng vấn ai, hỏi gì, quay cảnh trám nào - trước khi quay, rồi viết kịch bản thực tế từ tư liệu thật và dựng); gói đăng tải tự soạn sau mỗi clip (ba phương án tiêu đề, mô tả YouTube có chương, status Facebook bằng giọng của bạn, ba thumbnail dựng từ khung hình thật của clip); Bàn dựng để bạn tự tay chỉnh nhỏ một bản nháp trên Chrome (kênh hình, tiếng, đồ họa, nhạc như phần mềm dựng) kèm Dựng bằng lời: bôi đen chữ thừa trong lời bạn nói, hình và tiếng được cắt đúng chỗ
+Mười bốn năng lực dựng phim, mỗi năng lực là một quy trình chuẩn [skill] Claude làm theo. Bạn không cần nhớ tên chúng: nói bạn đang có gì và muốn gì, Claude chọn đúng quy trình.
+
+| Bạn đang có | Xưởng làm ra |
+|---|---|
+| Video bạn nói trước máy (bài giảng, chia sẻ, giới thiệu khoá học) | Clip ngang 16:9 hoàn chỉnh: cắt khoảng lặng và đoạn nói hỏng, intro và outro, nhãn từ khoá, nhạc, chương YouTube |
+| Bài giảng kèm file slide, hoặc bài nói trên sân khấu có khán giả | Dàn hình xen mặt, slide hoặc cả hai theo từng đoạn lời, không bao giờ để chữ hay thẻ che mặt ai |
+| Một bài dài, muốn clip ngắn cho mạng xã hội | Clip dọc 9:16 cho Reels, Shorts, TikTok: chọn đoạn có hook, phụ đề, bảng tên, cảnh minh hoạ khi ý cần hình |
+| Podcast hoặc buổi quay nhiều máy | Tự đồng bộ các góc bằng âm thanh, chuyển góc theo người nói |
+| Một đoạn giải thích cơ chế, quy trình, so sánh, số liệu | Cảnh minh hoạ động kiểu explainer vẽ riêng cho đoạn đó (sơ đồ lớn dần theo lời nói), chèn làm cảnh trám theo bốn kiểu: toàn khung, nền là khung hình mờ, thẻ nổi cạnh người nói, người nói thu vào góc |
+| Chỉ có file ghi âm giọng nói | Video giải thích bằng đồ họa thông tin tối giản [infomotion], hoặc phim hoạt hình vẽ bằng code có nhân vật và cảnh (kèm bộ lệnh để tự làm hoặc chia sẻ) |
+| Một dự án, chương trình, sự kiện cần phim giới thiệu | Phim tài liệu phỏng vấn nhiều nhân vật; Claude giúp lên kế hoạch ghi hình (phỏng vấn ai, hỏi gì, quay cảnh nào) trước khi quay, rồi viết kịch bản thực tế từ tư liệu thật và dựng |
+| Cần chữ hoặc hình phụ trợ | Gỡ băng tiếng Việt ngay trên máy (video không rời máy bạn), hình minh hoạ đã kiểm bản quyền, căn chỉnh màu cơ bản khi thật cần, intro, outro, bảng tên, infographic động |
+| Một clip đã dựng, sắp đăng | Gói đăng tải tự soạn sau mỗi clip: ba phương án tiêu đề, mô tả YouTube có chương, status Facebook bằng giọng của bạn, ba thumbnail dựng từ khung hình thật |
+| Bản nháp chỉ còn vài chỗ nhỏ | Bàn dựng trên Chrome để tự tay chỉnh (kênh hình, tiếng, đồ họa, nhạc như phần mềm dựng), kèm Dựng bằng lời: bôi đen chữ thừa trong lời nói, hình và tiếng được cắt đúng chỗ |
+
+Ngoài các năng lực trên, bạn nhận được:
+
 - **Một bước thiết lập phong cách** khoảng 30 phút: Claude hỏi bạn là ai, dạy gì, cho ai, thích cảm giác nào (bốn mẫu để chọn hoặc mô tả riêng), rồi điền tên, chức danh, màu sắc, nhạc, thông điệp kết vào chỗ đã chừa sẵn. Mọi clip sau đó mang đúng dấu ấn của bạn và đổi được bằng một câu nói
+- **Một buổi giới thiệu xưởng** khoảng 10 phút ngay sau thiết lập: Claude trình bày có hệ thống xưởng làm ra được gì cho bạn, một dự án chạy thế nào, những thói quen giúp dùng hiệu quả nhất, những gì xưởng chưa làm, rồi cùng bạn chọn bước đầu tiên. Gọi lại bất cứ lúc nào bằng câu "giới thiệu lại xưởng"
 - **Thư viện chất liệu sạch**: danh mục nhạc nền và hiệu ứng đã kiểm từng trang nguồn (dùng thương mại mọi nền tảng, không Content ID), tải về theo mẫu phong cách bạn chọn; danh mục nguồn hình miễn phí và quy tắc giấy phép
 - **Cổng nghiệm thu tự động**: hình khớp tiếng tới 2 khung hình, âm lượng chuẩn -14 LUFS, không khoảng đen, không đứng hình. Claude không được nói "xong" khi máy chưa báo đạt
-- **Hướng dẫn tận tình cho người mới**: `BAT-DAU.md` (cài lần đầu, từng bước), `HUONG-DAN.md` (cách đặt yêu cầu, ví dụ, xử lý sự cố)
+- **Bài học từ các dự án thật**, ghi thành quy tắc cứng: chữ và thẻ không bao giờ che mặt bất kỳ ai, thumbnail xen cận mặt với khung rộng, chương YouTube đúng luật, và nhiều điều khác trong `docs/BAI-HOC.md`
+- **Hướng dẫn tận tình cho người mới**: `BAT-DAU.md` (cài lần đầu, từng bước), `HUONG-DAN.md` (cách đặt yêu cầu, mười hai thói quen dùng hiệu quả, ví dụ, xử lý sự cố)
+
+## Dùng sao cho hiệu quả nhất
+
+Sáu điều đáng nhớ nhất, đầy đủ hơn ở `HUONG-DAN.md`:
+
+1. Bắt đầu bằng một clip nhỏ có thật (3-10 phút), làm trọn một vòng từ nháp tới gói đăng tải.
+2. Quay cho dễ dựng: ngừng một nhịp giữa các ý, đặt câu chốt mạnh nhất lên đầu, để mic gần.
+3. Nói mục đích, người xem và nơi đăng trong một câu yêu cầu; chốt trước điểm vào, điểm ra nếu bạn đã biết.
+4. Dành sức cho bảng phương án cắt: sửa ở đó chỉ mất một câu nói, sửa ở bản chính mất cả giờ.
+5. Góp ý theo mốc thời gian, rồi dặn "từ nay luôn..." khi chê một điều, để Claude ghi vào sổ tay và các clip sau không lặp lại.
+6. Tái dùng một buổi quay cho nhiều sản phẩm: bài đầy đủ, vài clip dọc, mỗi cái một gói đăng tải.
 
 ## Bắt đầu trong ba bước
 
@@ -24,7 +53,7 @@ Bản thân tôi không có nhu cầu với clip hình ảnh hay âm thanh do AI
 2. Mở app **Claude** trên máy, vào **Cowork**, thêm thư mục vừa giải nén (nút "Add folder")
 3. Nói với Claude: *"Đọc file CLAUDE.md trong thư mục này rồi thiết lập xưởng phim cho tôi."*
 
-Claude sẽ tự cài môi trường (10-20 phút, cần mạng), hỏi bạn vài câu về phong cách, tải nhạc theo mẫu bạn chọn và render thử một intro để bạn duyệt. Chi tiết từng bước và những gì cần chuẩn bị: [BAT-DAU.md](BAT-DAU.md).
+Claude sẽ tự cài môi trường (10-20 phút, cần mạng), hỏi bạn vài câu về phong cách, tải nhạc theo mẫu bạn chọn và render thử một intro để bạn duyệt. Cuối cùng Claude giới thiệu xưởng cho bạn một vòng (khoảng 10 phút) và cùng bạn chọn clip đầu tiên. Chi tiết từng bước và những gì cần chuẩn bị: [BAT-DAU.md](BAT-DAU.md).
 
 ## Cấu trúc thư mục
 

@@ -38,6 +38,8 @@ Bảng quy tắc mặc định (slide-khop.py đề xuất tự động theo s�
 | Mô tả có cử chỉ tay, so sánh, ví dụ minh hoạ bằng ảnh | ảnh/hình đơn giản | `chia-doi` | cả cử chỉ và hình đều rõ |
 | Slide động, nhiều animation (quay màn hình) | bất kỳ | `slide` | mặt cạnh tranh với chuyển động trên slide |
 
+**Cảnh báo `mat-chinh`:** thẻ slide góc trên phải nằm CHỒNG lên cảnh quay, nên khi khung rộng có người đứng hay ngồi phía sau người nói (khán phòng, sân khấu), thẻ có thể đè lên mặt họ. Trước khi dùng, xuất khung tại ít nhất ba mốc trong đoạn và nhìn cả hai mép khung phía trên. Có bất kỳ gương mặt nào bị che thì đổi sang `ca-hai` (slide ở khung riêng, không chồng lên cảnh) hoặc bỏ slide ấy; slide ít được nhắc đến thì không cần hiện. Quy tắc cứng: không lớp phủ nào được che mặt ai. (một keynote có slide, 2026-10-04)
+
 ## 3. Nhịp đổi trạng thái
 
 - Đổi trạng thái tại điểm ngắt hơi thật (`snap: true` lo việc này), không đổi giữa câu.

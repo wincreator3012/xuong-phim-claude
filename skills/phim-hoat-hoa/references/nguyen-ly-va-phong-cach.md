@@ -1,17 +1,17 @@
 # Nguyên lý bộ lệnh và lớp phong cách mặc định (phim-hoat-hoa)
 
-Tài liệu tra cứu cho skill phim-hoat-hoa: mười hai nguyên lý viết bộ lệnh làm phim (rút từ bộ lệnh phim "Nhà" của Đặng Hữu Sơn) và lớp phong cách mặc định của skill (ngôn ngữ hình, cung tự sự chuyển hoá, trí tuệ soma, hệ ẩn dụ, chữ trên hình). SKILL.md giữ bản tóm tắt; đọc đầy đủ ở đây khi viết kịch bản, kinh thánh thế giới hoặc soạn bộ lệnh. Tên, chức danh và từ ngữ phải viết đúng: `phong-cach/PHONG-CACH.md`.
+Tài liệu tra cứu cho skill phim-hoat-hoa: mười hai nguyên lý viết bộ lệnh làm phim và lớp phong cách mặc định của skill (ngôn ngữ hình, cung tự sự chuyển hoá, trí tuệ soma, hệ ẩn dụ, chữ trên hình). SKILL.md giữ bản tóm tắt; đọc đầy đủ ở đây khi viết kịch bản, kinh thánh thế giới hoặc soạn bộ lệnh. Tên, chức danh và từ ngữ phải viết đúng: `phong-cach/PHONG-CACH.md`.
 
 ## Phần 1. Mười hai nguyên lý viết bộ lệnh làm phim
 
-Đây là "ngữ pháp" rút ra từ bộ lệnh "Nhà". Mọi bộ lệnh skill này soạn phải đạt đủ mười hai điều.
+Đây là "ngữ pháp" của một bộ lệnh làm phim tốt. Mọi bộ lệnh skill này soạn phải đạt đủ mười hai điều.
 
 1. **Vai trò kép.** Mở bằng vai "đạo diễn kiêm lập trình viên hình hoạ sáng tạo [creative coding]". Một vai lo cảm xúc và nhịp, một vai lo tính tất định và hiệu năng; thiếu vai nào phim hỏng theo kiểu của vai đó.
 2. **Ràng buộc sinh phong cách.** "Chỉ code, không ảnh, không thư viện, không file âm thanh" không phải khó dễ kỹ thuật mà là cách ép phong cách nhất quán và chặn hình AI đại trà. Luôn nêu ngoại lệ tường minh (font Google Fonts, fallback khi mất mạng).
 3. **Đặc tả bằng dữ liệu, không bằng tính từ.** Mã màu hex, số px, số giây, số pha, BPM, LUFS. "Ấm áp" là mơ hồ; "Fmaj7, 66 BPM, pad triangle lọc thấp" thì làm được.
 4. **Tất định [determinism].** `render(t)` thuần theo thời gian, PRNG có seed, cấm `Math.random()` trong vòng render. Kèm phép kiểm: render cùng một `t` hai lần phải ra ảnh giống hệt. Không có điều này thì không tua, không xuất khung, không soát lỗi được.
 5. **Nhịp là dữ liệu, không phải code.** Timeline là bảng cue `{scene, duration, k, tr, td, at}`, `start` tự cộng dồn; hệ số `k` kéo giãn thời gian bên trong cảnh để chỉnh nhịp mà không sửa hàm vẽ. Âm thanh và caption neo theo cảnh (`S(tên cảnh, u) = cue.start + u*k`), nên đổi nhịp thì tất cả tự khớp.
-6. **Một mô-típ biến đổi xuyên suốt.** Máy bay giấy trong "Nhà" bay đi, gãy cánh, mở lại, nhân đôi, sinh thêm, bay vòng ôm gia đình. Mô-típ là sợi chỉ cảm xúc; mỗi trạng thái của nó là một nấc của hành trình.
+6. **Một mô-típ biến đổi xuyên suốt.** Ví dụ một chiếc máy bay giấy: bay đi, gãy cánh, mở lại, nhân đôi, sinh thêm, bay vòng ôm cả nhóm. Mô-típ là sợi chỉ cảm xúc; mỗi trạng thái của nó là một nấc của hành trình.
 7. **Cấu trúc gương [bookend].** Cảnh kết lặp bố cục cảnh mở nhưng đổi ánh sáng và đổi vai. Người xem cảm được sự chuyển hoá mà không cần lời giải thích.
 8. **Hình đọc được trong 0,3 giây.** Mỗi cảnh một chủ thể, silhouette rõ, bảng màu đóng (khoảng 7 màu), không chữ trong hình trừ caption và chữ ký.
 9. **Từ vựng chuyển cảnh đóng, mỗi loại mang nghĩa.** Chỉ 4-5 kiểu chuyển cảnh, cấm crossfade liên tục. Chuyển cảnh là dấu câu của tự sự.
@@ -25,9 +25,9 @@ Và một nguyên lý đóng gói: **tách hằng số khỏi biến số.** Ph�
 
 Đây là phong cách mặc định do tác giả gốc của xưởng xây dựng (xem README) (tự sự chuyển hoá, chánh niệm, soma). `phong-cach/PHONG-CACH.md` của người dùng nói khác thì theo PHONG-CACH; chưa rõ thì hỏi người dùng có muốn dùng lớp này không.
 
-"Nhà" là phim tốt, nhưng mang hai giả định khác phong cách mặc định này: công thức thành công bề ngoài (lên phố, thắng lợi, sân khấu, biểu đồ đi lên) và mật độ montage dày (20 cảnh / 70 giây). Bảng dưới là phép chuyển đổi.
+Nhiều phim hoạt hình tự sự mang hai giả định khác phong cách mặc định này: công thức thành công bề ngoài (lên phố, thắng lợi, sân khấu, biểu đồ đi lên) và mật độ montage dày (20 cảnh / 70 giây). Bảng dưới là phép chuyển đổi.
 
-| Trục | Phim "Nhà" | Phong cách mặc định |
+| Trục | Phim tự sự theo công thức thành công | Phong cách mặc định |
 |---|---|---|
 | Cung tự sự | Nghèo khó → nỗ lực → thành công → về quê | Mắc kẹt → dừng lại → nhận biết → nới ra → nảy mầm → tái hợp |
 | Thước đo "đến nơi" | Thành tựu nhìn thấy được | Trạng thái Tâm-Thể: thở được, hiện diện, kết nối |
@@ -35,7 +35,7 @@ Và một nguyên lý đóng gói: **tách hằng số khỏi biến số.** Ph�
 | Chuyển động | easeBack nảy (pop-up), boil 8 lần/giây | bezier(0.22, 1, 0.36, 1), không nảy; boil 5-6 lần/giây biên độ nhỏ, đóng băng ở khoảnh khắc tĩnh |
 | Chất giấy | Giấy cũ, vết loang, vignette nặng | Giấy ngà sạch, hạt mịn, vignette rất nhẹ |
 | Nhân vật | Silhouette đặc | Silhouette hoặc người nét 3px; thân thể là nơi mang cảm xúc |
-| Kết | Chữ ký "nhà" + credit | Hình gương + câu hỏi mở thực sự + chữ ký của người dùng |
+| Kết | Chữ ký + credit | Hình gương + câu hỏi mở thực sự + chữ ký của người dùng |
 | Chất bất toàn | Kết tròn trịa | Trạng thái cuối giữ dấu vết trạng thái đầu |
 
 ### 2.1. Ngôn ngữ hình ảnh

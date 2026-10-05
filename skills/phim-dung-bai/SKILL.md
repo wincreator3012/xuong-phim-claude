@@ -33,7 +33,7 @@ Lệnh này bắt quãng >8s có tiếng mà không có chữ (Whisper bỏ đo�
 
 ## Bước 3 - phương án cắt VÀ phương án overlay (chốt duyệt số 1)
 
-Đọc `transcript/<clip>.txt`, áp tiêu chí `bien-tap.md`, trình user MỘT bảng phương án cắt TRƯỚC KHI dựng: mốc nguồn | nội dung | giữ/bỏ | lý do.
+Đọc `transcript/<clip>.txt`, áp tiêu chí `bien-tap.md`, trình user MỘT bảng phương án cắt TRƯỚC KHI dựng: mốc nguồn | nội dung | giữ/bỏ | lý do. Mốc vào/ra do user chốt (ví dụ "bắt đầu từ 3:14, dừng hết câu ...") thắng mọi đề xuất của skill: ghi đúng mốc đó vào bảng. Clip đăng YouTube từ một buổi quay có khán giả tại chỗ thì chủ động đề xuất bỏ phần chỉ có nghĩa trong phòng (hướng dẫn dùng tài liệu, nhắc việc, thực hành tại chỗ) và kết ở câu chốt tự nhiên; xem `skills/phim-bai-giang-slide/references/clip-giang-san-khau.md`.
 
 Cùng lúc chủ động đề xuất overlay cho ba loại nội dung (không chờ user yêu cầu): (1) tên chương trình/chuyên đề/framework được xướng; (2) các bước quy trình hoặc cấu phần framework; (3) key message đáng trích riêng. Thêm một loại thứ tư: (4) đoạn người dùng GIẢI THÍCH một cơ chế, quy trình, so sánh, con số hay hướng dẫn một nhịp thực hành thì đề xuất một cảnh minh hoạ vẽ riêng theo skill phim-canh-minh-hoa, ghi kiểu chèn (toàn khung, nền là khung hình mờ, thẻ nổi cạnh người dùng, người dùng thu vào góc) và kịch bản cảnh bằng chữ (Thấy gì, các cảnh con có mốc, chữ ký chuyển động). Bảng overlay ghi: loại, mốc bắt đầu-kết thúc THEO LỜI NÓI, chữ dự kiến (trích từ transcript), composition (Benefits/InfoList/InfoSteps/InfoQuote/InfoStat/SectionTitle/LowerThird; một dòng chữ nổi bật = Benefits một mục `showIndex:false`, studio không có "Caption"). Kèm vị trí thẻ chuyển phần, B-roll, tổng thời lượng. Thẻ toàn màn hình phải cách nhau tối thiểu 5 giây cảnh quay chính; dày hơn thì đổi sang overlay bán trong suốt (Benefits, không tính vào quy tắc này). Gửi qua SendUserMessage nếu đang giữa chuỗi tool. Chờ user duyệt CẢ HAI bảng; user vắng lâu thì tiếp tục với phương án đã đề xuất và ghi rõ.
 
@@ -47,6 +47,7 @@ Thời lượng overlay tính theo `bien-tap.md` (lớn hơn giữa thời lư�
 
 Timeline `du-an/<tên>/timeline.json` theo schema trong docstring `tools/assemble.py`:
 - `snap: true` cho mọi đoạn video
+- **Quy tắc cứng: không lớp phủ nào (overlay, pill, bảng tên, slide thẻ) che mặt BẤT KỲ AI trong khung**, kể cả người ngồi hoặc đứng phía sau người nói và người đang được gửi hình lên slide. Chọn kiểu hiện không chồng lên cảnh quay (overlay ở vùng khung trống, `ca-hai`, `mat`), bỏ slide hay thẻ ít quan trọng; khung có khán phòng thì không dùng `mat-chinh`. Nghiệm thu: trích khung tại MỌI mốc có lớp phủ và nhìn từng khung (`skills/_chung/overlay-va-the.md`)
 - Gộp nhiều nội dung liệt kê/nhấn mạnh vào MỘT đoạn quay liên tục bằng `overlay` dạng LIST (mỗi cái một `at` theo lời nói, không chồng lấn) thay vì tách segment hay dùng `broll`; chỉ tách segment khi cần BỎ nội dung ở giữa, và cắt vào khoảng lặng thật
 - **Hai hệ mốc thời gian, dễ nhầm**: `in`/`out` và `broll[].at` là mốc TRONG FILE NGUỒN; `overlay[].at` TƯƠNG ĐỐI từ đầu đoạn (sau snap). Overlay muốn hiện lúc lời nói ở mốc nguồn T: `at = T - in`. Overlay chỉ phủ tới B-roll đầu tiên của đoạn
 - Nhiều góc máy: đổi nguồn giữa các segment liên tiếp là đủ chuyển cảnh
@@ -72,9 +73,9 @@ Chạy assemble không `--preview` cho từng aspect với `--out "<tên>-<aspec
 1. **Cổng máy đo, chạy trước mọi thứ**: `python3 tools/nghiem-thu.py video "du-an/<tên>/xuat-nhap/<file>.mp4" --khung <ngang|doc> --anh` phải ĐẠT (mã thoát 0): hình = tiếng trong 0.06s, khớp tổng part, đồng bộ hình-tiếng so với NGUỒN tại 10 mốc (cổng tự gọi `tools/do-dong-bo.py`: tiếng phải khớp nguồn trong ±25 ms, hình - tiếng trong ±50 ms, không trôi quá 15 ms mỗi phút), khung/fps/codec, -14±1 LUFS và true peak, im lặng dài, hình đứng, quãng đen, còn HDR không; xuất `<file>.luoi.jpg` 12 khung có mốc giờ
 2. Stage `<file>.luoi.jpg` và NHÌN: intro/outro đúng chỗ, bảng tên hiện, không khung đen, không lệch crop, chữ không tràn
 3. Kiểm TỪNG mối nối bằng `silencedetect`/`volumedetect` quanh mốc `start`/`end` của từng part trong `map.json` (không tính tay)
-4. Mỗi overlay: mốc thành phẩm = `start` của part + `at`, khớp bảng Bước 3; chưa chắc thì xuất 1 frame xem
+4. Mỗi overlay: mốc thành phẩm = `start` của part + `at`, khớp bảng Bước 3; chưa chắc thì xuất 1 frame xem; đồng thời xác nhận không che mặt ai trên khung thật tại mốc đó
 5. Nghe điểm vào/ra nhạc (xuất 5s audio quanh mốc nếu cần)
-6. chapters.txt khớp `map.json` nếu có chapter
+6. chapters.txt khớp `map.json` nếu có chapter: mỗi chương dài tối thiểu 10 giây (luật YouTube), chương mở đầu quá ngắn thì gộp vào chương kế; chương lấy từ công cụ, không gõ tay
 7. Phim nhiều part (multicam, phim tài liệu, trên 40 part) hay có lời than "hình lệch tiếng": chạy thêm `python3 tools/do-dong-bo.py "<file>.mp4" --mau 24` và đọc từng dòng (mốc dày hơn, thấy cả lệch cục bộ lẫn trôi dần). Lệch xuất hiện ở đầu ra mà tiếng đúng 0 ms thì nghi nguồn (tiếng từng máy so với tiếng chủ, hình cận so với hình toàn), không nghi bước dựng
 
 Đạt rồi mới COPY sang `du-an/<tên>/xuat-hoan-chinh/<tên>-<aspect>.mp4` (bỏ `-nhap`) và báo: tên file, thời lượng, dung lượng, chapters, kèm dòng "nghiệm thu máy: ĐẠT (hình = tiếng, -14 LUFS)". Thành phẩm đã ở máy user, không cần commit.
@@ -87,7 +88,8 @@ Ngay sau khi giao, làm gói đăng tải theo skill phim-dang-tai: ba phương 
 
 - `.tam/` sau khi dựng bị truncate còn 0 byte nhưng tên còn - bình thường
 - Sửa script/studio ở đám mây phải commit về máy ngay (máy là bản gốc). Sửa logic cắt, ghép hay finalize trong `assemble.py` thì đổi `TOOL_VERSION`, rồi chạy `python3 tools/kiem-tra-xuong.py` (gồm `kiem-dong-bo.py`, dựng thử chớp/click đo tiếng - hình từng sự kiện) và chỉ dựng thật khi cả hai ĐẠT
+- **Chốt thông số âm thanh trước khi bấm bản chính; bản dài thì chia việc.** Sau finalize các part bị truncate về 0 byte, nên đổi bất kỳ tham số nào (âm lượng, đỉnh tiếng) là mã hoá lại toàn bộ. Clip hơn 35 phút trên máy ảo (mỗi lệnh gọi khoảng 120 giây): part nhỏ, 4 worker, ca-hai nướng sẵn, resume được; chi tiết ở `docs/BAI-HOC.md` mục 13
 - **Lớp lỗi "bất biến bị vi phạm nhưng không ai kiểm"**: mọi file trung gian phải hình = tiếng; bước sau chỉ đi tiếp khi bước trước đo đạt; không để nhánh "sửa ngầm" (encode lại, hạ ngưỡng, bắt ngoại lệ rồi bỏ qua) che dấu vết; con số khớp "gần đúng" khó hiểu là dấu hiệu, không phải may mắn. Bất biến hình = tiếng phải được đo cả SO VỚI NGUỒN (ngưỡng chặt 4 ms ở part và thân phim, không dùng chung ngưỡng 0,06 s của AAC); một công cụ đo tự viết phải thử trên nguồn biết trước đáp án trước khi tin
 - Kết thúc dự án đáng nhớ: bài học kỹ thuật vào `docs/BAI-HOC.md` đúng chủ đề; tiêu chí biên tập mới vào `skills/phim-dung-bai/references/bien-tap.md`; góp ý phong cách vào sổ tay góp ý của `phong-cach/PHONG-CACH.md`. Sửa skill theo `skills/_chung/bao-tri-skill.md`
 
-<!-- ban-nguon: phim-dung-bai 2026-10-01 991d50e2 -->
+<!-- ban-nguon: phim-dung-bai 2026-10-05 6b425e52 -->

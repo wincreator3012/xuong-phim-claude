@@ -71,6 +71,9 @@ Bài học là lý do để hiểu vì sao một cách làm từng đúng với 
 - **Thẻ chuyển SectionTitle:** `kicker` là tên dự án viết hoa lặp xuyên suốt, `title` là tên hồi hoặc câu hỏi, `showLogos` ở ranh giới lớn. (dự án thật, 2026-09-20)
 - **Kiểm có hay không một lớp phủ mà không xem ảnh:** đọc màu một điểm ảnh góc khung (nền kem `#FAF7F1` khác hẳn cảnh quay), hoặc tìm "cao nguyên" độ lệch so với khung tham chiếu. (dự án thật, 2026-08-30)
 
+- **Tuyệt đối không để lớp phủ nào che mặt bất kỳ ai trong clip, kể cả người đứng ở nền hay người đang được gửi hình lên slide.** `mat-chinh` (slide thẻ góc trên phải) đã đè lên mặt người ngồi hàng sau ở ba chỗ trong nháp đầu của một keynote có slide (4:39, 3:53, 41:57). Cách xử lý: dùng `ca-hai` (slide ở khung riêng, mặt người nói ở ô riêng, không chồng lên cảnh) hoặc `mat` khi không cần slide; slide ít được nhắc (đội hình 7C ở cuối clip) thì bỏ hẳn. Nghiệm thu: trích khung tại MỌI mốc có lớp phủ (29 khung ở một keynote có slide) và nhìn từng khung, không chỉ vài mốc. (dự án thật, 2026-10-04)
+- **Clip đăng YouTube: cắt bỏ phần mở đầu nói về cách dùng tài liệu/slide cho khán phòng tại chỗ,** người xem YouTube không cần; bắt đầu từ chỗ nội dung thật sự mở ra, kết ở câu chốt tự nhiên mà người dùng chỉ định. Khi người dùng chốt mốc vào/ra thì dùng đúng mốc đó. (dự án thật, 2026-10-04)
+
 ## 5. Khung dọc, cropFocus và cách kết
 
 - **cropFocus đúng là giá trị giữ trọn cử chỉ tay,** không chỉ mặt giữa khung; chụp so sánh ở khung đang khoát tay. (dự án thật, 2026-09-09)
@@ -165,6 +168,8 @@ Bài học là lý do để hiểu vì sao một cách làm từng đúng với 
 - **`git status` trong VM để lại `.git/index.lock` rỗng không xoá được** (thư mục của người dùng cấm xoá mặc định), làm lần commit sau của người dùng bị git chặn. Chỉ đọc trạng thái repo bằng `GIT_OPTIONAL_LOCKS=0 git status`; lỡ để lại khoá thì xin quyền xoá đúng file đó. (dự án thật, 2026-09-30)
 - **Không chạy lệnh git trong VM trên repo của người dùng:** `git status` tạo tệp khoá index.lock trong thư mục .git mà VM không xoá được (cấm xoá), lock rỗng sẽ chặn lần commit của người dùng. Lỡ tạo thì đổi tên tệp khoá ngay trong thư mục .git (`mv -n`, git bỏ qua tên lạ), rồi báo người dùng. Muốn biết tệp nào đổi thì đọc kết quả `dong-bo-repo.py`. (dự án thật, 2026-10-01)
 
+- **Dựng clip dài (hơn 35 phút, hàng trăm đoạn `ca-hai`) trên VM 4 nhân, mỗi lệnh gọi bị chặn khoảng 120 giây và tiến trình nền bị giết khi lệnh kết thúc:** (1) mã hoá song song 4 worker, mỗi đoạn `ca-hai` cắt nhỏ khoảng 13 giây để vừa một lượt gọi; (2) `ca-hai` nướng sẵn [bake] khung nền và slide thành một PNG, chỉ overlay ô mặt, nhanh gấp khoảng 3 lần mà hình tương đương (PSNR Y 43,5 dB); (3) chia việc theo ngân sách thời gian từng lượt gọi, mọi bước đều phải resume được qua cache (`.sig`, dấu hoàn thành); (4) ghép cuối `fin.py` làm từng chặng nhỏ có đánh dấu (v.ok, raw.ok, mux.ok), bỏ bước `+faststart` nếu không kịp. Sau khi finalize, các `.tam/part-*.mp4` bị truncate về 0 byte nên đổi bất kỳ tham số nào (kể cả đỉnh tiếng [true peak]) là phải mã hoá lại từ đầu: chốt thông số âm thanh trước khi bấm bản chính. Không dùng `pkill -f ffmpeg` (giết luôn shell của chính mình, mã 143). (dự án thật, 2026-10-04)
+
 ## 15. Đăng tải
 
 - **Mặt đang nói đổi rất nhanh:** trong cùng một giây có khung cười thật và khung miệng méo, mắt liếc; máy lọc ứng viên theo cỡ mặt, độ chính diện, độ nét, còn nét mặt thì phải nhìn bảng `quanh-kNN.jpg` (mỗi 0,25 giây, cắt sát mặt) rồi mới chọn. (dự án thật, 2026-10-01)
@@ -177,6 +182,10 @@ Bài học là lý do để hiểu vì sao một cách làm từng đúng với 
 - **Nhạc Pixabay không bắt buộc ghi công;** chỉ track CC-BY (MacLeod) mới đặt `nhac_ccby`. Dòng ghi công cho track Pixabay chỉ là tự nguyện. Cổng sentence case chặn cả tên clip người dùng đặt ("Hành trình" viết hoa): đổi chữ thường và ghi vào `ghi_chu_kiem`. (dự án thật, 2026-10-01)
 
 - **Short khái niệm: thumbnail dùng chính thuật ngữ người nói** ("Skill AI là gì?", "Khung chuyên môn từ phía AI", "Đóng gói tiêu chuẩn của bạn"), cùng một khuôn mặt cho ba phương án để thử nghiệm đo đúng thông điệp; dòng dài nhất 8-10 ký tự (ba dòng cũng được khi ý cần). Tiêu đề đặt từ khoá trong khoảng 60-70 ký tự đầu. Clip cắt lại sau khi đã có gói: sửa độ dài trong `ghi_chu_kiem`, chạy `dang-tai.py kiem` lại. (dự án thật, 2026-10-03)
+
+- **Chương YouTube: chương đầu `Mở đầu` chỉ dài 6 giây thì cổng kiểm báo ngắn hơn 10 giây;** áp luật của `chuong-youtube.py` (gộp chương sát chương trước), chương `Mở đầu` kéo dài tới chương nội dung đầu tiên. Tên clip người dùng đặt có viết hoa từng từ cũng bị cổng sentence case chặn: tiêu đề đăng viết sentence case và ghi vào `ghi_chu_kiem`. (dự án thật, 2026-10-04)
+
+- **Thumbnail clip giảng sân khấu: xen cận mặt với khung rộng zoom out, chữ khớp thứ thấy trong ảnh.** Ẩn dụ ("vé lên tàu") kèm ảnh cận mặt bị người trình bày chê khó hiểu; khung rộng có slide "Bản đồ khuyến khích" sau lưng thì chữ và hình hỗ trợ nhau. Quét mặt theo giây bằng `tools/quet-mat-theo-giay.py`, cắt khung từ 4K; `faceScale` 0.13 cho toàn ảnh rộng; chữ 12 ký tự không đạt 110 px thì ngắt ba dòng. (dự án thật, 2026-10-05)
 
 ## 14. Màu
 

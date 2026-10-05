@@ -1,6 +1,6 @@
 # Mẫu bộ lệnh làm phim hoạt hoạ tự sự (phim-hoat-hoa, chế độ SOẠN LỆNH)
 
-Nội dung để chép ra rồi điền biến số. Phần hằng số giữ nguyên; tự soát bằng `skills/phim-hoat-hoa/references/checklist.md` mục "Bộ lệnh" trước khi giao. Ghi nhận nguồn phương pháp (bộ lệnh phim "Nhà" của Đặng Hữu Sơn) khi chia sẻ công khai.
+Nội dung để chép ra rồi điền biến số. Phần hằng số giữ nguyên; tự soát bằng `skills/phim-hoat-hoa/references/checklist.md` mục "Bộ lệnh" trước khi giao.
 
 ## Phần 7. Mẫu bộ lệnh (nhánh A, điền biến số trong ngoặc nhọn)
 
