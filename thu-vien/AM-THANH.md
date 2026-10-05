@@ -1,6 +1,17 @@
-# Thư viện âm thanh: danh mục đã kiểm định bản quyền
+# Thư viện âm thanh: danh mục theo mức tin cậy bản quyền
 
-Repo không chứa file nhạc (để nhẹ và để tôn trọng điều khoản phân phối lại). Thay vào đó, đây là danh mục 15 track nhạc nền và 10 hiệu ứng đã được kiểm từng trang nguồn, dùng được trên mọi nền tảng (YouTube, Facebook, Instagram, TikTok) cho mục đích thương mại và KHÔNG đăng ký Content ID (track có nhãn "Content ID Registered" trên Pixabay bị loại dù được phép dùng, vì sẽ gây khiếu nại tự động). Bản máy đọc: `am-thanh.json`. Sau khi tải về, danh mục thật của máy bạn (có LUFS đo thật) nằm ở `nhac-nen/THU-VIEN.md`.
+Repo không chứa file nhạc (để nhẹ và để tôn trọng điều khoản phân phối lại). Có hai đường: tự soạn nhạc riêng bằng `python3 tools/soan-nhac.py` (đảm bảo nhất, xem ngay dưới), hoặc tải từ danh mục các track dùng được thương mại trên mọi nền tảng.
+
+## Mức tin cậy bản quyền: đọc trước khi chọn nhạc
+
+Content ID dò dấu vân âm thanh, không đọc giấy phép, và một track miễn phí có thể được đăng ký sau khi bạn tải về. Nhãn "không đăng ký Content ID" trên trang nguồn chỉ đúng tại lúc nhìn: một track Pixabay không nhãn từng bị nhà phân phối thứ ba đăng ký, khiến một Short dùng nó làm nhạc nền chạy suốt bị YouTube chặn toàn cầu. Vì vậy:
+
+1. **Nhạc riêng (đảm bảo nhất).** `python3 tools/soan-nhac.py --danh-sach` liệt kê bốn bản (guitar mộc, piano trầm, nền thiền, sáng nhẹ); `python3 tools/soan-nhac.py <tên> --ra nhac-nen/<nhóm>` tổng hợp ra file mp3 chuẩn -15 LUFS bằng code, không dùng mẫu thu hay nhạc của ai nên không ai đăng ký Content ID được. `--hieu-ung` soạn bộ whoosh, chuông, pop. Đặt tên thêm hậu tố `_xuong-rieng` rồi chạy `nhap-am-thanh.py`. Nghe thử một lượt trước khi dùng; đừng đưa các bản này lên dịch vụ phát hành nhạc hay Content ID.
+2. **Kevin MacLeod (CC BY 4.0).** Rủi ro thấp đến vừa, có đường gỡ rõ: ghi công đúng, kháng nghị, biểu mẫu gỡ hàng loạt của tác giả.
+3. **Pixabay.** Dùng sau khi đăng bản riêng tư lên YouTube và mục Bản quyền của YouTube Studio báo sạch.
+4. **Track đã bị claim**: thêm tên file vào `nhac-nen/CAM-DUNG.json` (`{"cam": {"<tên file>": "lý do"}}`); `assemble.py` báo lỗi khi timeline dùng track đó.
+
+Trước khi đăng một lô clip mới, đăng một bản riêng tư và đọc mục Bản quyền.
 
 ## Cách tải (Claude làm, bạn chỉ bấm khi được nhờ)
 
@@ -46,9 +57,7 @@ Không cần đủ 15 track mới dùng được: hai track đúng mẫu phong c
 | File | Track gốc, tác giả | Dài | gainDb full / bookends | Giấy phép |
 |---|---|---|---|---|
 | acoustic-am-ap_macleod_ccby | Wholesome, Kevin MacLeod | 6:04 | -13 / -5 | CC-BY |
-| acoustic-cam-xuc_universfield_pixabay-232913 | Sentimental Acoustic Tune, Universfield | 1:39 | -15 / -7 | Pixabay |
 | acoustic-guitar-diu_moonpub_pixabay-506572 | Gentle acoustic guitar melody, Moonpub | 1:18 | -16 / -8 | Pixabay |
-| acoustic-stinger-30s_universfield_pixabay-239071 | Relaxing Acoustic Guitar 30s, Universfield | 0:30 | -14 / -6 | Pixabay |
 
 ### nang-luong-nhe: sáng và nhẹ, Reels/Shorts (mẫu hien-dai)
 
@@ -56,25 +65,23 @@ Không cần đủ 15 track mới dùng được: hai track đúng mẫu phong c
 |---|---|---|---|---|
 | soft-piano-nhe_andriih_pixabay-579821 | Soft - Soft Music, andriih | 2:09 | -9 / -1 | Pixabay |
 
-Nhóm này còn mỏng. Khi tìm thêm, ưu tiên Pixabay (kiểm không có Content ID) rồi incompetech.com.
+Nhóm này còn mỏng. Dùng `soan-nhac.py xuong-nhe-sang` cho nhịp nhanh; khi tìm thêm, ưu tiên nhạc riêng, rồi incompetech.com, rồi Pixabay (sau khi thử riêng tư).
 
 ### rieng: nhạc của chính bạn
 
 Thả vào `nhac-nen/rieng/`, chạy `nhap-am-thanh.py`. Claude ghi chú "nhạc riêng của người dùng" và không kiểm định thêm. Bạn chịu trách nhiệm về quyền sử dụng.
 
-## Hiệu ứng âm thanh (tất cả Pixabay, không cần ghi công)
+## Hiệu ứng âm thanh
+
+Whoosh chuyển cảnh và chuông mềm: soạn bằng `python3 tools/soan-nhac.py --hieu-ung --ra hieu-ung/<nhóm>` (không cần tải). Chuông xoay và pop dưới đây từ Pixabay (Content License, không cần ghi công).
 
 Dùng tiết chế: không phải chuyển cảnh nào cũng cần tiếng, chỉ dùng khi nhấn có chủ đích. Mức trộn: hiệu ứng thấp hơn đỉnh lời nói khoảng 20-26 dB.
 
 | Nhóm | File | Dài | Dùng khi |
 |---|---|---|---|
-| chuyen-canh | whoosh-manh_universfield_pixabay-352756 | 1.6s | mặc định cho thẻ chuyển phần |
-| chuyen-canh | whoosh-cham_universfield_pixabay-567191 | 3.1s | chuyển phần lớn |
-| chuyen-canh | whoosh-nhanh_universfield_pixabay-352855 | 1.2s | nhịp cắt nhanh của Reels |
 | chuong-thien | chuong-xoay-go_freesound_pixabay-33366 | 14.8s | mở đầu thực hành |
 | chuong-thien | chuong-xoay-eb_freesound_pixabay-38746 | 12.6s | điểm nhấn chiêm nghiệm |
 | chuong-thien | chuong-xoay-ngan-dai_freesound_pixabay-55786 | 1:26 | kết bài thiền, fade tuỳ ý |
-| nhan-do-hoa | chime-mem-1 / chime-mem-2 (pixabay-146623 / 131438) | 1.4s | khi infographic hiện |
 | nhan-do-hoa | pop-sach_dragon_pixabay-467466 | 1.6s | từng mục danh sách hiện |
 | nhan-do-hoa | pop-nhe_humordome_pixabay-451232 | 5s | nhiều click nhẹ, cắt lấy đoạn cần |
 
@@ -82,7 +89,7 @@ Trang nguồn cụ thể của từng file nằm trong `am-thanh.json` (trườn
 
 ## Quy tắc bổ sung thư viện (cho Claude)
 
-1. Nguồn ưu tiên: Pixabay (kiểm trang track không có nhãn "Content ID Registered" trước khi tải), rồi incompetech.com (CC-BY, thêm dòng ghi công)
+1. Nguồn ưu tiên: nhạc riêng (`soan-nhac.py`), rồi incompetech.com (CC-BY, thêm dòng ghi công), rồi Pixabay (nhãn trên trang không bảo đảm gì, thử riêng tư trước)
 2. Tải qua trình duyệt: bấm "Free download", chờ 6-8 giây sau mỗi cú bấm rồi mới điều hướng tiếp (điều hướng sớm sẽ huỷ lượt tải)
 3. Đặt tên `<mô-tả>_<tác-giả>_<nguồn-id>.mp3`, để vào đúng nhóm, chạy `nhap-am-thanh.py`
 4. Không nhận nhạc không rõ nguồn; nhạc người dùng tự có thì để `nhac-nen/rieng/`

@@ -46,7 +46,7 @@ Xưởng làm việc bằng nguyên lý, không bằng khuôn. Mọi quyết đ�
 
 1. Chưa qua cổng máy (`tools/nghiem-thu.py` ĐẠT) thì chưa nói "xong". Không hạ ngưỡng, không bật cờ bỏ qua kiểm tra để cho qua
 2. Chức danh, tên riêng, "từ ngữ phải viết đúng" trong PHONG-CACH.md là bất khả xâm phạm; chữ trên màn hình theo mục 4 của file đó (mặc định: thuần Việt, sentence case, gạch ngang thường, không Title Case, không emoji trong đồ họa)
-3. Nhạc chỉ từ `nhac-nen/THU-VIEN.md` (đã kiểm định) hoặc `nhac-nen/rieng/`; track CC-BY kèm dòng ghi công trong mô tả video
+3. Nhạc ưu tiên nhạc riêng soạn bằng `tools/soan-nhac.py` (không ai đăng ký Content ID được), rồi `nhac-nen/THU-VIEN.md` theo mức tin cậy trong `thu-vien/AM-THANH.md`, hoặc `nhac-nen/rieng/`; track CC-BY kèm dòng ghi công trong mô tả video; track trong `nhac-nen/CAM-DUNG.json` bị `assemble.py` chặn
 4. Không hardcode đường dẫn tuyệt đối của máy vào bất kỳ file nào của xưởng; gốc xưởng lấy từ thư mục đã kết nối
 5. Mã nguồn sửa ở sandbox đám mây (studio, tools) phải commit về máy ngay; máy là bản gốc
 6. Một góp ý lặp lại lần thứ hai là tín hiệu sửa NGUỒN MẶC ĐỊNH (brand.json, preset, defaultProps), không chỉ sửa dự án đang làm; ghi vào "Sổ tay góp ý" cuối PHONG-CACH.md

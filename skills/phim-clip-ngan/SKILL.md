@@ -42,7 +42,7 @@ Nháp tăng số mỗi vòng để không ghi đè bản người dùng đang xe
 - **Khung dọc, cropFocus**: kiểm bằng nhiều khung thử (ffmpeg crop + scale) trước khi dựng, chụp ở khung ĐANG CỬ CHỈ TAY; tiêu chí là "người và cử chỉ còn đủ trong khung", không chỉ "mặt giữa khung"; đầu không chạm mép trên. Đoạn dài hơn khoảng một phút hoặc có người, vật khác trong khung rộng: kiểm 5-6 mốc trải khắp đoạn, ở mỗi mốc nhìn cả hai mép; chấp nhận thu hẹp qua vài vòng (ví dụ 0,68 → 0,64 → 0,60) hơn là chốt sớm.
 - **Tách câu ghép để chèn thẻ ở giữa** khi silencedetect không tách được hai vế: kỹ thuật khoảng trũng năng lượng 20 ms trong `skills/phim-dung-bai/references/bien-tap.md` mục "Nhịp và điểm cắt".
 - **Đồ họa dọc** từ preset `do-hoa-chung/preset-intro-outro-doc.json`; outro clip ngắn 5-6 giây một dòng lời mời, có QR thì 8-9 giây. `render-do-hoa.mjs` thoát mã 1 thì sửa job, không dùng file sai.
-- **Nhạc**: `full` + duck, track và `gainDb` theo từng track trong `thu-vien/AM-THANH.md`; nhạc là lớp năng lượng nền, không lấn lời.
+- **Nhạc**: `full` + duck, track và `gainDb` theo từng track trong `thu-vien/AM-THANH.md`; nhạc là lớp năng lượng nền, không lấn lời. Short nhạc chạy suốt là loại dễ bị Content ID chặn nhất, nên chọn nhạc riêng của xưởng trước (nguyên lý ở `_chung/timeline-va-dung.md`).
 - **Nhịp cắt**: được phép sát hơn bài dài, bỏ mọi khoảng thở trên 0,8 giây trừ khoảng lặng có chủ đích trước câu chốt.
 - **Điểm kết là chữ cuối của ý đã trọn**, rồi outro lên ngay. Mốc cuối của cue hay của đoạn nhận dạng thường kéo sang nửa câu kế tiếp, nên chốt bằng đường bao năng lượng 10-20 ms của chính thành phẩm: khoảng trũng 0,05-0,15 giây ngay sau chữ cuối, `fadeOut` 0,05 giây. Người dùng nghe ra "câu thừa" thì đó là lỗi cắt, không phải gu: rút `out`, bớt phần giữ cuối của cảnh bằng `overlay.duration` kèm `giu`, sửa cue cuối, dựng, burn, nghiệm thu lại.
 - **Cảnh minh hoạ trong clip ngắn** (khi lời là một lập luận có ví dụ hay quy trình): một chủ thể hình biến hình xuyên suốt theo lời, lấy đúng ví dụ người nói nêu; mặt ở nửa trên, thẻ ở nửa dưới, cảnh bắt đầu sau LowerThird, chừa 1-2 giây giữ yên cuối cảnh. Nguyên lý và nhịp làm việc: `skills/phim-clip-ngan/references/clip-co-minh-hoa.md` mục 3-5; cách vẽ: skill phim-canh-minh-hoa.
@@ -69,4 +69,4 @@ File đã burn là bản HOÀN CHỈNH: ghi vào `du-an/<x>/xuat-hoan-chinh/<slu
 
 Báo kết quả kèm dòng "nghiệm thu máy: ĐẠT" và danh sách ngắn các điểm cần người dùng nghe lại (chữ nhận dạng chưa chắc, con số người nói ước lượng, chức danh, chỗ đã cắt bỏ tham chiếu ngoài clip). Một bài giảng tốt thường ra 3-5 clip: sau khi người dùng duyệt clip đầu, đề nghị dựng loạt còn lại cùng format cho đồng đều.
 
-<!-- ban-nguon: phim-clip-ngan 2026-10-03 5c8975ad -->
+<!-- ban-nguon: phim-clip-ngan 2026-10-05 2c1fae74 -->

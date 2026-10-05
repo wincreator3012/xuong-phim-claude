@@ -1,5 +1,5 @@
 {
- "_ghi_chu": "Danh mục chất liệu âm thanh đã kiểm định giấy phép (dùng thương mại mọi nền tảng, không Content ID). File KHÔNG nằm trong repo: tools/tai-chat-lieu.py tải về nhac-nen/<nhom>/ và hieu-ung/<nhom>/ theo mẫu phong cách. Sau khi tải, tools/nhap-am-thanh.py đo LUFS thật và ghi nhac-nen/THU-VIEN.md. Trường 'trang' là URL trang nguồn để tra ngược; 'truc_tiep' (nếu có) là link tải thẳng bằng curl.",
+ "_ghi_chu": "Danh mục chất liệu âm thanh đã kiểm định giấy phép (dùng thương mại mọi nền tảng; nhãn không-Content-ID trên trang nguồn không bảo đảm gì, xem thu-vien/AM-THANH.md). File KHÔNG nằm trong repo: tools/tai-chat-lieu.py tải về nhac-nen/<nhom>/ và hieu-ung/<nhom>/ theo mẫu phong cách. Sau khi tải, tools/nhap-am-thanh.py đo LUFS thật và ghi nhac-nen/THU-VIEN.md. Trường 'trang' là URL trang nguồn để tra ngược; 'truc_tiep' (nếu có) là link tải thẳng bằng curl.",
  "giay_phep": {
   "pixabay": {
    "ten": "Pixabay Content License",
@@ -253,25 +253,6 @@
    ]
   },
   {
-   "id": "acoustic-cam-xuc_universfield_pixabay-232913",
-   "nhom": "acoustic-am",
-   "ten_goc": "Sentimental Acoustic Tune",
-   "tac_gia": "Universfield",
-   "dai": "1:39",
-   "lufs": -14.9,
-   "gain_full": -15,
-   "gain_bookends": -7,
-   "giay_phep": "pixabay",
-   "trang": "https://pixabay.com/music/acoustic-group-sentimental-acoustic-tune-for-emotional-scenes-232913/",
-   "mood": [
-    "cảm xúc",
-    "quảng bá"
-   ],
-   "mau": [
-    "am-ap"
-   ]
-  },
-  {
    "id": "acoustic-guitar-diu_moonpub_pixabay-506572",
    "nhom": "acoustic-am",
    "ten_goc": "Gentle acoustic guitar melody",
@@ -288,26 +269,6 @@
    ],
    "mau": [
     "am-ap"
-   ]
-  },
-  {
-   "id": "acoustic-stinger-30s_universfield_pixabay-239071",
-   "nhom": "acoustic-am",
-   "ten_goc": "Relaxing Acoustic Guitar 30s",
-   "tac_gia": "Universfield",
-   "dai": "0:30",
-   "lufs": -15.7,
-   "gain_full": -14,
-   "gain_bookends": -6,
-   "giay_phep": "pixabay",
-   "trang": "https://pixabay.com/music/pulses-relaxing-acoustic-guitar-30s-239071/",
-   "mood": [
-    "30 giây",
-    "intro+outro vừa khít"
-   ],
-   "mau": [
-    "am-ap",
-    "hien-dai"
    ]
   },
   {
@@ -332,46 +293,6 @@
   }
  ],
  "hieu_ung": [
-  {
-   "id": "whoosh-manh_universfield_pixabay-352756",
-   "nhom": "chuyen-canh",
-   "dai": "1.6s",
-   "tac_gia": "Universfield",
-   "trang": "https://pixabay.com/sound-effects/search/whoosh/",
-   "ghi_chu": "mảnh, kín đáo - mặc định cho thẻ chuyển phần",
-   "mau": [
-    "tinh-lang",
-    "am-ap",
-    "hien-dai",
-    "hoc-thuat"
-   ],
-   "giay_phep": "pixabay"
-  },
-  {
-   "id": "whoosh-cham_universfield_pixabay-567191",
-   "nhom": "chuyen-canh",
-   "dai": "3.1s",
-   "tac_gia": "Universfield",
-   "trang": "https://pixabay.com/sound-effects/search/whoosh/",
-   "ghi_chu": "chậm êm, chuyển phần lớn",
-   "mau": [
-    "tinh-lang",
-    "am-ap"
-   ],
-   "giay_phep": "pixabay"
-  },
-  {
-   "id": "whoosh-nhanh_universfield_pixabay-352855",
-   "nhom": "chuyen-canh",
-   "dai": "1.2s",
-   "tac_gia": "Universfield",
-   "trang": "https://pixabay.com/sound-effects/search/whoosh/",
-   "ghi_chu": "nhịp cắt nhanh của Reels",
-   "mau": [
-    "hien-dai"
-   ],
-   "giay_phep": "pixabay"
-  },
   {
    "id": "chuong-xoay-go_freesound_pixabay-33366",
    "nhom": "chuong-thien",
@@ -405,34 +326,6 @@
    "ghi_chu": "ngân rất dài - kết bài thiền",
    "mau": [
     "tinh-lang"
-   ],
-   "giay_phep": "pixabay"
-  },
-  {
-   "id": "chime-mem-1_universfield_pixabay-146623",
-   "nhom": "nhan-do-hoa",
-   "dai": "1.4s",
-   "tac_gia": "Universfield",
-   "trang": "https://pixabay.com/sound-effects/search/chime/",
-   "ghi_chu": "chime mềm khi infographic hiện",
-   "mau": [
-    "tinh-lang",
-    "am-ap",
-    "hien-dai",
-    "hoc-thuat"
-   ],
-   "giay_phep": "pixabay"
-  },
-  {
-   "id": "chime-mem-2_universfield_pixabay-131438",
-   "nhom": "nhan-do-hoa",
-   "dai": "1.5s",
-   "tac_gia": "Universfield",
-   "trang": "https://pixabay.com/sound-effects/search/chime/",
-   "ghi_chu": "chime mềm, biến thể",
-   "mau": [
-    "tinh-lang",
-    "am-ap"
    ],
    "giay_phep": "pixabay"
   },

@@ -41,7 +41,9 @@ def pieces(files, t0, t1):
                 sys.exit(f"! Khoảng trống nguồn tại trục {t:.2f}s")
             fe = nx[0]
         d = min(t1, fe["offset"] + fe["dur"]) - t
-        out.append((fe["file"], max(0.0, t - fe["offset"]), d))
+        # bù trôi đồng hồ camera: mốc trong file = (T - offset) * (1 + drift_ppm*1e-6), như multicam-dan.py
+        x = t - fe["offset"]
+        out.append((fe["file"], max(0.0, x * (1 + fe.get("drift_ppm", 0) * 1e-6)), d, t))
         t += d
     return out
 
@@ -56,7 +58,7 @@ def chunk_ok(path, expect):
         if not m:
             return False
         dur = int(m.group(1)) * 3600 + int(m.group(2)) * 60 + float(m.group(3))
-        return abs(dur - expect) < 0.2
+        return abs(dur - expect) < 0.02
     except Exception:
         return False
 
@@ -93,16 +95,19 @@ def main():
         ten, k, ps = t
         outs = outs_of[ten]
         subs = {o["ten"]: [] for o in outs}
-        for j, (f, ss, d) in enumerate(ps):
+        t0k = tu + k * ch
+        for j, (f, ss, d, tstart) in enumerate(ps):
+            # ĐÚNG số khung: lọc fps=30 cộng -t từng thừa 1-2 khung mỗi mảnh, cộng dồn làm hình trễ hơn tiếng cả giây ở cuối phim
+            nfr = int(round((tstart + d - t0k) * 30)) - int(round((tstart - t0k) * 30))
             parts = {o["ten"]: os.path.join(ra, "nguon", o["ten"], ".manh", f"{k:03d}.{j}.part.mp4") for o in outs}
             chains = [f"[0:v]fps=30,split={len(outs)}" + "".join(f"[s{i}]" for i in range(len(outs)))]
             for i, o in enumerate(outs):
                 chains.append(f"[s{i}]{o['vf']},setsar=1,format=yuv420p[o{i}]")
             rest = ["-filter_complex", ";".join(chains)]
             for i, o in enumerate(outs):
-                rest += ["-map", f"[o{i}]", "-an", "-c:v", "libx264", "-preset", "veryfast", "-crf", "18", "-g", "60",
+                rest += ["-map", f"[o{i}]", "-an", "-frames:v", str(nfr), "-c:v", "libx264", "-preset", "veryfast", "-crf", "18", "-g", "60",
                          "-pix_fmt", "yuv420p", "-f", "mp4", parts[o["ten"]]]
-            r = run_ffmpeg(["-ss", f"{ss:.3f}", "-t", f"{d:.3f}", "-i", f], rest)
+            r = run_ffmpeg(["-ss", f"{ss:.3f}", "-t", f"{d + 0.1:.3f}", "-i", f], rest)
             if r.returncode:
                 print("LỖI", ten, k, r.stderr.decode(errors="ignore")[-300:], flush=True)
                 failed.append((ten, k))

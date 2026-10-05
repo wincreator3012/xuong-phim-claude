@@ -121,7 +121,7 @@ python3 tools/dang-tai.py kiem "du-an/<tên>/dang-tai/<video>"
 
 Cổng kiểm: giới hạn YouTube (tiêu đề 100, mô tả 5000, thẻ 500, chương từ 0:00, tối thiểu ba chương, mỗi chương từ 10 giây, mốc khớp file chương của tool), từ khoá trong câu đầu, chức danh nguyên văn, ghi công nhạc CC-BY, câu hỏi mở ở cả mô tả lẫn status, từ ngữ phải viết đúng và gạch dài, emoji, Title Case, viết hoa toàn bộ, mồi tương tác và khung sợ hãi ("comment nếu", "tag bạn", "đừng bỏ lỡ", "bị bỏ lại"), link trong thân status, số hashtag, kích thước, tỉ lệ và dung lượng thumbnail. KHÔNG ĐẠT thì sửa `dang-tai.json` rồi chạy lại; không hạ ngưỡng, không sửa tay `DANG-TAI.md`.
 
-Báo người dùng trong cùng lượt với báo giao clip: đường dẫn `DANG-TAI.md`, ảnh ghép ba thumbnail (gửi vào cuộc trò chuyện), các mục "cần người dùng xem lại", và cách đăng gọn:
+Báo người dùng trong cùng lượt với báo giao clip: đường dẫn `DANG-TAI.md`, ảnh ghép ba thumbnail (gửi vào cuộc trò chuyện), các mục "cần người dùng xem lại", và cách đăng gọn (nhắc đăng bản riêng tư trước và đọc mục Bản quyền của YouTube Studio khi clip dùng nhạc không phải nhạc riêng của xưởng, nhất là short nhạc chạy suốt):
 
 - YouTube: tiêu đề 1 và `thumb-1.jpg` làm mặc định; bật "Thử nghiệm và so sánh" [Test & Compare] trên máy tính với `thumb-2.jpg`, `thumb-3.jpg` (tối đa ba, chạy tới hai tuần, YouTube chọn theo tỉ lệ thời gian xem; kết quả "như nhau" cũng là câu trả lời). Thử nghiệm không áp dụng cho Shorts.
 - Facebook: tải video thẳng lên, dán status, link ở bình luận đầu.
@@ -141,4 +141,4 @@ Báo người dùng trong cùng lượt với báo giao clip: đường dẫn `D
 - Người dùng chọn phương án, sửa chữ, hay chê một kiểu thumbnail: một dòng vào sổ tay góp ý của `phong-cach/PHONG-CACH.md`; lặp lần hai thì sửa mặc định (PHONG-CACH mục 8, `thumbnailDefaults` trong `Thumbnail.tsx`, mẫu trong `references/mau-dang-tai.md`).
 - Kết quả thử nghiệm A/B người dùng kể lại (phương án nào thắng, kiểu chữ nào): ghi vào `docs/BAI-HOC.md` chủ đề "Đăng tải" kèm tên clip; đủ nhiều thì chưng thành nguyên lý trong `references/nghien-cuu-thumbnail.md`.
 
-<!-- ban-nguon: phim-dang-tai 2026-10-05 ede2eb70 -->
+<!-- ban-nguon: phim-dang-tai 2026-10-05 cd3ee6f6 -->

@@ -140,7 +140,7 @@ def cmd_video(args):
     if os.path.isfile(mp0) and not args.khong_dong_bo:
         try:
             r = subprocess.run([sys.executable, os.path.join(os.path.dirname(os.path.abspath(__file__)), "do-dong-bo.py"),
-                                path, "--mau", "10"], capture_output=True, text=True, timeout=170)
+                                path, "--mau", "12", "--cua-so", "14"], capture_output=True, text=True, timeout=170)
             tong = [ln.strip() for ln in r.stdout.splitlines() if ln.strip().startswith("Tổng:")]
             kl = [ln.strip() for ln in r.stdout.splitlines() if ln.strip().startswith("ĐO ĐỒNG BỘ")]
             if r.returncode == 0:

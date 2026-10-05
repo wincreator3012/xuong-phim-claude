@@ -41,6 +41,7 @@ Schema đầy đủ của `timeline.json` nằm trong docstring đầu `tools/as
 - Track và `gainDb` theo từng track, từng chế độ (full khác bookends) trong `thu-vien/AM-THANH.md`; không dùng một khoảng cố định chung.
 - Bài giảng: `bookends`. Clip quảng bá, highlight: `full` + `duck` (sidechain, gainDb full có thể cao hơn trực giác); người dùng muốn nhạc êm không dập dồn thì `"duck": false`.
 - Không để nhạc nghe rõ giai điệu hơn lời. Track Kevin MacLeod kèm dòng ghi công CC-BY trong mô tả video.
+- **Ưu tiên nhạc riêng của xưởng** (nhóm A trong `thu-vien/AM-THANH.md`, soạn bằng `tools/soan-nhac.py`): nhạc tải về từ thư viện miễn phí có thể được đăng ký Content ID sau khi tải, nhãn trên trang nguồn không bảo đảm, và short dùng nhạc chạy suốt có thể bị chặn toàn cầu. `assemble.py` báo lỗi khi timeline dùng track trong `nhac-nen/CAM-DUNG.json`; track nào bị claim thì thêm vào đó rồi đổi `music` và dựng lại (cắt, phụ đề giữ nguyên).
 - Tiếng nền cảnh thật (`volumeDb`): khoảng -12 là điểm khởi đầu, nghe lại từng dự án rồi hạ hay nâng.
 
 ## Đồng bộ hình-tiếng: điều phải nhớ

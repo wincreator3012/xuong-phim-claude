@@ -18,7 +18,7 @@ Mỗi bước tự bỏ qua nếu đã xong. Bước tải model có thể cần
 
 Các bước:
   1. Kiểm công cụ hệ thống: ffmpeg/ffprobe (bắt buộc), python3, node (tuỳ chọn)
-  2. Thư viện Python vào tools/pylib (numpy, sherpa-onnx, onnxruntime, pillow, python-pptx)
+  2. Thư viện Python vào tools/pylib (numpy, scipy, sherpa-onnx, onnxruntime, pillow, python-pptx)
   3. Model nhận dạng giọng nói vào tools/models (silero VAD + Whisper), rồi hai model mốc lời cho
      Bàn dựng và Dựng bằng lời (zipformer tiếng Việt chép nguyên văn, omnilingual CTC căn mốc; Apache 2.0)
   4. Sinh khung/mask bố cục bài giảng có slide (do-hoa-chung/bo-cuc)
@@ -55,6 +55,7 @@ VAD_FILE = "silero_vad.onnx"
 
 PIP_PACKAGES = [
     ("numpy", "numpy"),
+    ("scipy", "scipy"),
     ("sherpa_onnx", "sherpa-onnx"),
     ("onnxruntime", "onnxruntime"),
     ("PIL", "pillow"),

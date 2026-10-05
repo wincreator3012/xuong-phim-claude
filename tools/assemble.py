@@ -788,6 +788,16 @@ class Assembler:
                     except Exception:
                         pass
         mus = self.tl.get("music") or {}
+        if mus.get("src"):
+            _cam = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "nhac-nen", "CAM-DUNG.json")
+            try:
+                _ds = json.load(open(_cam, encoding="utf-8")).get("cam", {}) if os.path.exists(_cam) else {}
+            except Exception:
+                _ds = {}
+            _bn = os.path.basename(mus["src"])
+            if _bn in _ds:
+                errs.append(f"nhạc nền {_bn} nằm trong danh sách cấm (nhac-nen/CAM-DUNG.json): {_ds[_bn]}. "
+                            "Đổi sang track nhóm A trong thu-vien/AM-THANH.md")
         if mus.get("src") and mus.get("mode") == "bookends":
             segs = self.tl.get("segments", [])
             roles = {s.get("role") for s in segs if s.get("type") == "insert"}
