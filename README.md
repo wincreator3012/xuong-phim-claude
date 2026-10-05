@@ -1,6 +1,6 @@
 # Xưởng phim Claude
 
-**Một xưởng dựng phim cùng AI ngay trên máy tính của bạn, dùng tốt nhất với Claude Cowork trên máy Mac chip Apple Silicon (mô hình Sonnet 5).** Đây là repo tôi đóng gói các quy trình làm việc, tiêu chuẩn và bộ skill chuyên dụng để dựng clip trình bày kiến thức bằng Claude Cowork, thích hợp cho chuyên gia, giảng viên và nhà chuyên môn.
+**Một xưởng dựng phim cùng AI ngay trên máy tính của bạn, dùng tốt nhất với Claude Cowork trên máy Mac chip Apple Silicon (với mô hình Claude mới nhất ở tầm trung như Sonnet là đủ, không cần dòng đỉnh cao như Opus).** Đây là repo tôi đóng gói các quy trình làm việc, tiêu chuẩn và bộ skill chuyên dụng để dựng clip trình bày kiến thức bằng Claude Cowork, thích hợp cho chuyên gia, giảng viên và nhà chuyên môn.
 
 Nguyên liệu bạn cần là clip quay mình nói trước máy (có thể kèm slide), hoặc nếu không thích lên hình thì chỉ cần thu âm giọng trình bày. Thả file nguồn vào đúng thư mục trong xưởng, nói yêu cầu bằng lời thường, Claude làm phần còn lại: gỡ băng, cắt gọn, chèn intro/outro và nhãn từ khoá, lồng nhạc đã kiểm định bản quyền, xuất bản ngang cho YouTube hoặc dọc cho Reels/Shorts, và tự kiểm chất lượng trước khi bàn giao.
 
@@ -83,7 +83,7 @@ Video của bạn được xử lý ngay trên máy bạn bằng ffmpeg trong m�
 
 ## Yêu cầu
 
-- App Claude trên máy tính với Cowork, dùng tốt nhất với mô hình Sonnet 5 (Mac Apple Silicon chạy êm nhất; máy ảo Cowork có sẵn ffmpeg, Python, Node)
+- App Claude trên máy tính với Cowork, chọn mô hình Claude mới nhất ở tầm trung như Sonnet là đủ dùng, không cần dòng đỉnh cao như Opus (Mac Apple Silicon chạy êm nhất; máy ảo Cowork có sẵn ffmpeg, Python, Node)
 - Windows dùng được, nhưng cần Claude rà soát kỹ hơn và tinh chỉnh, cài thêm vài thư viện tuỳ máy
 - Khoảng 3 GB trống cho model nhận dạng giọng nói và thư viện (thêm khoảng 2 GB nếu muốn dùng large-v3 trên Mac)
 - Mạng lúc cài và lần đầu gỡ băng trên Mac; sau đó gỡ băng và dựng đều chạy offline
