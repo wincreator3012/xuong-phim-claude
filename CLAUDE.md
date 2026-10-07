@@ -2,6 +2,8 @@
 
 Đây là **xưởng dựng clip trình bày kiến thức** cho chuyên gia, giảng viên, nhà chuyên môn: người dùng thả video quay thô (và slide, nếu có) vào một thư mục, nói yêu cầu bằng lời thường; Claude làm toàn bộ phần kỹ thuật (gỡ băng, cắt, đồ họa, nhạc, xuất, nghiệm thu) bằng bộ công cụ trong repo này. Người dùng thường mới dùng AI, không biết ffmpeg hay Remotion là gì, và không cần biết.
 
+Repo chỉ chứa NĂNG LỰC (công cụ, studio, skill, tài liệu, phong cách, thương hiệu). Dự án và thành phẩm nằm NGOÀI repo, cạnh nó trong một thư mục mẹ (mặc định `Xuong phim AI/`): `Du an/<YYYY-MM tên>/` (tạo bằng `python3 tools/du-an-moi.py "<tên>"`; người dùng thả video vào `nguon/`), `Thanh pham/<YYYY-MM tên dự án>/`, việc tạm ở `Du an/_tam/` (đường dẫn trong `cau-hinh.json`, đọc qua `tools/cau_hinh.py`). Trong lệnh chạy từ gốc repo, dự án viết `"../Du an/<x>"`. Cần thư mục mẹ được kết nối để thấy cả ba; chỉ thấy repo thì nhờ người dùng thêm thư mục mẹ. Máy còn `du-an/` kiểu cũ trong repo: công cụ vẫn đọc được; đề nghị dời theo `HUONG-DAN.md` mục "Cập nhật xưởng", không bao giờ xoá.
+
 ## Tinh thần làm việc
 
 Xưởng làm việc bằng nguyên lý, không bằng khuôn. Mọi quyết định sáng tạo (cắt ở đâu, hình gì, đặt đâu, nhịp nào, nhạc nào, mở và kết ra sao) bắt đầu từ trải nghiệm của người xem: ở giây này họ thấy, nghe, cảm gì, cần gì để hiểu và ở lại. Giá trị mặc định trong skill, `phong-cach/PHONG-CACH.md` và `docs/BAI-HOC.md` là điểm xuất phát đã kiểm chứng, không phải đáp án; clip nào cần khác thì ứng biến, nói rõ lý do trong phương án trình người dùng và hỏi ở chốt duyệt khi lựa chọn đó đáng để họ quyết. Chỉ các bất biến kỹ thuật và giá trị (quy tắc cứng bên dưới) là giữ tuyệt đối. Chi tiết: `skills/_chung/van-hanh.md` mục "Nguyên lý trước khuôn mẫu".
@@ -40,7 +42,7 @@ Xưởng làm việc bằng nguyên lý, không bằng khuôn. Mọi quyết đ�
 - Hỏi ít, mỗi lượt tối đa 4 câu, luôn có mặc định lấy từ PHONG-CACH.md. Hai chốt duyệt cố định: phương án cắt và overlay (trước khi dựng), bản nháp 480p (trước bản chính). Phim tài liệu phỏng vấn có thêm hai chốt trên giấy: Kế hoạch ghi hình (trước khi quay) và kịch bản thực tế có ước tính thời lượng (trước khi dựng). Người dùng vắng mặt: chọn mặc định, ghi rõ giả định, làm tiếp
 - Người dùng mới hoặc hỏi "xưởng làm được gì": giới thiệu có hệ thống theo `skills/phim-thiet-lap/references/gioi-thieu-xuong.md` (sáu chặng, mỗi lượt một chặng, kết bằng một câu hỏi), cá nhân hoá theo `PHONG-CACH.md`; chỉ nói điều xưởng thật sự có và nói thẳng điều chưa làm được. Cách dùng hiệu quả nhất nằm ở `HUONG-DAN.md`
 - Báo tiến độ ngắn khi việc chạy lâu (gỡ băng bài dài, xuất bản chính), nói rõ đang chờ máy chứ không phải chờ người dùng
-- Kết mỗi dự án bằng: file nằm ở `du-an/<tên>/xuat-hoan-chinh/`, thời lượng, dung lượng, dòng ghi công nhạc (nếu dùng track CC-BY), và câu "nghiệm thu máy: ĐẠT"; rồi làm luôn gói đăng tải (skill phim-dang-tai) mà không chờ người dùng nhắc
+- Kết mỗi dự án bằng: thư mục clip trong `Thanh pham/<YYYY-MM tên dự án>/` (video, kết quả nghiệm thu, gói đăng tải), thời lượng, dung lượng, dòng ghi công nhạc (nếu dùng track CC-BY), và câu "nghiệm thu máy: ĐẠT"; rồi làm luôn gói đăng tải (skill phim-dang-tai) mà không chờ người dùng nhắc
 
 ## Quy tắc cứng
 
@@ -54,7 +56,8 @@ Xưởng làm việc bằng nguyên lý, không bằng khuôn. Mọi quyết đ�
 8. Footage của người dùng không rời máy họ, trừ vài khung hình để xem khi cần
 9. Timeline có trường `_chinhTay` là timeline người dùng đã tự chỉnh trên Bàn dựng: đó là nguồn sự thật. Không sinh lại nó từ kế hoạch, kịch bản hay phương án cũ; mọi sửa của Claude làm thẳng trên file và giữ nguyên chỉnh tay. Bàn dựng không thay hai chốt duyệt và cổng nghiệm thu
 10. Không lớp phủ nào (chữ, pill, bảng tên, slide thẻ) được che mặt BẤT KỲ AI trong khung, kể cả người ngồi hoặc đứng phía sau người nói. Chọn kiểu hiện không chồng lên cảnh quay (`ca-hai`, `mat`, vùng khung trống) hoặc bỏ lớp phủ; nghiệm thu bằng cách nhìn khung thật tại mọi mốc có lớp phủ
+11. Repo sạch: không tạo dự án, nháp, việc tạm, bản sao lưu hay file nén trong repo; ghi vào `Du an/<dự án>/`, `Du an/_tam/`, `Thanh pham/`. Đầu và cuối phiên chạy `python3 tools/kiem-sach.py`; cuối phiên phải ĐẠT (còn nháp lạc thì xin quyền xoá rồi `--xoa`; `du-an/` kiểu cũ thì dời, không xoá). Nháp và proxy của một dự án chỉ dọn sau khi người dùng nói "duyệt".
 
 ## Kiểm nhanh trạng thái xưởng
 
-`python3 tools/cai-dat.py --trang-thai` (máy người dùng). Chưa cài hoặc chưa giới thiệu xưởng → phim-thiet-lap. Sau khi sửa bất kỳ tool nào → `python3 tools/kiem-tra-xuong.py --co-slide` phải ĐẠT.
+`python3 tools/cai-dat.py --trang-thai` (máy người dùng), `python3 tools/kiem-sach.py` (repo sạch). Chưa cài hoặc chưa giới thiệu xưởng → phim-thiet-lap. Sau khi sửa bất kỳ tool nào → `python3 tools/kiem-tra-xuong.py --co-slide` phải ĐẠT.

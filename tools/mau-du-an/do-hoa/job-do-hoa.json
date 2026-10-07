@@ -1,7 +1,7 @@
 {
   "aspect": "ngang",
   "theme": "light",
-  "brandFile": "../../../brand/brand.json",
+  "brandFile": "@xuong/brand/brand.json",
   "outDir": "ngang",
   "assets": [],
   "jobs": [

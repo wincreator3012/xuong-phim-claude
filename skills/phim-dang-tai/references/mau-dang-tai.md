@@ -7,9 +7,9 @@ Tệp để chép ra khi soạn gói đăng tải (skill phim-dang-tai). Khuôn 
 ```json
 {
  "ten": "<tên hiển thị của clip>",
- "video": "du-an/<tên>/xuat-hoan-chinh/<video>.mp4",
+ "video": "../Du an/<tên>/xuat-hoan-chinh/<video>.mp4",
  "tu_khoa": ["<cụm từ khoá chính>", "<cụm thứ hai nếu có>"],
- "chuong_file": "du-an/<tên>/xuat-hoan-chinh/<video>.chuong.txt",
+ "chuong_file": "../Du an/<tên>/xuat-hoan-chinh/<video>.chuong.txt",
  "chuc_danh": ["<chức danh nguyên văn người 1, đúng như trong mô tả>"],
  "chuc_danh_fb": [],
  "nhac_ccby": null,
@@ -32,7 +32,7 @@ Tệp để chép ra khi soạn gói đăng tải (skill phim-dang-tai). Khuôn 
 ```
 
 - `tu_khoa`: cổng máy đòi ít nhất một cụm nằm trong câu đầu của mô tả; nhắc nếu không nằm trong 70 ký tự đầu của tiêu đề.
-- `chuong_file`: có thì cổng máy đòi các mốc trong mô tả khớp từng dòng với tệp này (mốc phải lấy từ tool). Clip không có chương thì bỏ trường này.
+- `chuong_file`: có thì cổng máy đòi các mốc trong mô tả khớp từng dòng với tệp này (mốc phải lấy từ tool). Clip không có chương thì bỏ trường này. `video` và `chuong_file` tính tương đối với thư mục gói trước, rồi tới gốc repo; khi gói vào `Thanh pham/` thì đổi thành `../<video>.mp4`, `../<video>.chuong.txt` để thư mục clip tự đủ.
 - `chuc_danh`: mỗi chuỗi phải có nguyên văn trong mô tả (lấy từ `phong-cach/PHONG-CACH.md` mục 1 hoặc bảng nhân vật của dự án). `chuc_danh_fb` tương tự cho status (thường để trống: status là giọng người dùng).
 - `nhac_ccby`: dòng ghi công nhạc nguyên văn (mẫu trong `thu-vien/AM-THANH.md`) khi dùng track CC-BY; `null` khi nhạc không cần ghi công.
 - Clip chỉ đăng Facebook, Reels: bỏ khối `youtube`. Clip chỉ đăng YouTube: bỏ khối `facebook`.

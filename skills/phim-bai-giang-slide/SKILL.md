@@ -25,10 +25,10 @@ Nhịp: đổi tại điểm ngắt hơi (`snap: true`), mỗi trạng thái t�
 
 ## Bước 1 - nhập slide
 
-Slide user để trong `du-an/<tên>/nguon/` (PPTX, PDF, thư mục ảnh, hoặc video quay màn hình; Keynote thì nhờ user xuất PDF/PPTX). Chạy:
+Slide user để trong `Du an/<tên>/nguon/` (PPTX, PDF, thư mục ảnh, hoặc video quay màn hình; Keynote thì nhờ user xuất PDF/PPTX). Chạy:
 
 ```
-python3 tools/slide-nguon.py "du-an/<tên>/nguon/<slide>" --project "du-an/<tên>"
+python3 tools/slide-nguon.py "../Du an/<tên>/nguon/<slide>" --project "../Du an/<tên>"
 ```
 
 Ra `slide/slide-NN.png` (tối đa 1920 ngang) và `slide/slide.json` (chữ, ghi chú diễn giả, số từ, mốc `ts` nếu từ quay màn hình). Môi trường: PPTX cần LibreOffice (soffice), PDF cần poppler (pdftoppm) - VM Cowork đã có cả hai (kiểm 2026-09-05), sandbox đám mây cũng có; máy khác kiểm `which soffice pdftoppm` trước, thiếu thì chạy bước này ở đám mây rồi commit `slide/` về máy. Bộ ảnh và quay màn hình chạy ở đâu cũng được. Slide không có chữ (ảnh, quay màn hình): stage vài ảnh lên và ĐỌC để biết nội dung từng slide trước khi khớp.
@@ -38,7 +38,7 @@ Ra `slide/slide-NN.png` (tối đa 1920 ngang) và `slide/slide.json` (chữ, gh
 Cần transcript đã qua `nghiem-thu.py transcript`. Chạy:
 
 ```
-python3 tools/slide-khop.py "du-an/<tên>" --clip "<tên file nguồn không đuôi>" [--lech <giây>] [--bo-qua 1,2]
+python3 tools/slide-khop.py "../Du an/<tên>" --clip "<tên file nguồn không đuôi>" [--lech <giây>] [--bo-qua 1,2]
 ```
 
 - Không có mốc quay màn hình: khớp bằng quy hoạch động đơn điệu trên từ khoá (chữ slide + ghi chú vs câu transcript; cụm hai từ nặng hơn từ đơn; có "khoảng trống" để lời dẫn không bị nuốt vào slide). Slide tin cậy < 0.35 phải đọc transcript tự xác nhận.
@@ -51,7 +51,7 @@ Ra `slide/DAN-HINH.md` (bảng: mốc nguồn, slide, bố cục đề xuất, t
 
 Chép segments từ `timeline-slide-nhap.json` vào `timeline.json` sau khi chỉnh theo bảng đã duyệt; kiểm đuôi file nguồn (.mp4/.MP4/.MOV). Mỗi segment thêm `"layout"` và `"slide": "slide/slide-NN.png"` (bắt buộc khi layout khác `mat`), tùy chọn `"slideZoom"`; cấp cao nhất `"theme": "light"|"dark"` chọn nền khung. Overlay pill, fade, chapter, B-roll dùng như thường (B-roll bỏ qua layout trong quãng của nó). Intro/outro từ preset như mọi dự án; hook-trước-intro áp dụng như phim-dung-bai.
 
-Kiểm rồi dựng: `python3 tools/assemble.py --project "du-an/<tên>" --kiem-tra` (bắt layout sai, thiếu slide, slideZoom sai, thiếu bo-cuc) → `--preview --out "<tên>-ngang-nhap1"` (mỗi vòng nháp tăng số) → duyệt → bản chính `--out "<tên>-ngang"`. Bố cục ghép ở 1920x1080 rồi thu về preview nên bản nháp phản ánh đúng tỉ lệ. Thiếu `do-hoa-chung/bo-cuc/`: chạy `python3 tools/bo-cuc-slide.py`.
+Kiểm rồi dựng: `python3 tools/assemble.py --project "../Du an/<tên>" --kiem-tra` (bắt layout sai, thiếu slide, slideZoom sai, thiếu bo-cuc) → `--preview --out "<tên>-ngang-nhap1"` (mỗi vòng nháp tăng số) → duyệt → bản chính `--out "<tên>-ngang"`. Bố cục ghép ở 1920x1080 rồi thu về preview nên bản nháp phản ánh đúng tỉ lệ. Thiếu `do-hoa-chung/bo-cuc/`: chạy `python3 tools/bo-cuc-slide.py`.
 
 ## Bước 4 - nghiệm thu
 
@@ -72,4 +72,4 @@ Báo kết quả kèm số quãng theo từng bố cục (ví dụ "mặt 40%, s
 - Khi user quay mặt và màn hình riêng, nhắc bắt đầu cả hai bằng một tín hiệu chung để đo `--lech`
 - Sửa skill này theo `skills/_chung/bao-tri-skill.md`; bài học mới vào `docs/BAI-HOC.md`
 
-<!-- ban-nguon: phim-bai-giang-slide 2026-10-05 1c647d7a -->
+<!-- ban-nguon: phim-bai-giang-slide 2026-10-07 8643dfe0 -->

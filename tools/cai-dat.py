@@ -22,7 +22,7 @@ Các bước:
   3. Model nhận dạng giọng nói vào tools/models (silero VAD + Whisper), rồi hai model mốc lời cho
      Bàn dựng và Dựng bằng lời (zipformer tiếng Việt chép nguyên văn, omnilingual CTC căn mốc; Apache 2.0)
   4. Sinh khung/mask bố cục bài giảng có slide (do-hoa-chung/bo-cuc)
-  5. Tạo thư mục thư viện và dự án
+  5. Tạo thư mục thư viện (trong repo) và hai thư mục Du an/, Thanh pham/ cạnh repo (tools/cau_hinh.py)
   6. Dựng thử một dự án tổng hợp nhỏ qua cổng nghiệm thu (tools/kiem-tra-xuong.py)
 """
 import argparse
@@ -363,9 +363,16 @@ def b5_thu_muc():
         os.makedirs(os.path.join(ROOT, "nhac-nen", n), exist_ok=True)
     for n in NHOM_SFX:
         os.makedirs(os.path.join(ROOT, "hieu-ung", n), exist_ok=True)
-    os.makedirs(os.path.join(ROOT, "du-an"), exist_ok=True)
     os.makedirs(os.path.join(ROOT, "brand", "logo"), exist_ok=True)
-    ok("nhac-nen/<nhóm>, hieu-ung/<nhóm>, du-an/, brand/logo/")
+    ok("nhac-nen/<nhóm>, hieu-ung/<nhóm>, brand/logo/")
+    sys.path.insert(0, TOOLS)
+    import cau_hinh as CH
+    if os.path.isdir(os.path.join(ROOT, "du-an")):
+        canh_bao("còn thư mục du-an/ kiểu cũ trong repo: nhờ Claude dời từng dự án sang thư mục Du an cạnh repo (xem HUONG-DAN.md mục Cập nhật xưởng)")
+    else:
+        for d in (CH.du_an(), CH.thanh_pham(), CH.tam(tao=False)):
+            os.makedirs(d, exist_ok=True)
+        ok(f"dự án: {CH.du_an()}; thành phẩm: {CH.thanh_pham()} (nằm cạnh repo, không lên git)")
     nhac = [f for n in NHOM_NHAC for f in os.listdir(os.path.join(ROOT, "nhac-nen", n))
             if f.lower().endswith((".mp3", ".wav", ".m4a", ".flac"))]
     if nhac:

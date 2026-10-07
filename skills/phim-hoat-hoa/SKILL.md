@@ -95,8 +95,8 @@ Một bài nói 10 phút không thể vẽ 150 cảnh riêng mà vẫn đẹp v�
 
 ## Chọn nhánh kỹ thuật (Phần 5)
 
-- **Nhánh A - Canvas HTML tự chứa**: làm nhanh một phim độc lập, chia sẻ bộ lệnh cho người khác dán vào claude.ai, dạy trong khoá học, hoặc cần một file HTML xem trực tiếp. File ở `du-an/<tên>/canvas/index.html`, MP4 xuất ra `du-an/<tên>/nguon/` để đi tiếp qua `assemble.py` nếu cần outro hoặc nhạc thư viện.
-- **Nhánh B - Remotion trong xưởng** (mặc định khi phim thuộc một dự án của xưởng): cần bản ngang lẫn dọc, tái dùng brand, từ điển, thư viện âm thanh, intro, outro, cổng nghiệm thu. Component ở `studio/src/hoat-hoa/<slug>/`, composition `HoatHoa-<slug>-ngang`/`-doc`; bảng cảnh `du-an/<tên>/BANG-CANH.json` là nguồn chân lý duy nhất cho thời lượng. Có voice thì làm nền như infomotion (`nguon/nen-<khung>.mp4`), phim render câm, toàn khung, theo chương, ghép bằng `broll` trên segment cắt từ nền, nên hình và tiếng không thể trôi nhau.
+- **Nhánh A - Canvas HTML tự chứa**: làm nhanh một phim độc lập, chia sẻ bộ lệnh cho người khác dán vào claude.ai, dạy trong khoá học, hoặc cần một file HTML xem trực tiếp. File ở `Du an/<tên>/canvas/index.html`, MP4 xuất ra `Du an/<tên>/nguon/` để đi tiếp qua `assemble.py` nếu cần outro hoặc nhạc thư viện.
+- **Nhánh B - Remotion trong xưởng** (mặc định khi phim thuộc một dự án của xưởng): cần bản ngang lẫn dọc, tái dùng brand, từ điển, thư viện âm thanh, intro, outro, cổng nghiệm thu. Component ở `studio/src/hoat-hoa/<slug>/`, composition `HoatHoa-<slug>-ngang`/`-doc`; bảng cảnh `Du an/<tên>/BANG-CANH.json` là nguồn chân lý duy nhất cho thời lượng. Có voice thì làm nền như infomotion (`nguon/nen-<khung>.mp4`), phim render câm, toàn khung, theo chương, ghép bằng `broll` trên segment cắt từ nền, nên hình và tiếng không thể trôi nhau.
 
 Đặc tả đầy đủ (bộ vẽ, tất định, hiệu năng, xuất MP4 bằng Playwright, ánh xạ nguyên lý sang Remotion): `nhanh-ky-thuat.md`. Clip 10 phút ở 30 fps là 18.000 khung: ưu tiên SVG nhẹ, cache lớp nặng, render nháp 720p để duyệt nhịp trước khi render 1080p.
 
@@ -111,7 +111,7 @@ Khi người dùng muốn một bộ lệnh để tự dán vào claude.ai, chia
 1. Hỏi một lượt (Bước 1 của lối vào tương ứng), làm các bước bản chữ (bản tự sự hoặc kịch bản hình tượng hoá, rồi bảng cảnh).
 2. Soạn bộ lệnh theo `mau-bo-lenh.md`, điền đủ biến số; phần hằng số giữ nguyên. Lối vào 1: dùng biến thể [2B] và dặn người dùng đính kèm file voice cùng transcript có mốc thời gian.
 3. Tự soát bằng `checklist.md` mục "Bộ lệnh".
-4. Giao file `BO-LENH-<slug>.md` (trong xưởng: `du-an/<tên>/`). Kèm lệnh phụ nếu người dùng cần: bản dọc 9:16, bản vuông trình diễn bộ lệnh (nửa trên phim, nửa dưới chữ bộ lệnh chạy lên), bài đăng giới thiệu (theo quy ước ngôn ngữ của người dùng, kết bằng câu hỏi mở, không hook viết hoa kiểu con số giật gân).
+4. Giao file `BO-LENH-<slug>.md` (trong xưởng: `Du an/<tên>/`). Kèm lệnh phụ nếu người dùng cần: bản dọc 9:16, bản vuông trình diễn bộ lệnh (nửa trên phim, nửa dưới chữ bộ lệnh chạy lên), bài đăng giới thiệu (theo quy ước ngôn ngữ của người dùng, kết bằng câu hỏi mở, không hook viết hoa kiểu con số giật gân).
 
 ### Chế độ DỰNG - lối vào 1: từ giọng nói
 
@@ -171,4 +171,4 @@ Sau mỗi chặng: contact sheet (2 khung mỗi cảnh, ghép một lưới), t�
 - Hình vẽ bằng code; không dùng ảnh hay hình do AI tạo. Giọng tổng hợp chỉ khi người dùng yêu cầu.
 - Nghiệm thu máy và soát bằng mắt là bắt buộc trước khi báo "xong".
 
-<!-- ban-nguon: phim-hoat-hoa 2026-09-30 9a70b073 -->
+<!-- ban-nguon: phim-hoat-hoa 2026-10-07 532c8ebf -->

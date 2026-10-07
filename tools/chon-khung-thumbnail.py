@@ -5,8 +5,8 @@
 bảng ứng viên, đề xuất, anh duyệt).
 
 Cách dùng (từ gốc xưởng, sau khi video đã vào xuat-hoan-chinh/ cùng <video>.map.json):
-  python3 tools/chon-khung-thumbnail.py --map "du-an/<x>/xuat-hoan-chinh/<video>.map.json" \\
-      [--ra "du-an/<x>/dang-tai/<video>/khung"] [--nguon goc|thanh-pham] [--buoc 3] [--so 12] \\
+  python3 tools/chon-khung-thumbnail.py --map "../Du an/<x>/xuat-hoan-chinh/<video>.map.json" \\
+      [--ra "../Du an/<x>/dang-tai/<video>/khung"] [--nguon goc|thanh-pham] [--buoc 3] [--so 12] \\
       [--gioi-han 160]
 
   --nguon goc (mặc định): lấy khung từ FILE NGUỒN của từng đoạn cắt (không dính pill, bảng tên, phụ đề;

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Tóm tắt thông số media của các file trong một thư mục (hoặc một file).
 
-Cách dùng: python3 tools/mediainfo.py "du-an/x/nguon"
+Cách dùng: python3 tools/mediainfo.py "../Du an/x/nguon"
 """
 import json
 import os

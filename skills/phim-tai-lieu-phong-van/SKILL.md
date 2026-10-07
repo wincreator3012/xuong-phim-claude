@@ -18,7 +18,7 @@ Bốn nguyên tắc xuyên suốt:
 
 ## Bối cảnh riêng của xưởng "xuong-phim-claude"
 
-- Mẫu cấu trúc thư mục dự án: `du-an/_mau/tai-lieu-phong-van/`; bài học từ dự án thật đã chưng cất ở `ke-chuyen-phong-van.md` mục 6. Gặp tình huống lạ thì đọc mục đó trước khi nghĩ cách mới.
+- Mẫu cấu trúc thư mục dự án: `tools/mau-du-an/tai-lieu-phong-van/`; bài học từ dự án thật đã chưng cất ở `ke-chuyen-phong-van.md` mục 6. Gặp tình huống lạ thì đọc mục đó trước khi nghĩ cách mới.
 - Người dùng thường là một phần của đội dự án được làm phim. Hỏi sớm (Bước 1.1 hoặc 2.3) người dùng có muốn xuất hiện trong phim không; mặc định là không, để phim thuộc về nhân vật và người thụ hưởng. Nếu có, chức danh theo `phong-cach/PHONG-CACH.md` mục 1.
 - Logo các bên thả vào `brand/logo/` và truyền qua props `logos` của preset intro, outro (hàng 1-3 logo).
 - Cách kết mặc định: một câu tầm nhìn của nhân vật rồi một câu hỏi mở thật cho người xem, không lời kêu gọi tài trợ trực tiếp.
@@ -31,7 +31,7 @@ Bốn nguyên tắc xuyên suốt:
 ## Cấu trúc dự án
 
 ```
-du-an/<tên phim>/
+Du an/<tên phim>/
   HO-SO-PHIM.md            nguồn sự thật giữa các phiên: bối cảnh, mục tiêu, khán giả, độ dài,
                            thông điệp lõi, tên phim tạm, điều không nói/không hiện, quyết định đã chốt,
                            trạng thái tiến độ
@@ -56,7 +56,7 @@ User đã tự sắp thư mục theo cách khác (ví dụ "Lấy voice" / "Khô
 
 ### Bước 1.1 - Nhận đầu vào, tạo hồ sơ
 
-Đọc hết những gì user đưa. Hỏi MỘT lượt, tối đa bốn câu, chỉ những gì tài liệu không trả lời: (1) phim làm cho ai xem trước nhất và để họ làm gì sau khi xem; (2) độ dài và nơi phát; (3) ngày quay, thời gian với từng người, có máy thứ hai không; (4) điều không được nói hay hiện, và ai duyệt bản cuối. Không có câu trả lời thì mặc định bản đầy đủ 5-6 phút cho nhà tài trợ và đối tác, bản gọn 60-90 giây làm sau, ghi rõ là giả định. Tạo `du-an/<tên>/` và viết `HO-SO-PHIM.md` theo mẫu.
+Đọc hết những gì user đưa. Hỏi MỘT lượt, tối đa bốn câu, chỉ những gì tài liệu không trả lời: (1) phim làm cho ai xem trước nhất và để họ làm gì sau khi xem; (2) độ dài và nơi phát; (3) ngày quay, thời gian với từng người, có máy thứ hai không; (4) điều không được nói hay hiện, và ai duyệt bản cuối. Không có câu trả lời thì mặc định bản đầy đủ 5-6 phút cho nhà tài trợ và đối tác, bản gọn 60-90 giây làm sau, ghi rõ là giả định. Tạo `Du an/<tên>/` và viết `HO-SO-PHIM.md` theo mẫu.
 
 ### Bước 1.2 - Định hướng kịch bản
 
@@ -109,7 +109,7 @@ Nguyên tắc thể loại đã kiểm chứng (lý do và dự án gốc: `ke-c
 
 **Cổng kiểm chứng.** Mỗi dòng có đồ họa mang dữ kiện ghi nguồn vào cột "Kiểm chứng": tài liệu của tổ chức (tên file, trang), trang web chính thức, văn bản ký kết, chức danh nguyên văn trong bảng nhân vật hoặc `phong-cach/PHONG-CACH.md`, hoặc người có thẩm quyền đã xác nhận (ai, ngày nào). Dữ kiện công khai thì tra web và ghi đường dẫn; không tìm ra thì ghi "chưa kiểm được", không để trống. Callout biên tập (overlay không có câu nói tương ứng) cũng phải có nguồn. Dữ kiện chưa kiểm được hoặc lệch nguồn không lên đồ họa; đưa vào danh sách quyết định kèm bằng chứng và ba cách: (1) nhờ tổ chức hoặc nhân vật xác nhận rồi mới hiện; (2) giữ lời nguyên văn, đồ họa không lặp dữ kiện; (3) bỏ câu, thay bằng một bite khác cùng ý. Không tự chọn thay user.
 
-Cuối kịch bản bắt buộc có: **tổng thời lượng ước tính** theo hồi do `python3 tools/uoc-luong.py "du-an/<x>/KICH-BAN-THUC-TE.md"` cộng (không cộng tay); vượt mục tiêu quá 30% thì đề xuất ngay hai phương án (bản đầy đủ và bản gọn, ghi rõ bỏ bite nào) để user chọn TRƯỚC khi dựng; **danh sách quyết định cần user** (tên phim, dữ kiện chưa kiểm được, người tổ chức hay người quay có xuất hiện không, overlay không có câu nói tương ứng đặt ở đâu vì sao, cụm nhạy đã cắt); **cảnh trám còn thiếu** và cách bù (quay bổ sung theo mô tả Bước 1.4, ảnh tĩnh có nguồn qua phim-tu-lieu, đồ họa).
+Cuối kịch bản bắt buộc có: **tổng thời lượng ước tính** theo hồi do `python3 tools/uoc-luong.py "../Du an/<x>/KICH-BAN-THUC-TE.md"` cộng (không cộng tay); vượt mục tiêu quá 30% thì đề xuất ngay hai phương án (bản đầy đủ và bản gọn, ghi rõ bỏ bite nào) để user chọn TRƯỚC khi dựng; **danh sách quyết định cần user** (tên phim, dữ kiện chưa kiểm được, người tổ chức hay người quay có xuất hiện không, overlay không có câu nói tương ứng đặt ở đâu vì sao, cụm nhạy đã cắt); **cảnh trám còn thiếu** và cách bù (quay bổ sung theo mô tả Bước 1.4, ảnh tĩnh có nguồn qua phim-tu-lieu, đồ họa).
 
 ### Cổng duyệt 2 - Kịch bản thực tế
 
@@ -151,4 +151,4 @@ Nguyên tắc chung ở `_chung/van-hanh.md`. Riêng thể loại này:
 
 Dự án này luôn kéo qua nhiều phiên. Trước khi dừng, `HO-SO-PHIM.md` phải nói được: đang ở bước nào, chờ ai, quyết định nào đã chốt, nháp mới nhất tên gì. Phiên sau đọc file đó trước, không hỏi lại điều đã chốt.
 
-<!-- ban-nguon: phim-tai-lieu-phong-van 2026-09-30 40209987 -->
+<!-- ban-nguon: phim-tai-lieu-phong-van 2026-10-07 95203654 -->

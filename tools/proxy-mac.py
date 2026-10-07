@@ -10,7 +10,7 @@ Cách dùng:  python3 tools/proxy-mac.py <job.json>
 
 job.json:
   {"loai": "proxy", "tu": 440.0, "den": 3130.0, "chunk": 60, "workers": 3, "ra": "<thư mục tuyệt đối>",
-   "du_an": "du-an/<x>",   (tương đối so với gốc xưởng, để ghi PROXY.json)
+   "du_an": "../Du an/<x>",   (tương đối so với gốc xưởng, để ghi PROXY.json)
    "goc": [{"ten": "chinh", "loai": "can",
             "files": [{"file": "<tuyệt đối>", "offset": -210.059, "dur": 1797.796}, ...],
             "ra": [{"ten": "chinh", "vf": "scale=1920:1080"},                      (tuỳ chọn: nhiều đầu ra từ MỘT lần giải mã,

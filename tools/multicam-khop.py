@@ -3,14 +3,14 @@
 """ĐỒNG BỘ MULTICAM bằng đối chiếu âm thanh: đặt mọi file của mọi góc lên MỘT trục thời gian chung.
 
 Cách dùng (từ gốc "xuong-phim-claude"):
-  python3 tools/multicam-khop.py "du-an/<x>" [--chu toan] [--cau-hinh multicam.json]
+  python3 tools/multicam-khop.py "../Du an/<x>" [--chu toan] [--cau-hinh multicam.json]
 
-Cấu trúc nguồn đề nghị: du-an/<x>/nguon/<tên góc>/<các file quay của góc đó>
+Cấu trúc nguồn đề nghị: Du an/<x>/nguon/<tên góc>/<các file quay của góc đó>
   nguon/toan/A001.MP4            ← góc toàn (chạy liên tục là tốt nhất: làm trục chuẩn)
   nguon/an/IMG_1.MOV, IMG_2.MOV   ← góc cận người thứ nhất (máy tự tách file vẫn được)
   nguon/khach/C001.MP4           ← góc cận khách
   nguon/tieng/recorder.wav       ← (tuỳ chọn) file tiếng riêng, không có hình
-Hoặc tự soạn du-an/<x>/multicam.json {"goc": [{"ten": "toan", "files": [...], "nguoi": null,
+Hoặc tự soạn Du an/<x>/multicam.json {"goc": [{"ten": "toan", "files": [...], "nguoi": null,
   "loai": "toan|can|tieng"}, ...]} rồi truyền --cau-hinh.
 
 Thuật toán: rút tiếng mỗi file về 8 kHz mono (ffmpeg), tính đường bao năng lượng log
@@ -20,7 +20,7 @@ file và đường bao của trục chuẩn → lệch thô 10 ms; tinh lại qu
 đường thẳng (ppm). Đường bao (không phải sóng thô) chịu được tạp âm phòng, mic khác nhau,
 khoảng cách khác nhau. Tin cậy = đỉnh/đỉnh phụ (cách > 1 s) và r = Pearson đường bao tại lag; đỉnh/phụ < 1.1 hay r < 0.2 là nghi ngờ (r thật với lời nói cùng phòng thường 0.4-0.8).
 
-Kết quả: du-an/<x>/multicam.json (bổ sung/ghi mới) với từng file: offset (giây, mốc bắt đầu
+Kết quả: Du an/<x>/multicam.json (bổ sung/ghi mới) với từng file: offset (giây, mốc bắt đầu
 file trên trục chung), dur, drift_ppm, tin_cay, snr_db; góc nào phủ đoạn nào; đề xuất track
 tiếng chủ (SNR cao nhất). Mọi mốc trong timeline multicam sau đó dùng trục chung này.
 """

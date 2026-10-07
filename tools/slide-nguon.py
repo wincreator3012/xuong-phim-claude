@@ -5,12 +5,12 @@
 (slide-khop.py) và bước dựng (assemble.py) dùng.
 
 Cách dùng (từ gốc "xuong-phim-claude"):
-  python3 tools/slide-nguon.py "du-an/<x>/nguon/bai-giang.pptx"  --project "du-an/<x>"
-  python3 tools/slide-nguon.py "du-an/<x>/nguon/bai-giang.pdf"   --project "du-an/<x>"
-  python3 tools/slide-nguon.py "du-an/<x>/nguon/slide-anh/"       --project "du-an/<x>"
-  python3 tools/slide-nguon.py "du-an/<x>/nguon/man-hinh.mp4"    --project "du-an/<x>" [--nguong 1.5]
+  python3 tools/slide-nguon.py "../Du an/<x>/nguon/bai-giang.pptx"  --project "../Du an/<x>"
+  python3 tools/slide-nguon.py "../Du an/<x>/nguon/bai-giang.pdf"   --project "../Du an/<x>"
+  python3 tools/slide-nguon.py "../Du an/<x>/nguon/slide-anh/"       --project "../Du an/<x>"
+  python3 tools/slide-nguon.py "../Du an/<x>/nguon/man-hinh.mp4"    --project "../Du an/<x>" [--nguong 1.5]
 
-Kết quả: du-an/<x>/slide/slide-01.png … + du-an/<x>/slide/slide.json
+Kết quả: Du an/<x>/slide/slide-01.png … + Du an/<x>/slide/slide.json
   {"nguon": "...", "loai": "pptx|pdf|anh|man-hinh",
    "slides": [{"n": 1, "file": "slide-01.png", "text": "...", "notes": "...",
                "so_tu": 23, "ts": 12.4 (chỉ khi từ quay màn hình)}]}

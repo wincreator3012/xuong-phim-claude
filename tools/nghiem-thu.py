@@ -8,12 +8,12 @@ Nguyên tắc: máy đo những gì mắt không thấy; mắt (Claude, rồi us
 những gì máy không đo được. KHÔNG ĐẠT = không giao, không biện hộ.
 
 Cách dùng (từ gốc "xuong-phim-claude"):
-  Video:      python3 tools/nghiem-thu.py video "du-an/<x>/xuat-nhap/<file>.mp4"
+  Video:      python3 tools/nghiem-thu.py video "../Du an/<x>/xuat-nhap/<file>.mp4"
                   [--khung ngang|doc] [--nhap] [--fps 30] [--anh]
               --anh: xuất thêm ảnh lưới 12 khung (contact sheet) để soi mắt
-  Transcript: python3 tools/nghiem-thu.py transcript "du-an/<x>" [--nguon <file nguồn>]
+  Transcript: python3 tools/nghiem-thu.py transcript "../Du an/<x>" [--nguon <file nguồn>]
               (phát hiện đoạn nói bị Whisper bỏ trống, mốc thời gian đảo, câu dài bất thường)
-  Đồ họa:     python3 tools/nghiem-thu.py do-hoa "du-an/<x>/do-hoa" [--fps 30]
+  Đồ họa:     python3 tools/nghiem-thu.py do-hoa "../Du an/<x>/do-hoa" [--fps 30]
               (mọi file render: thời lượng khớp tên/props, fps, alpha còn không)
 
 Kết quả: in bảng ĐẠT/KHÔNG ĐẠT/CẢNH BÁO, ghi <file>.nghiem-thu.json, mã thoát 1 nếu

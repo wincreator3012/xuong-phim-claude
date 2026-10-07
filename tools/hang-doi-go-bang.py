@@ -9,15 +9,15 @@ Mac; VM (turbo) chỉ là đường dự phòng.
 Cách dùng (từ thư mục gốc "xuong-phim-claude"):
 
   Trong VM (Claude chạy qua device_bash):
-    python3 tools/hang-doi-go-bang.py them "du-an/x/nguon/a.mp4" [--out-dir "du-an/x/transcript"] [--model auto]
+    python3 tools/hang-doi-go-bang.py them "../Du an/x/nguon/a.mp4" [--out-dir "../Du an/x/transcript"] [--model auto]
     python3 tools/hang-doi-go-bang.py trang-thai          # việc nào chờ, xong, lỗi
-    python3 tools/hang-doi-go-bang.py don                 # cất việc đã xong vào tools/go-bang/xong/
+    python3 tools/hang-doi-go-bang.py don                 # cất việc đã xong vào <Du an>/_tam/go-bang/xong/
   Trên Mac (người dùng bấm đúp "Go bang tren Mac.command", script đó gọi):
     python3 tools/hang-doi-go-bang.py chay                # chạy lần lượt mọi việc đang chờ
 
-Mỗi việc là một file tools/go-bang/viec/<id>.json; kết quả ghi vào
-tools/go-bang/viec/<id>.ket-qua.json (trạng thái, model đã dùng, máy, số giây, dòng
-cuối của log) và log đầy đủ ở tools/go-bang/log/<id>.log. Việc đã có ket-qua với
+Mỗi việc là một file <Du an>/_tam/go-bang/viec/<id>.json (cau-hinh.json > thuMucTam); kết quả ghi vào
+<Du an>/_tam/go-bang/viec/<id>.ket-qua.json (trạng thái, model đã dùng, máy, số giây, dòng
+cuối của log) và log đầy đủ ở <Du an>/_tam/go-bang/log/<id>.log. Việc đã có ket-qua với
 trạng thái "xong" thì không chạy lại; trạng thái "loi" thì lần bấm sau chạy lại.
 Mọi đường dẫn trong việc là đường dẫn TƯƠNG ĐỐI so với thư mục gốc xưởng, nên cùng
 một việc chạy được ở cả VM lẫn Mac (thư mục có thể đồng bộ qua đám mây, gốc khác nhau).
@@ -35,14 +35,18 @@ import time
 
 TOOLS_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(TOOLS_DIR)
-QDIR = os.path.join(TOOLS_DIR, "go-bang", "viec")
-LOGDIR = os.path.join(TOOLS_DIR, "go-bang", "log")
+sys.path.insert(0, TOOLS_DIR)
+import cau_hinh as CH  # noqa: E402
+QDIR = CH.tam("go-bang", "viec")      # hàng đợi là việc tạm, NGOÀI repo
+LOGDIR = CH.tam("go-bang", "log")
+
+
 
 
 def rel(p):
     ap = os.path.abspath(p)
-    if not ap.startswith(ROOT + os.sep):
-        sys.exit(f"Đường dẫn phải nằm trong thư mục xưởng: {p}")
+    if not CH.cho_phep(ap):
+        sys.exit(f"Đường dẫn phải nằm trong thư mục xưởng hoặc thư mục Du an: {p}")
     return os.path.relpath(ap, ROOT)
 
 
@@ -153,7 +157,7 @@ def cmd_chay(a):
 
 def cmd_don(a):
     import shutil
-    dst = os.path.join(TOOLS_DIR, "go-bang", "xong")
+    dst = CH.tam("go-bang", "xong")
     os.makedirs(dst, exist_ok=True)
     n = 0
     for jid, p, kq in jobs():
@@ -161,7 +165,7 @@ def cmd_don(a):
             for f in (p, kq):
                 shutil.move(f, os.path.join(dst, os.path.basename(f)))
             n += 1
-    print(f"Đã cất {n} việc xong vào tools/go-bang/xong/.")
+    print(f"Đã cất {n} việc xong vào {dst}.")
 
 
 def main():

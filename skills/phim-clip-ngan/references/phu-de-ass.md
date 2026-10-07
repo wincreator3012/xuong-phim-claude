@@ -31,7 +31,7 @@ rồi burn bằng `ffmpeg -i clip.mp4 -vf "ass=clip.ass:fontsdir=." -c:a copy cl
 
 Lần đầu dùng trên máy: kiểm tra fontconfig thấy font Việt (`fc-list | grep -i "be vietnam"`; chưa có thì làm theo mục 3). Test một khung hình đơn lẻ tại mốc có cue PHẢI dùng output-seek (`-ss` đặt SAU `-i`), không dùng input-seek (`-ss` trước `-i` làm PTS rebase, subtitle/ass filter không khớp cue, lặng lẽ ra khung hình không chữ trông như "không hoạt động"). Xuất 2 frame kiểm tra dấu tiếng Việt hiển thị đúng trước khi burn cả clip.
 
-File đã burn phụ đề là bản HOÀN CHỈNH cuối cùng - ghi vào `du-an/<x>/xuat-hoan-chinh/<slug>-doc.mp4` (không phải `xuat-nhap/`, nơi đó chỉ chứa bản `assemble.py` xuất thô chưa phụ đề và các bản nháp preview). Burn là một lượt encode mới nên file này phải qua cổng nghiệm thu ở Bước 4 một lần nữa.
+File đã burn phụ đề là bản HOÀN CHỈNH cuối cùng - ghi vào `Du an/<x>/xuat-hoan-chinh/<slug>-doc.mp4` (không phải `xuat-nhap/`, nơi đó chỉ chứa bản `assemble.py` xuất thô chưa phụ đề và các bản nháp preview). Burn là một lượt encode mới nên file này phải qua cổng nghiệm thu ở Bước 4 một lần nữa.
 
 ## 2. Tránh chồng lấn phụ đề với LowerThird
 

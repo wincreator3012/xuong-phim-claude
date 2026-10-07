@@ -2,7 +2,7 @@
 # Gỡ băng trên máy Mac (ngoài VM Cowork) bằng whisper large-v3.
 # Cách dùng: mở Finder, vào thư mục xưởng, bấm đúp file này.
 # Lần đầu tiên (một lần cho mỗi máy): tự dựng môi trường Python riêng, mất vài phút.
-# Việc cần gỡ băng do Claude xếp sẵn trong tools/go-bang/viec/ (tools/hang-doi-go-bang.py).
+# Việc cần gỡ băng do Claude xếp sẵn trong "Du an/_tam/go-bang/viec/" cạnh xưởng (tools/hang-doi-go-bang.py).
 # Nếu macOS báo "không mở được vì từ nhà phát triển không xác định":
 #   bấm chuột phải vào file, chọn Open (Mở), rồi Open lần nữa. Chỉ cần làm một lần.
 
@@ -60,6 +60,6 @@ echo
 if [ $RC -eq 0 ]; then
   echo "Gỡ băng xong. Quay lại Claude và nhắn: đã gỡ băng xong."
 else
-  echo "Có việc gỡ băng bị lỗi. Quay lại Claude và nhắn: gỡ băng bị lỗi (log nằm ở tools/go-bang/log/)."
+  echo "Có việc gỡ băng bị lỗi. Quay lại Claude và nhắn: gỡ băng bị lỗi (log nằm ở Du an/_tam/go-bang/log/)."
 fi
 ket_thuc $RC

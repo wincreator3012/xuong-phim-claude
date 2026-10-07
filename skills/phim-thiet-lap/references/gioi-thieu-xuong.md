@@ -56,10 +56,10 @@ Kết chặng: "Bạn muốn xem một dự án chạy từ đầu tới cuối 
 
 Kể sáu bước, nhấn rõ ai làm gì (đọc `HUONG-DAN.md` mục "Chuyện gì xảy ra sau khi bạn nói" để lấy đúng chi tiết và thời gian):
 
-1. **Bạn** thả file vào `du-an/<tên>/nguon/` và nói một câu yêu cầu.
+1. **Bạn** thả file vào `nguon/` của dự án (`Du an/<năm-tháng tên>/`, Claude tạo giúp) và nói một câu yêu cầu.
 2. **Claude** khảo sát nguồn, gỡ băng, rồi gửi **bảng phương án** (đoạn nào giữ, đoạn nào bỏ, chỗ nào chèn chữ hay hình). Đây là **chốt duyệt 1**; sửa ở đây rẻ nhất.
 3. **Claude** làm đồ họa và dựng **bản nháp** nhỏ vào `xuat-nhap/`. Bạn xem và góp ý theo mốc thời gian. Đây là **chốt duyệt 2**.
-4. **Claude** xuất **bản chính** 1080p, để máy tự đo hình khớp tiếng và âm lượng, rồi tự nhìn ảnh lưới 12 khung. Đạt thì file vào `xuat-hoan-chinh/`.
+4. **Claude** xuất **bản chính** 1080p, để máy tự đo hình khớp tiếng và âm lượng, rồi tự nhìn ảnh lưới 12 khung. Đạt thì video cùng gói đăng tải vào `Thanh pham/<năm-tháng tên dự án>/`.
 5. **Claude** soạn **gói đăng tải** trong `dang-tai/` mà không cần nhắc; bạn chọn, sửa, chép dán.
 6. Mọi góp ý đáng nhớ của bạn được ghi vào sổ tay để clip sau không lặp lại.
 
@@ -92,7 +92,7 @@ Kết chặng: "Giờ mình chọn bước đầu tiên nhé."
 
 Hỏi bằng AskUserQuestion, một câu: "Bạn muốn làm gì đầu tiên?", bốn lựa chọn lấy từ chặng 2 sát với người dùng nhất (ví dụ: dựng một bài giảng đã quay, cắt clip dọc từ video có sẵn, gỡ băng một file, lên kế hoạch quay mới), cộng "Để mình xem sau". Với lựa chọn đã chọn:
 
-1. Tạo `du-an/<tên không dấu, ngắn>/nguon/` cho họ (hoặc nhờ họ tạo) và nói rõ cần thả gì vào.
+1. Tạo dự án cho họ bằng `python3 tools/du-an-moi.py "<tên không dấu, ngắn>"` và nói rõ cần thả gì vào `nguon/` của dự án đó.
 2. Đưa đúng câu họ sẽ nói khi file đã sẵn sàng (lấy từ cột "Câu mẫu").
 3. Nhắc nơi tìm hướng dẫn: `HUONG-DAN.md` cho việc hằng ngày, và câu "giới thiệu lại xưởng" để nghe lại phần này.
 4. Ghi dấu đã giới thiệu: `python3 tools/cai-dat.py --danh-dau gioi-thieu`. Lần sau mở xưởng, không giới thiệu lại trừ khi họ yêu cầu.

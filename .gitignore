@@ -15,13 +15,11 @@ nhac-nen/*
 hieu-ung/*
 !hieu-ung/README.md
 
-# Logo và dự án riêng của từng người
+# Logo riêng; dự án KHÔNG nằm trong repo (thư mục Du an/ cạnh repo, xem README)
 brand/logo/*
 !brand/logo/README.md
-du-an/*
-!du-an/_mau/
-du-an/_mau/.tam/
-du-an/_mau/xuat-*/
+du-an/
+cau-hinh.json
 
 # Rác hệ thống
 .DS_Store

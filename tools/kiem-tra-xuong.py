@@ -9,7 +9,7 @@ kỹ thuật chính (cắt, fade, overlay alpha, B-roll, B-roll cảnh minh ho�
 insert, tuỳ chọn bố cục slide và multicam audioSrc), rồi chạy đúng đường thật: assemble.py --kiem-tra →
 assemble.py --preview → nghiem-thu.py video. Thoát mã 0 = ĐẠT.
 
-Dự án thử nằm ở du-an/_kiem-tra-tu-dong/ (xoá được). Không cần model, không cần mạng.
+Dự án thử nằm ở <Du an>/_tam/_kiem-tra-tu-dong/ (NGOÀI repo, xoá được). Không cần model, không cần mạng.
 
 Trước khi dựng thử, chạy cổng kiểm tài liệu (tools/kiem-tai-lieu.py: YAML của skill,
 đường dẫn trong tài liệu, kho ẩn dụ, dấu phiên bản). Tài liệu KHÔNG ĐẠT thì vẫn dựng
@@ -52,7 +52,9 @@ def main():
     if not kiem_cat_loi():
         raise SystemExit("! ban_dung_loi.py đặt điểm cắt khác mốc đã kiểm - xem dòng ✗ ở trên")
 
-    proj = os.path.join("du-an", "_kiem-tra-tu-dong")
+    sys.path.insert(0, TOOLS)
+    import cau_hinh as CH
+    proj = os.path.relpath(CH.tam("_kiem-tra-tu-dong"), ROOT)
     for d in ("nguon", "do-hoa"):
         os.makedirs(os.path.join(proj, d), exist_ok=True)
     ff = ["ffmpeg", "-hide_banner", "-v", "error", "-y"]

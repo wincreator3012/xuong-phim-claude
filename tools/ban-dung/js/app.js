@@ -57,7 +57,7 @@ async function moChonDuAn(batBuoc = false) {
       el("small", {}, `${x.doan} đoạn · sửa ${ngay.toLocaleDateString("vi-VN")} ${ngay.toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" })}${x.chinhTay ? " · đã chỉnh tay" : ""}`),
     ]));
   }
-  if (!ds.length) list.append(el("p", {}, "Chưa có timeline nào trong du-an/. Nhờ Claude dựng phương án cắt trước."));
+  if (!ds.length) list.append(el("p", {}, "Chưa có timeline nào trong thư mục Du an. Nhờ Claude dựng phương án cắt trước."));
   const nen = el("div", { class: "nen-hop" }, [el("div", { class: "hop hop-rong" }, [
     el("h3", {}, "Mở timeline nào?"),
     el("p", { class: "nhat" }, "Mỗi dòng là một timeline Claude đã dựng. Bàn dựng sửa đúng file đó; bản cũ luôn được cất lại."),

@@ -7,8 +7,8 @@ Cổng máy (`tools/nghiem-thu.py`, `check_av()` trong assemble, `render-do-hoa.
 - Thành phẩm: `python3 tools/nghiem-thu.py video "<file.mp4>" --khung ngang|doc [--nhap] --anh` (ra kèm ảnh lưới `<file>.luoi.jpg`).
   Cổng này tự gọi `tools/do-dong-bo.py` (đo thành phẩm so với nguồn, cần `<file>.map.json`); KHÔNG ĐẠT ở dòng đồng bộ là lỗi lệch hình-tiếng thật, không phải cảnh báo.
 - Đồng bộ hình-tiếng của chính công cụ dựng (sau khi sửa `assemble.py`): `python3 tools/kiem-dong-bo.py`.
-- Transcript: `python3 tools/nghiem-thu.py transcript "du-an/<x>" [--nguon <tên file>]`.
-- Đồ họa đã render: `python3 tools/nghiem-thu.py do-hoa "du-an/<x>/do-hoa"`.
+- Transcript: `python3 tools/nghiem-thu.py transcript "../Du an/<x>" [--nguon <tên file>]`.
+- Đồ họa đã render: `python3 tools/nghiem-thu.py do-hoa "../Du an/<x>/do-hoa"`.
 - Giấy (kịch bản infomotion, phim tài liệu): `python3 tools/uoc-luong.py "<kịch bản>"`.
 
 ## Năm việc soi mắt

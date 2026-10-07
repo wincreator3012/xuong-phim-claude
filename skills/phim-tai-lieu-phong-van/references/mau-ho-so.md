@@ -173,7 +173,7 @@ Nguyên tắc: dệt giọng theo chủ đề; tối thiểu chỉnh sửa lời
 5. Dữ kiện chưa kiểm được hoặc lệch nguồn: <nhãn dòng, dữ kiện nhân vật nói, nguồn nói gì> - đề xuất cách <1 xác nhận / 2 giữ lời, không lên đồ họa / 3 thay bite>
 
 ## Thời lượng ước tính
-Bảng này lấy từ `python3 tools/uoc-luong.py "du-an/<x>/KICH-BAN-THUC-TE.md" --muc-tieu <mục tiêu>`, không cộng tay; chạy lại sau mỗi lần sửa dòng dựng.
+Bảng này lấy từ `python3 tools/uoc-luong.py "../Du an/<x>/KICH-BAN-THUC-TE.md" --muc-tieu <mục tiêu>`, không cộng tay; chạy lại sau mỗi lần sửa dòng dựng.
 
 | Phần | Ước tính | Mục tiêu |
 |---|---|---|

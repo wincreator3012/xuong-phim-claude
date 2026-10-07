@@ -7,7 +7,7 @@ description: "Soạn gói đăng tải cho mỗi clip đã xuất hoàn chỉnh 
 
 Trước khi bấm xem, người xem chỉ gặp ba thứ: thumbnail, tiêu đề, vài dòng đầu của mô tả hay status. Skill này soạn ba thứ đó cho từng clip, như bước cuối của mọi quy trình dựng. Nguyên lý xuyên suốt: **một lời hứa rõ ràng mà clip giữ được**. Đây vừa là giá trị của người dùng (chân thật, không giật tít, không khung sợ hãi) vừa là điều nền tảng thưởng: YouTube xếp hạng theo thời gian xem có giá trị [valued watch time] và khảo sát mức hài lòng, chọn thumbnail thắng trong thử nghiệm A/B bằng thời gian xem chứ không bằng lượt bấm; Meta hạ phân phối bài giật tít và mồi tương tác. Nền nghiên cứu và nguồn: `skills/phim-dang-tai/references/nghien-cuu-thumbnail.md`.
 
-Kết quả của mỗi clip soạn ở `du-an/<tên>/dang-tai/<tên video>/` rồi khi xong thì nằm CHUNG với video trong thư mục clip `Thanh pham/<tên dự án>/Short NN <slug>/dang-tai/` (clip dài: `Thanh pham/<tên dự án>/00 Video day du/dang-tai/`) (một clip một thư mục tự đủ để người dùng sao lưu nguyên thư mục; chạy lại `dang-tai.py kiem` trên bản trong `Thanh pham/`):
+Kết quả của mỗi clip soạn ở `Du an/<tên>/dang-tai/<tên video>/` rồi khi xong thì nằm CHUNG với video trong thư mục clip `Thanh pham/<YYYY-MM tên dự án>/Short NN <slug>/dang-tai/` (clip dài: `Thanh pham/<YYYY-MM tên dự án>/00 Video day du/dang-tai/`) (một clip một thư mục tự đủ để người dùng sao lưu nguyên thư mục; khi dời vào `Thanh pham/` thì đổi `video`, `chuong_file` trong `dang-tai.json` thành `../<video>.mp4`, `../<video>.chuong.txt` và chép file brand dự án vào cùng `dang-tai/`, rồi chạy lại `dang-tai.py kiem` trên bản trong `Thanh pham/`):
 
 | Tệp | Là gì |
 |---|---|
@@ -57,7 +57,7 @@ Schema và mẫu đầy đủ ở `skills/phim-dang-tai/references/mau-dang-tai.
 ### 3a. Chọn khung hình (máy lọc, mắt chọn)
 
 ```
-python3 tools/chon-khung-thumbnail.py --map "du-an/<tên>/xuat-hoan-chinh/<video>.map.json"
+python3 tools/chon-khung-thumbnail.py --map "../Du an/<tên>/xuat-hoan-chinh/<video>.map.json"
 ```
 
 Máy lấy mẫu mỗi 3 giây trong các đoạn cắt, dò mặt (YuNet), chấm cỡ mặt, độ chính diện, độ nét, độ sáng, xuất 12 ứng viên (và vài khung hai mặt cho podcast) từ file nguồn gốc, không dính pill hay phụ đề. Lượt gọi hết 180 giây thì gọi lại y nguyên, cache giữ phần đã chấm. Stage `khung/ung-vien.jpg` và NHÌN; chọn hai đến bốn ứng viên. Mặt đang nói đổi rất nhanh, nên tinh chỉnh quanh từng ứng viên:
@@ -94,7 +94,7 @@ Brand theo dự án: mặc định `brand/brand.json` (giấy ngà, mực, lục
 Soạn `thumbnail.json` (schema ở `skills/phim-dang-tai/references/mau-dang-tai.md` mục 2), rồi:
 
 ```
-python3 tools/dang-tai.py job "du-an/<tên>/dang-tai/<video>/thumbnail.json"
+python3 tools/dang-tai.py job "../Du an/<tên>/dang-tai/<video>/thumbnail.json"
 ```
 
 Lệnh sinh `thumbnail.job.json` (ảnh khung khai báo trong "assets", tâm mặt chép từ `khung.json`) và ước cỡ chữ: chữ tiêu đề dưới 110 px trên khung 1920 (dưới 10 px khi YouTube hiện thumbnail rộng 168 px) thì báo lỗi, rút dòng dài nhất hoặc bớt chữ.
@@ -116,7 +116,7 @@ Bước 4 sinh `soi-thumbnail.jpg`: mỗi phương án ở ba cỡ thật trên 
 ## Bước 4 - cổng máy và báo
 
 ```
-python3 tools/dang-tai.py kiem "du-an/<tên>/dang-tai/<video>"
+python3 tools/dang-tai.py kiem "../Du an/<tên>/dang-tai/<video>"
 ```
 
 Cổng kiểm: giới hạn YouTube (tiêu đề 100, mô tả 5000, thẻ 500, chương từ 0:00, tối thiểu ba chương, mỗi chương từ 10 giây, mốc khớp file chương của tool), từ khoá trong câu đầu, chức danh nguyên văn, ghi công nhạc CC-BY, câu hỏi mở ở cả mô tả lẫn status, từ ngữ phải viết đúng và gạch dài, emoji, Title Case, viết hoa toàn bộ, mồi tương tác và khung sợ hãi ("comment nếu", "tag bạn", "đừng bỏ lỡ", "bị bỏ lại"), link trong thân status, số hashtag, kích thước, tỉ lệ và dung lượng thumbnail. KHÔNG ĐẠT thì sửa `dang-tai.json` rồi chạy lại; không hạ ngưỡng, không sửa tay `DANG-TAI.md`.
@@ -141,4 +141,4 @@ Báo người dùng trong cùng lượt với báo giao clip: đường dẫn `D
 - Người dùng chọn phương án, sửa chữ, hay chê một kiểu thumbnail: một dòng vào sổ tay góp ý của `phong-cach/PHONG-CACH.md`; lặp lần hai thì sửa mặc định (PHONG-CACH mục 8, `thumbnailDefaults` trong `Thumbnail.tsx`, mẫu trong `references/mau-dang-tai.md`).
 - Kết quả thử nghiệm A/B người dùng kể lại (phương án nào thắng, kiểu chữ nào): ghi vào `docs/BAI-HOC.md` chủ đề "Đăng tải" kèm tên clip; đủ nhiều thì chưng thành nguyên lý trong `references/nghien-cuu-thumbnail.md`.
 
-<!-- ban-nguon: phim-dang-tai 2026-10-07 e368bad3 -->
+<!-- ban-nguon: phim-dang-tai 2026-10-07 3946e3bb -->

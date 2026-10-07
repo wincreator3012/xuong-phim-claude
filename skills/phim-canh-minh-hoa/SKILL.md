@@ -45,11 +45,11 @@ Loại cảnh lần đầu xuất hiện trong dự án, hoặc người dùng m
 
 ### Bước 3 - Viết file cảnh
 
-`du-an/<x>/canh/NN-<ten>.html`, bắt đầu từ cảnh mẫu gần nhất. Mốc để ở MỘT đối tượng hằng số đầu script, tính `t trong cảnh = mốc nguồn - mốc bắt đầu cảnh`. Viết cả hai khung khi dự án có cả ngang lẫn dọc: dọc không phải bản cắt của ngang, là bố cục riêng (xếp chồng, chữ to hơn, trục toạ độ sơ đồ hẹp hơn). Theo luật tất định ở `viet-canh.md` mục 1. Chừa 1-2 giây giữ yên ở cuối cảnh để sau này rút đuôi thân vẫn không phải chụp lại.
+`Du an/<x>/canh/NN-<ten>.html`, bắt đầu từ cảnh mẫu gần nhất. Mốc để ở MỘT đối tượng hằng số đầu script, tính `t trong cảnh = mốc nguồn - mốc bắt đầu cảnh`. Viết cả hai khung khi dự án có cả ngang lẫn dọc: dọc không phải bản cắt của ngang, là bố cục riêng (xếp chồng, chữ to hơn, trục toạ độ sơ đồ hẹp hơn). Theo luật tất định ở `viet-canh.md` mục 1. Chừa 1-2 giây giữ yên ở cuối cảnh để sau này rút đuôi thân vẫn không phải chụp lại.
 
 ### Bước 4 - Soi trước khi chụp
 
-Trong sandbox (dựng theo mục "Khởi động phiên mới" của `docs/QUY-TRINH-KY-THUAT.md`, thêm `tools/canh.mjs`, `do-hoa-chung/canh-kit/` và `du-an/<x>/canh/`):
+Trong sandbox (dựng theo mục "Khởi động phiên mới" của `docs/QUY-TRINH-KY-THUAT.md`, thêm `tools/canh.mjs`, `do-hoa-chung/canh-kit/` và `Du an/<x>/canh/`):
 
 1. `node tools/canh.mjs kiem <cảnh>` phải báo "KIỂM TẤT ĐỊNH: ĐẠT".
 2. `node tools/canh.mjs người dùng <cảnh> --t <các mốc cảnh con> --khung <khung đích>` rồi NHÌN contact sheet: chữ Việt đủ dấu, không tràn, không đè nhau, cỡ chữ đọc được trên điện thoại (khung dọc soi riêng).
@@ -57,7 +57,7 @@ Trong sandbox (dựng theo mục "Khởi động phiên mới" của `docs/QUY-T
 
 ### Bước 5 - Chụp và đưa về máy
 
-Lệnh theo kiểu chèn ở `viet-canh.md` mục 4-5; ra `du-an/<x>/do-hoa/<khung>/canh-NN-<ten>.<mp4|webm>`, commit về máy theo `_chung/van-hanh.md` (kèm `do-hoa-manifest.json` và file cảnh `.html` nếu sửa ở sandbox). Thời lượng: `canh.mjs` tự đo và ghi manifest; lệch quá 0,1 giây là lỗi, chụp lại. Kiểu thu vào góc: chạy `canh-ghep.py pip` trên máy với nguồn thật (footage không rời máy).
+Lệnh theo kiểu chèn ở `viet-canh.md` mục 4-5; ra `Du an/<x>/do-hoa/<khung>/canh-NN-<ten>.<mp4|webm>`, commit về máy theo `_chung/van-hanh.md` (kèm `do-hoa-manifest.json` và file cảnh `.html` nếu sửa ở sandbox). Thời lượng: `canh.mjs` tự đo và ghi manifest; lệch quá 0,1 giây là lỗi, chụp lại. Kiểu thu vào góc: chạy `canh-ghep.py pip` trên máy với nguồn thật (footage không rời máy).
 
 ### Bước 6 - Ghép, nghiệm thu
 
@@ -83,4 +83,4 @@ Góp ý của người dùng ghi `SO-GOP-Y.md` theo mốc; góp ý về cả h�
 - Thời lượng cảnh khớp ô trong timeline, đo bằng manifest hay `ffprobe`; không kéo dài bằng khung đứng. Ô bị rút ngắn sau khi chụp thì bớt bằng `overlay.duration` kèm `giu`, không chạm hoạt cảnh.
 - Chưa qua cổng nghiệm thu của skill gọi thì chưa báo "xong".
 
-<!-- ban-nguon: phim-canh-minh-hoa 2026-10-03 5e71977b -->
+<!-- ban-nguon: phim-canh-minh-hoa 2026-10-07 e6ba9af5 -->

@@ -64,13 +64,13 @@ Class của kit (định nghĩa trong `canh.css`): `.kicker`, `.tieu-de` (kèm `
 
 ## 3. Soi
 
-Chạy trong sandbox, từ gốc xưởng đã stage (`tools/canh.mjs`, `do-hoa-chung/canh-kit/`, `du-an/<x>/canh/`). Cần Playwright (sandbox có sẵn bản cài toàn cục; thiếu thì `npm i -g playwright@1.56.0`, Chromium có sẵn ở `/opt/pw-browsers`).
+Chạy trong sandbox, từ gốc xưởng đã stage (`tools/canh.mjs`, `do-hoa-chung/canh-kit/`, `Du an/<x>/canh/`). Cần Playwright (sandbox có sẵn bản cài toàn cục; thiếu thì `npm i -g playwright@1.56.0`, Chromium có sẵn ở `/opt/pw-browsers`).
 
 ```
-node tools/canh.mjs kiem "du-an/<x>/canh/03-cua-so.html" [--khung doc] [--pip]
-node tools/canh.mjs người dùng  "du-an/<x>/canh/03-cua-so.html" --t 1.5,4,7.2,11 --out-dir /tmp/soi-03 [--khung doc]
-node tools/canh.mjs người dùng  "du-an/<x>/canh/04-tho-hop.html" --alpha --xem-tren /tmp/khung-0412.jpg --t 6
-node tools/canh.mjs phong-thu "du-an/<x>/canh/03-cua-so.html" --out /tmp/phong-thu-03.html [--nen-anh <khung.jpg>]
+node tools/canh.mjs kiem "../Du an/<x>/canh/03-cua-so.html" [--khung doc] [--pip]
+node tools/canh.mjs người dùng  "../Du an/<x>/canh/03-cua-so.html" --t 1.5,4,7.2,11 --out-dir /tmp/soi-03 [--khung doc]
+node tools/canh.mjs người dùng  "../Du an/<x>/canh/04-tho-hop.html" --alpha --xem-tren /tmp/khung-0412.jpg --t 6
+node tools/canh.mjs phong-thu "../Du an/<x>/canh/03-cua-so.html" --out /tmp/phong-thu-03.html [--nen-anh <khung.jpg>]
 ```
 
 - `kiem`: tua thẳng tới ba mốc phải ra cùng ảnh như chạy tuần tự tới đó; lệch dưới 40 dB là lỗi thật, lệch nhẹ hơn là khử răng cưa của chữ đang chuyển động (vẫn ĐẠT).
@@ -81,7 +81,7 @@ node tools/canh.mjs phong-thu "du-an/<x>/canh/03-cua-so.html" --out /tmp/phong-t
 ## 4. Chụp
 
 ```
-node tools/canh.mjs chup "<cảnh>.html" --out "du-an/<x>/do-hoa/ngang/canh-03-cua-so.mp4"                      # toàn khung
+node tools/canh.mjs chup "<cảnh>.html" --out "../Du an/<x>/do-hoa/ngang/canh-03-cua-so.mp4"                      # toàn khung
 node tools/canh.mjs chup "<cảnh>.html" --nen-anh "<khung.jpg>" --out ".../canh-03-cua-so-nen.mp4"                 # nền mờ
 node tools/canh.mjs chup "<cảnh>.html" --alpha --out ".../canh-04-tho-hop.webm"                                   # thẻ nổi
 node tools/canh.mjs chup "<cảnh>.html" --pip --out ".../canh-05-vong-lap-pip-nen.mp4"                             # chừa góc
@@ -106,7 +106,7 @@ Nhắc lại hai hệ mốc (`skills/_chung/timeline-va-dung.md`): `broll.at` l�
 **Nền là khung hình mờ.** Trên máy lấy khung ngay trước lúc cảnh bắt đầu, stage ảnh đó lên sandbox, chụp với `--nen-anh`, rồi ghép như toàn khung.
 
 ```
-python3 tools/canh-ghep.py khung "du-an/<x>/nguon/bai.mp4" --at 840.0 --out "du-an/<x>/canh/nen/khung-0840.jpg"
+python3 tools/canh-ghep.py khung "../Du an/<x>/nguon/bai.mp4" --at 840.0 --out "../Du an/<x>/canh/nen/khung-0840.jpg"
 ```
 
 Ảnh nền đi qua lớp mờ và phủ tối của kit (`.nen-anh`, `.nen-phu`), nên chỉ còn là màu và khối của căn phòng. Cảnh nền mờ thường bỏ tiêu đề lớn (người dùng đang nói), giữ sơ đồ và dòng đọng.
@@ -123,8 +123,8 @@ python3 tools/canh-ghep.py khung "du-an/<x>/nguon/bai.mp4" --at 840.0 --out "du-
 **Người nói thu vào góc.** Chụp `--pip` (cảnh hiện ô `.o-pip`, manifest ghi toạ độ ô), commit về máy, rồi trên máy đặt đoạn quay thật vào ô; clip ra (không tiếng) vào `broll` với cùng `at`.
 
 ```
-python3 tools/canh-ghep.py pip "du-an/<x>/do-hoa/ngang/canh-05-vong-lap-pip-nen.mp4" "du-an/<x>/nguon/bai.mp4" \
-  --at 1502.0 --out "du-an/<x>/do-hoa/ngang/canh-05-vong-lap-pip.mp4" [--tieu-diem 0.45] [--tieu-diem-y 0.4]
+python3 tools/canh-ghep.py pip "../Du an/<x>/do-hoa/ngang/canh-05-vong-lap-pip-nen.mp4" "../Du an/<x>/nguon/bai.mp4" \
+  --at 1502.0 --out "../Du an/<x>/do-hoa/ngang/canh-05-vong-lap-pip.mp4" [--tieu-diem 0.45] [--tieu-diem-y 0.4]
 ```
 
 ```json

@@ -34,6 +34,9 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 TOOLS = os.path.dirname(os.path.abspath(__file__))
 GOC = os.path.dirname(TOOLS)                       # gốc xưởng
+sys.path.insert(0, TOOLS)
+import cau_hinh as CH  # noqa: E402
+DU_AN = CH.du_an()                                 # hồ sơ dự án, NGOÀI repo (cau-hinh.json > thuMucDuAn)
 APP = os.path.join(TOOLS, "ban-dung")              # trang tĩnh
 sys.path.insert(0, TOOLS)
 
@@ -68,7 +71,7 @@ def phien_ban(path):
 
 def thu_muc_du_an(tl_path):
     """Thư mục dự án mà đường dẫn trong timeline tính theo (giống --project của assemble.py):
-    du-an/<x>/timeline*.json, du-an/<x>/ke-hoach-dung/timeline*.json, du-an/<x>/clip-ngan/<slug>/timeline*.json."""
+    <Du an>/<x>/timeline*.json, <Du an>/<x>/ke-hoach-dung/timeline*.json, <Du an>/<x>/clip-ngan/<slug>/timeline*.json."""
     d = os.path.dirname(tl_path)
     if os.path.basename(d) == "ke-hoach-dung":
         return os.path.dirname(d)
@@ -96,9 +99,9 @@ def thut_le(raw):
 
 def danh_sach():
     ra = []
-    mau = [os.path.join(GOC, "du-an", "*", "timeline*.json"),
-           os.path.join(GOC, "du-an", "*", "ke-hoach-dung", "timeline*.json"),
-           os.path.join(GOC, "du-an", "*", "clip-ngan", "*", "timeline*.json")]
+    mau = [os.path.join(DU_AN, "*", "timeline*.json"),
+           os.path.join(DU_AN, "*", "ke-hoach-dung", "timeline*.json"),
+           os.path.join(DU_AN, "*", "clip-ngan", "*", "timeline*.json")]
     for f in sorted(set(sum((glob.glob(m) for m in mau), []))):
         rel = os.path.relpath(f, GOC)
         da = os.path.relpath(thu_muc_du_an(f), GOC)
@@ -284,7 +287,7 @@ class XuLy(BaseHTTPRequestHandler):
         p = q.get("p", "")
         f = os.path.join(GOC, p)
         if not p.endswith(".json") or not os.path.basename(p).startswith("timeline") or not trong(
-                os.path.join(GOC, "du-an"), f) or not os.path.isfile(f):
+                DU_AN, f) or not os.path.isfile(f):
             return None
         return f
 
@@ -354,7 +357,7 @@ class XuLy(BaseHTTPRequestHandler):
                 da, p = rest.split("::", 1)
                 du_an = os.path.join(GOC, da)
                 f = giai_media(du_an, p)
-                if not trong(GOC, f):
+                if not (trong(GOC, f) or trong(DU_AN, f)):
                     return self._loi(403, "ngoài xưởng")
                 return self._gui_file(f)
             if path == "/api/danh-sach":
@@ -368,8 +371,8 @@ class XuLy(BaseHTTPRequestHandler):
                                         "duAn": os.path.relpath(thu_muc_du_an(f), GOC), "p": q["p"]})
             if path == "/api/phu-tro":
                 du_an = os.path.join(GOC, q.get("duAn", ""))
-                if not trong(os.path.join(GOC, "du-an"), du_an):
-                    return self._loi(403, "ngoài du-an")
+                if not trong(DU_AN, du_an):
+                    return self._loi(403, "ngoài Du an")
                 return self._json(200, phu_tro(du_an, q.get("src", "")))
             if path == "/api/ping":
                 return self._json(200, {"ok": True})

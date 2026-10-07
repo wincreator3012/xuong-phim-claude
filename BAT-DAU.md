@@ -10,11 +10,19 @@ Tài liệu này dành cho người chưa từng dùng AI làm việc với file
 - **Mạng ổn định** trong lúc cài (tải khoảng 700 MB). Sau khi cài, gỡ băng và dựng clip chạy offline
 - **30-45 phút** không bị ngắt, và một video ngắn bạn tự quay (1-3 phút, nói trước máy) để làm clip thử nếu muốn
 
-Nếu bạn dùng hai máy (ví dụ laptop mang đi và máy bàn ở nhà), đặt thư mục xưởng vào nơi đồng bộ (iCloud Drive, Dropbox, OneDrive) là dùng chung được; xem lưu ý cuối tài liệu.
+Nếu bạn dùng hai máy (ví dụ laptop mang đi và máy bàn ở nhà), xem lưu ý cuối tài liệu.
 
 ## Bước 1: tải xưởng về máy
 
-Trên trang GitHub của repo, bấm nút xanh **Code**, chọn **Download ZIP**. Giải nén (bấm đúp file ZIP trên Mac). Bạn có một thư mục tên `xuong-phim-claude-main` hoặc tương tự; đổi tên thành gì dễ nhớ, ví dụ `Xuong phim`, và kéo vào **Documents** (hoặc bất kỳ chỗ nào bạn hay để tài liệu).
+Trong **Documents** (hoặc chỗ bạn hay để tài liệu), tạo một thư mục tên **Xuong phim AI**. Trên trang GitHub của repo, bấm nút xanh **Code**, chọn **Download ZIP**. Giải nén (bấm đúp file ZIP trên Mac). Bạn có một thư mục tên `xuong-phim-claude-main`; đổi tên thành `xuong-phim-claude` và kéo vào trong **Xuong phim AI**.
+
+```
+Documents/
+└── Xuong phim AI/
+    └── xuong-phim-claude/
+```
+
+Hai thư mục `Du an` (dự án của bạn) và `Thanh pham` (sản phẩm để đăng) sẽ được tạo tự động bên cạnh repo ở bước cài. Vì sao tách ra: repo chỉ chứa "năng lực" của xưởng, còn video của bạn nằm riêng, nên lúc cập nhật xưởng không đụng tới dự án nào.
 
 Nếu bạn quen dùng Terminal: `git clone <địa chỉ repo>` cho kết quả tương tự và sau này cập nhật dễ hơn.
 
@@ -22,7 +30,7 @@ Bên trong thư mục có sẵn mọi thứ Claude cần, trừ ba thứ sẽ t�
 
 ## Bước 2: mở Cowork và thêm thư mục
 
-Mở app Claude, chọn **Cowork** và bắt đầu một phiên làm việc mới. Tìm nút **Add folder** (thêm thư mục) và chọn thư mục xưởng vừa giải nén. Từ lúc này Claude đọc và ghi được trong thư mục đó, và chỉ thư mục đó.
+Mở app Claude, chọn **Cowork** và bắt đầu một phiên làm việc mới. Tìm nút **Add folder** (thêm thư mục) và chọn thư mục **Xuong phim AI** (thư mục mẹ, không phải thư mục repo bên trong), để Claude thấy cả repo lẫn hai thư mục dự án, thành phẩm. Từ lúc này Claude đọc và ghi được trong thư mục đó, và chỉ thư mục đó.
 
 Lần đầu, hệ điều hành có thể hỏi quyền truy cập thư mục; bấm cho phép.
 
@@ -30,7 +38,7 @@ Lần đầu, hệ điều hành có thể hỏi quyền truy cập thư mục; 
 
 Gõ vào khung chat:
 
-> Đọc file CLAUDE.md trong thư mục này rồi thiết lập xưởng phim cho tôi.
+> Đọc file CLAUDE.md trong thư mục xuong-phim-claude rồi thiết lập xưởng phim cho tôi.
 
 Claude sẽ đọc hướng dẫn bên trong thư mục và bắt đầu thiết lập. Chuyện gì sẽ xảy ra, theo thứ tự:
 
@@ -58,11 +66,11 @@ Kết thúc, Claude tóm tắt đã làm gì và gợi ý câu để làm clip �
 
 ## Bước 4: làm clip đầu tiên
 
-Tạo thư mục cho clip trong `du-an/`, ví dụ `du-an/bai-1/`, bên trong tạo `nguon/` và thả video quay thô vào đó (kéo thả trong Finder). Hoặc nhờ Claude tạo giúp. Rồi nói:
+Nói với Claude "tạo dự án Bai 1": Claude tạo thư mục `Du an/<năm-tháng> Bai 1/` có sẵn `nguon/`. Thả video quay thô vào `nguon/` (kéo thả trong Finder), rồi nói:
 
-> Dựng bài giảng ngang từ clip trong du-an/bai-1, cắt bỏ khoảng lặng và đoạn nói hỏng, thêm intro outro.
+> Dựng bài giảng ngang từ clip trong dự án Bai 1, cắt bỏ khoảng lặng và đoạn nói hỏng, thêm intro outro.
 
-Claude sẽ gỡ băng (vài phút cho clip 10 phút), gửi bạn **một bảng phương án**: đoạn nào giữ, đoạn nào bỏ, vì sao, và chỗ nào định chèn nhãn từ khoá. Bạn đọc, sửa nếu cần, gật đầu. Claude dựng **bản nháp** nhỏ để bạn xem trong `du-an/bai-1/xuat-nhap/`; bạn góp ý; Claude sửa. Ưng rồi Claude xuất **bản chính** 1080p, tự kiểm hình khớp tiếng và âm lượng, đặt vào `du-an/bai-1/xuat-hoan-chinh/`. Đó là file bạn đăng.
+Claude sẽ gỡ băng (vài phút cho clip 10 phút), gửi bạn **một bảng phương án**: đoạn nào giữ, đoạn nào bỏ, vì sao, và chỗ nào định chèn nhãn từ khoá. Bạn đọc, sửa nếu cần, gật đầu. Claude dựng **bản nháp** nhỏ để bạn xem trong `xuat-nhap/` của dự án; bạn góp ý; Claude sửa. Ưng rồi Claude xuất **bản chính** 1080p, tự kiểm hình khớp tiếng và âm lượng, làm luôn gói đăng tải, và đặt cả hai vào `Thanh pham/<năm-tháng> Bai 1/`. Đó là file bạn đăng. Khi bạn nói "duyệt", Claude xin phép rồi dọn nháp cho nhẹ máy.
 
 Cách đặt yêu cầu cho từng loại clip, ví dụ câu nói, và xử lý khi có gì lạ: đọc tiếp [HUONG-DAN.md](HUONG-DAN.md).
 
@@ -72,7 +80,7 @@ Cách đặt yêu cầu cho từng loại clip, ví dụ câu nói, và xử lý
 - **Bản nháp nhỏ (480p), bản chính 1080p.** Xem nháp để góp ý bố cục và nhịp, không đánh giá độ nét ở bản nháp
 - **Video của bạn không rời máy.** Gỡ băng và dựng chạy trên máy bạn. Chỉ đồ họa (intro, thẻ chữ, không có hình bạn) được dựng trong sandbox của Claude rồi ghép về
 - **Lần đầu trên một máy** có thể cần cấp thêm quyền (thư mục Downloads, cho phép trình duyệt tải nhiều file). Claude sẽ nhờ khi cần
-- **Dùng trên hai máy**: đặt thư mục xưởng vào iCloud Drive/Dropbox. Bộ nhận dạng giọng nói và thư viện nằm trong thư mục nên đồng bộ theo; trước khi dựng bài lớn, chờ file tải hết về máy đang ngồi (Finder không còn icon đám mây). File `Go bang tren Mac.command` tự cài môi trường riêng trên từng máy, nên lần đầu bấm trên máy mới sẽ chờ vài phút
+- **Dùng trên hai máy**: đồng bộ đám mây (iCloud, Dropbox) dễ kẹt với file video lớn, nên đừng đặt cả `Xuong phim AI` vào đó. Cách gọn: tải repo về máy thứ hai (hoặc `git clone`, sau này `git pull` để cập nhật), chạy thiết lập lại trên máy đó; dự án nào dựng ở máy nào thì để ở máy đó. File `Go bang tren Mac.command` tự cài môi trường riêng trên từng máy, nên lần đầu bấm trên máy mới sẽ chờ vài phút
 - **Gỡ băng chất lượng cao nhất trên Mac (tuỳ chọn).** Xưởng mặc định dùng model turbo. Muốn dùng large-v3, nhờ Claude tải theo `tools/models/TAI-MODEL.md` (khoảng 1,7 GB). Khi Claude nhờ, bấm đúp file `Go bang tren Mac.command` trong Finder; lần đầu trên mỗi máy cần mạng và mất vài phút. macOS chặn thì bấm chuột phải, chọn Open, rồi Open lần nữa. Chưa tải large-v3 thì xưởng tự dùng turbo
 - **Quay hình để dựng dễ hơn**: nói trước máy, để mặt rõ và sáng; quay liền một mạch, nghỉ vài giây giữa các ý để chỗ cắt rơi vào khoảng lặng; clip nói trên sân khấu thì giữ nguyên khuôn mặt người nói trên hình, xưởng không che mặt bằng bảng chữ hay đồ họa
 - **Muốn đổi phong cách** (màu, chức danh, nhạc): nói với Claude "đổi phong cách" và nêu điều muốn đổi. Không cần làm lại từ đầu

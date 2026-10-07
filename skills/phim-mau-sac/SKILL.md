@@ -10,7 +10,7 @@ Triết lý đã chốt với user: **đa số clip không cần chỉnh** - ch�
 ## Bước 1 - KHÁM (mỗi dự án một lần, trước khi dựng)
 
 ```
-python3 tools/mau-sac.py kham "du-an/<x>"
+python3 tools/mau-sac.py kham "../Du an/<x>"
 ```
 
 Script đo từng file nguồn (metadata màu, sáng p5/p50/p95, lệch kênh RGB, bão hòa, so chéo giữa các nguồn), xuất `mau-sac-kham.json` + 5 frame/file vào `.tam/mau/`. Sau đó BẮT BUỘC stage vài frame tiêu biểu lên và NHÌN BẰNG MẮT - số liệu chỉ là gợi ý, hai bẫy đã gặp thật:
@@ -39,10 +39,10 @@ TRẦN AN TOÀN (không vượt dù mắt muốn thêm): brightness ±0.05, gamm
 ## Bước 3 - SOI LẠI (cổng duyệt của user, bắt buộc trước khi áp)
 
 ```
-python3 tools/mau-sac.py soi "du-an/<x>/nguon/<file>" --vf "<đơn>"
+python3 tools/mau-sac.py soi "../Du an/<x>/nguon/<file>" --vf "<đơn>"
 ```
 
-Ra 3 ảnh ghép trái gốc | phải sau đơn. Claude tự nhìn trước (đạt "sửa mà như không sửa" chưa - da tự nhiên, nền không cháy, không bị "màu instagram"), rồi stage 1 ảnh gửi user gật/lắc. User gật → ghi đơn vào `du-an/<x>/mau-sac.json`:
+Ra 3 ảnh ghép trái gốc | phải sau đơn. Claude tự nhìn trước (đạt "sửa mà như không sửa" chưa - da tự nhiên, nền không cháy, không bị "màu instagram"), rồi stage 1 ảnh gửi user gật/lắc. User gật → ghi đơn vào `Du an/<x>/mau-sac.json`:
 
 ```json
 {"<tên file nguồn>": {"vf": "<chuỗi filter>", "note": "<bệnh gì, vì sao đơn này>"}}
@@ -64,4 +64,4 @@ assemble.py TỰ đọc mau-sac.json và chèn đơn vào trước chuỗi chu�
 - Duyệt màu của user thực hiện trên màn Mac (đã chốt); Claude nhìn frame staged là đủ tin cho bậc 1, bậc 2
 - Frame khám nằm trong `.tam/mau/` - dọn theo .tam như thường lệ
 
-<!-- ban-nguon: phim-mau-sac 2026-09-30 7e33aede -->
+<!-- ban-nguon: phim-mau-sac 2026-10-07 428d9b58 -->

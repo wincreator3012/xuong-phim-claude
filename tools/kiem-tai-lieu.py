@@ -40,7 +40,7 @@ DAU_BAT_KY = re.compile(r"^<!-- ban-nguon:.*-->\s*\n?", re.M)
 DUONG_DAN = re.compile(r"`([^`\s]+)`")
 DUOI = (".md", ".py", ".json", ".tsx", ".ts", ".mjs", ".command", ".png", ".jpg", ".mp4", ".webm", ".txt", ".sh")
 # đường dẫn bên trong một dự án, trong máy, hay sinh ra lúc chạy: không kiểm tồn tại
-BO_QUA_DAU = ("du-an/", "nguon/", "transcript/", "do-hoa/", "xuat-nhap/", "xuat-hoan-chinh/", "slide/", "multicam/",
+BO_QUA_DAU = ("du-an/", "../Du an/", "Du an/", "../Thanh pham/", "Thanh pham/", "<Du an>", "nguon/", "transcript/", "do-hoa/", "xuat-nhap/", "xuat-hoan-chinh/", "slide/", "multicam/",
               "canvas/", "tu-lieu/", "clip-ngan/", "proxy/", ".tam/", "$", "~", "/", "http", "tools/go-bang/",
               "studio/public/brand/", "nhac-nen/rieng/",
               "references/<", "PROXY", "os.", "props.", "palettes.", "brand.", "job.")
@@ -208,6 +208,8 @@ def kiem_duong_dan(goc, bc, kq):
                 continue
             for m in DUONG_DAN.finditer(dong):
                 dd = m.group(1)
+                if dd.startswith("@xuong/"):  # đường tính từ gốc xưởng trong job đồ họa (render-do-hoa.mjs)
+                    dd = dd[len("@xuong/"):]
                 if "/" not in dd or not (dd.endswith(DUOI) or dd.endswith("/")):
                     continue
                 if any(k in KY_TU_MAU for k in dd) or dd.startswith(BO_QUA_DAU) or dd.startswith("-"):

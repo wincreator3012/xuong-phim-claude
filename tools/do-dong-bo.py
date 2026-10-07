@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """ĐO ĐỒNG BỘ HÌNH-TIẾNG TRÊN PHIM THẬT: so thành phẩm với chính nguồn của nó tại nhiều mốc trải khắp phim.
 
-    python3 tools/do-dong-bo.py "du-an/<x>/xuat-hoan-chinh/<phim>.mp4" [--mau 12] [--cua-so 6] [--project du-an/<x>]
+    python3 tools/do-dong-bo.py "../Du an/<x>/xuat-hoan-chinh/<phim>.mp4" [--mau 12] [--cua-so 6] [--project "../Du an/<x>"]
 
 Cần <phim>.map.json cạnh file (assemble.py ghi). Với mỗi part cắt (loại "cut") đủ dài, lấy một cửa sổ
 vài giây và đo:

@@ -13,7 +13,7 @@ Tài liệu cho Claude khi cần sửa hay mở rộng Bàn dựng. Cách dùng 
 | Tệp | Việc |
 |---|---|
 | `Mo ban dung.command` | người dùng bấm đúp: tìm python3 có sẵn, chạy máy chủ, mở Chrome |
-| `tools/ban-dung.py` | máy chủ thư viện chuẩn Python 3.8+: trang tĩnh, media có HTTP 206, danh sách timeline (cả `du-an/<x>/ke-hoach-dung/` và `du-an/<x>/clip-ngan/<slug>/`), đọc và ghi timeline có khoá lạc quan, cất bản cũ, nhật ký thay đổi, dữ liệu phụ (khoảng lặng, câu large-v3, âm tiết, năng lượng), làm đẹp chữ, `/api/cat` |
+| `tools/ban-dung.py` | máy chủ thư viện chuẩn Python 3.8+: trang tĩnh, media có HTTP 206, danh sách timeline (cả `Du an/<x>/ke-hoach-dung/` và `Du an/<x>/clip-ngan/<slug>/`), đọc và ghi timeline có khoá lạc quan, cất bản cũ, nhật ký thay đổi, dữ liệu phụ (khoảng lặng, câu large-v3, âm tiết, năng lượng), làm đẹp chữ, `/api/cat` |
 | `tools/ban-dung/index.html`, `ban-dung.css` | khung trang (tối, sentence case) |
 | `tools/ban-dung/js/tien-ich.js` | tiện ích chung |
 | `tools/ban-dung/js/mo-hinh.js` | mô hình: bố cục y hệt assemble, thao tác sửa, hoàn tác, kiểm |
@@ -30,7 +30,7 @@ Tài liệu cho Claude khi cần sửa hay mở rộng Bàn dựng. Cách dùng 
 - `transcript/<nguồn>.tu.json`: `{"tu": [{"w", "s", "e", "c", "k"}], "khuc", "nangLuong": {"file", "hz", "san"}, "vanTay"}`. `k` là khúc nói do VAD cắt (giữa hai khúc luôn có khoảng lặng).
 - `transcript/<nguồn>.nang-luong.bin`: mỗi byte là dB + 100, 100 byte mỗi giây.
 - `timeline.json` thêm `_chinhTay` khi người dùng lưu từ Bàn dựng; `overlay[].duration` và `overlay[].giu` (assemble r7); `volumeDb` của đoạn (r7).
-- Mọi lần lưu: bản cũ vào `du-an/<x>/ke-hoach-dung/_phien-ban/<đường dẫn timeline, / thành __>.<ngày-giờ>.json`, một dòng vào `du-an/<x>/ke-hoach-dung/_ban-dung/nhat-ky.jsonl`.
+- Mọi lần lưu: bản cũ vào `Du an/<x>/ke-hoach-dung/_phien-ban/<đường dẫn timeline, / thành __>.<ngày-giờ>.json`, một dòng vào `Du an/<x>/ke-hoach-dung/_ban-dung/nhat-ky.jsonl`.
 
 ## Quy tắc điểm cắt (`tools/ban_dung_loi.py`)
 
@@ -51,7 +51,7 @@ Tài liệu cho Claude khi cần sửa hay mở rộng Bàn dựng. Cách dùng 
 ## Kiểm
 
 - `tools/kiem-tra-xuong.py --co-slide`: thêm ba phần cho Bàn dựng (điểm cắt trên lời tổng hợp; trường r7 đo trên thành phẩm; vi mờ ở mọi mép mối nối).
-- Trang: Playwright ở sandbox với dự án WebM dựng từ `du-an/_kiem-tra-tu-dong` (VP9, Opus) và mốc lời tổng hợp; kịch bản kéo tỉa, tách, hoàn tác, dời và kéo dài thẻ, đổi thứ tự, lưu, xung đột, bỏ và khôi phục bằng lời.
+- Trang: Playwright ở sandbox với dự án WebM dựng từ `Du an/_tam/_kiem-tra-tu-dong` (VP9, Opus) và mốc lời tổng hợp; kịch bản kéo tỉa, tách, hoàn tác, dời và kéo dài thẻ, đổi thứ tự, lưu, xung đột, bỏ và khôi phục bằng lời.
 - Dữ liệu thật: dùng chữ và năng lượng của một dự án thật, thay hình bằng video giả cùng thời lượng (footage không rời máy).
 
 ## Nguồn

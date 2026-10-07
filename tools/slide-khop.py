@@ -2,15 +2,15 @@
 # -*- coding: utf-8 -*-
 """KHỚP SLIDE với LỜI GIẢNG và đề xuất DÀN HÌNH (mặt / slide / cả hai) cho bài giảng có slide.
 
-Đầu vào: du-an/<x>/slide/slide.json (từ slide-nguon.py) + transcript
-         du-an/<x>/transcript/<clip>.transcript.json (từ transcribe.py).
-Đầu ra:  du-an/<x>/slide/slide-khop.json  (mốc từng slide trong FILE NGUỒN + độ tin cậy)
-         du-an/<x>/slide/DAN-HINH.md      (bảng đề xuất để user duyệt: mốc, slide, bố cục, lý do)
-         du-an/<x>/slide/timeline-slide-nhap.json (đoạn segments nháp có layout/slide, Claude
+Đầu vào: Du an/<x>/slide/slide.json (từ slide-nguon.py) + transcript
+         Du an/<x>/transcript/<clip>.transcript.json (từ transcribe.py).
+Đầu ra:  Du an/<x>/slide/slide-khop.json  (mốc từng slide trong FILE NGUỒN + độ tin cậy)
+         Du an/<x>/slide/DAN-HINH.md      (bảng đề xuất để user duyệt: mốc, slide, bố cục, lý do)
+         Du an/<x>/slide/timeline-slide-nhap.json (đoạn segments nháp có layout/slide, Claude
                                                    chép vào timeline.json sau khi chỉnh)
 
 Cách dùng (từ gốc "xuong-phim-claude"):
-  python3 tools/slide-khop.py "du-an/<x>" --clip "<tên file nguồn không đuôi>"
+  python3 tools/slide-khop.py "../Du an/<x>" --clip "<tên file nguồn không đuôi>"
       [--lech 12.5]   # quay màn hình bắt đầu TRỄ 12.5s so với quay mặt (mốc màn hình + lech = mốc mặt)
       [--bo-qua 1,2]  # slide không dùng (bìa, cảm ơn...)
 

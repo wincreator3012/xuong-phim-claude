@@ -17,7 +17,7 @@ Quy trình chủ lực của xưởng phim: từ video talking-head quay liền 
 
 ## Bước 1 - tiếp nhận và khảo sát
 
-Tư liệu ở `du-an/<tên>/nguon/` (chưa có thì tạo theo `du-an/_mau/`). Chạy `python3 tools/mediainfo.py "du-an/<tên>/nguon"` (thời lượng, độ phân giải, fps, âm thanh). Khám màu mọi nguồn theo skill phim-mau-sac (`python3 tools/mau-sac.py kham "du-an/<tên>"`); footage HDR bắt buộc có đơn tonemap trong `mau-sac.json` trước khi dựng.
+Tư liệu ở `Du an/<tên>/nguon/` (chưa có hồ sơ dự án thì tạo bằng `python3 tools/du-an-moi.py "<tên>"`). Chạy `python3 tools/mediainfo.py "../Du an/<tên>/nguon"` (thời lượng, độ phân giải, fps, âm thanh). Khám màu mọi nguồn theo skill phim-mau-sac (`python3 tools/mau-sac.py kham "../Du an/<tên>"`); footage HDR bắt buộc có đơn tonemap trong `mau-sac.json` trước khi dựng.
 
 Làm rõ với user một lần, chỉ hỏi những gì `phong-cach/PHONG-CACH.md` chưa trả lời: ngang, dọc hay cả hai; độ dài; theme sáng/tối; nhạc nền nào trong `nhac-nen/`; đoạn phải giữ nguyên. User vắng mặt thì chọn mặc định (ngang, light, nhạc bookends) và ghi rõ giả định. Nguồn 25fps thì đặt `"fps": 25` trong timeline; mặc định 30.
 
@@ -26,7 +26,7 @@ Làm rõ với user một lần, chỉ hỏi những gì `phong-cach/PHONG-CACH.
 User đã có transcript thì vẫn chạy bước khoảng lặng (silences.json). Chưa có: gỡ băng theo skill phim-transcript. Ưu tiên chạy trên Mac bằng large-v3 (khi máy là Mac thật và đã tải model này, xem `tools/models/TAI-MODEL.md`) (xếp việc bằng `python3 tools/hang-doi-go-bang.py them ...`, nhờ người dùng bấm đúp `Go bang tren Mac.command`); người dùng không ở máy hoặc cần ngay thì chạy trong VM (tự chọn turbo) và ghi rõ trong báo cáo. Sau đó luôn chạy:
 
 ```
-python3 tools/nghiem-thu.py transcript "du-an/<tên>"
+python3 tools/nghiem-thu.py transcript "../Du an/<tên>"
 ```
 
 Lệnh này bắt quãng >8s có tiếng mà không có chữ (Whisper bỏ đoạn) và mốc đảo - KHÔNG ĐẠT thì nhận dạng lại quãng đó với cửa sổ rộng (skill phim-transcript) trước khi lên phương án cắt. Bài >90 phút: tách audio từng 30 phút, transcript từng phần, cộng offset. Việc chạy lâu: mục "Việc chạy dài hơn 180 giây" trong `docs/QUY-TRINH-KY-THUAT.md`.
@@ -39,13 +39,13 @@ Cùng lúc chủ động đề xuất overlay cho ba loại nội dung (không c
 
 ## Bước 4 - đồ họa và timeline
 
-Đồ họa: intro/outro LUÔN từ preset `do-hoa-chung/preset-intro-outro-<ngang|doc>.json` (đủ placeholder, hàng 1-3 logo từ `brand/logo/`; tinh chỉnh theo `do-hoa-chung/GHI-CHU.md`). Đồ họa khác soạn job theo `du-an/_mau/do-hoa/`. Render bằng `node tools/render-do-hoa.mjs <job> --studio <studio-đám-mây>` - script tự đo từng file (thời lượng khớp `durationInSeconds`, fps, webm còn alpha), ghi `do-hoa-manifest.json`, thoát mã 1 là có file sai: sửa job, render lại, không đem file sai vào timeline. Commit về `du-an/<tên>/do-hoa/<ngang|doc>/`. Chi tiết: skill phim-do-hoa, `brand/brand.json`. Chữ trong đồ họa lấy từ chính lời giảng, không bịa thêm ý. Cảnh minh hoạ đã duyệt: viết, soi (`canh.mjs kiem`, `người dùng`), chụp theo skill phim-canh-minh-hoa; kiểu nền mờ cần một khung hình trích trên máy (`tools/canh-ghep.py khung`), kiểu thu vào góc ghép trên máy (`tools/canh-ghep.py pip`, `--at` bằng đúng `broll.at`); mẫu timeline bốn kiểu ở `skills/phim-canh-minh-hoa/references/viet-canh.md` mục 5.
+Đồ họa: intro/outro LUÔN từ preset `do-hoa-chung/preset-intro-outro-<ngang|doc>.json` (đủ placeholder, hàng 1-3 logo từ `brand/logo/`; tinh chỉnh theo `do-hoa-chung/GHI-CHU.md`). Đồ họa khác soạn job theo `tools/mau-du-an/do-hoa/`. Render bằng `node tools/render-do-hoa.mjs <job> --studio <studio-đám-mây>` - script tự đo từng file (thời lượng khớp `durationInSeconds`, fps, webm còn alpha), ghi `do-hoa-manifest.json`, thoát mã 1 là có file sai: sửa job, render lại, không đem file sai vào timeline. Commit về `Du an/<tên>/do-hoa/<ngang|doc>/`. Chi tiết: skill phim-do-hoa, `brand/brand.json`. Chữ trong đồ họa lấy từ chính lời giảng, không bịa thêm ý. Cảnh minh hoạ đã duyệt: viết, soi (`canh.mjs kiem`, `người dùng`), chụp theo skill phim-canh-minh-hoa; kiểu nền mờ cần một khung hình trích trên máy (`tools/canh-ghep.py khung`), kiểu thu vào góc ghép trên máy (`tools/canh-ghep.py pip`, `--at` bằng đúng `broll.at`); mẫu timeline bốn kiểu ở `skills/phim-canh-minh-hoa/references/viet-canh.md` mục 5.
 
 Bài dài mặc định intro đứng đầu; NHƯNG nếu câu mở đầu tự nó là câu chốt mạnh thì áp quy tắc "hook trước, intro sau": Hook là segment ĐẦU TIÊN (snap đúng khoảng lặng), Intro là segment `type:"insert"` NGAY SAU, đánh dấu `"role": "intro"` để nhạc bookends bám đúng thẻ intro (không dùng field `intro` cấp cao nhất vì nó luôn build trước mọi segment; thiếu `role` thì `--kiem-tra` cảnh báo) - xem `bien-tap.md` mục "Hook trước Intro". Không chắc thì hỏi user.
 
 Thời lượng overlay tính theo `bien-tap.md` (lớn hơn giữa thời lượng lời nói và thời gian đọc chữ, cộng đệm 1-2s), không đặt số tròn. Có `tu-lieu/TU-LIEU.md` (skill phim-tu-lieu) thì đọc khi soạn timeline; ảnh tĩnh chuyển Ken Burns theo lệnh trong đó; ghi công gom vào mô tả video.
 
-Timeline `du-an/<tên>/timeline.json` theo schema trong docstring `tools/assemble.py`:
+Timeline `Du an/<tên>/timeline.json` theo schema trong docstring `tools/assemble.py`:
 - `snap: true` cho mọi đoạn video
 - **Quy tắc cứng: không lớp phủ nào (overlay, pill, bảng tên, slide thẻ) che mặt BẤT KỲ AI trong khung**, kể cả người ngồi hoặc đứng phía sau người nói và người đang được gửi hình lên slide. Chọn kiểu hiện không chồng lên cảnh quay (overlay ở vùng khung trống, `ca-hai`, `mat`), bỏ slide hay thẻ ít quan trọng; khung có khán phòng thì không dùng `mat-chinh`. Nghiệm thu: trích khung tại MỌI mốc có lớp phủ và nhìn từng khung (`skills/_chung/overlay-va-the.md`)
 - Gộp nhiều nội dung liệt kê/nhấn mạnh vào MỘT đoạn quay liên tục bằng `overlay` dạng LIST (mỗi cái một `at` theo lời nói, không chồng lấn) thay vì tách segment hay dùng `broll`; chỉ tách segment khi cần BỎ nội dung ở giữa, và cắt vào khoảng lặng thật
@@ -54,12 +54,12 @@ Timeline `du-an/<tên>/timeline.json` theo schema trong docstring `tools/assembl
 - Gắn `chapter` cho các phần chính (chapters.txt cho YouTube)
 - Kết bài: đoạn nội dung cuối đặt `fadeOut` 0,4-0,6 giây; chỉ muốn tiếng tắt dần thì `fadeOutAudio`; outro tĩnh thì mờ cả hình lẫn tiếng khoảng 1,5 giây (`_chung/timeline-va-dung.md` mục "Điểm cắt, fade, kết")
 
-Soạn xong, kiểm ngay: `python3 tools/assemble.py --project "du-an/<tên>" --kiem-tra` - bắt file thiếu, `out` vượt nguồn, `overlay.at` vượt đoạn, `broll.at` ngoài đoạn, B-roll chồng nhau, cảnh báo overlay bị cắt cụt. Hết lỗi rồi mới dựng.
+Soạn xong, kiểm ngay: `python3 tools/assemble.py --project "../Du an/<tên>" --kiem-tra` - bắt file thiếu, `out` vượt nguồn, `overlay.at` vượt đoạn, `broll.at` ngoài đoạn, B-roll chồng nhau, cảnh báo overlay bị cắt cụt. Hết lỗi rồi mới dựng.
 
 ## Bước 5 - bản nháp (chốt duyệt số 2)
 
 ```
-python3 tools/assemble.py --project "du-an/<tên>" --preview --out "<tên>-<aspect>-nhap1"
+python3 tools/assemble.py --project "../Du an/<tên>" --preview --out "<tên>-<aspect>-nhap1"
 ```
 
 Bản 480p. LUÔN truyền `--out` tường minh có số nháp (`-nhap1`, `-nhap2`...): không truyền thì mọi vòng dùng chung tên `<tên>-<aspect>-nhap.mp4` và vòng sau lặng lẽ ghi đè vòng trước (đã xảy ra thật). Tên kết thúc bằng `-nhapN` thì script không nối thêm `-nhap`. Lệnh bị ngắt thì gọi lại y nguyên, assemble tự resume (cache tự vô hiệu khi đổi code, tham số hay file nguồn). Cuối lượt assemble in dòng `NGHIỆM THU: hình = tiếng = tổng N part` và ghi `<file>.map.json` (mốc nguồn sang mốc thành phẩm từng part) cùng `<file>.nghiem-thu.json`. Báo user mở `xuat-nhap/<tên>-<aspect>-nhapN.mp4` xem trên máy. Lặp nháp tới khi ưng, mỗi vòng tăng số. Ở nháp đầu, chạy `tools/moc-tu.py` cho dự án và nói một dòng rằng người dùng có thể tự chỉnh nhỏ trên Bàn dựng; người dùng chỉnh xong thì làm theo skill phim-ban-dung.
@@ -70,7 +70,7 @@ Assemble dừng với `[NGHIỆM THU] KHÔNG ĐẠT`: đọc bảng chẩn đoá
 
 Chạy assemble không `--preview` cho từng aspect với `--out "<tên>-<aspect>"` (gọi lại y nguyên nếu bị ngắt). Nghiệm thu, không bỏ mục nào:
 
-1. **Cổng máy đo, chạy trước mọi thứ**: `python3 tools/nghiem-thu.py video "du-an/<tên>/xuat-nhap/<file>.mp4" --khung <ngang|doc> --anh` phải ĐẠT (mã thoát 0): hình = tiếng trong 0.06s, khớp tổng part, đồng bộ hình-tiếng so với NGUỒN tại 10 mốc (cổng tự gọi `tools/do-dong-bo.py`: tiếng phải khớp nguồn trong ±25 ms, hình - tiếng trong ±50 ms, không trôi quá 15 ms mỗi phút), khung/fps/codec, -14±1 LUFS và true peak, im lặng dài, hình đứng, quãng đen, còn HDR không; xuất `<file>.luoi.jpg` 12 khung có mốc giờ
+1. **Cổng máy đo, chạy trước mọi thứ**: `python3 tools/nghiem-thu.py video "../Du an/<tên>/xuat-nhap/<file>.mp4" --khung <ngang|doc> --anh` phải ĐẠT (mã thoát 0): hình = tiếng trong 0.06s, khớp tổng part, đồng bộ hình-tiếng so với NGUỒN tại 10 mốc (cổng tự gọi `tools/do-dong-bo.py`: tiếng phải khớp nguồn trong ±25 ms, hình - tiếng trong ±50 ms, không trôi quá 15 ms mỗi phút), khung/fps/codec, -14±1 LUFS và true peak, im lặng dài, hình đứng, quãng đen, còn HDR không; xuất `<file>.luoi.jpg` 12 khung có mốc giờ
 2. Stage `<file>.luoi.jpg` và NHÌN: intro/outro đúng chỗ, bảng tên hiện, không khung đen, không lệch crop, chữ không tràn
 3. Kiểm TỪNG mối nối bằng `silencedetect`/`volumedetect` quanh mốc `start`/`end` của từng part trong `map.json` (không tính tay)
 4. Mỗi overlay: mốc thành phẩm = `start` của part + `at`, khớp bảng Bước 3; chưa chắc thì xuất 1 frame xem; đồng thời xác nhận không che mặt ai trên khung thật tại mốc đó
@@ -78,7 +78,7 @@ Chạy assemble không `--preview` cho từng aspect với `--out "<tên>-<aspec
 6. chapters.txt khớp `map.json` nếu có chapter: mỗi chương dài tối thiểu 10 giây (luật YouTube), chương mở đầu quá ngắn thì gộp vào chương kế; chương lấy từ công cụ, không gõ tay
 7. Phim nhiều part (multicam, phim tài liệu, trên 40 part) hay có lời than "hình lệch tiếng": chạy thêm `python3 tools/do-dong-bo.py "<file>.mp4" --mau 24` và đọc từng dòng (mốc dày hơn, thấy cả lệch cục bộ lẫn trôi dần). Lệch xuất hiện ở đầu ra mà tiếng đúng 0 ms thì nghi nguồn (tiếng từng máy so với tiếng chủ, hình cận so với hình toàn), không nghi bước dựng
 
-Đạt rồi mới COPY sang `du-an/<tên>/xuat-hoan-chinh/<tên>-<aspect>.mp4` (bỏ `-nhap`) và báo: tên file, thời lượng, dung lượng, chapters, kèm dòng "nghiệm thu máy: ĐẠT (hình = tiếng, -14 LUFS)". Thành phẩm đã ở máy user, không cần commit.
+Đạt rồi mới COPY sang `Du an/<tên>/xuat-hoan-chinh/<tên>-<aspect>.mp4` (bỏ `-nhap`) và báo: tên file, thời lượng, dung lượng, chapters, kèm dòng "nghiệm thu máy: ĐẠT (hình = tiếng, -14 LUFS)". Thành phẩm đã ở máy user, không cần commit.
 
 ## Bước 7 - gói đăng tải (tự làm, không chờ nhắc)
 
@@ -92,4 +92,4 @@ Ngay sau khi giao, làm gói đăng tải theo skill phim-dang-tai: ba phương 
 - **Lớp lỗi "bất biến bị vi phạm nhưng không ai kiểm"**: mọi file trung gian phải hình = tiếng; bước sau chỉ đi tiếp khi bước trước đo đạt; không để nhánh "sửa ngầm" (encode lại, hạ ngưỡng, bắt ngoại lệ rồi bỏ qua) che dấu vết; con số khớp "gần đúng" khó hiểu là dấu hiệu, không phải may mắn. Bất biến hình = tiếng phải được đo cả SO VỚI NGUỒN (ngưỡng chặt 4 ms ở part và thân phim, không dùng chung ngưỡng 0,06 s của AAC); một công cụ đo tự viết phải thử trên nguồn biết trước đáp án trước khi tin
 - Kết thúc dự án đáng nhớ: bài học kỹ thuật vào `docs/BAI-HOC.md` đúng chủ đề; tiêu chí biên tập mới vào `skills/phim-dung-bai/references/bien-tap.md`; góp ý phong cách vào sổ tay góp ý của `phong-cach/PHONG-CACH.md`. Sửa skill theo `skills/_chung/bao-tri-skill.md`
 
-<!-- ban-nguon: phim-dung-bai 2026-10-05 6b425e52 -->
+<!-- ban-nguon: phim-dung-bai 2026-10-07 affb1913 -->

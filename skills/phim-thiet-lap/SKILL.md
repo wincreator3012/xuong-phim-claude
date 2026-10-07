@@ -50,7 +50,7 @@ Hình minh hoạ không tải lúc này (theo từng dự án, skill phim-tu-lie
 
 ## Bước 4 - render thử intro/outro để duyệt bằng mắt
 
-Ở nơi có studio: copy preset ngang vào `du-an/_thiet-lap/do-hoa/`, điền title "Tên bài giảng mẫu", subtitle tên chuỗi chương trình thật, render `node tools/render-do-hoa.mjs <job> --studio <studio>`; xuất một khung giữa intro và một khung giữa outro (ffmpeg -ss), đưa người dùng xem (SendUserFile). Hỏi đúng ba điều: màu có đúng cảm giác không, chữ và chức danh đúng chưa, logo cân đối chưa. Sửa brand.json/preset theo góp ý, render lại tới khi gật. Mỗi góp ý về chữ/chức danh ghi vào "Sổ tay góp ý" của PHONG-CACH.md.
+Ở nơi có studio: copy preset ngang vào `../Du an/_tam/thiet-lap/do-hoa/` (ngoài repo), điền title "Tên bài giảng mẫu", subtitle tên chuỗi chương trình thật, render `node tools/render-do-hoa.mjs <job> --studio <studio>`; xuất một khung giữa intro và một khung giữa outro (ffmpeg -ss), đưa người dùng xem (SendUserFile). Hỏi đúng ba điều: màu có đúng cảm giác không, chữ và chức danh đúng chưa, logo cân đối chưa. Sửa brand.json/preset theo góp ý, render lại tới khi gật. Mỗi góp ý về chữ/chức danh ghi vào "Sổ tay góp ý" của PHONG-CACH.md.
 
 Không có studio ở đâu cả (không sandbox, máy không có node): bỏ qua, ghi chú trong PHONG-CACH.md "chưa duyệt đồ họa thử", sẽ duyệt ở dự án đầu tiên.
 
@@ -62,11 +62,11 @@ Thiết lập xong mà người dùng chưa biết xưởng làm được gì ch
 
 **5b. Giới thiệu xưởng có hệ thống (khoảng 10 phút).** Đọc `skills/phim-thiet-lap/references/gioi-thieu-xuong.md` và làm theo sáu chặng: xưởng là gì và ba lời hứa; bản đồ năng lực (bạn đang có gì, xưởng làm ra gì); một dự án chạy thế nào; dùng hiệu quả nhất; giới hạn nói thẳng; chọn bước đầu tiên. Mỗi lượt một chặng, kết bằng một câu hỏi để người dùng chọn đi tiếp; cá nhân hoá bằng loại clip họ đã chọn ở Bước 2. Cuối chặng 6 chạy `python3 tools/cai-dat.py --danh-dau gioi-thieu` để lần sau không giới thiệu lại.
 
-Người dùng nói "để sau" hay vắng mặt: tóm tắt chặng 1 và 6 trong một tin nhắn, vẫn ghi dấu, và nói họ gọi lại bằng câu "giới thiệu lại xưởng". Kết bằng câu đầu tiên họ có thể nói để làm clip thật, ví dụ: "Tạo thư mục du-an/bai-1, tôi sẽ thả clip quay vào nguon, rồi dựng bài giảng ngang cho tôi".
+Người dùng nói "để sau" hay vắng mặt: tóm tắt chặng 1 và 6 trong một tin nhắn, vẫn ghi dấu, và nói họ gọi lại bằng câu "giới thiệu lại xưởng". Kết bằng câu đầu tiên họ có thể nói để làm clip thật, ví dụ: "Tạo dự án bai-1, tôi sẽ thả clip quay vào nguon, rồi dựng bài giảng ngang cho tôi".
 
 ## Khi người dùng hỏi xưởng làm được gì (bất cứ lúc nào)
 
-Không cần chạy lại thiết lập. Chạy 5b (sáu chặng, hoặc chỉ chặng người dùng hỏi), cập nhật theo những gì đã có trong `PHONG-CACH.md` và các dự án trong `du-an/`. Người dùng cũ hỏi "nên làm gì tiếp" thì gợi ý theo dự án họ đã làm (ví dụ đã có bài giảng dài chưa có clip dọc thì đề xuất cắt clip ngắn).
+Không cần chạy lại thiết lập. Chạy 5b (sáu chặng, hoặc chỉ chặng người dùng hỏi), cập nhật theo những gì đã có trong `PHONG-CACH.md` và các dự án trong `Du an/`. Người dùng cũ hỏi "nên làm gì tiếp" thì gợi ý theo dự án họ đã làm (ví dụ đã có bài giảng dài chưa có clip dọc thì đề xuất cắt clip ngắn).
 
 ## Khi người dùng muốn đổi phong cách về sau
 

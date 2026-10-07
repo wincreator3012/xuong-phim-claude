@@ -7,7 +7,7 @@ Hai nơi chạy (từ thư mục gốc "xuong-phim-claude"):
      Claude xếp việc bằng tools/hang-doi-go-bang.py, người dùng bấm đúp
      "Go bang tren Mac.command" ở thư mục gốc (xem tools/models/TAI-MODEL.md).
   2. DỰ PHÒNG - trong VM Cowork (device_bash):
-       python3 tools/transcribe.py "du-an/x/nguon/clip.mp4" --out-dir "du-an/x/transcript"
+       python3 tools/transcribe.py "../Du an/x/nguon/clip.mp4" --out-dir "../Du an/x/transcript"
      VM chỉ khoảng 3-4 GB RAM nên --model auto sẽ chọn turbo (large-v3 chết lặng trong VM).
 
 Kết quả (đặt theo tên file nguồn, ví dụ clip.*):

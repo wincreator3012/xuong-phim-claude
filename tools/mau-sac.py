@@ -8,9 +8,9 @@ xem bằng mắt. Script chỉ ĐO và GỢI Ý cờ hiệu - kết luận kê �
 quyết sau khi nhìn frame, theo trần an toàn trong skill.
 
 Cách dùng (từ gốc "xuong-phim-claude"):
-  KHÁM cả dự án:   python3 tools/mau-sac.py kham "du-an/<x>"
-  KHÁM một file:   python3 tools/mau-sac.py kham "du-an/<x>" --files "clip.MP4"
-  SOI trước/sau:   python3 tools/mau-sac.py soi "du-an/<x>/nguon/clip.MP4" \
+  KHÁM cả dự án:   python3 tools/mau-sac.py kham "../Du an/<x>"
+  KHÁM một file:   python3 tools/mau-sac.py kham "../Du an/<x>" --files "clip.MP4"
+  SOI trước/sau:   python3 tools/mau-sac.py soi "../Du an/<x>/nguon/clip.MP4" \
                        --vf "<chuỗi filter>" [--t 30,120,300]
 
 Kết quả KHÁM: <dự án>/mau-sac-kham.json + frame ở <dự án>/.tam/mau/

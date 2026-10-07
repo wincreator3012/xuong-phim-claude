@@ -29,7 +29,7 @@ Xưởng làm việc bằng nguyên lý, không bằng khuôn. Mọi quyết đ�
 - Sandbox về máy: chép vào `/mnt/user-data/outputs/<thư mục>/`, rồi `device_commit_files` với `stagedPath` và đường dẫn tuyệt đối trên máy. Mỗi lần commit bản sửa dùng tên staged MỚI; so md5 hai phía (mp4 và ảnh so bằng `ffprobe` vì có thể bị gắn thêm hộp manifest). File hơn 20 MB: `split -b 19m`, commit từng phần, `cat` trên máy, kiểm checksum.
 - File `.tsx` sửa ở sandbox commit về `studio/src/...` trên máy NGAY sau khi sửa.
 - Sửa file có dấu tiếng Việt trên máy bằng `python3 <<'PYEOF'` đọc sửa ghi, rồi đọc lại đoạn vừa ghi để chắc dấu còn nguyên.
-- Không xoá file trong thư mục của người dùng khi chưa được phép; file cần bỏ chuyển vào `_to_delete/`. Ảnh kiểm tra tạm để trong thư mục nhà của VM, không để trong thư mục dự án.
+- Không xoá file trong thư mục của người dùng khi chưa được phép; file cần bỏ chuyển vào `Du an/_tam/_to_delete/` (ngoài repo). Ảnh kiểm tra tạm để trong thư mục nhà của VM, không để trong thư mục dự án.
 
 ## Chữ và chức danh
 
@@ -43,7 +43,7 @@ Xưởng làm việc bằng nguyên lý, không bằng khuôn. Mọi quyết đ�
 - Phương án cắt và overlay duyệt trước khi dựng; nháp 480p duyệt trước bản chính. Infomotion và phim tài liệu có thêm cổng duyệt trên giấy. Ở chốt nháp, người dùng có thể tự chỉnh nhỏ trên Bàn dựng (skill phim-ban-dung); timeline có `_chinhTay` là nguồn sự thật, không sinh lại.
 - Chưa có "nghiệm thu máy: ĐẠT" thì chưa nói "xong" (chi tiết: `skills/_chung/nghiem-thu-dung-y.md`).
 - Báo giao: tên file, đúng thư mục clip trong `Thanh pham/`, thời lượng, dung lượng, chapters nếu có, dòng ghi công nhạc nếu dùng track CC-BY.
-- Clip vừa qua nghiệm thu thì làm luôn gói đăng tải theo skill phim-dang-tai (ba tiêu đề và mô tả YouTube, status Facebook, ba thumbnail từ khung hình thật, qua `tools/dang-tai.py kiem`), không chờ người dùng nhắc; báo cùng lượt với báo giao. Video và gói đăng tải của mỗi clip nằm chung một thư mục tự đủ `Short NN <slug>/` (NN hai chữ số theo thứ tự dựng), và mọi clip cùng dự án nằm dưới MỘT thư mục mẹ `Thanh pham/<tên dự án>/` (clip dài ở `00 Video day du/`), không tách ngang cấp.
+- Clip vừa qua nghiệm thu thì làm luôn gói đăng tải theo skill phim-dang-tai (ba tiêu đề và mô tả YouTube, status Facebook, ba thumbnail từ khung hình thật, qua `tools/dang-tai.py kiem`), không chờ người dùng nhắc; báo cùng lượt với báo giao. Video và gói đăng tải của mỗi clip nằm chung một thư mục tự đủ `Short NN <slug>/` (NN hai chữ số theo thứ tự dựng), và mọi clip cùng dự án nằm dưới MỘT thư mục mẹ `Thanh pham/<YYYY-MM tên dự án>/` (clip dài ở `00 Video day du/`), không tách ngang cấp.
 
 ## Khi một khâu hỏng
 
@@ -51,9 +51,10 @@ Bảng từng khâu và mẫu câu báo ở mục "Khi một khâu hỏng" của
 
 ## Khép dự án hoặc khép phiên
 
-- Bản đạt nghiệm thu đặt vào thư mục clip trong `Thanh pham/` (cùng gói đăng tải, md5 khớp); nguồn dựng lưu ở `du-an/<dự án>/`; nháp và rác chỉ dọn sau khi người dùng nói "duyệt"; job JSON đồ họa giữ trong `do-hoa/job/` tới khi giao xong.
+- Bản đạt nghiệm thu đặt vào thư mục clip trong `Thanh pham/` (cùng gói đăng tải, md5 khớp); nguồn dựng lưu ở `Du an/<dự án>/`; nháp và rác chỉ dọn sau khi người dùng nói "duyệt", khi đó nguồn quay thô chuyển sang ổ lưu trữ người dùng chọn (ghi `NGUON-O-DAU.md`); job JSON đồ họa giữ trong `do-hoa/job/` tới khi giao xong.
 - Bài học kỹ thuật mới: một dòng vào đúng chủ đề của `docs/BAI-HOC.md` (kèm dự án, ngày). Bài học làm đổi môi trường, lệnh hay quy ước thì sửa luôn đúng mục của `docs/QUY-TRINH-KY-THUAT.md`; không nối ghi chú có ngày vào cuối file đó.
 - Góp ý phong cách của người dùng: một dòng vào sổ tay góp ý của `phong-cach/PHONG-CACH.md`; góp ý lặp lần hai thì sửa nguồn mặc định (brand.json, preset, defaultProps).
 - Ẩn dụ hình mới được duyệt: ghi ngay vào `do-hoa-chung/an-du-y-niem.json` (chưa có file thì tạo theo schema ở `skills/phim-infomotion/references/mau-kich-ban.md` mục 4).
 - Quy trình của skill cần đổi: theo `skills/_chung/bao-tri-skill.md`.
+- Repo sạch: hồ sơ dự án, nháp, việc tạm luôn ở ngoài repo (`Du an/`, `Du an/_tam/`, `Thanh pham/`; `tools/cau_hinh.py`). Đầu và cuối phiên `python3 tools/kiem-sach.py`; cuối phiên phải ĐẠT (CLAUDE.md quy tắc 14).
 - Dự án kéo qua nhiều phiên: file hồ sơ của dự án (ví dụ `HO-SO-PHIM.md`, `SO-GOP-Y.md`) phải nói được đang ở bước nào, chờ ai, đã chốt gì, nháp mới nhất tên gì.

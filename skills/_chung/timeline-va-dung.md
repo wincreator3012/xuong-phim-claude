@@ -14,7 +14,7 @@ Schema đầy đủ của `timeline.json` nằm trong docstring đầu `tools/as
 ## Tên file xuất
 
 - Luôn truyền `--out` tường minh: nháp `<tên>-<khung>-nhapN` (tăng N mỗi vòng, kể cả nháp đầu), bản chính `<tên>-<khung>`. Để tên mặc định từng làm nháp sau ghi đè nháp trước.
-- assemble ghi vào `du-an/<x>/xuat-nhap/`; bản đạt nghiệm thu (clip dọc: bản đã burn phụ đề) copy sang `xuat-hoan-chinh/`.
+- assemble ghi vào `Du an/<x>/xuat-nhap/`; bản đạt nghiệm thu (clip dọc: bản đã burn phụ đề) copy sang `xuat-hoan-chinh/`.
 - Gọi lặp y nguyên lệnh (cùng `--out`) khi một lượt bị ngắt; part đã đúng tự bỏ qua.
 
 ## Dự án con (clip ngắn cắt từ một dự án)

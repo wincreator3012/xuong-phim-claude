@@ -5,9 +5,9 @@
 Hai lệnh (từ gốc xưởng):
 
   1) JOB THUMBNAIL - đổi bản thiết kế thumbnail ngắn gọn thành job cho render-do-hoa.mjs:
-       python3 tools/dang-tai.py job "du-an/<x>/dang-tai/<video>/thumbnail.json"
+       python3 tools/dang-tai.py job "../Du an/<x>/dang-tai/<video>/thumbnail.json"
      thumbnail.json (Claude soạn):
-       {"theme": "light", "brandFile": "../../../../brand/brand.json",   # tương đối so với file này
+       {"theme": "light", "brandFile": "@xuong/brand/brand.json",   # "@xuong/" = gốc xưởng; đường khác tương đối so với file này
         "kicker": "TÊN CHUỖI",                                           # tuỳ chọn, dùng chung
         "logo": "<logo nhỏ>.png",                                          # tuỳ chọn, file trong brand/logo
         "ban": [
@@ -19,7 +19,7 @@ Hai lệnh (từ gốc xưởng):
      Render trong sandbox: node tools/render-do-hoa.mjs <thumbnail.job.json> --studio <studio>
 
   2) KIỂM - cổng máy cho gói đăng tải, chạy TRƯỚC khi báo anh:
-       python3 tools/dang-tai.py kiem "du-an/<x>/dang-tai/<video>"
+       python3 tools/dang-tai.py kiem "../Du an/<x>/dang-tai/<video>"
      Đọc dang-tai.json trong thư mục (schema: skills/phim-dang-tai/references/mau-dang-tai.md),
      kiểm giới hạn nền tảng, quy ước chữ của anh, mồi tương tác [engagement bait], chương YouTube,
      thumbnail (kích thước, tỉ lệ, 2 MB); ghi DANG-TAI.md (bản chép-dán) và soi-thumbnail.jpg (thumbnail
@@ -97,7 +97,7 @@ def cmd_job(spec_path):
         logo = b.get("logo", spec.get("logo"))
         if logo:
             props["logoFile"] = logo
-            rel = os.path.relpath(os.path.join(ROOT, "brand", "logo", logo), base)
+            rel = "@xuong/brand/logo/" + logo  # gốc xưởng, không phụ thuộc chỗ để dự án
             if rel not in [a[0] for a in assets]:
                 assets.append((rel, logo))
         if b.get("theme"):
@@ -281,6 +281,20 @@ def soi_thumbnail(imgs, out):
     sheet.save(out, quality=90)
 
 
+def tim_tep(folder, p):
+    """Đường dẫn trong dang-tai.json: ưu tiên tương đối với thư mục gói (gói tự đủ trong Thanh pham/),
+    rồi mới tới gốc repo (kiểu cũ)."""
+    if not p:
+        return None
+    if os.path.isabs(p):
+        return p
+    for goc in (folder, ROOT):
+        c = os.path.normpath(os.path.join(goc, p))
+        if os.path.exists(c):
+            return c
+    return os.path.normpath(os.path.join(folder, p))
+
+
 def cmd_kiem(folder):
     path = os.path.join(folder, "dang-tai.json")
     if not os.path.exists(path):
@@ -321,7 +335,7 @@ def cmd_kiem(folder):
             dau = mo_ta.strip().split("\n")[0][:160].lower()
             if tu_khoa and not any(k in dau for k in tu_khoa):
                 loi.append("mô tả YouTube: câu đầu (phần hiện trước \"Xem thêm\") chưa chứa từ khoá chính")
-            kiem_chuong(mo_ta, loi, nhac, d.get("chuong_file") and os.path.join(ROOT, d["chuong_file"]))
+            kiem_chuong(mo_ta, loi, nhac, tim_tep(folder, d.get("chuong_file")))
             tags = re.findall(r"(?<![\w/])#[\wÀ-ỹ]+", mo_ta)
             if len(tags) > 3:
                 nhac.append(f"mô tả YouTube: {len(tags)} hashtag; chỉ 3 cái đầu hiện trên tiêu đề, giữ 1-3")

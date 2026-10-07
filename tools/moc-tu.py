@@ -14,12 +14,12 @@ Vì sao (thử nghiệm 2026-10-01 trên clip một dự án bài giảng, BAI-H
 large-v3 vẫn là bản gỡ băng cho phụ đề và đọc hiểu (tools/transcribe.py); file này không đụng tới nó.
 
 Cách dùng (từ gốc xưởng):
-  python3 tools/moc-tu.py "du-an/<x>" [--nguon "nguon/a.mp4" ...] [--gioi-han 150]
+  python3 tools/moc-tu.py "../Du an/<x>" [--nguon "nguon/a.mp4" ...] [--gioi-han 150]
   Không truyền --nguon: lấy mọi file TIẾNG mà các timeline*.json của dự án dùng (audioSrc nếu có, không thì src).
   Chạy lại đúng lệnh tới khi báo "✓ Xong": mỗi lượt gọi lệnh trên máy giới hạn khoảng 180 s, tool làm
   từng khúc, lưu tạm, lượt sau làm tiếp. Bài 10 phút xong trong một lượt; bài 1 giờ khoảng ba lượt.
 
-Đầu ra trong du-an/<x>/transcript/:
+Đầu ra trong Du an/<x>/transcript/:
   <base>.tu.json          {"phienBan", "nguon", "moHinh", "nangLuong", "khuc", "tu": [{"w","s","e","c","k"}]}
                           w = âm tiết viết thường, s/e = giây trong file nguồn, c = độ tin cậy căn khớp (0-1),
                           k = số thứ tự khúc nói (khúc do VAD cắt, giữa hai khúc luôn có khoảng lặng)

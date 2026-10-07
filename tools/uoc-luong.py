@@ -4,8 +4,8 @@
 TRƯỚC khi dựng - để mô hình lo phần nghĩ, script lo phần tính.
 
 Cách dùng (từ gốc xưởng):
-    python3 tools/uoc-luong.py "du-an/<x>/KICH-BAN-THUC-TE.md"      [--muc-tieu 5-6p] [--out BAO-CAO.md]
-    python3 tools/uoc-luong.py "du-an/<x>/KICH-BAN-INFOMOTION.md"   [--muc-tieu 8:00]
+    python3 tools/uoc-luong.py "../Du an/<x>/KICH-BAN-THUC-TE.md"      [--muc-tieu 5-6p] [--out BAO-CAO.md]
+    python3 tools/uoc-luong.py "../Du an/<x>/KICH-BAN-INFOMOTION.md"   [--muc-tieu 8:00]
 
 Tự nhận loại kịch bản theo dòng tiêu đề đầu file:
 - "# Kịch bản thực tế ..." (skill phim-tai-lieu-phong-van): đọc bảng dưới "## Dòng dựng";

@@ -4,7 +4,7 @@
 theo thực hành podcast/multicam hiệu quả, sinh timeline nháp cho assemble.py.
 
 Cách dùng (từ gốc "xuong-phim-claude", sau multicam-khop.py và transcript của tiếng chủ):
-  python3 tools/multicam-dan.py "du-an/<x>" --transcript "<tên file transcript không đuôi>"
+  python3 tools/multicam-dan.py "../Du an/<x>" --transcript "<tên file transcript không đuôi>"
       [--che-do auto|podcast|bai-giang] [--phut 8] [--khong-session] [--tieng "nguon/tieng-chu.wav"]
       [--nguoi-noi auto|tieng|hinh|<file.json>] [--khoa overlay.json] [--cua-so A-B --hau-to clip1]
       [--gioi-han 150]
@@ -21,9 +21,9 @@ Cách dùng (từ gốc "xuong-phim-claude", sau multicam-khop.py và transcript
   --gioi-han   giây tối đa cho một lượt đo chuyển động (mỗi lượt gọi lệnh trên máy bị giới hạn ~180 s);
                phần đã đo được cache trong multicam/.chuyen-dong/, chạy lại đúng lệnh để đo tiếp.
 
-Đầu vào: du-an/<x>/multicam.json (offset từng file), transcript/<tên>.transcript.json + .silences.json
+Đầu vào: Du an/<x>/multicam.json (offset từng file), transcript/<tên>.transcript.json + .silences.json
   (transcript chạy trên TIẾNG CHỦ - nguon/tieng-chu.wav nếu đã --tron-tieng, hoặc file góc chủ).
-Đầu ra: du-an/<x>/multicam/
+Đầu ra: Du an/<x>/multicam/
   nguoi-noi.json          ai nói khi nào (podcast) - từ so năng lượng mic gần từng người
   session.json            ranh giới session + từ khoá + câu mở (Claude đặt tên rồi user duyệt)
   DAN-GOC.md              bảng duyệt: session, từng cú cắt (mốc, góc, lý do)
@@ -838,7 +838,8 @@ def main():
     json.dump(tl, open(os.path.join(out_dir, f"timeline-multicam-nhap{sfx}.json"), "w", encoding="utf-8"),
               ensure_ascii=False, indent=1)
     if jobs:
-        json.dump({"aspect": "ngang", "theme": "light", "brandFile": "../../../brand/brand.json",
+        brand_rel = "@xuong/brand/brand.json"  # gốc xưởng (render-do-hoa.mjs hiểu), dự án nằm ngoài repo
+        json.dump({"aspect": "ngang", "theme": "light", "brandFile": brand_rel,
                    "outDir": "ngang", "jobs": jobs},
                   open(os.path.join(out_dir, f"job-session{sfx}.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print("\n".join(lines[:40]))

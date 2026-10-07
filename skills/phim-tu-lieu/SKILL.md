@@ -7,7 +7,7 @@ description: "Nghiên cứu và thu thập tư liệu minh họa cho clip của 
 
 Mục tiêu: mỗi phút clip nói về điều gì trừu tượng, xa lạ hay số liệu đều có thứ để NHÌN - đúng nội dung, sạch bản quyền, đủ chất lượng. Ba nguyên tắc xuyên suốt: không bao giờ dùng tư liệu chưa xác minh được nguồn gốc; ưu tiên tự dựng đồ họa hơn ảnh tải về khi minh họa khái niệm/số liệu (hợp brand minimalist, không rủi ro bản quyền); tư liệu thật của user (footage lớp học, hoạt động) luôn quý hơn ảnh stock - chỉ tìm ngoài những gì user không thể tự có.
 
-Đọc trước: `skills/_chung/van-hanh.md` (hai nơi chạy lệnh, truyền file, kiểm chứng dữ kiện) và `docs/QUY-TRINH-KY-THUAT.md` mục "Môi trường" (egress được phép). Kết quả đặt tại `du-an/<tên>/tu-lieu/`.
+Đọc trước: `skills/_chung/van-hanh.md` (hai nơi chạy lệnh, truyền file, kiểm chứng dữ kiện) và `docs/QUY-TRINH-KY-THUAT.md` mục "Môi trường" (egress được phép). Kết quả đặt tại `Du an/<tên>/tu-lieu/`.
 
 ## Lối vào A - user mới có ý tưởng
 
@@ -41,8 +41,8 @@ Nguồn và quy tắc giấy phép chi tiết: đọc `skills/phim-tu-lieu/refer
 
 Tải qua Chrome của user theo đúng quy trình trong thu-vien/AM-THANH.md mục "Quy tắc bổ sung thư viện" (click nút tải trên trang nguồn, chờ 6-8 giây mỗi lượt, file về Downloads rồi copy vào dự án). Wikimedia: tải bản "Original file" độ phân giải gốc.
 
-- Đặt tên: `<mo-ta-ngan>_<nguon>-<id>.<ext>` vào `du-an/<tên>/tu-lieu/`
-- Ghi `du-an/<tên>/tu-lieu/TU-LIEU.md`: mỗi file một mục gồm mô tả, dùng cho đoạn nào (mốc transcript), URL nguồn, tác giả, giấy phép, dòng ghi công nếu CC-BY (mẫu: `Ảnh: <tên> - <tác giả>, CC BY 4.0`), kích thước; thêm mục "Số liệu đã kiểm chứng" liệt kê từng con số với citation và câu chữ đề xuất cho InfoStat/InfoQuote; cuối file: mục "Chưa tìm được / cần user cung cấp"
+- Đặt tên: `<mo-ta-ngan>_<nguon>-<id>.<ext>` vào `Du an/<tên>/tu-lieu/`
+- Ghi `Du an/<tên>/tu-lieu/TU-LIEU.md`: mỗi file một mục gồm mô tả, dùng cho đoạn nào (mốc transcript), URL nguồn, tác giả, giấy phép, dòng ghi công nếu CC-BY (mẫu: `Ảnh: <tên> - <tác giả>, CC BY 4.0`), kích thước; thêm mục "Số liệu đã kiểm chứng" liệt kê từng con số với citation và câu chữ đề xuất cho InfoStat/InfoQuote; cuối file: mục "Chưa tìm được / cần user cung cấp"
 - Dòng ghi công gom lại để phiên dựng chèn vào mô tả video (giống nhạc MacLeod)
 
 ## Bàn giao cho bước dựng
@@ -55,4 +55,4 @@ ffmpeg -loop 1 -i tu-lieu/anh.jpg -t 6 -vf "scale=2400:-2,zoompan=z='min(1.10,1+
 
 Kết thúc: báo user số tư liệu đã thu thập, những gì cần họ cung cấp thêm, và TU-LIEU.md đã sẵn sàng để skill phim-dung-bai hoặc phim-clip-ngan dùng khi soạn timeline.
 
-<!-- ban-nguon: phim-tu-lieu 2026-09-30 c738f1ca -->
+<!-- ban-nguon: phim-tu-lieu 2026-10-07 b4975635 -->

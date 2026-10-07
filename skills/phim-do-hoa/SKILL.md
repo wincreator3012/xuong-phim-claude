@@ -36,10 +36,10 @@ Studio KHÔNG có composition `Caption`. Đồ họa nổi (Benefits, LowerThird
 
 ## Render đồ họa (việc thường gặp nhất)
 
-1. **Soạn job JSON**: intro, outro bắt đầu từ preset (đủ placeholder; hướng dẫn tinh chỉnh `do-hoa-chung/GHI-CHU.md`); đồ họa khác theo mẫu `du-an/_mau/do-hoa/job-do-hoa.json`. `brandFile` trỏ `brand/brand.json`; đồ họa nổi đặt `"alpha": true`. File QR, hình riêng của dự án khai báo qua `"assets"` (đường dẫn tương đối so với file job); QR tạo ở sandbox bằng python `qrcode`. Prop có default kiểu placeholder (như `subtitle` của Intro) mà không dùng thì đặt `""` tường minh. Job JSON giữ trong `du-an/<x>/do-hoa/job/`.
+1. **Soạn job JSON**: intro, outro bắt đầu từ preset (đủ placeholder; hướng dẫn tinh chỉnh `do-hoa-chung/GHI-CHU.md`); đồ họa khác theo mẫu `tools/mau-du-an/do-hoa/job-do-hoa.json`. `brandFile` trỏ `brand/brand.json`; đồ họa nổi đặt `"alpha": true`. File QR, hình riêng của dự án khai báo qua `"assets"` (đường dẫn tương đối so với file job); QR tạo ở sandbox bằng python `qrcode`. Prop có default kiểu placeholder (như `subtitle` của Intro) mà không dùng thì đặt `""` tường minh. Job JSON giữ trong `Du an/<x>/do-hoa/job/`.
 2. **Still trước**: đồ họa mới hoặc props lạ thì render một still (`npx remotion still ... --frame=<giữa bài> --props=...`) và xem bằng Read: chữ Việt đủ dấu, không tràn khung, đúng theme. Job đổi sau still thì render lại still hoặc trích khung từ file cuối.
 3. **Render ở sandbox**: `node tools/render-do-hoa.mjs <job.json> --studio <đường dẫn tuyệt đối>`. Nhiều đồ họa gộp một job để chạy tuần tự; không chạy song song; nhiều job thì `--gioi-han 150` và lặp đúng lệnh khi thoát mã 2. Script tự đồng bộ `brand/logo/`, tự đo thời lượng, bỏ qua job đã render đúng props.
-4. **Commit** về `du-an/<x>/do-hoa/<ngang|doc>/` trên máy theo `_chung/van-hanh.md` (tên staged mới mỗi lần sửa, so md5, file lớn hơn 20 MB thì split).
+4. **Commit** về `Du an/<x>/do-hoa/<ngang|doc>/` trên máy theo `_chung/van-hanh.md` (tên staged mới mỗi lần sửa, so md5, file lớn hơn 20 MB thì split).
 5. **Soi chữ bằng mắt**: `nghiem-thu.py do-hoa` và cổng máy không đọc chữ trên hình. Sau MỖI lần sửa chữ (kể cả một chữ số), trích khung tại đúng mốc và xem bằng Read trước khi báo xong; đồ họa nổi kiểm thêm trên khung hình thật của video đã dựng.
 
 ## Thêm component mới, sửa component
@@ -58,4 +58,4 @@ Hình ẩn dụ mới cho YNiem (slug) hay YCanh (variant): kèm một mục tro
 - Đổi màu, tagline, social trong `brand/brand.json` ảnh hưởng mọi dự án về sau: xác nhận với người dùng trước; nhu cầu một dự án thì ghi đè trong job.
 - Chức danh, tagline trên clip là chỗ hay bị góp ý lặp lại: nguồn chuẩn là `phong-cach/PHONG-CACH.md` mục 1. Góp ý sửa câu chữ lần thứ hai là tín hiệu sửa NGUỒN MẶC ĐỊNH (brand.json, defaultProps) và ghi vào sổ tay góp ý của PHONG-CACH, không chỉ sửa job đang làm.
 
-<!-- ban-nguon: phim-do-hoa 2026-09-30 810fe86c -->
+<!-- ban-nguon: phim-do-hoa 2026-10-07 80881365 -->

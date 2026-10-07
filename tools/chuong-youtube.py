@@ -4,8 +4,8 @@
 định dạng chương [chapters] YouTube để dán vào phần mô tả.
 
 Cách dùng (từ gốc xưởng, sau khi assemble.py đã xuất <video>.map.json):
-  python3 tools/chuong-youtube.py --map "du-an/<x>/xuat-hoan-chinh/<video>.map.json" \\
-      --chuong "du-an/<x>/chuong.json" [--mo-dau "Mở đầu"] [--ket "Lời mời tham gia ..."]
+  python3 tools/chuong-youtube.py --map "../Du an/<x>/xuat-hoan-chinh/<video>.map.json" \\
+      --chuong "../Du an/<x>/chuong.json" [--mo-dau "Mở đầu"] [--ket "Lời mời tham gia ..."]
 
 chuong.json: [{"t": <giây trên trục nguồn>, "ten": "Tên chương"}, ...]
   - "t" là mốc trong TIẾNG CHỦ (audioIn) khi timeline multicam, hoặc mốc trong file nguồn (in/out)

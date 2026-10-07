@@ -6,7 +6,7 @@ Mọi bước sau (đo chuyển động, dàn góc, dựng) chạy trên proxy n
 file gốc; mỗi lượt gọi lệnh trên máy bị giới hạn ~180 s nên tool làm từng mảnh và chạy tiếp được.
 
 Cách dùng (từ gốc xưởng, sau multicam-khop.py trên thư mục gốc):
-  python3 tools/multicam-proxy.py "du-an/<x>" [--ra "du-an/<x>/proxy"] [--tu 340 --den 1570]
+  python3 tools/multicam-proxy.py "../Du an/<x>" [--ra "../Du an/<x>/proxy"] [--tu 340 --den 1570]
       [--chieu-cao 1080] [--fps 30] [--crf 18] [--gioi-han 150]
 
 Đầu ra trong --ra: nguon/<góc>/<góc>.mp4 (chỉ hình, 1080p, cfr), nguon/tieng-chu.wav (tiếng góc

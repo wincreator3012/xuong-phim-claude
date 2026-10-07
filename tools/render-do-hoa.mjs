@@ -6,7 +6,8 @@
 // {
 //   "aspect": "ngang" | "doc",          // mặc định "ngang"
 //   "theme": "light" | "dark",          // mặc định "light"
-//   "brandFile": "brand/brand.json",    // tùy chọn, ghi đè brand mặc định
+//   "brandFile": "@xuong/brand/brand.json", // tùy chọn, ghi đè brand mặc định; "@xuong/" = gốc xưởng (repo),
+//                                           // đường khác tính tương đối so với file job
 //   "outDir": "out",
 //   "jobs": [
 //     {"comp": "Intro", "out": "intro.mp4",
@@ -28,6 +29,11 @@ import {execFileSync} from 'node:child_process';
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+
+// Gốc xưởng (repo): dự án nằm ngoài repo nên đường dẫn tới tài nguyên dùng chung viết "@xuong/..."
+const XUONG = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const giaiDuong = (p) => (p.startsWith('@xuong/') ? path.join(XUONG, p.slice(7)) : path.resolve(path.dirname(jobFile), p));
 
 const args = process.argv.slice(2);
 const jobFile = args[0];
@@ -58,7 +64,7 @@ fs.mkdirSync(outDir, {recursive: true});
 
 let brand = {};
 if (spec.brandFile) {
-  const brandPath = path.resolve(path.dirname(jobFile), spec.brandFile);
+  const brandPath = giaiDuong(spec.brandFile);
   brand = JSON.parse(fs.readFileSync(brandPath, 'utf8'));
   // Tự đồng bộ brand/logo/* vào studio/public/brand/ để staticFile tìm thấy
   const logoDir = path.join(path.dirname(brandPath), 'logo');
@@ -74,11 +80,11 @@ if (spec.brandFile) {
 }
 
 // "assets": các file (logo, QR…) copy vào studio/public/brand/ trước khi render.
-// Đường dẫn tương đối so với file job.
+// Đường dẫn tương đối so với file job, hoặc "@xuong/..." tính từ gốc xưởng.
 // Mục dạng {"from": "<đường dẫn>", "as": "<tên trong public/brand>"} để đổi tên (ảnh khung thumbnail).
 for (const asset of spec.assets ?? []) {
   const from = typeof asset === 'string' ? asset : asset.from;
-  const src = path.resolve(path.dirname(jobFile), from);
+  const src = giaiDuong(from);
   const dst = path.join(studioDir, 'public', 'brand', typeof asset === 'string' ? path.basename(asset) : asset.as);
   fs.mkdirSync(path.dirname(dst), {recursive: true});
   fs.copyFileSync(src, dst);

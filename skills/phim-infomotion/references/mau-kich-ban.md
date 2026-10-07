@@ -5,7 +5,7 @@ Bốn thứ: (1) lệnh tạo nền, (2) mẫu `KICH-BAN-INFOMOTION.md`, (3) m�
 ## 1. Tạo nền từ voice (chạy trong device_bash, từ gốc "xuong-phim-claude")
 
 ```
-P="du-an/<tên>"
+P="../Du an/<tên>"
 # chuẩn hoá tiếng (giữ file gốc), mono 48 kHz
 ffmpeg -y -i "$P/nguon/<file gốc>" -ac 1 -ar 48000 -c:a pcm_s16le "$P/nguon/voice.wav"
 # nền ngang: màu bg của theme (light #FAF7F1, dark #15181C), 30 fps, tiếng = voice
@@ -28,7 +28,7 @@ Khung: ngang | Theme: light | Tổng: 7 phút 42 giây (voice) | Số nhịp: 31
 Nguồn: nguon/nen-ngang.mp4 (transcript/nen-ngang.json)
 Chương: 1 Mở (0:00-1:10) · 2 Ba trụ cột (1:10-4:30) · 3 Thực hành (4:30-7:00) · 4 Kết (7:00-7:42)
 Khung hình chung: theme light · màu nhấn accent của brand · họ hình chủ đạo: vẽ nét YNiem, YCanh cho đoạn kể chuyện · nhịp chuyển động chậm theo brand · đồ họa nổi mặc định canh giữa · độ phủ: phủ kín (không quá 1 giây nền trơn ngoài nhịp `Hình: KHÔNG - <lý do>`)
-Kiểm giấy: python3 tools/uoc-luong.py "du-an/<tên>/KICH-BAN-INFOMOTION.md" → KIỂM GIẤY: ĐẠT
+Kiểm giấy: python3 tools/uoc-luong.py "../Du an/<tên>/KICH-BAN-INFOMOTION.md" → KIỂM GIẤY: ĐẠT
 
 ## Chương 1 - Mở
 
@@ -74,11 +74,11 @@ Cần người dùng quyết: (1) tên video trên Intro; (2) câu kết dùng I
 
 ## 3. Mẫu job JSON và timeline.json
 
-`du-an/<tên>/do-hoa/job/job-nhip.json` (theo `du-an/_mau/do-hoa/job-do-hoa.json`, `brandFile` tương đối so với file job):
+`Du an/<tên>/do-hoa/job/job-nhip.json` (theo `tools/mau-du-an/do-hoa/job-do-hoa.json`, `brandFile` viết `@xuong/brand/brand.json` (gốc xưởng) hoặc tương đối so với file job):
 
 ```json
 {
-  "aspect": "ngang", "theme": "light", "brandFile": "../../../../brand/brand.json", "outDir": "../ngang",
+  "aspect": "ngang", "theme": "light", "brandFile": "@xuong/brand/brand.json", "outDir": "../ngang",
   "jobs": [
     {"comp": "Intro", "out": "intro.mp4", "props": {"title": "Tên video", "subtitle": "Tên chuỗi", "durationInSeconds": 6}},
     {"comp": "Benefits", "out": "nhip-02.webm", "alpha": true,

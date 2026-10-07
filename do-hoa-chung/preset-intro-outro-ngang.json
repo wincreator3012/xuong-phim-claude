@@ -2,7 +2,7 @@
   "_ghi_chu": "Preset intro/outro khung ngang 16:9. Copy vào du-an/<x>/do-hoa/, sửa các PLACEHOLDER, xóa qrFile nếu không cần QR. Trường assets: file QR/hình cần copy vào studio trước khi render (đường dẫn tương đối so với file này).",
   "aspect": "ngang",
   "theme": "light",
-  "brandFile": "../../../brand/brand.json",
+  "brandFile": "@xuong/brand/brand.json",
   "outDir": "ngang",
   "assets": [],
   "jobs": [

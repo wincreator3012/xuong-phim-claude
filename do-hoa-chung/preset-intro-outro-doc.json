@@ -2,7 +2,7 @@
   "_ghi_chu": "Preset intro/outro khung dọc 9:16 cho Reels/Shorts. Clip ngắn thường vào thẳng nội dung nên intro dọc để 3-4 giây hoặc bỏ hẳn; outro dọc 5-6 giây, có QR thì 8-9 giây.",
   "aspect": "doc",
   "theme": "light",
-  "brandFile": "../../../brand/brand.json",
+  "brandFile": "@xuong/brand/brand.json",
   "outDir": "doc",
   "assets": [],
   "jobs": [

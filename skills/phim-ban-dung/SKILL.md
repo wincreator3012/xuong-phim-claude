@@ -17,14 +17,14 @@ Tinh thần: Bàn dựng trao lại cho người dùng quyền quyết những c
 
 Làm ngay khi gửi bản nháp đầu tiên (chốt duyệt số 2), để người dùng có thể chỉnh luôn nếu muốn:
 
-1. `python3 tools/moc-tu.py "du-an/<x>"` trong VM: chép nguyên văn từng âm tiết (giữ từ đệm) và mốc đầu-cuối, ra `transcript/<nguồn>.tu.json` và `<nguồn>.nang-luong.bin` cho mọi file tiếng mà timeline dùng. Bài dài chạy lặp đúng lệnh tới khi báo "✓ Xong" (bài 10 phút khoảng 2,5 phút; 1 giờ khoảng năm lượt). Thiếu bước này Bàn dựng vẫn mở được, nhưng không có dạng sóng, chữ trong khối và thẻ "Lời".
+1. `python3 tools/moc-tu.py "../Du an/<x>"` trong VM: chép nguyên văn từng âm tiết (giữ từ đệm) và mốc đầu-cuối, ra `transcript/<nguồn>.tu.json` và `<nguồn>.nang-luong.bin` cho mọi file tiếng mà timeline dùng. Bài dài chạy lặp đúng lệnh tới khi báo "✓ Xong" (bài 10 phút khoảng 2,5 phút; 1 giờ khoảng năm lượt). Thiếu bước này Bàn dựng vẫn mở được, nhưng không có dạng sóng, chữ trong khối và thẻ "Lời".
 2. Nguồn là định dạng Chrome không giải mã (ProRes, HDR lạ): báo người dùng và đề xuất tạo proxy cùng trục thời gian; H.264, HEVC thì phát thẳng.
 3. Báo người dùng một dòng: "Muốn tự chỉnh nhỏ thì bấm đúp `Mo ban dung.command`, mở <dự án>." Không giải thích kỹ thuật.
 
 ## Bước 2 - khi người dùng báo đã chỉnh xong
 
-1. Đọc dòng cuối `du-an/<x>/ke-hoach-dung/_ban-dung/nhat-ky.jsonl`: danh sách thay đổi và đường dẫn bản cũ (thư mục `du-an/<x>/ke-hoach-dung/_phien-ban/`). Đọc thay đổi như đọc góp ý của người dùng.
-2. `python3 tools/assemble.py --project "du-an/<x>" --timeline <file> --kiem-tra`. Lỗi thì báo đúng chỗ và hỏi người dùng, không tự sửa ngược ý người dùng.
+1. Đọc dòng cuối `Du an/<x>/ke-hoach-dung/_ban-dung/nhat-ky.jsonl`: danh sách thay đổi và đường dẫn bản cũ (thư mục `Du an/<x>/ke-hoach-dung/_phien-ban/`). Đọc thay đổi như đọc góp ý của người dùng.
+2. `python3 tools/assemble.py --project "../Du an/<x>" --timeline <file> --kiem-tra`. Lỗi thì báo đúng chỗ và hỏi người dùng, không tự sửa ngược ý người dùng.
 3. Dựng nháp với `--out` tường minh (số nháp kế tiếp), nghiệm thu, gửi người dùng như mọi vòng. Bản đạt mới sang bản chính.
 4. Nhìn lại thay đổi: một kiểu chỉnh lặp lần thứ hai (ví dụ luôn cho bảng tên hiện muộn hơn, luôn hạ nhạc) là góp ý lặp, sửa nguồn mặc định và ghi sổ tay góp ý của `phong-cach/PHONG-CACH.md` theo quy tắc cứng 6 của `CLAUDE.md`.
 
@@ -38,7 +38,7 @@ Bản đồ tệp, mô hình dữ liệu, quy tắc điểm cắt và cách ki�
 
 - Bố cục trên trang phải khớp đúng cách `tools/assemble.py` dựng (snap, overlay tương đối, B-roll theo mốc nguồn, nhạc bookends, `overlay.duration`). Thêm trường mới vào assemble thì thêm cả vào `tools/ban-dung/js/mo-hinh.js`.
 - Điểm cắt theo lời chỉ có một nơi tính: `tools/ban_dung_loi.py` (máy chủ gọi qua `/api/cat`). Không chép logic sang trình duyệt.
-- Sửa quy tắc điểm cắt: chạy lại phòng nghe thử 16 điểm (`du-an/<x>/_ban-dung-thu/`) và so mốc cũ; `kiem-tra-xuong.py` có phần kiểm điểm cắt trên lời tổng hợp.
+- Sửa quy tắc điểm cắt: chạy lại phòng nghe thử 16 điểm (`Du an/<x>/_ban-dung-thu/`) và so mốc cũ; `kiem-tra-xuong.py` có phần kiểm điểm cắt trên lời tổng hợp.
 - Kiểm trang ở sandbox bằng Playwright với dự án thử WebM (Chromium của sandbox không giải mã H.264), rồi commit về máy. Máy chủ giữ module đã nạp: người dùng phải đóng và mở lại Bàn dựng sau khi sửa phần Python.
 
 ## Quy tắc cứng
@@ -48,7 +48,7 @@ Bản đồ tệp, mô hình dữ liệu, quy tắc điểm cắt và cách ki�
 3. Không bao giờ sửa bản gỡ băng hay mốc lời để "cho khớp"; Dựng bằng lời chỉ đổi `in`, `out` và cấu trúc đoạn.
 4. Chỉ cắt trong khe giữa hai âm tiết; ranh giới dính liền thì hỏi người dùng, không tự cắt.
 5. Footage không rời máy: máy chủ chạy trên Mac, chỉ nghe 127.0.0.1.
-6. Bản cũ mỗi lần lưu luôn được cất; không xoá `du-an/<x>/ke-hoach-dung/_phien-ban/`.
+6. Bản cũ mỗi lần lưu luôn được cất; không xoá `Du an/<x>/ke-hoach-dung/_phien-ban/`.
 7. Đổi logic encode của `assemble.py` vì Bàn dựng cần thì đổi `TOOL_VERSION` và chạy `kiem-tra-xuong.py --co-slide` ĐẠT trước khi dựng thật.
 
 ## Khép việc
@@ -56,4 +56,4 @@ Bản đồ tệp, mô hình dữ liệu, quy tắc điểm cắt và cách ki�
 - Bài học kỹ thuật mới (một kiểu cắt hỏng, một định dạng không phát) vào chủ đề 17 của `docs/BAI-HOC.md`; đổi thao tác, lệnh thì sửa mục "Bàn dựng" của `docs/QUY-TRINH-KY-THUAT.md` và `HUONG-DAN.md`.
 - Góp ý về chính Bàn dựng (thiếu thao tác, khó dùng): ghi vào tài liệu "ban-dung-dac-ta" trong Project, làm theo từng đợt có chốt duyệt.
 
-<!-- ban-nguon: phim-ban-dung 2026-10-01 d263823a -->
+<!-- ban-nguon: phim-ban-dung 2026-10-07 3b767ef5 -->

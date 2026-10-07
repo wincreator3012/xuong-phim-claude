@@ -4,20 +4,24 @@ Bạn đã cài xưởng và thiết lập phong cách (nếu chưa, xem `BAT-DA
 
 ## Một dự án trông như thế nào
 
-Mỗi clip là một thư mục trong `du-an/`. Bạn chỉ cần tạo thư mục và thả file vào `nguon/`; các thư mục khác Claude tạo khi làm.
+Mỗi dự án là một thư mục trong `Du an/` (cạnh thư mục repo, trong `Xuong phim AI`). Nói "tạo dự án <tên>" để Claude tạo, hoặc tự tạo thư mục rồi thả file vào `nguon/`; các thư mục khác Claude tạo khi làm. Sản phẩm cuối nằm ở `Thanh pham/`.
 
 ```
-du-an/ten-du-an/
+Du an/2026-11 Ten du an/
 ├── nguon/            ← BẠN thả video quay thô, cảnh trám, file slide vào đây
 ├── transcript/       ← lời giảng gỡ băng có mốc thời gian (Claude tạo; có sẵn thì thả vào)
 ├── tu-lieu/          ← hình minh hoạ đã kiểm định + ghi chú TU-LIEU.md (khi bạn cần hình)
 ├── do-hoa/           ← intro, outro, thẻ, nhãn từ khoá đã render
 ├── timeline.json     ← "kịch bản dựng" máy đọc (Claude soạn, bạn không cần mở)
 ├── xuat-nhap/        ← bản nháp 480p để bạn xem và góp ý
-└── xuat-hoan-chinh/  ← THÀNH PHẨM. Chỉ file ở đây mới là bản đăng
+└── xuat-hoan-chinh/  ← bản đạt nghiệm thu, trước khi Claude đặt vào Thanh pham/
+
+Thanh pham/2026-11 Ten du an/
+├── 00 Video day du/  ← video dài và gói đăng tải (tiêu đề, mô tả, status, thumbnail)
+└── Short 01 <tên>/   ← mỗi clip ngắn một thư mục: video, kết quả nghiệm thu, gói đăng tải
 ```
 
-Tên thư mục dự án nên không dấu, ngắn (`bai-1`, `gioi-thieu-khoa-hoc`). Có thể có dấu và khoảng trắng, nhưng không dấu thì đỡ lỗi khi đồng bộ đám mây.
+Tên dự án nên không dấu, ngắn (`Bai 1`, `Gioi thieu khoa hoc`); Claude tự thêm năm-tháng ở đầu để dự án xếp theo thời gian. Khi bạn nói "duyệt", Claude xin phép rồi dọn bản nháp, proxy, việc tạm; hồ sơ dự án chỉ còn phần nhẹ để dựng lại khi cần.
 
 ## Quay thế nào để dựng dễ
 
@@ -30,51 +34,51 @@ Có slide: để file PPTX, PDF hoặc bộ ảnh slide vào `nguon/` cạnh vid
 Nói tự nhiên, nêu rõ thư mục dự án và kết quả mong muốn. Vài mẫu:
 
 **Bài giảng dài, khung ngang**
-> Dựng bài giảng từ clip trong du-an/bai-1, cắt bỏ khoảng lặng và đoạn nói hỏng, thêm intro outro, chèn nhãn từ khoá khi tôi nhắc tới các bước của mô hình.
+> Dựng bài giảng từ clip trong dự án bai-1, cắt bỏ khoảng lặng và đoạn nói hỏng, thêm intro outro, chèn nhãn từ khoá khi tôi nhắc tới các bước của mô hình.
 
 **Bài giảng có slide**
-> Trong du-an/bai-2 có video và file slide PDF. Dựng bài giảng ngang, chỗ nào tôi giải thích sơ đồ thì hiện slide, chỗ kể chuyện thì hiện mặt.
+> Trong dự án bai-2 có video và file slide PDF. Dựng bài giảng ngang, chỗ nào tôi giải thích sơ đồ thì hiện slide, chỗ kể chuyện thì hiện mặt.
 
 **Bài nói trên sân khấu, có khán giả (keynote, talk, sự kiện)**
-> Dựng clip từ buổi nói trong du-an/keynote-1: có hai file quay 4K, file tiếng từ bàn âm thanh và file slide PPTX. Bắt đầu từ phút 3:14, dừng ở hết câu "...rất là hiệu quả". Bỏ phần nhắc việc tại chỗ. Hiện slide cạnh mặt tôi, không để chữ hay thẻ nào che mặt ai. Đăng YouTube.
+> Dựng clip từ buổi nói trong dự án keynote-1: có hai file quay 4K, file tiếng từ bàn âm thanh và file slide PPTX. Bắt đầu từ phút 3:14, dừng ở hết câu "...rất là hiệu quả". Bỏ phần nhắc việc tại chỗ. Hiện slide cạnh mặt tôi, không để chữ hay thẻ nào che mặt ai. Đăng YouTube.
 
 Người xem ở nhà không ngồi trong phòng, nên Claude sẽ đề xuất bỏ những gì chỉ có nghĩa tại chỗ (nhắc việc, hướng dẫn dùng tài liệu, bài tập tương tác) và bạn là người chốt. Quay sự kiện: nếu được, xin thêm file tiếng từ bàn âm thanh và file slide gốc; nguồn 4K nặng thì Claude làm bản xem nhẹ trước khi dựng.
 
 **Clip ngắn dọc cho Reels/Shorts**
-> Từ bài giảng du-an/bai-1, cắt hai clip dọc 60 giây có phụ đề, mỗi clip một ý trọn vẹn.
+> Từ bài giảng dự án bai-1, cắt hai clip dọc 60 giây có phụ đề, mỗi clip một ý trọn vẹn.
 
 **Clip giới thiệu chương trình**
-> Dựng clip giới thiệu khoá học từ du-an/gioi-thieu, khung ngang lẫn dọc, nhạc chạy suốt, cuối clip có QR đăng ký theo link này: ...
+> Dựng clip giới thiệu khoá học từ dự án gioi-thieu, khung ngang lẫn dọc, nhạc chạy suốt, cuối clip có QR đăng ký theo link này: ...
 
 **Podcast hai người, ba máy**
-> du-an/podcast-1 có ba góc quay (toan, an, khach). Đồng bộ, chuyển góc theo người nói, chia thành các phần có thẻ tên phần.
+> dự án podcast-1 có ba góc quay (toan, an, khach). Đồng bộ, chuyển góc theo người nói, chia thành các phần có thẻ tên phần.
 
 **Phim tài liệu phỏng vấn, trước khi quay**
 > Tháng sau chúng tôi ký kết hợp tác ba năm với trường X, muốn làm một phim 5 phút giới thiệu dự án cho nhà tài trợ. Đây là mô tả chương trình và kịch bản dự kiến. Giúp tôi lên kế hoạch: phỏng vấn ai, hỏi gì, quay cảnh nào.
 
 **Phim tài liệu phỏng vấn, sau khi quay**
-> Đã quay xong theo kế hoạch, source trong du-an/phim-du-an-x/nguon. Gỡ băng, đối chiếu với kế hoạch rồi viết kịch bản thực tế cho tôi duyệt trước khi dựng.
+> Đã quay xong theo kế hoạch, source trong dự án phim-du-an-x/nguon. Gỡ băng, đối chiếu với kế hoạch rồi viết kịch bản thực tế cho tôi duyệt trước khi dựng.
 
 **Cảnh minh hoạ cho đoạn đang giải thích**
-> Trong du-an/bai-1, đoạn phút 6:20 tới 7:05 tôi giải thích vòng lặp căng thẳng và hồi phục. Làm một cảnh minh hoạ động cho đoạn đó, lấy một khung hình của chính đoạn quay làm nền mờ.
+> Trong dự án bai-1, đoạn phút 6:20 tới 7:05 tôi giải thích vòng lặp căng thẳng và hồi phục. Làm một cảnh minh hoạ động cho đoạn đó, lấy một khung hình của chính đoạn quay làm nền mờ.
 
 Bốn kiểu chèn để chọn: toàn khung, nền là khung hình mờ, thẻ nổi cạnh bạn (vẫn thấy mặt), bạn thu vào góc nhỏ. Không nói rõ thì Claude đề xuất kiểu hợp từng đoạn ở bảng phương án và gửi một trang xem thử để bạn duyệt chuyển động trước khi render. Gửi kèm một hình mẫu phong cách bạn thích cũng được.
 
 **Chỉ có file ghi âm, muốn video giải thích**
-> Trong du-an/bai-4 có file ghi âm bài nói 6 phút. Làm video infomotion khung ngang, hình minh hoạ theo từng ý tôi nói.
+> Trong dự án bai-4 có file ghi âm bài nói 6 phút. Làm video infomotion khung ngang, hình minh hoạ theo từng ý tôi nói.
 
 Mặc định hình phủ kín, nền trống không quá 1 giây. Muốn thoáng hơn thì nói rõ. Đoạn nói về cơ chế, quy trình, số liệu, Claude dùng cảnh minh hoạ kiểu sơ đồ; đoạn chiêm nghiệm dùng nét vẽ ẩn dụ tối giản.
 
 **Phim hoạt hình từ lời nói hay một câu chuyện**
-> Từ file ghi âm trong du-an/chuyen-1, làm phim hoạt hình khoảng 90 giây có một nhân vật và cảnh vẽ tay, kết bằng một câu hỏi mở.
+> Từ file ghi âm trong dự án chuyen-1, làm phim hoạt hình khoảng 90 giây có một nhân vật và cảnh vẽ tay, kết bằng một câu hỏi mở.
 
 **Gói đăng tải**
-> Soạn tiêu đề, mô tả YouTube và status Facebook cho clip du-an/bai-1/xuat-hoan-chinh/bai-1-ngang.mp4, kèm ba thumbnail.
+> Soạn tiêu đề, mô tả YouTube và status Facebook cho bản đã xuất của dự án Bai 1, kèm ba thumbnail.
 
 Sau mỗi clip dựng trong xưởng, Claude tự làm bước này mà không cần nhắc; câu trên dùng cho clip cũ hay clip dựng ở nơi khác.
 
 **Chỉ gỡ băng**
-> Gỡ băng clip trong du-an/bai-3, cho tôi file SRT và bản text.
+> Gỡ băng clip trong dự án bai-3, cho tôi file SRT và bản text.
 
 **Cần hình minh hoạ**
 > Đoạn phút 4 tới 6 tôi nói về vỏ não trước trán, tìm hình minh hoạ sạch bản quyền.
@@ -91,7 +95,7 @@ Bạn không cần nhớ tên skill hay tên công cụ. Claude nhận ra loại
 3. **Phương án cắt và nhãn** (bạn duyệt lần 1): một bảng ghi đoạn nào giữ, đoạn nào bỏ, vì sao, và các chỗ định chèn nhãn từ khoá, thẻ chuyển phần, cảnh trám. Sửa gì cứ nói
 4. **Đồ họa và bản nháp** (bạn duyệt lần 2): Claude render intro, outro, nhãn, rồi dựng bản nháp 480p vào `xuat-nhap/`. Mở xem trên máy, góp ý về nhịp, bố cục, chỗ nào chữ hiện sai lúc. Lặp tới khi ưng
 5. **Bản chính**: xuất 1080p, máy đo hình khớp tiếng, âm lượng chuẩn, không khoảng đen, rồi Claude nhìn ảnh lưới 12 khung. Đạt thì copy vào `xuat-hoan-chinh/` và báo bạn: tên file, thời lượng, dung lượng, danh sách chương (nếu có), dòng ghi công nhạc cần dán vào mô tả video (nếu dùng track CC-BY)
-6. **Gói đăng tải**: ngay sau đó Claude soạn trong `du-an/<tên>/dang-tai/` ba phương án tiêu đề, mô tả YouTube, status Facebook và ba thumbnail từ khung hình thật; bạn chọn, sửa, rồi chép dán khi đăng
+6. **Gói đăng tải**: ngay sau đó Claude soạn trong `dang-tai/` của dự án (rồi đặt cùng video vào `Thanh pham/`) ba phương án tiêu đề, mô tả YouTube, status Facebook và ba thumbnail từ khung hình thật; bạn chọn, sửa, rồi chép dán khi đăng
 
 Clip 10 phút trọn quy trình thường mất 30-60 phút kể cả thời gian bạn duyệt. Bản chính của bài dài (1-3 giờ) xuất trong một tới vài giờ; để máy chạy.
 
@@ -103,7 +107,7 @@ Mười hai thói quen rút từ các dự án thật. Không cần nhớ hết:
 
 1. **Bắt đầu bằng một clip nhỏ có thật.** Chọn một đoạn 3-10 phút bạn sắp đăng, không chọn dự án lớn nhất. Làm trọn một vòng (nháp, bản chính, gói đăng tải) sẽ dạy bạn nhiều hơn đọc tài liệu, và những góp ý đầu tiên của bạn định hình xưởng cho mọi clip sau.
 2. **Quay cho dễ dựng.** Ngừng một nhịp giữa các ý và trước khi nói lại câu hỏng; nói câu chốt mạnh nhất ngay câu đầu nếu clip dành cho mạng xã hội; để mic gần nhất có thể. Quay sự kiện thì xin thêm file tiếng từ bàn âm thanh và file slide gốc.
-3. **Đặt tên thư mục và file rõ ràng.** Một dự án một thư mục trong `du-an/`, video và slide vào `nguon/`. Quay nhiều máy thì mỗi máy một thư mục con.
+3. **Đặt tên thư mục và file rõ ràng.** Một dự án một thư mục trong `Du an/`, video và slide vào `nguon/`. Quay nhiều máy thì mỗi máy một thư mục con.
 
 **Khi nói yêu cầu**
 
@@ -167,4 +171,6 @@ Nhạc chỉ lấy từ thư viện đã kiểm định (`nhac-nen/THU-VIEN.md`)
 
 ## Cập nhật xưởng
 
-Tải bản mới của repo và chép đè các thư mục `tools/`, `studio/`, `skills/`, `docs/`, `thu-vien/` cùng hai file `Go bang tren Mac.command` và `CLAUDE.md` ở thư mục gốc lên bản cũ; giữ nguyên `phong-cach/`, `brand/`, `nhac-nen/`, `hieu-ung/`, `du-an/` và, trong `do-hoa-chung/` (chép đè `do-hoa-chung/canh-kit/` được; cảnh riêng của bạn nằm trong `du-an/<tên>/canh/`), từ điển ẩn dụ `an-du-y-niem.json`, thư mục `do-hoa-chung/the-gioi-hoat-hoa/` (nếu có) cùng hai preset bạn đã sửa. Nếu bạn đã làm phim infomotion hay hoạt hình (có hình vẽ riêng trong `studio/src/y-niem/` hoặc `studio/src/hoat-hoa/`), nhờ Claude cập nhật `studio/` thay vì chép đè. Sau đó nói "chạy kiểm tra xưởng". Nếu dùng `git`, `git pull` làm việc này gọn hơn; các thư mục riêng của bạn đã được để ngoài theo dõi (`.gitignore`) trừ `phong-cach/PHONG-CACH.md` và `brand/brand.json`, hai file bạn nên giữ bản của mình khi có xung đột.
+Tải bản mới của repo và chép đè các thư mục `tools/`, `studio/`, `skills/`, `docs/`, `thu-vien/` cùng hai file `Go bang tren Mac.command` và `CLAUDE.md` ở thư mục gốc lên bản cũ; giữ nguyên `phong-cach/`, `brand/`, `nhac-nen/`, `hieu-ung/` và, trong `do-hoa-chung/` (chép đè `do-hoa-chung/canh-kit/` được; cảnh riêng của bạn nằm trong `Du an/<tên>/canh/`), từ điển ẩn dụ `an-du-y-niem.json`, thư mục `do-hoa-chung/the-gioi-hoat-hoa/` (nếu có) cùng hai preset bạn đã sửa. Nếu bạn đã làm phim infomotion hay hoạt hình (có hình vẽ riêng trong `studio/src/y-niem/` hoặc `studio/src/hoat-hoa/`), nhờ Claude cập nhật `studio/` thay vì chép đè. Sau đó nói "chạy kiểm tra xưởng". Nếu dùng `git`, `git pull` làm việc này gọn hơn; các thư mục riêng của bạn đã được để ngoài theo dõi (`.gitignore`) trừ `phong-cach/PHONG-CACH.md` và `brand/brand.json`, hai file bạn nên giữ bản của mình khi có xung đột.
+
+**Đã dùng bản cũ, dự án còn nằm trong `du-an/` bên trong repo?** Từ bản này dự án nằm ngoài repo. Nói với Claude "dời dự án ra ngoài repo": Claude tạo `Du an/` và `Thanh pham/` cạnh repo, dời từng dự án sang `Du an/` (giữ nguyên bên trong, thêm năm-tháng vào tên), sửa đường dẫn trong file dựng nếu cần, rồi bỏ `du-an/` rỗng. Khi đó thêm thư mục mẹ (chứa repo) vào Cowork thay cho thư mục repo. Trong lúc chưa dời, công cụ vẫn đọc được `du-an/` kiểu cũ.

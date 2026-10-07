@@ -49,16 +49,21 @@ Sáu điều đáng nhớ nhất, đầy đủ hơn ở `HUONG-DAN.md`:
 
 ## Bắt đầu trong ba bước
 
-1. Tải repo này về máy (nút **Code → Download ZIP** rồi giải nén, hoặc `git clone`), đặt vào nơi bạn hay để tài liệu
-2. Mở app **Claude** trên máy, vào **Cowork**, thêm thư mục vừa giải nén (nút "Add folder")
-3. Nói với Claude: *"Đọc file CLAUDE.md trong thư mục này rồi thiết lập xưởng phim cho tôi."*
+1. Tạo một thư mục tên `Xuong phim AI` trong Documents. Tải repo này về (nút **Code → Download ZIP** rồi giải nén, hoặc `git clone`), đặt thư mục repo vào trong `Xuong phim AI` và giữ tên `xuong-phim-claude`
+2. Mở app **Claude** trên máy, vào **Cowork**, thêm thư mục `Xuong phim AI` (nút "Add folder")
+3. Nói với Claude: *"Đọc file CLAUDE.md trong thư mục xuong-phim-claude rồi thiết lập xưởng phim cho tôi."*
 
 Claude sẽ tự cài môi trường (10-20 phút, cần mạng), hỏi bạn vài câu về phong cách, tải nhạc theo mẫu bạn chọn và render thử một intro để bạn duyệt. Cuối cùng Claude giới thiệu xưởng cho bạn một vòng (khoảng 10 phút) và cùng bạn chọn clip đầu tiên. Chi tiết từng bước và những gì cần chuẩn bị: [BAT-DAU.md](BAT-DAU.md).
 
 ## Cấu trúc thư mục
 
+Repo chỉ chứa "năng lực" của xưởng (cách làm, công cụ, phong cách của bạn); dự án và thành phẩm nằm ở hai thư mục cạnh repo, nên cập nhật xưởng không bao giờ đụng tới video của bạn, và sao lưu một dự án chỉ cần dời một thư mục.
+
 ```
-xuong-phim-claude/
+Xuong phim AI/
+├── Du an/                 ← mỗi dự án một thư mục <năm-tháng tên>/: nguon/ (video bạn thả vào), nháp, file dựng
+├── Thanh pham/            ← sản phẩm để đăng: <năm-tháng tên dự án>/00 Video day du/, Short 01 .../ (kèm gói đăng tải)
+└── xuong-phim-claude/     ← repo này
 ├── README.md              ← bạn đang đọc
 ├── BAT-DAU.md             ← cài lần đầu, từng bước, cho người mới
 ├── HUONG-DAN.md           ← cách đặt yêu cầu, ví dụ, sự cố thường gặp
@@ -73,8 +78,7 @@ xuong-phim-claude/
 ├── nhac-nen/  hieu-ung/   ← file âm thanh tải về, theo nhóm công dụng
 ├── do-hoa-chung/          ← preset intro/outro dùng chung, bố cục slide, canh-kit/ (bộ thiết kế cảnh minh hoạ)
 ├── studio/                ← đồ họa động Remotion (Claude quản lý)
-├── tools/                 ← công cụ pipeline + cài đặt (Claude quản lý)
-└── du-an/                 ← mỗi clip một thư mục: nguon/ → xuat-hoan-chinh/
+└── tools/                 ← công cụ pipeline + cài đặt (Claude quản lý)
 ```
 
 ## Cách nó chạy (cho người tò mò)

@@ -3,10 +3,10 @@
 """Ghép dựng video hoàn chỉnh từ timeline.json - chạy bằng ffmpeg trong VM cục bộ.
 
 Cách dùng (từ thư mục gốc "xuong-phim-claude"):
-    python3 tools/assemble.py --project "du-an/ten-du-an" [--timeline timeline.json]
+    python3 tools/assemble.py --project "../Du an/ten-du-an" [--timeline timeline.json]
                               [--preview] [--out ten-file]
 
-Tên file xuất (trong du-an/<x>/xuat-nhap/): mặc định "<tên dự án>-<khung>", thêm
+Tên file xuất (trong Du an/<x>/xuat-nhap/): mặc định "<tên dự án>-<khung>", thêm
 "-nhap" khi --preview. Từ vòng nháp thứ hai trở đi LUÔN truyền --out tường minh,
 quy ước "<tên>-<khung>-nhapN" cho nháp và "<tên>-<khung>" cho bản chính; tên đã
 kết thúc bằng "-nhap" hoặc "-nhapN" thì không nối thêm "-nhap" lần nữa.
@@ -89,6 +89,7 @@ PREVIEW_SIZES = {"ngang": (854, 480), "doc": (480, 854)}
 
 # --- Chống lệch hình-tiếng (bản vá 2026-09-05, 2026-09-17) --------------------
 # Đổi TOOL_VERSION mỗi khi sửa logic encode → mọi cache .sig cũ tự vô hiệu.
+XUONG = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # gốc xưởng: nhac-nen/, brand/, do-hoa-chung/
 TOOL_VERSION = "2026-10-01.r8"  # r8: vi mờ 5 ms ở mép part có tiếng không liền với part kề (chống tiếng bụp ở mối cắt); r7: overlay "duration" (giữ/bớt khung giữa), volumeDb của đoạn, audioIn multicam theo từng quãng B-roll; r1: insert_part tự cắt đuôi tiếng AAC, role intro/outro cho bookends
 # CONCAT_REV: đổi khi sửa bước GHÉP hoặc FINALIZE (không đụng cách encode từng part) - chỉ vô hiệu cache body,
 # không bắt encode lại các part đã xong. Sửa cách encode part thì đổi TOOL_VERSION.
@@ -266,7 +267,7 @@ class Assembler:
         cand1 = os.path.join(self.project, p)
         if os.path.exists(cand1):
             return cand1
-        root = os.path.dirname(os.path.dirname(os.path.normpath(self.project)))
+        root = XUONG  # gốc xưởng (repo); dự án nằm ngoài repo ở "../Du an/<x>"
         cand2 = os.path.join(root, p)
         return cand2 if os.path.exists(cand2) else cand1
 
@@ -331,8 +332,7 @@ class Assembler:
     def bo_cuc(self):
         """Đọc do-hoa-chung/bo-cuc/bo-cuc.json (cache) - toạ độ ô, palette, đường dẫn khung/mask."""
         if getattr(self, "_bo_cuc", None) is None:
-            root = os.path.dirname(os.path.dirname(os.path.normpath(self.project)))
-            d = os.path.join(root, "do-hoa-chung", "bo-cuc")
+            d = os.path.join(XUONG, "do-hoa-chung", "bo-cuc")
             p = os.path.join(d, "bo-cuc.json")
             if not os.path.isfile(p):
                 raise RuntimeError(f"Thiếu {p} - chạy: python3 tools/bo-cuc-slide.py")
