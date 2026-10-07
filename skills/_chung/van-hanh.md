@@ -42,8 +42,8 @@ Xưởng làm việc bằng nguyên lý, không bằng khuôn. Mọi quyết đ�
 
 - Phương án cắt và overlay duyệt trước khi dựng; nháp 480p duyệt trước bản chính. Infomotion và phim tài liệu có thêm cổng duyệt trên giấy. Ở chốt nháp, người dùng có thể tự chỉnh nhỏ trên Bàn dựng (skill phim-ban-dung); timeline có `_chinhTay` là nguồn sự thật, không sinh lại.
 - Chưa có "nghiệm thu máy: ĐẠT" thì chưa nói "xong" (chi tiết: `skills/_chung/nghiem-thu-dung-y.md`).
-- Báo giao: tên file, đúng thư mục `xuat-hoan-chinh/`, thời lượng, dung lượng, chapters nếu có, dòng ghi công nhạc nếu dùng track CC-BY.
-- Clip vừa vào `xuat-hoan-chinh/` thì làm luôn gói đăng tải theo skill phim-dang-tai (ba tiêu đề và mô tả YouTube, status Facebook, ba thumbnail từ khung hình thật, qua `tools/dang-tai.py kiem`), không chờ người dùng nhắc; báo cùng lượt với báo giao.
+- Báo giao: tên file, đúng thư mục clip trong `Thanh pham/`, thời lượng, dung lượng, chapters nếu có, dòng ghi công nhạc nếu dùng track CC-BY.
+- Clip vừa qua nghiệm thu thì làm luôn gói đăng tải theo skill phim-dang-tai (ba tiêu đề và mô tả YouTube, status Facebook, ba thumbnail từ khung hình thật, qua `tools/dang-tai.py kiem`), không chờ người dùng nhắc; báo cùng lượt với báo giao. Video và gói đăng tải của mỗi clip nằm chung một thư mục tự đủ `Short NN <slug>/` (NN hai chữ số theo thứ tự dựng), và mọi clip cùng dự án nằm dưới MỘT thư mục mẹ `Thanh pham/<tên dự án>/` (clip dài ở `00 Video day du/`), không tách ngang cấp.
 
 ## Khi một khâu hỏng
 
@@ -51,7 +51,7 @@ Bảng từng khâu và mẫu câu báo ở mục "Khi một khâu hỏng" của
 
 ## Khép dự án hoặc khép phiên
 
-- Bản đạt nghiệm thu copy sang `xuat-hoan-chinh/`; job JSON đồ họa giữ trong `do-hoa/job/` tới khi giao xong.
+- Bản đạt nghiệm thu đặt vào thư mục clip trong `Thanh pham/` (cùng gói đăng tải, md5 khớp); nguồn dựng lưu ở `du-an/<dự án>/`; nháp và rác chỉ dọn sau khi người dùng nói "duyệt"; job JSON đồ họa giữ trong `do-hoa/job/` tới khi giao xong.
 - Bài học kỹ thuật mới: một dòng vào đúng chủ đề của `docs/BAI-HOC.md` (kèm dự án, ngày). Bài học làm đổi môi trường, lệnh hay quy ước thì sửa luôn đúng mục của `docs/QUY-TRINH-KY-THUAT.md`; không nối ghi chú có ngày vào cuối file đó.
 - Góp ý phong cách của người dùng: một dòng vào sổ tay góp ý của `phong-cach/PHONG-CACH.md`; góp ý lặp lần hai thì sửa nguồn mặc định (brand.json, preset, defaultProps).
 - Ẩn dụ hình mới được duyệt: ghi ngay vào `do-hoa-chung/an-du-y-niem.json` (chưa có file thì tạo theo schema ở `skills/phim-infomotion/references/mau-kich-ban.md` mục 4).

@@ -42,7 +42,7 @@ Vận dụng những gì đã có thay vì làm lại.
 | Bài giảng có slide | `tools/slide-nguon.py`, `tools/slide-khop.py`, `do-hoa-chung/bo-cuc/`, trường `layout`/`slide` trong timeline | khi nguồn có slide - mục "Bài giảng có slide" |
 | Multicam | `tools/multicam-khop.py`, `tools/multicam-proxy.py`, `tools/multicam-dan.py`, trường `audioSrc`/`audioIn` | khi nguồn có nhiều thư mục góc - mục "Multicam" |
 | Phim tài liệu phỏng vấn | skill phim-tai-lieu-phong-van, mẫu hồ sơ `references/mau-ho-so.md`, mẫu `du-an/_mau/tai-lieu-phong-van/` | khi người dùng mô tả sự kiện sắp quay (Pha 1) hoặc thả nhiều file phỏng vấn (Pha 2) |
-| Gói đăng tải (tiêu đề, mô tả YouTube, status Facebook, thumbnail) | skill phim-dang-tai, `tools/chon-khung-thumbnail.py` (dò mặt bằng `tools/models/face_detection_yunet_2023mar.onnx`), `tools/dang-tai.py` (`job`, `kiem`), composition `Thumbnail` | tự làm ngay khi một clip vào `xuat-hoan-chinh/`; kết quả ở `du-an/<x>/dang-tai/<video>/` |
+| Gói đăng tải (tiêu đề, mô tả YouTube, status Facebook, thumbnail) | skill phim-dang-tai, `tools/chon-khung-thumbnail.py` (dò mặt bằng `tools/models/face_detection_yunet_2023mar.onnx`), `tools/dang-tai.py` (`job`, `kiem`), composition `Thumbnail` | tự làm ngay khi một clip qua nghiệm thu; kết quả nằm trong thư mục clip ở `Thanh pham/` (`dang-tai/`) |
 | Cảnh minh hoạ (sơ đồ động vẽ riêng từng ý, trang web thời gian ảo chụp ra video) | skill phim-canh-minh-hoa; bộ thiết kế `do-hoa-chung/canh-kit/` (runtime, hệ màu theo vai ba họ Đêm xanh, Than đồng, Giấy mực, font nhúng, cảnh mẫu, khuôn trang phòng thử); `tools/canh.mjs` (sandbox: kiem, người dùng, phong-thu, chup), `tools/canh-ghep.py` (máy: khung nền mờ, ghép người nói vào góc) | B-roll giải thích trong bài giảng (bốn kiểu chèn) và giọng hình sơ đồ của infomotion |
 | Infomotion | skill phim-infomotion, `references/mau-kich-ban.md`, `references/hinh-tuong-hoa.md` | khi nguồn là file âm thanh không có hình |
 
@@ -103,7 +103,7 @@ Khung chung; từng loại việc theo skill tương ứng.
 5. **Timeline**: soạn `du-an/<x>/timeline.json` theo docstring đầu `tools/assemble.py` (mục "timeline.json: những điều phải nhớ" bên dưới). Chạy `assemble.py --kiem-tra` trước khi dựng.
 6. **Bản nháp**: `python3 tools/assemble.py --project "du-an/<x>" --preview --out "<tên>-<khung>-nhapN"` rồi nghiệm thu và gửi người dùng duyệt.
 7. **Bản chính**: bỏ `--preview`, `--out "<tên>-<khung>"`. Bài dài gọi lặp y nguyên lệnh (tự resume).
-8. **Giao**: bản đạt nghiệm thu (và đã burn phụ đề nếu là clip dọc) copy sang `xuat-hoan-chinh/`. Báo tên file, đúng thư mục `xuat-hoan-chinh/`, thời lượng, dung lượng, kèm chapters nếu có.
+8. **Giao**: bản đạt nghiệm thu (và đã burn phụ đề nếu là clip dọc) đặt vào thư mục clip trong `Thanh pham/` (xem mục "Quy ước hai thư mục xuất và tên file"). Báo tên file, đúng thư mục clip trong `Thanh pham/`, thời lượng, dung lượng, kèm chapters nếu có.
 9. **Đăng tải** (tự làm, không chờ nhắc): skill phim-dang-tai. Chọn khung mặt bằng `python3 tools/chon-khung-thumbnail.py --map <video>.map.json` (rồi `--quanh kNN`), soạn `dang-tai.json` và `thumbnail.json`, `python3 tools/dang-tai.py job` rồi render thumbnail ở sandbox bằng `render-do-hoa.mjs --lam-lai` (job `"still": true`), cuối cùng `python3 tools/dang-tai.py kiem` ĐẠT và nhìn `soi-thumbnail.jpg`. Báo cùng lượt với bước 8.
 
 ## Bàn dựng: người dùng tự tinh chỉnh
@@ -177,7 +177,10 @@ Bối cảnh: một bất biến của hệ (hình = tiếng ở mọi file trun
 ## Quy ước hai thư mục xuất và tên file
 
 - **`xuat-nhap/`**: mọi thứ `assemble.py` ghi ra (nháp 480p và bản chính chưa qua hậu kỳ nào khác). Vùng làm việc, không gửi người dùng như bản cuối; dọn được khi dự án xong.
-- **`xuat-hoan-chinh/`**: CHỈ file đã hoàn tất hậu kỳ và qua nghiệm thu (clip dọc là bản đã burn phụ đề). Nơi duy nhất trỏ người dùng tới khi báo hoàn thành.
+- **`xuat-hoan-chinh/`** (trong dự án): CHỈ file đã hoàn tất hậu kỳ và qua nghiệm thu (clip dọc là bản đã burn phụ đề); bước đệm trước khi vào `Thanh pham/`.
+- **`Thanh pham/`** (ngang hàng "xuong-phim-claude"): nơi duy nhất trỏ người dùng tới khi báo hoàn thành. MỖI DỰ ÁN MỘT THƯ MỤC MẸ `<tên dự án>/`, bên trong mỗi clip một thư mục tự đủ đánh số thứ tự: `Short NN <slug>/` cho short (NN hai chữ số), `00 Video day du/` cho clip dài; không tách thư mục ngang cấp ở `Thanh pham/`. Thư mục clip gồm video, `nghiem-thu.json`, `dang-tai/` (dang-tai.json, DANG-TAI.md, thumbnail-*.json, thumb-*.jpg, soi-thumbnail.jpg, khung/). Người dùng sao lưu bằng cách dời nguyên thư mục. Chép từ sandbox: chỉ khi render đã xong, đối chiếu md5; sau khi vào `Thanh pham/` chạy lại `dang-tai.py kiem`.
+- **Nguồn dựng** (timeline, cues, phụ đề .ass, map.json, script, nguồn cảnh minh hoạ, gỡ băng) lưu ở `du-an/<dự án>/`, không nằm trong thư mục clip; nhờ đó dựng lại được khi cần.
+- **Dọn nháp và rác chỉ sau khi người dùng nói "duyệt"** (xin quyền xoá rồi dọn cho trống ổ; xem CLAUDE.md quy tắc 12).
 - Luôn truyền `--out` tường minh: nháp `<tên>-<khung>-nhapN` (tăng N mỗi vòng), bản chính `<tên>-<khung>`. Tên đã kết thúc bằng `-nhapN` thì script không nối thêm `-nhap`. Không cần hậu tố `-final` hay `-khong-phude`.
 
 ## Quy ước chất lượng

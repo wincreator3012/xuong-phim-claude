@@ -57,7 +57,7 @@ Phần lớn người lướt không bật tiếng: clip dọc mặc định bur
 3. Burn bằng file `.ass` có `PlayResX`/`PlayResY` đúng độ phân giải thật (không dùng `force_style` nhiều key); mẫu `.ass`, lệnh burn, font và cách đo MarginV: `references/phu-de-ass.md`.
 4. Kiểm hai khung tại mốc có cue bằng output-seek (`-ss` sau `-i`) trước khi burn cả clip.
 
-File đã burn là bản HOÀN CHỈNH: ghi vào `du-an/<x>/xuat-hoan-chinh/<slug>-doc.mp4`. Burn là một lượt encode mới nên phải qua cổng nghiệm thu lần nữa. Burn và chuẩn hoá âm lượng làm trong cùng một lượt ffmpeg (chuỗi lệnh mẫu và mức `volume` điểm xuất phát: `references/phu-de-ass.md` mục 4); đo lại trước khi báo.
+File đã burn là bản HOÀN CHỈNH: ghi vào `du-an/<x>/xuat-hoan-chinh/<slug>-doc.mp4`, rồi sau khi qua nghiệm thu và có gói đăng tải thì đặt vào thư mục clip `Thanh pham/<tên dự án>/Short NN <slug>/` (một thư mục mẹ cho cả dự án, short đánh số thứ tự bên trong) (video, nghiem-thu.json, dang-tai/); không để clip rải ở nơi khác. Burn là một lượt encode mới nên phải qua cổng nghiệm thu lần nữa. Burn và chuẩn hoá âm lượng làm trong cùng một lượt ffmpeg (chuỗi lệnh mẫu và mức `volume` điểm xuất phát: `references/phu-de-ass.md` mục 4); đo lại trước khi báo.
 
 ## Bước 4 - nghiệm thu
 
@@ -69,4 +69,4 @@ File đã burn là bản HOÀN CHỈNH: ghi vào `du-an/<x>/xuat-hoan-chinh/<slu
 
 Báo kết quả kèm dòng "nghiệm thu máy: ĐẠT" và danh sách ngắn các điểm cần người dùng nghe lại (chữ nhận dạng chưa chắc, con số người nói ước lượng, chức danh, chỗ đã cắt bỏ tham chiếu ngoài clip). Một bài giảng tốt thường ra 3-5 clip: sau khi người dùng duyệt clip đầu, đề nghị dựng loạt còn lại cùng format cho đồng đều.
 
-<!-- ban-nguon: phim-clip-ngan 2026-10-05 2c1fae74 -->
+<!-- ban-nguon: phim-clip-ngan 2026-10-07 0023040d -->

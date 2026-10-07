@@ -1,13 +1,13 @@
 ---
 name: "phim-dang-tai"
-description: "Soạn gói đăng tải cho mỗi clip đã xuất hoàn chỉnh trong thư mục \"xuong-phim-claude\": ba phương án tiêu đề và mô tả YouTube chuẩn tìm kiếm (chương, thẻ, hashtag), status Facebook bằng giọng của người dùng, và ba phương án thumbnail dựng từ khung hình thật của clip, qua cổng kiểm máy. Tự chạy ngay khi một clip vừa qua nghiệm thu và vào xuat-hoan-chinh, không chờ người dùng nhắc. Cũng kích hoạt khi người dùng nói \"mô tả YouTube\", \"description\", \"SEO\", \"status Facebook\", \"caption đăng bài\", \"thumbnail\", \"ảnh bìa\", \"bìa Reels\", \"chuẩn bị đăng\", \"gói đăng tải\", hoặc nhờ làm những thứ đó cho một clip cũ. Không dùng để dựng clip (phim-dung-bai và các skill thể loại) hay làm đồ họa chạy trong video (phim-do-hoa)."
+description: "Soạn gói đăng tải cho mỗi clip đã xuất hoàn chỉnh trong thư mục \"xuong-phim-claude\": ba phương án tiêu đề và mô tả YouTube chuẩn tìm kiếm (chương, thẻ, hashtag), status Facebook bằng giọng của người dùng, và ba phương án thumbnail dựng từ khung hình thật của clip, qua cổng kiểm máy. Tự chạy ngay khi một clip vừa qua nghiệm thu, không chờ người dùng nhắc. Cũng kích hoạt khi người dùng nói \"mô tả YouTube\", \"description\", \"SEO\", \"status Facebook\", \"caption đăng bài\", \"thumbnail\", \"ảnh bìa\", \"bìa Reels\", \"chuẩn bị đăng\", \"gói đăng tải\", hoặc nhờ làm những thứ đó cho một clip cũ. Không dùng để dựng clip (phim-dung-bai và các skill thể loại) hay làm đồ họa chạy trong video (phim-do-hoa)."
 ---
 
 # Gói đăng tải: tiêu đề, mô tả YouTube, status Facebook, thumbnail
 
 Trước khi bấm xem, người xem chỉ gặp ba thứ: thumbnail, tiêu đề, vài dòng đầu của mô tả hay status. Skill này soạn ba thứ đó cho từng clip, như bước cuối của mọi quy trình dựng. Nguyên lý xuyên suốt: **một lời hứa rõ ràng mà clip giữ được**. Đây vừa là giá trị của người dùng (chân thật, không giật tít, không khung sợ hãi) vừa là điều nền tảng thưởng: YouTube xếp hạng theo thời gian xem có giá trị [valued watch time] và khảo sát mức hài lòng, chọn thumbnail thắng trong thử nghiệm A/B bằng thời gian xem chứ không bằng lượt bấm; Meta hạ phân phối bài giật tít và mồi tương tác. Nền nghiên cứu và nguồn: `skills/phim-dang-tai/references/nghien-cuu-thumbnail.md`.
 
-Kết quả của mỗi clip nằm trong `du-an/<tên>/dang-tai/<tên video>/`:
+Kết quả của mỗi clip soạn ở `du-an/<tên>/dang-tai/<tên video>/` rồi khi xong thì nằm CHUNG với video trong thư mục clip `Thanh pham/<tên dự án>/Short NN <slug>/dang-tai/` (clip dài: `Thanh pham/<tên dự án>/00 Video day du/dang-tai/`) (một clip một thư mục tự đủ để người dùng sao lưu nguyên thư mục; chạy lại `dang-tai.py kiem` trên bản trong `Thanh pham/`):
 
 | Tệp | Là gì |
 |---|---|
@@ -20,7 +20,7 @@ Kết quả của mỗi clip nằm trong `du-an/<tên>/dang-tai/<tên video>/`:
 
 ## Khi nào chạy
 
-- **Tự chạy** ngay sau khi một clip có "nghiệm thu máy: ĐẠT" và đã copy sang `xuat-hoan-chinh/` (mọi skill dựng trỏ về đây ở bước giao). Người dùng không cần ra lệnh thêm; báo giao clip và gói đăng tải trong cùng một lượt.
+- **Tự chạy** ngay sau khi một clip có "nghiệm thu máy: ĐẠT" (mọi skill dựng trỏ về đây ở bước giao). Người dùng không cần ra lệnh thêm; báo giao clip và gói đăng tải trong cùng một lượt.
 - Nhiều clip một lượt (một buổi podcast ra hai clip, một loạt Reels): mỗi clip một gói, soạn chữ cho cả loạt cùng lúc để các tiêu đề không trùng ý.
 - Clip cũ, clip không dựng trong xưởng: chạy độc lập theo đường dẫn video (`--video` thay cho `--map` ở bước chọn khung).
 - Gói đăng tải là bản nháp để người dùng duyệt khi đăng, không có chốt duyệt chặn trước; Claude không tự đăng lên nền tảng nào.
@@ -141,4 +141,4 @@ Báo người dùng trong cùng lượt với báo giao clip: đường dẫn `D
 - Người dùng chọn phương án, sửa chữ, hay chê một kiểu thumbnail: một dòng vào sổ tay góp ý của `phong-cach/PHONG-CACH.md`; lặp lần hai thì sửa mặc định (PHONG-CACH mục 8, `thumbnailDefaults` trong `Thumbnail.tsx`, mẫu trong `references/mau-dang-tai.md`).
 - Kết quả thử nghiệm A/B người dùng kể lại (phương án nào thắng, kiểu chữ nào): ghi vào `docs/BAI-HOC.md` chủ đề "Đăng tải" kèm tên clip; đủ nhiều thì chưng thành nguyên lý trong `references/nghien-cuu-thumbnail.md`.
 
-<!-- ban-nguon: phim-dang-tai 2026-10-05 cd3ee6f6 -->
+<!-- ban-nguon: phim-dang-tai 2026-10-07 e368bad3 -->
