@@ -2,5 +2,7 @@
   "_huong-dan": "Chép thành cau-hinh.json (không đưa lên git) nếu máy cần chỗ khác mặc định. Đường dẫn tương đối tính từ thư mục repo. thuMucDuAn: hồ sơ dự án, mỗi dự án một thư mục <YYYY-MM tên>/. thuMucThanhPham: thành phẩm, <YYYY-MM tên dự án>/00 Video day du/ và Short NN <slug>/. thuMucTam: việc tạm của công cụ và Claude, xoá lúc nào cũng được. Không bao giờ trỏ vào trong repo.",
   "thuMucDuAn": "../Du an",
   "thuMucThanhPham": "../Thanh pham",
-  "thuMucTam": "../Du an/_tam"
+  "thuMucTam": "../Du an/_tam",
+  "thuMucGiao": "",
+  "_giao": "thuMucGiao: nơi giao trọn gói thành phẩm sau khi duyệt (thường là thư mục đồng bộ Google Drive); để trống nếu không dùng."
 }

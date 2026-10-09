@@ -7,6 +7,7 @@
       Du an/            hồ sơ dự án: <YYYY-MM tên>/ (nguon/, transcript/, timeline, clip-ngan/, do-hoa/, xuat-nhap/ ...)
       Du an/_tam/       việc tạm của công cụ và Claude (dự án thử, hàng đợi gỡ băng, bản vá đồng bộ); xoá lúc nào cũng được
       Thanh pham/       <YYYY-MM tên dự án>/00 Video day du/, Short NN <slug>/ (mỗi thư mục tự đủ)
+      (thư mục giao)    nơi giao trọn gói thành phẩm sau khi anh duyệt (thuMucGiao, vd thư mục đồng bộ Google Drive); không bắt buộc
 
 Đường dẫn đọc từ cau-hinh.json ở gốc repo (chép từ cau-hinh.mau.json, không lên git), tương đối tính từ gốc repo.
 Thiếu cau-hinh.json thì dùng mặc định bên dưới. Máy còn kiểu cũ (du-an/ trong repo, chưa có "../Du an") thì dùng du-an/.
@@ -14,6 +15,7 @@ Thiếu cau-hinh.json thì dùng mặc định bên dưới. Máy còn kiểu c�
     import cau_hinh as CH
     CH.du_an()            # thư mục hồ sơ dự án (tuyệt đối)
     CH.thanh_pham()       # thư mục thành phẩm
+    CH.giao()             # thư mục giao thành phẩm (None nếu chưa cấu hình thuMucGiao)
     CH.tam("go-bang")     # thư mục tạm (tạo nếu chưa có)
     CH.trong_repo(p)      # p có nằm trong repo không
     CH.cho_phep(p)        # p nằm trong repo, Du an hoặc Thanh pham
@@ -54,6 +56,11 @@ def thanh_pham():
     return _tuyet_doi(doc()["thuMucThanhPham"])
 
 
+def giao():
+    v = (doc().get("thuMucGiao") or "").strip()
+    return _tuyet_doi(v) if v else None
+
+
 def tam(*con, tao=True):
     d = _tuyet_doi(doc()["thuMucTam"])
     if not os.path.isdir(os.path.dirname(d)) and os.path.isdir(os.path.join(GOC, "du-an")):
@@ -82,4 +89,5 @@ if __name__ == "__main__":
     print("Repo xưởng :", GOC)
     print("Du an      :", du_an())
     print("Thanh pham :", thanh_pham())
+    print("Giao       :", giao() or "(chưa cấu hình thuMucGiao)")
     print("Tạm        :", tam(tao=False))

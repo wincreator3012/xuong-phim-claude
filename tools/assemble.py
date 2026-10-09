@@ -71,6 +71,9 @@ Bài giảng có SLIDE (skill phim-bai-giang-slide):
   "theme": "light"|"dark" ở cấp cao nhất; mỗi segment thêm
   "layout": "mat"|"slide"|"ca-hai"|"chia-doi"|"mat-chinh", "slide": "slide/slide-03.png",
   "slideZoom": [x, y, w, h] (tỉ lệ 0-1, tùy chọn). Toạ độ/khung/mask: do-hoa-chung/bo-cuc/.
+  "screen": "nguon/man-hinh.mp4" (thay cho "slide" khi nội dung là demo trực tiếp): ô slide lấy từ VIDEO
+  quay màn hình, cùng trục thời gian với "src" (cộng "screenOffset" giây nếu quay màn hình bắt đầu lệch);
+  "slideZoom" vẫn dùng được (crop tĩnh theo đoạn). Tiếng vẫn từ src (hoặc audioSrc).
 MULTICAM (skill phim-multicam): segment thêm "audioSrc": "nguon/tieng-chu.wav", "audioIn": <giây>
   → hình từ src [in, out], tiếng từ audioSrc bắt đầu tại audioIn (trục tiếng chủ); đặt snap:false.
 """
@@ -90,7 +93,7 @@ PREVIEW_SIZES = {"ngang": (854, 480), "doc": (480, 854)}
 # --- Chống lệch hình-tiếng (bản vá 2026-09-05, 2026-09-17) --------------------
 # Đổi TOOL_VERSION mỗi khi sửa logic encode → mọi cache .sig cũ tự vô hiệu.
 XUONG = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # gốc xưởng: nhac-nen/, brand/, do-hoa-chung/
-TOOL_VERSION = "2026-10-01.r8"  # r8: vi mờ 5 ms ở mép part có tiếng không liền với part kề (chống tiếng bụp ở mối cắt); r7: overlay "duration" (giữ/bớt khung giữa), volumeDb của đoạn, audioIn multicam theo từng quãng B-roll; r1: insert_part tự cắt đuôi tiếng AAC, role intro/outro cho bookends
+TOOL_VERSION = "2026-10-09.r9"  # r9: segment "screen" (ô slide lấy từ VIDEO quay màn hình cùng trục thời gian, bài giảng có demo); r8: vi mờ 5 ms ở mép part có tiếng không liền với part kề (chống tiếng bụp ở mối cắt); r7: overlay "duration" (giữ/bớt khung giữa), volumeDb của đoạn, audioIn multicam theo từng quãng B-roll; r1: insert_part tự cắt đuôi tiếng AAC, role intro/outro cho bookends
 # CONCAT_REV: đổi khi sửa bước GHÉP hoặc FINALIZE (không đụng cách encode từng part) - chỉ vô hiệu cache body,
 # không bắt encode lại các part đã xong. Sửa cách encode part thì đổi TOOL_VERSION.
 CONCAT_REV = "c8"  # c7: concat.txt ghi duration chính xác n/fps mỗi part; c8: đo loudness nghiêm ngặt, map insert chính xác
@@ -350,7 +353,7 @@ class Assembler:
     def cut_part(self, src, t_in, t_out, focus=0.5, fade_in=0.0, fade_out=0.0,
                  fade_out_audio=0.0,
                  overlay=None, video_from=None, broll_from=0.0,
-                 layout="mat", slide=None, slide_zoom=None,
+                 layout="mat", slide=None, slide_zoom=None, screen=None, screen_offset=0.0,
                  audio_src=None, audio_in=None, volume_db=0.0, vi_mo=(False, False)):
         """Cắt [t_in, t_out] từ src thành một phần chuẩn hóa.
         video_from: nếu đặt → video lấy từ file khác (B-roll), audio vẫn từ src.
@@ -371,6 +374,8 @@ class Assembler:
         self.time_map[-1]["layout"] = layout
         if slide:
             self.time_map[-1]["slide"] = slide
+        if screen:
+            self.time_map[-1]["screen"] = screen
         if audio_src:
             # multicam: mốc phụ đề/chapter tính theo TIẾNG CHỦ, không theo file góc
             self.time_map[-1]["audio_src"] = os.path.relpath(self.resolve(audio_src), self.project)
@@ -382,6 +387,7 @@ class Assembler:
                                fade_in=fade_in, fade_out=fade_out, fade_out_audio=fade_out_audio, overlay=overlay,
                                video_from=video_from, broll_from=broll_from, preview=self.preview,
                                mau=mau, layout=layout, slide=slide, slide_zoom=slide_zoom, theme=theme,
+                               screen=(self.resolve(screen) if screen else None), screen_offset=screen_offset,
                                audio_src=a_path, audio_in=audio_in, volume_db=volume_db, vi_mo=list(vi_mo))
         if self._cache_hit(out, dur, sig) and check_av(out, dur, label=os.path.basename(out) + " (cache)", raise_on_fail=False, tol=AV_TOL_PCM):
             print(f"    (dùng lại part-{idx:03d}.mp4 đã encode)", flush=True)
@@ -445,16 +451,21 @@ class Assembler:
                 pal = spec["palette"][theme]
                 bg = "0x" + pal["bg"].lstrip("#")
                 sd = spec["_dir"]
-                if not slide:
-                    raise RuntimeError(f"Đoạn layout '{layout}' cần trường 'slide'")
-                slide_path = self.resolve(slide)
-                cmd += ["-loop", "1", "-framerate", str(self.fps), "-i", slide_path]
+                if not slide and not screen:
+                    raise RuntimeError(f"Đoạn layout '{layout}' cần trường 'slide' (ảnh) hoặc 'screen' (video quay màn hình)")
+                if screen:
+                    cmd += ["-ss", f"{max(0.0, t_in + float(screen_offset or 0.0)):.3f}", "-t", f"{dur:.3f}",
+                            "-i", self.resolve(screen)]
+                else:
+                    cmd += ["-loop", "1", "-framerate", str(self.fps), "-i", self.resolve(slide)]
                 i_slide, n_in = n_in, n_in + 1
                 zoom = ""
                 if slide_zoom:
                     zx, zy, zw, zh = [float(v) for v in slide_zoom]
                     zoom = f"crop=iw*{zw:.4f}:ih*{zh:.4f}:iw*{zx:.4f}:ih*{zy:.4f},"
                 ss = lay["slide"]
+                if screen:
+                    zoom = f"fps={self.fps}:start_time=0,{zoom}"
                 slide_chain = (f"[{i_slide}:v]{zoom}scale={ss['w']}:{ss['h']}:force_original_aspect_ratio=decrease,"
                                f"pad={ss['w']}:{ss['h']}:(ow-iw)/2:(oh-ih)/2:color={bg},setsar=1,format=rgba")
 
@@ -721,10 +732,13 @@ class Assembler:
             if layout not in self.LAYOUTS_OK:
                 errs.append(f"{tag}: layout '{layout}' không hợp lệ ({'|'.join(self.LAYOUTS_OK)})")
             elif layout != "mat":
-                if not seg.get("slide"):
-                    errs.append(f"{tag}: layout '{layout}' cần trường 'slide' (ảnh slide)")
+                if not seg.get("slide") and not seg.get("screen"):
+                    errs.append(f"{tag}: layout '{layout}' cần trường 'slide' (ảnh slide) hoặc 'screen' (video màn hình)")
                 else:
-                    need(seg["slide"], f"{tag} slide")
+                    if seg.get("slide"):
+                        need(seg["slide"], f"{tag} slide")
+                    if seg.get("screen"):
+                        need(seg["screen"], f"{tag} screen")
                 if seg.get("broll"):
                     warns.append(f"{tag}: có cả layout '{layout}' và B-roll - quãng B-roll sẽ không ghép slide")
                 try:
@@ -945,6 +959,7 @@ class Assembler:
                     broll_from=float(binfo.get("from", 0)) if kind == "broll" else 0.0,
                     layout=seg.get("layout", "mat"), slide=seg.get("slide"),
                     slide_zoom=seg.get("slideZoom"),
+                    screen=seg.get("screen"), screen_offset=float(seg.get("screenOffset") or 0.0),
                     audio_src=seg.get("audioSrc"),
                     # multicam: tiếng chủ chạy liền theo hình, mỗi quãng con (cắt bởi B-roll) bắt đầu đúng chỗ
                     audio_in=(float(seg.get("audioIn") or 0.0) + (a - t_in)) if seg.get("audioSrc") else None,

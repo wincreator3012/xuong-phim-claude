@@ -48,6 +48,7 @@ Thời lượng overlay tính theo `bien-tap.md` (lớn hơn giữa thời lư�
 Timeline `Du an/<tên>/timeline.json` theo schema trong docstring `tools/assemble.py`:
 - `snap: true` cho mọi đoạn video
 - **Quy tắc cứng: không lớp phủ nào (overlay, pill, bảng tên, slide thẻ) che mặt BẤT KỲ AI trong khung**, kể cả người ngồi hoặc đứng phía sau người nói và người đang được gửi hình lên slide. Chọn kiểu hiện không chồng lên cảnh quay (overlay ở vùng khung trống, `ca-hai`, `mat`), bỏ slide hay thẻ ít quan trọng; khung có khán phòng thì không dùng `mat-chinh`. Nghiệm thu: trích khung tại MỌI mốc có lớp phủ và nhìn từng khung (`skills/_chung/overlay-va-the.md`)
+- **Nguồn có màn hình chia sẻ của người giảng** (demo, live thực hành): màn hình thường lộ email, tên khách hàng hay dự án, danh sách riêng. Quét khung trước khi dựng, che bằng vùng phóng hay đổi sang `mat`, rà lại trên phim đã dựng: `skills/phim-bai-giang-slide/references/demo-man-hinh.md`
 - Gộp nhiều nội dung liệt kê/nhấn mạnh vào MỘT đoạn quay liên tục bằng `overlay` dạng LIST (mỗi cái một `at` theo lời nói, không chồng lấn) thay vì tách segment hay dùng `broll`; chỉ tách segment khi cần BỎ nội dung ở giữa, và cắt vào khoảng lặng thật
 - **Hai hệ mốc thời gian, dễ nhầm**: `in`/`out` và `broll[].at` là mốc TRONG FILE NGUỒN; `overlay[].at` TƯƠNG ĐỐI từ đầu đoạn (sau snap). Overlay muốn hiện lúc lời nói ở mốc nguồn T: `at = T - in`. Overlay chỉ phủ tới B-roll đầu tiên của đoạn
 - Nhiều góc máy: đổi nguồn giữa các segment liên tiếp là đủ chuyển cảnh
@@ -88,8 +89,8 @@ Ngay sau khi giao, làm gói đăng tải theo skill phim-dang-tai: ba phương 
 
 - `.tam/` sau khi dựng bị truncate còn 0 byte nhưng tên còn - bình thường
 - Sửa script/studio ở đám mây phải commit về máy ngay (máy là bản gốc). Sửa logic cắt, ghép hay finalize trong `assemble.py` thì đổi `TOOL_VERSION`, rồi chạy `python3 tools/kiem-tra-xuong.py` (gồm `kiem-dong-bo.py`, dựng thử chớp/click đo tiếng - hình từng sự kiện) và chỉ dựng thật khi cả hai ĐẠT
-- **Chốt thông số âm thanh trước khi bấm bản chính; bản dài thì chia việc.** Sau finalize các part bị truncate về 0 byte, nên đổi bất kỳ tham số nào (âm lượng, đỉnh tiếng) là mã hoá lại toàn bộ. Clip hơn 35 phút trên máy ảo (mỗi lệnh gọi khoảng 120 giây): part nhỏ, 4 worker, ca-hai nướng sẵn, resume được; chi tiết ở `docs/BAI-HOC.md` mục 13
+- **Chốt thông số âm thanh trước khi bấm bản chính; bản dài thì chia việc.** Sau finalize các part bị truncate về 0 byte, nên đổi bất kỳ tham số nào (âm lượng, đỉnh tiếng) là mã hoá lại toàn bộ. Clip hơn 35 phút trên máy ảo (mỗi lệnh gọi khoảng 120 giây): dùng `tools/dung-dai.py` (`song-song` lặp tới `XONG-SONG-SONG`, rồi `ghep`, `tron`, `mux-a`, `mux-b`; luôn đường dẫn dự án tuyệt đối, không bao giờ dọn cache; phim 64 phút khoảng 25-30 phút trên 4 lõi), hoặc part nhỏ, 4 worker, ca-hai nướng sẵn; chi tiết ở `docs/BAI-HOC.md` mục 13 và 24
 - **Lớp lỗi "bất biến bị vi phạm nhưng không ai kiểm"**: mọi file trung gian phải hình = tiếng; bước sau chỉ đi tiếp khi bước trước đo đạt; không để nhánh "sửa ngầm" (encode lại, hạ ngưỡng, bắt ngoại lệ rồi bỏ qua) che dấu vết; con số khớp "gần đúng" khó hiểu là dấu hiệu, không phải may mắn. Bất biến hình = tiếng phải được đo cả SO VỚI NGUỒN (ngưỡng chặt 4 ms ở part và thân phim, không dùng chung ngưỡng 0,06 s của AAC); một công cụ đo tự viết phải thử trên nguồn biết trước đáp án trước khi tin
 - Kết thúc dự án đáng nhớ: bài học kỹ thuật vào `docs/BAI-HOC.md` đúng chủ đề; tiêu chí biên tập mới vào `skills/phim-dung-bai/references/bien-tap.md`; góp ý phong cách vào sổ tay góp ý của `phong-cach/PHONG-CACH.md`. Sửa skill theo `skills/_chung/bao-tri-skill.md`
 
-<!-- ban-nguon: phim-dung-bai 2026-10-07 affb1913 -->
+<!-- ban-nguon: phim-dung-bai 2026-10-09 cf141074 -->

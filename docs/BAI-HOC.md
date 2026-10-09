@@ -276,3 +276,48 @@ Bài học là lý do để hiểu vì sao một cách làm từng đúng với 
 - **Cổng repo sạch:** `tools/kiem-sach.py` đầu và cuối phiên (CLAUDE.md quy tắc 14); không tạo `du-an/`, `.tam/`, `_to_delete/`, `*.truoc-*` trong repo.
 - **Đường tới tài nguyên dùng chung không được phụ thuộc chỗ để dự án:** khi dự án ra ngoài repo, mọi đường kiểu "../../../brand/brand.json" trong job đồ họa đều gãy, còn đường kèm tên repo thì gãy khi người dùng đặt tên thư mục khác. Job viết `@xuong/brand/brand.json` (`render-do-hoa.mjs` tính từ gốc xưởng); `assemble.py` tìm nhạc nền, brand, khung slide ở gốc xưởng chứ không ở "ông của thư mục dự án". Lỗi này chỉ lộ ra khi chạy `kiem-tra-xuong.py --co-slide` sau đợt dời, nên dời cấu trúc nào cũng phải chạy cổng dựng thử.
 - **Người dùng bản cũ còn `du-an/` trong repo:** `tools/cau_hinh.py` vẫn đọc được kiểu cũ, `kiem-sach.py` báo "dự án kiểu cũ" và không bao giờ xoá; hướng dẫn dời ở HUONG-DAN mục "Cập nhật xưởng" của repo chung.
+
+## 22. Podcast hai người ba camera, không cắt, kèm pill và gói đăng tải (dự án thật, 2026-10-08)
+
+- 
+- **Chọn một kênh tiếng làm chủ cho cả clip:** camera toàn cảnh (có hai micro cùng thu) cho tiếng sạch nhất nên làm kênh chủ `tieng-chu.wav`; mọi bản gỡ băng, mốc từ, mốc pill tính theo trục này (trục gốc trừ độ trễ đồng bộ), không trộn kênh.
+- **Gỡ băng nhanh theo mảnh trước, gỡ chính xác sau:** bản turbo cắt theo khúc đủ để lập kế hoạch và đặt pill; bản chính xác (large-v3) chỉ chạy được trên Mac thật qua hàng đợi `hang-doi-go-bang.py`, nên kế hoạch không được chờ nó, nhưng thuật ngữ trên chữ công khai phải đối chiếu lại khi nó xong.
+- **Đặt pill [lớp chữ ngắn] theo từ neo, không theo giờ ước chừng:** mỗi pill có danh sách từ neo; công cụ tìm cụm neo trong `tieng-chu.tu.json` (mốc từng âm tiết) để lấy thời điểm thật. Gần năm mươi pill không đè lên thẻ phần, thanh tên người nói hay nhau, và không phủ lên mặt.
+- **Chỉ chạy MỘT tiến trình `render-do-hoa.mjs` mỗi lần:** hai tiến trình trùng nhau làm tốc độ giảm một nửa chứ không nhân đôi. Render dài trong sandbox phải chạy nền (`setsid nohup ... & disown`) vì tiến trình con chết khi lệnh kết thúc; hỏi thăm bằng log, đừng chạy ở nền trước.
+- **Nhạc nền chọn từ danh sách cấm trước:** `nhac-nen/CAM-DUNG.json` liệt kê bài đã vướng bản quyền; chọn nhạc nhóm của riêng xưởng, đặt ở đầu và cuối clip, hạ khi có người nói (duck).
+- **Khung thumbnail từ thành phẩm chỉ ra một người:** `chon-khung-thumbnail.py --nguon thanh-pham` giới hạn số khung trên mỗi file nguồn, mà thành phẩm chỉ có một file, nên mười hai ứng viên đều là một người (và có cả chữ pill). Dùng `--nguon goc` để lấy từ ba camera gốc: sạch, đủ cả hai người, thêm khung đôi từ camera toàn cảnh.
+- **Chữ lệch thời điểm:** clip quay trước ngày đăng vài tháng và nhắc mốc tương lai (sự kiện đã qua lúc đăng): thêm pill "ghi hình vào tháng N" ngay đầu clip, một dòng trong mô tả và bình luận đầu, đổi tên chương nhắc tháng cũ; không sửa lời nói trong video.
+- **Việc tạm không đặt trong thư mục người dùng:** script soạn gói đăng tải (như `_viet.py`) và ảnh chụp kiểm (`_sNN.jpg`) để vào `Du an/_tam/`, vì `rm` bị chặn đến khi người dùng nói "duyệt"; chạy Python cũng sinh `tools/__pycache__` làm `kiem-sach.py` báo bẩn, cần ghi vào danh sách dọn.
+- 
+
+## 23. Chín short từ podcast hai người (dự án thật, 2026-10-08)
+
+- **Phụ đề tính theo nửa dòng:** mỗi nửa dòng không quá khoảng 31 ký tự, cả cue không quá khoảng 62 ký tự; `tao-ass.py` in `!! DONG DAI` thì tách cue trước khi burn, đừng chữa bằng cách thu nhỏ chữ.
+- **Cue không được kéo qua cuối đoạn:** giờ kết thúc cue phải nhỏ hơn hoặc bằng cuối đoạn chứa nó, nếu không chữ của câu bị cắt hiện lên đè đoạn kế.
+- **`tu.py` ghi khoảng lặng TRƯỚC từ:** dòng `từ[mốc] <gap>` nghĩa là khoảng lặng nằm trước từ đó. `tr.py` cho khoảng lặng "giữa" (tâm); cửa sổ có mức thấp nhất trên khoảng -35 dB là tiếng nói hay tiếng đệm chứ không phải im lặng, soi lại bằng cửa sổ hẹp hơn rồi mới cắt.
+- **Cắt ở tâm khoảng lặng thật,** bỏ tiếng đệm ("ờ", "ơ") bằng cách nối hai quãng, không xoá bằng cách rút `in`/`out` giữa tiếng.
+- **Bảng tên người [lower third] cần đoạn thân đầu tiên dài ít nhất khoảng 4,6 giây;** đoạn ngắn hơn thì gộp với đoạn sau hoặc bỏ. Với short có nhiều hơn một đoạn hook (hook rồi hook 2), biến môi trường `LT_PART` của `xuat.sh` phải trỏ đúng chỉ số đoạn thân đầu (short 7 là `LT_PART=2`); để mặc định thì phụ đề đè lên bảng tên, nhìn ảnh lưới ở khung bảng tên hiện mới thấy.
+- **Hook nhấc từ giữa lời giảng:** đưa câu đắt lên đầu rồi khi vào thân phải bỏ quãng đã dùng làm hook để không nghe lại hai lần; ghi cú nối đó vào ghi chú kiểm để người dùng nghe.
+- **Cú nối giữa hai quãng đều ghi vào `ghi_chu_kiem`:** thời điểm trong thành phẩm, câu trước và câu sau cú nối. Không khẳng định mình "nghe không rõ"; chỉ có kết quả nhận dạng, nên viết "nhận dạng ra chữ không rõ nghĩa".
+- **Truyền file giữa hai máy:** chép từ sandbox về Mac vào một thư mục `/mnt/user-data/outputs/<tên mới>/` MỚI cho mỗi lượt (đường dẫn cũ bị nhớ và ghi nhầm bản cũ), rồi so `md5`; ảnh và mp4 trên Mac có thể lớn hơn khoảng 5,8 KB, vô hại, webm phải khớp tuyệt đối. Lượt chép lớn trong lúc sandbox đang render dễ hết thời gian chờ: chờ render xong, chép từng đợt không quá 4 đến 5 file.
+- **Tiến trình nền trên Mac không đáng tin:** chạy `xuat.sh` đồng bộ trong một lượt gọi (dưới 180 giây); việc dài hơn thì chia nhỏ hoặc làm ở sandbox.
+- **Xem trước cảnh minh hoạ:** `canh.mjs người dùng --t` nhận thời gian CỤC BỘ của đoạn (tuyệt đối trừ mốc T0 của đoạn do `gen-canh.py` in ra), đưa mốc tuyệt đối thì cảnh trống.
+- 
+- **Công cụ `mk-timeline.py`** (trong `clip-ngan/_chung/`): sinh `timeline.json` cho short từ danh sách mốc, gồm hook, intro, các đoạn thân (đoạn đầu kèm bảng tên và cảnh), outro; nên dùng thay vì viết tay.
+- 
+- **Nhạc nền riêng của xưởng:** các short tập 3 dùng `xuong-guitar-am`; các short tập 2 vẫn dùng nhạc nằm trong danh sách cấm (Content ID), cần thay trước khi đăng.
+- 
+
+## 24. Buổi live có quay màn hình: hình động, phóng vùng, giữ kín thông tin riêng tư và dựng phim dài
+
+Cách làm đầy đủ ở `skills/phim-bai-giang-slide/references/demo-man-hinh.md`; ở đây là các bài học và lý do.
+
+- **Bản ghi Zoom "ghi riêng từng luồng" cho hai file cùng trục thời gian** (`Speakers only` 1280x720, `Screen only` 2560x1440): mặt sạch, không lộ người tham dự, màn hình nét gấp đôi. Chép nguyên byte thành `nguon/mat.mp4` và `nguon/man-hinh.mp4`; thường `screenOffset` bằng 0. Phụ đề giao kèm tính theo thời gian của video NGUỒN, không phải phim đã cắt: ghi rõ trong mục lục giao.
+- **Trường `screen` trong segment lấy ô slide từ video màn hình** (`assemble.py` r9) thay cho ảnh slide tĩnh; ô mặt vẫn từ `src`. Đây là cách duy nhất cho người xem thấy thao tác thật mà vẫn giữ mặt người giảng.
+- **Phóng vùng cố định theo segment (`slideZoom`) làm hai việc: chữ thao tác đọc được trên điện thoại và thông tin ngoài vùng không lên hình.** Vùng đổi thì chia segment ở điểm ngắt hơi, không bám con trỏ. Người dùng khen đúng ở điểm này: vừa rõ hơn vừa tránh lộ thông tin riêng.
+- **Màn hình người giảng luôn có thể lộ thông tin:** email và tên tài khoản (hộp thoại chia sẻ, bộ chọn tệp), tên khách hàng hay dự án trong thư viện sổ tay, danh sách dự án của công cụ AI, trang khởi động trình duyệt, thông báo nổi. Cách xử lý đã chạy: quét bảng ảnh khung mỗi 3-5 giây (`tools/xem-khung.sh`), lập danh sách quãng nhạy cảm, mỗi quãng chọn vùng phóng nằm ngoài thông tin (hộp thoại chia sẻ: phóng nửa dưới, bỏ hàng tài khoản) hoặc đổi sang `mat`; biên cắt chỉ nới về phía `mat`; rà lại trên phim đã dựng tại mọi mốc biên. Phóng vùng không phải biện pháp riêng tư tự thân: phải kiểm hai mép vùng cắt vì cửa sổ trượt, danh sách cuộn.
+- **Cắt quãng chờ máy chạy (5-7 giây) ở hai khoảng lặng kề nhau;** màn hình đứng im lâu là chỗ người xem rời đi, còn lời giảng không mất gì.
+- **Chữ ghi chú kiểm phải theo thời gian PHIM, không theo thời gian nguồn:** đổi mốc nguồn sang mốc phim bằng `map.json` trước khi ghi `ghi_chu_kiem` (từng ghi nhầm hai quãng, `dang-tai.py kiem` chỉ so chương chứ không so ghi chú).
+- **Dựng phim 64 phút trên máy ảo:** `assemble.py run()` dọn sạch cache part khi kết thúc, nên một lần chạy trọn lỡ dở là mất hàng trăm part. `tools/dung-dai.py` chia việc thành `song-song`, `ghep`, `tron`, `mux-a`, `mux-b`, không dọn cache, dựng lại ra file giống từng byte (đã kiểm). Bẫy: chữ ký part chứa đường dẫn nguồn nên luôn dùng đường dẫn dự án tuyệt đối; ổ tạm của VM chỉ vài GB nên PCM thô ghi ngoài thư mục gắn; từ nháp sang bản chính phải encode lại toàn bộ part (25-30 phút trên 4 lõi). **[máy]**
+- **Thumbnail từ khung rộng có slide phía sau:** bố cục `toan-anh` để gradient che slide, dùng `chia-doi` kèm `focusX`, `focusY`, `faceScale` đặt tay; tiêu đề slide bị cắt giữa chữ ở mép ô thì vẽ lại ô tiêu đề hoặc đổi khung; headline dưới 110 px không qua cổng nên rút chữ ("Khung WISER-AI" thay vì câu dài).
+- **Nhãn khái niệm (pill) theo từ neo; số ước lượng trong pill ghi vào `ghi_chu_kiem`.**

@@ -1,11 +1,11 @@
 ---
 name: "phim-bai-giang-slide"
-description: "Dựng clip bài giảng ngang có SLIDE trong thư mục \"xuong-phim-claude\": nhập slide (PPTX, PDF, bộ ảnh, quay màn hình), khớp từng slide với lời giảng, đề xuất dàn hình xen ba trạng thái mặt / slide toàn khung / cả hai theo nghiên cứu học tập đa phương tiện, dựng bằng assemble.py với trường layout và slide. Kích hoạt khi user nói \"bài giảng có slide\", \"dựng clip có slide\", \"hiện slide\", \"picture in picture\", \"quay màn hình kèm mặt\", hoặc nguon có file slide cạnh video quay mặt."
+description: "Dựng clip bài giảng ngang có SLIDE trong thư mục \"xuong-phim-claude\": nhập slide (PPTX, PDF, bộ ảnh, quay màn hình), khớp từng slide với lời giảng, đề xuất dàn hình xen ba trạng thái mặt / slide toàn khung / cả hai theo nghiên cứu học tập đa phương tiện, dựng bằng assemble.py với trường layout và slide. Kích hoạt khi user nói \"bài giảng có slide\", \"dựng clip có slide\", \"hiện slide\", \"picture in picture\", \"quay màn hình kèm mặt\", \"buổi live có chia sẻ màn hình\", \"demo trực tiếp\", \"phóng vào cho rõ\", bản ghi Zoom có Screen only, hoặc nguon có file slide cạnh video quay mặt."
 ---
 
 # Bài giảng có slide: mặt, slide, hay cả hai
 
-Mở rộng của quy trình dựng bài (skill phim-dung-bai - vẫn áp dụng toàn bộ: Bước 0 nền tảng, transcript và cổng nghiệm thu transcript, phương án cắt, đồ họa, bản nháp, nghiệm thu máy bắt buộc). Skill này thêm đúng một lớp: quyết định người học NHÌN gì ở từng quãng lời giảng và dựng lớp hình đó. Chi tiết cơ sở nghiên cứu và bảng quy tắc đầy đủ ở `skills/phim-bai-giang-slide/references/bo-cuc-slide.md` (trong thư mục xưởng). Buổi nói chuyện có khán giả tại chỗ (keynote, talk, sự kiện): đọc thêm `skills/phim-bai-giang-slide/references/clip-giang-san-khau.md` (mốc vào/ra, nguồn nặng, lớp phủ không che mặt, clip dài, thumbnail).
+Mở rộng của quy trình dựng bài (skill phim-dung-bai - vẫn áp dụng toàn bộ: Bước 0 nền tảng, transcript và cổng nghiệm thu transcript, phương án cắt, đồ họa, bản nháp, nghiệm thu máy bắt buộc). Skill này thêm đúng một lớp: quyết định người học NHÌN gì ở từng quãng lời giảng và dựng lớp hình đó. Chi tiết cơ sở nghiên cứu và bảng quy tắc đầy đủ ở `skills/phim-bai-giang-slide/references/bo-cuc-slide.md` (trong thư mục xưởng). Buổi nói chuyện có khán giả tại chỗ (keynote, talk, sự kiện): đọc thêm `skills/phim-bai-giang-slide/references/clip-giang-san-khau.md` (mốc vào/ra, nguồn nặng, lớp phủ không che mặt, clip dài, thumbnail). Buổi live thực hành hay demo có CHIA SẺ MÀN HÌNH (nguồn là video quay màn hình, kể cả bản ghi Zoom tách luồng): đọc thêm `skills/phim-bai-giang-slide/references/demo-man-hinh.md` (trường `screen`, bảng vùng phóng, quy trình rà thông tin riêng tư trên màn hình, dựng phim dài).
 
 Nguyên tắc rút từ nghiên cứu (Wang & Antonenko 2017; Polat 2022; Alemdag 2022; meta-analysis ánh nhìn 2023; Guo, Kim & Rubin 2014; Mayer 2020): mặt giảng viên không tự nâng kết quả học nhưng nâng kết nối và hài lòng; khi nội dung dày, mặt chia chú ý; xen kẽ mặt và slide giữ người xem lâu hơn; đổi trạng thái hình theo NỘI DUNG lời nói, không theo vị trí trong bài. Vì vậy: nói cái gì cần đọc thì cho slide đủ lớn; nói cái gì cần cảm thì cho mặt; slide đơn giản thì cả hai.
 
@@ -25,7 +25,7 @@ Nhịp: đổi tại điểm ngắt hơi (`snap: true`), mỗi trạng thái t�
 
 ## Bước 1 - nhập slide
 
-Slide user để trong `Du an/<tên>/nguon/` (PPTX, PDF, thư mục ảnh, hoặc video quay màn hình; Keynote thì nhờ user xuất PDF/PPTX). Chạy:
+Slide user để trong `Du an/<tên>/nguon/` (PPTX, PDF, thư mục ảnh, hoặc video quay màn hình; Keynote thì nhờ user xuất PDF/PPTX). Có video quay màn hình thì ngoài ảnh slide, giữ video đó làm nguồn hình động cho trường `screen` ở Bước 3. Chạy:
 
 ```
 python3 tools/slide-nguon.py "../Du an/<tên>/nguon/<slide>" --project "../Du an/<tên>"
@@ -49,7 +49,7 @@ Ra `slide/DAN-HINH.md` (bảng: mốc nguồn, slide, bố cục đề xuất, t
 
 ## Bước 3 - timeline và dựng
 
-Chép segments từ `timeline-slide-nhap.json` vào `timeline.json` sau khi chỉnh theo bảng đã duyệt; kiểm đuôi file nguồn (.mp4/.MP4/.MOV). Mỗi segment thêm `"layout"` và `"slide": "slide/slide-NN.png"` (bắt buộc khi layout khác `mat`), tùy chọn `"slideZoom"`; cấp cao nhất `"theme": "light"|"dark"` chọn nền khung. Overlay pill, fade, chapter, B-roll dùng như thường (B-roll bỏ qua layout trong quãng của nó). Intro/outro từ preset như mọi dự án; hook-trước-intro áp dụng như phim-dung-bai.
+Chép segments từ `timeline-slide-nhap.json` vào `timeline.json` sau khi chỉnh theo bảng đã duyệt; kiểm đuôi file nguồn (.mp4/.MP4/.MOV). Mỗi segment thêm `"layout"` và `"slide": "slide/slide-NN.png"` hoặc `"screen": "nguon/man-hinh.mp4"` (một trong hai, bắt buộc khi layout khác `mat`; `screen` lấy ô slide từ VIDEO màn hình cùng trục thời gian với `src`, thêm `"screenOffset"` nếu lệch), tùy chọn `"slideZoom"` (vùng phóng cố định suốt segment; với `screen` là cách làm chữ thao tác đọc được và cũng là cách giữ thông tin ngoài vùng không lên hình, xem `demo-man-hinh.md` mục 3-4); cấp cao nhất `"theme": "light"|"dark"` chọn nền khung. Overlay pill, fade, chapter, B-roll dùng như thường (B-roll bỏ qua layout trong quãng của nó). Intro/outro từ preset như mọi dự án; hook-trước-intro áp dụng như phim-dung-bai.
 
 Kiểm rồi dựng: `python3 tools/assemble.py --project "../Du an/<tên>" --kiem-tra` (bắt layout sai, thiếu slide, slideZoom sai, thiếu bo-cuc) → `--preview --out "<tên>-ngang-nhap1"` (mỗi vòng nháp tăng số) → duyệt → bản chính `--out "<tên>-ngang"`. Bố cục ghép ở 1920x1080 rồi thu về preview nên bản nháp phản ánh đúng tỉ lệ. Thiếu `do-hoa-chung/bo-cuc/`: chạy `python3 tools/bo-cuc-slide.py`.
 
@@ -62,6 +62,7 @@ Như phim-dung-bai Bước 6 (cổng `nghiem-thu.py video` bắt buộc, ảnh l
 3. Slide đúng mốc lời nói: mở `map.json`, với 2-3 slide quan trọng trích frame tại `start` của part và đọc lại câu transcript bao quanh
 4. Quãng `slide` đứng hình là cố ý (nghiem-thu đã bỏ cảnh báo theo `map.json`); quãng `mat` đứng hình là lỗi. Quãng `ca-hai` có thể bị báo "hình đứng" khi slide tĩnh và người nói im lặng: đối chiếu `map.json`, xem khung, nếu đúng là slide tĩnh thì đó là dương tính giả, ghi một dòng vào báo cáo
 5. **Không lớp phủ nào che mặt bất kỳ ai** (người nói, người ngồi hoặc đứng phía sau, người đang được gửi hình lên slide): trích khung thật tại MỌI mốc có thẻ, pill hay bảng tên và nhìn từng khung, cả hai mép trên; không chỉ vài mốc đại diện. Có người che khuất thì đổi bố cục (`ca-hai`, `mat`) hoặc bỏ lớp phủ đó
+6. **Nguồn có màn hình chia sẻ: rà thông tin riêng tư** (email, tên tài khoản, tên khách hàng hay dự án, danh sách dự án của công cụ, thông báo nổi, thanh dấu trang) trên khung thật của MỌI quãng `screen` trước khi dựng và tại mọi mốc biên sau khi dựng; quãng không có vùng phóng an toàn thì đổi sang `mat`. Quy trình và công cụ ở `skills/phim-bai-giang-slide/references/demo-man-hinh.md` mục 4; quãng đã che ghi vào `ghi_chu_kiem` cho user
 
 Báo kết quả kèm số quãng theo từng bố cục (ví dụ "mặt 40%, slide 25%, cả hai 35%") để user cảm được nhịp, và dòng "nghiệm thu máy: ĐẠT".
 
@@ -69,7 +70,8 @@ Báo kết quả kèm số quãng theo từng bố cục (ví dụ "mặt 40%, s
 
 - Đổi toạ độ/bo góc bố cục: sửa `tools/bo-cuc-slide.py`, chạy lại để sinh khung/mask, đổi `TOOL_VERSION` trong assemble.py nếu đổi logic ghép; commit cả `do-hoa-chung/bo-cuc/` về máy
 - Slide chữ nhỏ hơn 24pt không nên vào `ca-hai`; nhắc user khi có dịp: một ý một slide, ít animation, có ghi chú diễn giả thì khớp chính xác hơn
-- Khi user quay mặt và màn hình riêng, nhắc bắt đầu cả hai bằng một tín hiệu chung để đo `--lech`
+- Khi user quay mặt và màn hình riêng, nhắc bắt đầu cả hai bằng một tín hiệu chung để đo `--lech`; bản ghi Zoom tách luồng (`Speakers only`, `Screen only`) cùng trục thời gian nên thường không cần đo
+- Nhắc user trước buổi live kế tiếp: đóng thông báo và các cửa sổ có tên khách hàng, dùng hồ sơ trình duyệt sạch hoặc chế độ không làm phiền, vì phóng vùng chỉ che được một phần
 - Sửa skill này theo `skills/_chung/bao-tri-skill.md`; bài học mới vào `docs/BAI-HOC.md`
 
-<!-- ban-nguon: phim-bai-giang-slide 2026-10-07 8643dfe0 -->
+<!-- ban-nguon: phim-bai-giang-slide 2026-10-09 8f7c05a5 -->

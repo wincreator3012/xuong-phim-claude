@@ -119,7 +119,13 @@ def main():
                             "snap": False, "layout": "ca-hai", "slide": "slide/slide-01.png"})
             segs.append({"type": "video", "src": "nguon/chinh.mp4", "in": 28.0, "out": 30.0,
                          "snap": False, "layout": "mat-chinh", "slide": "slide/slide-01.png"})
-            print("→ có hai đoạn bố cục slide (ca-hai, mat-chinh)")
+            # quay màn hình (r9): ô lớn lấy từ VIDEO màn hình cùng trục thời gian, có vùng phóng và lệch 0,5 s
+            sh(ff + ["-f", "lavfi", "-i", "testsrc2=size=1280x720:rate=25", "-t", "30",
+                     "-c:v", "libx264", "-preset", "ultrafast", os.path.join(proj, "nguon", "man-hinh.mp4")])
+            segs.insert(2, {"type": "video", "src": "nguon/chinh.mp4", "in": 5.0, "out": 9.0,
+                            "snap": False, "layout": "ca-hai", "screen": "nguon/man-hinh.mp4",
+                            "screenOffset": 0.5, "slideZoom": [0.24, 0.10, 0.52, 0.52]})
+            print("→ có ba đoạn bố cục slide (ca-hai ảnh, ca-hai màn hình có phóng vùng, mat-chinh)")
         except ImportError:
             print("⚠ thiếu Pillow - bỏ qua đoạn thử bố cục slide")
     elif args.co_slide:
