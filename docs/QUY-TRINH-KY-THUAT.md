@@ -19,7 +19,7 @@ Bài học mới sau mỗi dự án ghi vào `docs/BAI-HOC.md` đúng chủ đ�
 
 Hệ thống dựng video cho người dùng: cắt ghép bài giảng, clip ngắn, podcast nhiều góc, phim tài liệu phỏng vấn, infomotion, hoạt hình; intro, outro và đồ họa minimalist bằng Remotion; nhạc nền; xuất 16:9 và 9:16. Nguyên tắc phân công: **video nặng xử lý trên máy của người dùng (`device_bash` + ffmpeg), đồ họa Remotion render trong sandbox đám mây** (đồ họa không chứa hình người), gỡ băng chạy trên máy (dữ liệu không rời máy).
 
-Mười bốn skill trong `skills/` là quy trình chuẩn của từng loại việc: phim-thiet-lap (cài đặt và phong cách lần đầu), phim-dung-bai, phim-clip-ngan, phim-do-hoa, phim-canh-minh-hoa, phim-transcript, phim-tu-lieu, phim-bai-giang-slide, phim-multicam, phim-mau-sac, phim-tai-lieu-phong-van, phim-infomotion, phim-hoat-hoa, phim-dang-tai. Việc nào dùng skill nào: bảng trong `CLAUDE.md`. Phần dùng chung cho mọi skill nằm ở `skills/_chung/` (`van-hanh.md`: hai máy, truyền file, chức danh, khi hỏng, khép dự án; `timeline-va-dung.md`; `overlay-va-the.md`; `nghiem-thu-dung-y.md`; `bao-tri-skill.md`). Skill sửa ở `skills/`; tham chiếu tới references luôn ghi đủ đường dẫn `skills/<skill>/references/<file>.md`.
+Mười lăm skill trong `skills/` là quy trình chuẩn của từng loại việc: phim-thiet-lap (dựng xưởng, phong cách, giới thiệu, lưu skill vào tài khoản), phim-dung-bai, phim-ban-dung, phim-clip-ngan, phim-do-hoa, phim-canh-minh-hoa, phim-transcript, phim-tu-lieu, phim-bai-giang-slide, phim-multicam, phim-mau-sac, phim-tai-lieu-phong-van, phim-infomotion, phim-hoat-hoa, phim-dang-tai. Việc nào dùng skill nào: bảng trong `CLAUDE.md`. Phần dùng chung cho mọi skill nằm ở `skills/_chung/` (`van-hanh.md`: hai máy, truyền file, chức danh, khi hỏng, khép dự án; `timeline-va-dung.md`; `overlay-va-the.md`; `nghiem-thu-dung-y.md`; `bao-tri-skill.md`). Skill sửa ở `skills/` trước; bản trong tài khoản AI là bản chép, đóng gói lại bằng `python3 tools/dong-goi-skill.py --lam` sau mỗi lần sửa (chỉ những skill đã đổi), lưu xong ghi `--da-luu`, xem lệch bằng `python3 tools/dong-goi-skill.py`; tham chiếu tới references luôn ghi đủ đường dẫn `skills/<skill>/references/<file>.md`.
 
 ## Bản đồ tài nguyên chuẩn
 
@@ -178,6 +178,7 @@ Bối cảnh: một bất biến của hệ (hình = tiếng ở mọi file trun
 | Kiểm giấy kịch bản (thời lượng, độ phủ infomotion) | `python3 tools/uoc-luong.py "../Du an/<x>/KICH-BAN-<...>.md" [--muc-tieu 5-6p] [--khoang-hinh 8]` |
 | Dựng thử cả xưởng sau khi sửa tool (chạy cả cổng kiểm tài liệu) | `python3 tools/kiem-tra-xuong.py [--co-slide]` |
 | Chỉ kiểm tài liệu và skill (YAML, đường dẫn, tên skill, kho ẩn dụ, dấu phiên bản) | `python3 tools/kiem-tai-lieu.py` |
+| Skill trong tài khoản AI có lệch nguồn không; đóng gói lại để lưu | `python3 tools/dong-goi-skill.py` (trạng thái), `--lam` (đóng gói skill đã đổi ra `Du an/_tam/goi-skill/<ngày giờ>/`), `--da-luu` (ghi nhận đã lưu), `--so-voi <thư mục skill đã cài>` |
 
 **Quy ước báo cáo**: chưa có dòng "nghiệm thu máy: ĐẠT" thì chưa được nói "xong". Ảnh lưới `<file>.luoi.jpg` là bước soi mắt, chạy SAU cổng máy, không thay cổng máy. Overlay đồng bộ lời nói cần thêm lớp thứ hai: trích khung tại mốc từng overlay (theo `map.json`) và đối chiếu với câu transcript đang nói ở đúng khung đó.
 

@@ -1,15 +1,17 @@
 ---
 name: phim-thiet-lap
-description: Thiết lập xưởng phim lần đầu cho một người dùng mới của repo xuong-phim-claude - cài môi trường và model bằng tools/cai-dat.py, phỏng vấn ngắn để điền phong-cach/PHONG-CACH.md và brand/brand.json theo một mẫu phong cách, tải nhạc và hiệu ứng theo mẫu, render thử intro/outro để duyệt. Kích hoạt khi user nói "thiết lập xưởng phim", "bắt đầu thiết lập", "cài đặt xưởng", "thiết lập phong cách", "cá nhân hoá xưởng phim", "đổi phong cách/màu/logo mặc định", hoặc khi thư mục xưởng chưa có tools/.cai-dat.json hay PHONG-CACH.md còn dấu [...] chưa điền. Cũng kích hoạt để GIỚI THIỆU XƯỞNG cho người mới (xưởng làm được gì, một dự án chạy thế nào, cách dùng hiệu quả) khi user nói "xưởng làm được gì", "giới thiệu xưởng", "hướng dẫn tôi cách dùng", "mới vào chưa biết làm gì", hoặc khi thiết lập vừa xong mà tools/.cai-dat.json chưa có da_gioi_thieu.
+description: Dựng và thiết lập xưởng phim cho người dùng mới từ bản thiết kế xuong-phim-claude - cá nhân hoá xưởng (tên, tiền tố skill), cài môi trường và model bằng tools/cai-dat.py, phỏng vấn ngắn để điền phong-cach/PHONG-CACH.md và brand/brand.json, tải nhạc theo mẫu, render thử intro/outro, đóng gói các skill của xưởng để người dùng lưu vào tài khoản AI kèm giải thích skill là gì, rồi giới thiệu xưởng. Kích hoạt khi user nói "dựng xưởng phim", "thiết lập xưởng phim", "cài đặt xưởng", "thiết lập phong cách", "đổi phong cách/màu/logo mặc định", "skill là gì", "lưu skill vào tài khoản", "skill nào cần lưu lại", "xưởng làm được gì", "giới thiệu xưởng", "hướng dẫn tôi cách dùng", "mới vào chưa biết làm gì", hoặc khi xưởng chưa có tools/.cai-dat.json, PHONG-CACH.md còn dấu [...], chưa lưu skill vào tài khoản, hay chưa có da_gioi_thieu.
 ---
 
 # Thiết lập xưởng phim lần đầu
 
-Mục tiêu: sau 40-55 phút, người dùng (thường là giảng viên, chuyên gia mới dùng AI) có một xưởng chạy được trên máy của họ, mang tên, chức danh, màu sắc và nhạc đúng ý họ, hiểu xưởng làm ra được gì cho họ và dùng sao cho hiệu quả, và biết câu đầu tiên cần nói để dựng clip. Nguyên tắc: hỏi ít, mỗi lượt tối đa 4 câu, luôn có phương án mặc định hợp lý, giải thích bằng lời thường, không bắt người dùng đọc tài liệu kỹ thuật. Người dùng vắng mặt thì chọn mặc định và ghi rõ giả định vào PHONG-CACH.md.
+Mục tiêu: sau 45-60 phút, người dùng (thường là giảng viên, chuyên gia mới dùng AI) có một xưởng RIÊNG chạy được trên máy của họ, mang tên, chức danh, màu sắc và nhạc đúng ý họ; các skill của xưởng đã nằm trong tài khoản AI của họ với tiền tố riêng; họ hiểu skill là gì, xưởng làm ra được gì cho họ, dùng sao cho hiệu quả, và biết câu đầu tiên cần nói để dựng clip. Nguyên tắc: hỏi ít, mỗi lượt tối đa 4 câu, luôn có phương án mặc định hợp lý, giải thích bằng lời thường, không bắt người dùng đọc tài liệu kỹ thuật. Người dùng vắng mặt thì chọn mặc định và ghi rõ giả định vào PHONG-CACH.md.
 
 ## Bước 0 - định vị
 
 Đọc `CLAUDE.md` ở gốc xưởng (nếu chưa đọc trong phiên). Xác định: thư mục xưởng đã kết nối chưa (device tools) và lệnh chạy ở đâu (`device_bash` tại máy người dùng, `Bash` ở sandbox đám mây, hoặc chỉ có một nơi). Chưa kết nối thư mục thì dừng, hướng dẫn người dùng bấm "Add folder" trong app Claude và chọn thư mục xưởng.
+
+Xưởng phải là xưởng RIÊNG của người dùng, dựng từ bản thiết kế theo `DUNG-XUONG.md` của repo bản thiết kế (đọc trên GitHub: wincreator3012/xuong-phim-claude), không phải bản clone. Dấu hiệu chưa dựng xong: `python3 tools/cai-dat.py --trang-thai` chưa có dòng "bản thiết kế", hoặc `cau-hinh.json` chưa có `tienToSkill`. Khi đó làm Bước 1-3 của `DUNG-XUONG.md` trước (với thư mục đã là bản clone hay bản tải ZIP cũ: chỉ cần Bước 1 và Bước 3, chạy `--dung-xuong` ngay tại chỗ; còn remote git trỏ về bản thiết kế thì đề nghị người dùng gỡ, không tự push hay pull).
 
 Kiểm `tools/.cai-dat.json`: có và `dung_thu: true` thì bỏ qua Bước 1.
 
@@ -54,19 +56,25 @@ Hình minh hoạ không tải lúc này (theo từng dự án, skill phim-tu-lie
 
 Không có studio ở đâu cả (không sandbox, máy không có node): bỏ qua, ghi chú trong PHONG-CACH.md "chưa duyệt đồ họa thử", sẽ duyệt ở dự án đầu tiên.
 
-## Bước 5 - giới thiệu xưởng và bàn giao
+## Bước 5 - skill vào tài khoản, giới thiệu xưởng và bàn giao
 
-Thiết lập xong mà người dùng chưa biết xưởng làm được gì cho họ thì xưởng chưa thật sự bàn giao. Làm hai việc theo thứ tự.
+Thiết lập xong mà người dùng chưa có skill trong tài khoản, hay chưa biết xưởng làm được gì cho họ, thì xưởng chưa thật sự bàn giao. Làm ba việc theo thứ tự.
 
 **5a. Tóm tắt thiết lập (5-7 câu).** Đã cài gì, mẫu phong cách nào, nhạc nào đã có, cái gì còn treo (logo, track chưa tải). Máy là Mac thật và muốn gỡ băng chất lượng cao nhất: tải thêm model large-v3 theo `tools/models/TAI-MODEL.md` (tuỳ chọn, khoảng 1,7 GB); chưa tải thì xưởng dùng turbo. Nhắc: mọi thứ vừa chọn đều đổi được sau bằng một câu nói.
 
-**5b. Giới thiệu xưởng có hệ thống (khoảng 10 phút).** Đọc `skills/phim-thiet-lap/references/gioi-thieu-xuong.md` và làm theo sáu chặng: xưởng là gì và ba lời hứa; bản đồ năng lực (bạn đang có gì, xưởng làm ra gì); một dự án chạy thế nào; dùng hiệu quả nhất; giới hạn nói thẳng; chọn bước đầu tiên. Mỗi lượt một chặng, kết bằng một câu hỏi để người dùng chọn đi tiếp; cá nhân hoá bằng loại clip họ đã chọn ở Bước 2. Cuối chặng 6 chạy `python3 tools/cai-dat.py --danh-dau gioi-thieu` để lần sau không giới thiệu lại.
+**5b. Lưu skill vào tài khoản (khoảng 10 phút).** Đọc `skills/phim-thiet-lap/references/skill-trong-tai-khoan.md`. Giải thích bốn ý (skill là gì; hai nơi skill sống; tên mang tiền tố của bạn; skill cần thư mục xưởng), mỗi lượt một ý ngắn. Rồi `python3 tools/dong-goi-skill.py --lam --tat-ca`, gửi các tệp `.skill` kèm hướng dẫn lưu, chờ người dùng lưu xong, `python3 tools/dong-goi-skill.py --da-luu --tat-ca`. Người dùng muốn để sau: vẫn đóng gói sẵn, nói rõ tệp nằm ở đâu và câu để gọi lại ("lưu skill vào tài khoản"); xưởng vẫn chạy vì `CLAUDE.md` trỏ thẳng tới `skills/`.
+
+**5c. Giới thiệu xưởng có hệ thống (khoảng 10 phút).** Đọc `skills/phim-thiet-lap/references/gioi-thieu-xuong.md` và làm theo sáu chặng: xưởng là gì và ba lời hứa; bản đồ năng lực (bạn đang có gì, xưởng làm ra gì); một dự án chạy thế nào; dùng hiệu quả nhất; giới hạn nói thẳng; chọn bước đầu tiên. Mỗi lượt một chặng, kết bằng một câu hỏi để người dùng chọn đi tiếp; cá nhân hoá bằng loại clip họ đã chọn ở Bước 2. Cuối chặng 6 chạy `python3 tools/cai-dat.py --danh-dau gioi-thieu` để lần sau không giới thiệu lại.
 
 Người dùng nói "để sau" hay vắng mặt: tóm tắt chặng 1 và 6 trong một tin nhắn, vẫn ghi dấu, và nói họ gọi lại bằng câu "giới thiệu lại xưởng". Kết bằng câu đầu tiên họ có thể nói để làm clip thật, ví dụ: "Tạo dự án bai-1, tôi sẽ thả clip quay vào nguon, rồi dựng bài giảng ngang cho tôi".
 
+## Khi người dùng hỏi về skill (bất cứ lúc nào)
+
+"Skill là gì", "lưu skill thế nào", "skill nào cần lưu lại", "sao AI không tự nhận ra việc": làm theo `skills/phim-thiet-lap/references/skill-trong-tai-khoan.md`. Chạy `python3 tools/dong-goi-skill.py` để biết skill nào trong tài khoản đang cũ hơn bản gốc trong xưởng, đóng gói lại đúng những skill đó.
+
 ## Khi người dùng hỏi xưởng làm được gì (bất cứ lúc nào)
 
-Không cần chạy lại thiết lập. Chạy 5b (sáu chặng, hoặc chỉ chặng người dùng hỏi), cập nhật theo những gì đã có trong `PHONG-CACH.md` và các dự án trong `Du an/`. Người dùng cũ hỏi "nên làm gì tiếp" thì gợi ý theo dự án họ đã làm (ví dụ đã có bài giảng dài chưa có clip dọc thì đề xuất cắt clip ngắn).
+Không cần chạy lại thiết lập. Chạy 5c (sáu chặng, hoặc chỉ chặng người dùng hỏi), cập nhật theo những gì đã có trong `PHONG-CACH.md` và các dự án trong `Du an/`. Người dùng cũ hỏi "nên làm gì tiếp" thì gợi ý theo dự án họ đã làm (ví dụ đã có bài giảng dài chưa có clip dọc thì đề xuất cắt clip ngắn).
 
 ## Khi người dùng muốn đổi phong cách về sau
 

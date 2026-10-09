@@ -1,0 +1,1283 @@
+{
+"_huong-dan": "Bản đồ tệp của bản thiết kế xưởng phim. AI dựng xưởng: đọc DUNG-XUONG.md; lấy từng tệp vai 'chep' theo mẫu địa chỉ 'raw' (thay {ref} bằng mã commit đang dùng hoặc 'main', {p} bằng đường dẫn đã mã hoá URL), kiểm 'sha' (sha1 của 'blob <cỡ>\\0' + nội dung, giống git hash-object), tệp 'chay' thì cấp quyền chạy. Tệp vai 'ban-mau' không chép. Bản đồ này không tự liệt kê mình.",
+"repo": "https://github.com/wincreator3012/xuong-phim-claude",
+"raw": "https://raw.githubusercontent.com/wincreator3012/xuong-phim-claude/{ref}/{p}",
+"so_tep": 205,
+"so_tep_chep": 199,
+"tep": [
+{
+"p": ".gitattributes",
+"c": 66,
+"sha": "dfe0770424b2a19faf507a501ebfc23be8f54e7b",
+"vai": "ban-mau"
+},
+{
+"p": ".gitignore",
+"c": 632,
+"sha": "2d109c96ff785cb8b563b3d32c261c6d2b0530fd",
+"vai": "chep"
+},
+{
+"p": "AGENTS.md",
+"c": 2182,
+"sha": "678ec1a16ad09bd8560bb24f7d92bb8cc667637b",
+"vai": "chep"
+},
+{
+"p": "BAT-DAU.md",
+"c": 13217,
+"sha": "0cb4ad546edea232b6b21e69ee467cd69c8ee0d0",
+"vai": "ban-mau"
+},
+{
+"p": "CLAUDE.md",
+"c": 14097,
+"sha": "ca5f0bf835ee8a2581696ceb72d70c0e0e0ff17e",
+"vai": "chep"
+},
+{
+"p": "DUNG-XUONG.md",
+"c": 11308,
+"sha": "87a29c4754ac54a44b0c68ef61575492039022a7",
+"vai": "ban-mau"
+},
+{
+"p": "Go bang tren Mac.command",
+"c": 2680,
+"sha": "f8231e2582058428e86f6714a278299586a71e76",
+"vai": "chep",
+"chay": true
+},
+{
+"p": "HUONG-DAN.md",
+"c": 21885,
+"sha": "03cafda6b161d347786d05e14b6b992a20c16771",
+"vai": "chep"
+},
+{
+"p": "LICENSE",
+"c": 1547,
+"sha": "2a2fd01917d78b99d7225dfc0552e46b18d6b001",
+"vai": "chep"
+},
+{
+"p": "Mo ban dung.command",
+"c": 1054,
+"sha": "1612679c36485332e070a8f9c42d18687aa280d1",
+"vai": "chep",
+"chay": true
+},
+{
+"p": "README.md",
+"c": 17546,
+"sha": "83b5ddac34b0d8a6f1e283c0ccb0c4973fa11c64",
+"vai": "ban-mau"
+},
+{
+"p": "THAY-DOI.md",
+"c": 4349,
+"sha": "46d903070654edfdd49233581a77155295254f6b",
+"vai": "ban-mau"
+},
+{
+"p": "brand/brand.json",
+"c": 792,
+"sha": "a063522a8f3010bc39a96f7d72633356cd7ff18e",
+"vai": "chep"
+},
+{
+"p": "brand/logo/README.md",
+"c": 552,
+"sha": "4347acd69b55893d1206aabd297bb7581e76438e",
+"vai": "chep"
+},
+{
+"p": "cau-hinh.mau.json",
+"c": 1045,
+"sha": "0bcd34a8dbabe7cba4721bd7e2babbe77764e56b",
+"vai": "chep"
+},
+{
+"p": "do-hoa-chung/GHI-CHU.md",
+"c": 4108,
+"sha": "f1adb49532b060eff7e9102aff6b29fc696d8964",
+"vai": "chep"
+},
+{
+"p": "do-hoa-chung/canh-kit/canh.css",
+"c": 11650,
+"sha": "cef7b745f0e16d134c0e0c3c5c8f0f49438eb356",
+"vai": "chep"
+},
+{
+"p": "do-hoa-chung/canh-kit/canh.js",
+"c": 10232,
+"sha": "e5310890ed8a9d473a173c3f0b6791228aeb6038",
+"vai": "chep"
+},
+{
+"p": "do-hoa-chung/canh-kit/fonts/LICENSE-be-vietnam-pro.txt",
+"c": 6476,
+"sha": "d28526e8c298bc0fdb1a885e9aec6a619d956a36",
+"vai": "chep"
+},
+{
+"p": "do-hoa-chung/canh-kit/fonts/LICENSE-jetbrains-mono.txt",
+"c": 4524,
+"sha": "8f7ed671137e7a27c646ead86f45d5cb4875f459",
+"vai": "chep"
+},
+{
+"p": "do-hoa-chung/canh-kit/fonts/LICENSE-lora.txt",
+"c": 4563,
+"sha": "372d3cb875058b56de434648a1ef62b4ac085f52",
+"vai": "chep"
+},
+{
+"p": "do-hoa-chung/canh-kit/fonts/be-vietnam-pro-latin-400-normal.woff2",
+"c": 21168,
+"sha": "14b6b603439ce99ac1a9d88c3aad0880fde4946e",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "do-hoa-chung/canh-kit/fonts/be-vietnam-pro-latin-500-normal.woff2",
+"c": 21892,
+"sha": "dcac95d8adaea018c4c8241f24cf640d780485d0",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "do-hoa-chung/canh-kit/fonts/be-vietnam-pro-latin-600-normal.woff2",
+"c": 22032,
+"sha": "4ee217b919910166e7d9029199c92c8f34f572a9",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "do-hoa-chung/canh-kit/fonts/be-vietnam-pro-latin-700-normal.woff2",
+"c": 22152,
+"sha": "803d5a51b2f0adbd79e90c78890821424e95a189",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "do-hoa-chung/canh-kit/fonts/be-vietnam-pro-latin-800-normal.woff2",
+"c": 22320,
+"sha": "6a9fe326019b8985997bda7a40a397c704e1051a",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "do-hoa-chung/canh-kit/fonts/be-vietnam-pro-latin-ext-400-normal.woff2",
+"c": 13056,
+"sha": "c167704c6c92e2b272659639c16193920e01ebbb",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "do-hoa-chung/canh-kit/fonts/be-vietnam-pro-latin-ext-500-normal.woff2",
+"c": 13548,
+"sha": "cffe1d7c03daeab7f2d890ff66c7741c1061f03f",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "do-hoa-chung/canh-kit/fonts/be-vietnam-pro-latin-ext-600-normal.woff2",
+"c": 13608,
+"sha": "d7be7ab2be3d8045a58edfd2eddc355bb89981ba",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "do-hoa-chung/canh-kit/fonts/be-vietnam-pro-latin-ext-700-normal.woff2",
+"c": 13852,
+"sha": "0f2e6d1cf966051aa6ffc3f617b991b8fe5d2d10",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "do-hoa-chung/canh-kit/fonts/be-vietnam-pro-latin-ext-800-normal.woff2",
+"c": 13752,
+"sha": "d06d5a06f0320c4e29e88c5aabcd07e520f1069c",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "do-hoa-chung/canh-kit/fonts/be-vietnam-pro-vietnamese-400-normal.woff2",
+"c": 11532,
+"sha": "aa81449416d14fdecc92f30934d354cbccf926b8",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "do-hoa-chung/canh-kit/fonts/be-vietnam-pro-vietnamese-500-normal.woff2",
+"c": 12172,
+"sha": "da4160a2acbc8b5cd0abd076093305e0219b6015",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "do-hoa-chung/canh-kit/fonts/be-vietnam-pro-vietnamese-600-normal.woff2",
+"c": 12176,
+"sha": "fd834eb2e432618d96bdadd34f0e5f37fec5c493",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "do-hoa-chung/canh-kit/fonts/be-vietnam-pro-vietnamese-700-normal.woff2",
+"c": 12468,
+"sha": "7c29589a218d8014b2c35fe29f29270e41d87791",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "do-hoa-chung/canh-kit/fonts/be-vietnam-pro-vietnamese-800-normal.woff2",
+"c": 12404,
+"sha": "6a1e65de0c4191e8e1a037928ec052d0427c3ece",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "do-hoa-chung/canh-kit/fonts/fonts.css",
+"c": 8916,
+"sha": "9fe511aba599440c571d48581505de60e810f102",
+"vai": "chep"
+},
+{
+"p": "do-hoa-chung/canh-kit/fonts/jetbrains-mono-latin-400-normal.woff2",
+"c": 21168,
+"sha": "585887339efd032b6b715466ae72d86e306bec79",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "do-hoa-chung/canh-kit/fonts/jetbrains-mono-latin-600-normal.woff2",
+"c": 21860,
+"sha": "59c24e7cb8bdff26638068aac0afff3dcbe9b2c1",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "do-hoa-chung/canh-kit/fonts/jetbrains-mono-latin-ext-400-normal.woff2",
+"c": 7336,
+"sha": "9d97c9b797658435b1e504d4ffc250f8bbbd6c1e",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "do-hoa-chung/canh-kit/fonts/jetbrains-mono-latin-ext-600-normal.woff2",
+"c": 7512,
+"sha": "d5a88f9c17ef069a661dea39e13ed0ebb7b94c69",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "do-hoa-chung/canh-kit/fonts/jetbrains-mono-vietnamese-400-normal.woff2",
+"c": 3924,
+"sha": "2e5dab08873dadd81cfbe8c4665c602e950237a8",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "do-hoa-chung/canh-kit/fonts/jetbrains-mono-vietnamese-600-normal.woff2",
+"c": 3996,
+"sha": "52674de8a665083946299e30ea3931cda502230b",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "do-hoa-chung/canh-kit/fonts/lora-latin-500-normal.woff2",
+"c": 21900,
+"sha": "b2702af808e7ecd61de0c9f2d38728067093b0ee",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "do-hoa-chung/canh-kit/fonts/lora-latin-600-normal.woff2",
+"c": 21916,
+"sha": "479b6982b65b5afe467e32d52ef9f2dd93d44775",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "do-hoa-chung/canh-kit/fonts/lora-latin-ext-500-normal.woff2",
+"c": 12212,
+"sha": "86090b071fcdf4349f6d40b2533b355f032c727e",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "do-hoa-chung/canh-kit/fonts/lora-latin-ext-600-normal.woff2",
+"c": 12272,
+"sha": "5e3201cfb49163dc318a02b08f33101e842c05dd",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "do-hoa-chung/canh-kit/fonts/lora-vietnamese-500-normal.woff2",
+"c": 5524,
+"sha": "242493b6594b137ce399d8722d4b046fa7049434",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "do-hoa-chung/canh-kit/fonts/lora-vietnamese-600-normal.woff2",
+"c": 5564,
+"sha": "a1c0be49870b2d78b58caccbc0cf7594f25e5545",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "do-hoa-chung/canh-kit/mau/cua-so-dung-nap.html",
+"c": 12629,
+"sha": "d800662e67bacf4375c85306e307c799b2b80604",
+"vai": "chep"
+},
+{
+"p": "do-hoa-chung/canh-kit/mau/the-noi-tho-hop.html",
+"c": 4739,
+"sha": "6ec02230b173efa1c9384c8e69c7dc2dd1f919d7",
+"vai": "chep"
+},
+{
+"p": "do-hoa-chung/canh-kit/phong-thu/phong-thu.html",
+"c": 5956,
+"sha": "f89e591ac9e4c43a9b50fefe466d43eda513b5ec",
+"vai": "chep"
+},
+{
+"p": "do-hoa-chung/preset-intro-outro-doc.json",
+"c": 971,
+"sha": "b891cf425bffd9d8a467f65c5b5b4e567e474ec8",
+"vai": "chep"
+},
+{
+"p": "do-hoa-chung/preset-intro-outro-ngang.json",
+"c": 1159,
+"sha": "4b26031b567e837dfdb2f4d09e5102b76a07fa1d",
+"vai": "chep"
+},
+{
+"p": "docs/BAI-HOC.md",
+"c": 83235,
+"sha": "31d0f22c2651be0cf6346aae6609706c0f2b741a",
+"vai": "chep"
+},
+{
+"p": "docs/QUY-TRINH-KY-THUAT.md",
+"c": 52070,
+"sha": "0a776d93a8e96eab2bb32988e3ba7799c50230aa",
+"vai": "chep"
+},
+{
+"p": "hieu-ung/README.md",
+"c": 325,
+"sha": "2506a2e53af850f73aa774ef6b96d69ddbbb9ebe",
+"vai": "chep"
+},
+{
+"p": "nhac-nen/CAM-DUNG.json",
+"c": 184,
+"sha": "f2ae0726d1c58d9993e7967efdf661a855a3d5c6",
+"vai": "chep"
+},
+{
+"p": "nhac-nen/README.md",
+"c": 477,
+"sha": "87d036d3629a6b18121ce3a74b4ce19396c123a3",
+"vai": "chep"
+},
+{
+"p": "phong-cach/PHONG-CACH.md",
+"c": 4939,
+"sha": "344fa8e3053c96899a281e1ef020d55756adb412",
+"vai": "chep"
+},
+{
+"p": "phong-cach/mau/README.md",
+"c": 1372,
+"sha": "e320857f6c538d3c8857f75d897e7a3d401e7c5a",
+"vai": "chep"
+},
+{
+"p": "phong-cach/mau/am-ap.json",
+"c": 943,
+"sha": "42596df877216891825f1481ca1b60317105fe13",
+"vai": "chep"
+},
+{
+"p": "phong-cach/mau/hien-dai.json",
+"c": 911,
+"sha": "297d5223cc0e1f323b00392ce4d0b9e7d0108244",
+"vai": "chep"
+},
+{
+"p": "phong-cach/mau/hoc-thuat.json",
+"c": 950,
+"sha": "8847e23239418b58833ff26a4952d3d37a71ff63",
+"vai": "chep"
+},
+{
+"p": "phong-cach/mau/tinh-lang.json",
+"c": 990,
+"sha": "8cf087c49a97892c56ffddbcefc63c84b231a45a",
+"vai": "chep"
+},
+{
+"p": "skills/_chung/README.md",
+"c": 1666,
+"sha": "5e832b5ee33067e10898775484fe53a926c34f78",
+"vai": "chep"
+},
+{
+"p": "skills/_chung/bao-tri-skill.md",
+"c": 2767,
+"sha": "08474152d33d087b613dab130d2feb203b908143",
+"vai": "chep"
+},
+{
+"p": "skills/_chung/nghiem-thu-dung-y.md",
+"c": 4502,
+"sha": "115053b53772b908c48bf1ab37221b6bc3df904f",
+"vai": "chep"
+},
+{
+"p": "skills/_chung/overlay-va-the.md",
+"c": 6671,
+"sha": "ad876fb1483b0f31b1b41ade22dfc67a34d8d972",
+"vai": "chep"
+},
+{
+"p": "skills/_chung/timeline-va-dung.md",
+"c": 7556,
+"sha": "74d7abc7650716282b4f465760ea22e8c5ca8d9f",
+"vai": "chep"
+},
+{
+"p": "skills/_chung/van-hanh.md",
+"c": 9517,
+"sha": "2fe25b114de69d42b2335e6a6c16de4bfba74aad",
+"vai": "chep"
+},
+{
+"p": "skills/phim-bai-giang-slide/SKILL.md",
+"c": 13292,
+"sha": "5d3c80f60c2d41192c125d48301c5e8c22210b95",
+"vai": "chep"
+},
+{
+"p": "skills/phim-bai-giang-slide/references/bo-cuc-slide.md",
+"c": 11194,
+"sha": "ec3de69a813822415186c4d262740b15b5f3ec52",
+"vai": "chep"
+},
+{
+"p": "skills/phim-bai-giang-slide/references/clip-giang-san-khau.md",
+"c": 8627,
+"sha": "32b5e19b1b8410e1315ce080268f8a337d7e45e0",
+"vai": "chep"
+},
+{
+"p": "skills/phim-bai-giang-slide/references/demo-man-hinh.md",
+"c": 9978,
+"sha": "968946e32706606ed917f0ff37bff53d0afecc88",
+"vai": "chep"
+},
+{
+"p": "skills/phim-ban-dung/SKILL.md",
+"c": 7141,
+"sha": "7650ee1037131ce66c8e398e604107731111cbb9",
+"vai": "chep"
+},
+{
+"p": "skills/phim-ban-dung/references/kien-truc.md",
+"c": 6975,
+"sha": "00aa2b6d10133ea1dbb355c0b51af10e912a83ef",
+"vai": "chep"
+},
+{
+"p": "skills/phim-canh-minh-hoa/SKILL.md",
+"c": 12735,
+"sha": "e6686dd3e8664b6c7cddd529b1381bdc4f491872",
+"vai": "chep"
+},
+{
+"p": "skills/phim-canh-minh-hoa/references/nguyen-ly-canh.md",
+"c": 16966,
+"sha": "744cc44d58aa86193398b1ed110ed8bebad86be6",
+"vai": "chep"
+},
+{
+"p": "skills/phim-canh-minh-hoa/references/viet-canh.md",
+"c": 12373,
+"sha": "59292c5c258a55190c6db01c74af2e8e44379c65",
+"vai": "chep"
+},
+{
+"p": "skills/phim-clip-ngan/SKILL.md",
+"c": 12547,
+"sha": "9ba65e630ad0fb98db202a1dc672419851a9e63d",
+"vai": "chep"
+},
+{
+"p": "skills/phim-clip-ngan/references/clip-co-minh-hoa.md",
+"c": 10186,
+"sha": "3137c2be0ef5929a54031cf7f6122690d0461d65",
+"vai": "chep"
+},
+{
+"p": "skills/phim-clip-ngan/references/phu-de-ass.md",
+"c": 8466,
+"sha": "589b4c4c3ffec728b8abf7c456724bbc52f869fc",
+"vai": "chep"
+},
+{
+"p": "skills/phim-dang-tai/SKILL.md",
+"c": 19012,
+"sha": "ca246462cdae2371b7f71ea411864fa085b77b9f",
+"vai": "chep"
+},
+{
+"p": "skills/phim-dang-tai/references/mau-dang-tai.md",
+"c": 7538,
+"sha": "16674f82f42287cbe75c4d730c3fb62e154eacce",
+"vai": "chep"
+},
+{
+"p": "skills/phim-dang-tai/references/nghien-cuu-thumbnail.md",
+"c": 21200,
+"sha": "047a10100b1511113aa7ca18fe213c5afd2cfc68",
+"vai": "chep"
+},
+{
+"p": "skills/phim-do-hoa/SKILL.md",
+"c": 8634,
+"sha": "bed3580917c4d42270f89082931764efb9e506c6",
+"vai": "chep"
+},
+{
+"p": "skills/phim-do-hoa/references/props-va-bay.md",
+"c": 8237,
+"sha": "e3e09858483c90adb485f9384227d0dc78ad0f4e",
+"vai": "chep"
+},
+{
+"p": "skills/phim-dung-bai/SKILL.md",
+"c": 18128,
+"sha": "54e35d819b815c43fcb8843c601854381da1df7f",
+"vai": "chep"
+},
+{
+"p": "skills/phim-dung-bai/references/bien-tap.md",
+"c": 36272,
+"sha": "55cefed6d11ec5c9b47cbd86c99c7b2993b23a42",
+"vai": "chep"
+},
+{
+"p": "skills/phim-hoat-hoa/SKILL.md",
+"c": 23808,
+"sha": "451dcee7286d0f4ae6254b72ea4a8105bfa27e38",
+"vai": "chep"
+},
+{
+"p": "skills/phim-hoat-hoa/references/checklist.md",
+"c": 2809,
+"sha": "4fbbc4b553a804c02c05177667df3a578ca105b2",
+"vai": "chep"
+},
+{
+"p": "skills/phim-hoat-hoa/references/chuyen-canh-am-thanh-caption.md",
+"c": 4990,
+"sha": "3406a0275211198164a07693e1abf7bcd7a76e17",
+"vai": "chep"
+},
+{
+"p": "skills/phim-hoat-hoa/references/mau-bo-lenh.md",
+"c": 8567,
+"sha": "a5d8826f53be1e0936235a39f2e71605b3f37555",
+"vai": "chep"
+},
+{
+"p": "skills/phim-hoat-hoa/references/nguyen-ly-va-phong-cach.md",
+"c": 13425,
+"sha": "b6d9b66bad4b54ff38ba7be7176d1d37cfd769ca",
+"vai": "chep"
+},
+{
+"p": "skills/phim-hoat-hoa/references/nhanh-ky-thuat.md",
+"c": 6472,
+"sha": "2942482d9e86da088e8c9bcc42ed8a87e13728b3",
+"vai": "chep"
+},
+{
+"p": "skills/phim-infomotion/SKILL.md",
+"c": 20957,
+"sha": "db113d3a1afefad82057e46d0a0d38902a3d69eb",
+"vai": "chep"
+},
+{
+"p": "skills/phim-infomotion/references/hinh-tuong-hoa.md",
+"c": 14684,
+"sha": "ce7b8dffa708f2d6efc420090d30928457ad18d7",
+"vai": "chep"
+},
+{
+"p": "skills/phim-infomotion/references/mau-kich-ban.md",
+"c": 10640,
+"sha": "c5944d0995efda37424051af21ab28d623903005",
+"vai": "chep"
+},
+{
+"p": "skills/phim-mau-sac/SKILL.md",
+"c": 6446,
+"sha": "086dd776cefeae4f6f66d7acd76ed3a8ac1eb655",
+"vai": "chep"
+},
+{
+"p": "skills/phim-multicam/SKILL.md",
+"c": 17912,
+"sha": "2d2a29997e64b59e687d7780a62ebdce61381a4e",
+"vai": "chep"
+},
+{
+"p": "skills/phim-multicam/references/dan-goc-multicam.md",
+"c": 11152,
+"sha": "1a485b6c7c0e4ca7709a2a831acbe2bd1be15e4a",
+"vai": "chep"
+},
+{
+"p": "skills/phim-tai-lieu-phong-van/SKILL.md",
+"c": 21977,
+"sha": "9f90498d7386efba9efb337346ac616363c45156",
+"vai": "chep"
+},
+{
+"p": "skills/phim-tai-lieu-phong-van/references/ke-chuyen-phong-van.md",
+"c": 23243,
+"sha": "c51cf7d4e95d41a7b49f2b8dfa7235da5dd8e251",
+"vai": "chep"
+},
+{
+"p": "skills/phim-tai-lieu-phong-van/references/mau-ho-so.md",
+"c": 16667,
+"sha": "51f343c07d98e99f81983438ea847287dc604db7",
+"vai": "chep"
+},
+{
+"p": "skills/phim-thiet-lap/SKILL.md",
+"c": 12449,
+"sha": "03e24d47ec2ed7c964767fbfa51ba180c53e8839",
+"vai": "chep"
+},
+{
+"p": "skills/phim-thiet-lap/references/gioi-thieu-xuong.md",
+"c": 13064,
+"sha": "1d251179b5d89ad9c5376deac8ce1cc400293870",
+"vai": "chep"
+},
+{
+"p": "skills/phim-thiet-lap/references/skill-trong-tai-khoan.md",
+"c": 5514,
+"sha": "6a26c55dad8ad808d07b868856447c41216b0aa9",
+"vai": "chep"
+},
+{
+"p": "skills/phim-transcript/SKILL.md",
+"c": 7162,
+"sha": "17fa155e937e0a0e1f2384fc540254e6a14753d4",
+"vai": "chep"
+},
+{
+"p": "skills/phim-tu-lieu/SKILL.md",
+"c": 7661,
+"sha": "241922ddfa0b9ec2d6fc597d8d01df3dbafb60ce",
+"vai": "chep"
+},
+{
+"p": "skills/phim-tu-lieu/references/nguon-tu-lieu.md",
+"c": 3684,
+"sha": "308d0cbb992a9c8cabfbca235d56784e49e22394",
+"vai": "chep"
+},
+{
+"p": "studio/package-lock.json",
+"c": 141815,
+"sha": "3795226fb75a04204ab04b0d5d1a0ea3ffad8782",
+"vai": "chep"
+},
+{
+"p": "studio/package.json",
+"c": 605,
+"sha": "2896da4900df5ae4522a4c2f2519a84ddc3b9800",
+"vai": "chep"
+},
+{
+"p": "studio/public/fonts/be-vietnam-pro-latin-400-normal.woff2",
+"c": 21168,
+"sha": "14b6b603439ce99ac1a9d88c3aad0880fde4946e",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "studio/public/fonts/be-vietnam-pro-latin-500-normal.woff2",
+"c": 21892,
+"sha": "dcac95d8adaea018c4c8241f24cf640d780485d0",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "studio/public/fonts/be-vietnam-pro-latin-600-normal.woff2",
+"c": 22032,
+"sha": "4ee217b919910166e7d9029199c92c8f34f572a9",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "studio/public/fonts/be-vietnam-pro-latin-700-normal.woff2",
+"c": 22152,
+"sha": "803d5a51b2f0adbd79e90c78890821424e95a189",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "studio/public/fonts/be-vietnam-pro-vietnamese-400-normal.woff2",
+"c": 11532,
+"sha": "aa81449416d14fdecc92f30934d354cbccf926b8",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "studio/public/fonts/be-vietnam-pro-vietnamese-500-normal.woff2",
+"c": 12172,
+"sha": "da4160a2acbc8b5cd0abd076093305e0219b6015",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "studio/public/fonts/be-vietnam-pro-vietnamese-600-normal.woff2",
+"c": 12176,
+"sha": "fd834eb2e432618d96bdadd34f0e5f37fec5c493",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "studio/public/fonts/be-vietnam-pro-vietnamese-700-normal.woff2",
+"c": 12468,
+"sha": "7c29589a218d8014b2c35fe29f29270e41d87791",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "studio/public/fonts/lora-latin-500-normal.woff2",
+"c": 21900,
+"sha": "b2702af808e7ecd61de0c9f2d38728067093b0ee",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "studio/public/fonts/lora-latin-600-normal.woff2",
+"c": 21916,
+"sha": "479b6982b65b5afe467e32d52ef9f2dd93d44775",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "studio/public/fonts/lora-vietnamese-500-normal.woff2",
+"c": 5524,
+"sha": "242493b6594b137ce399d8722d4b046fa7049434",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "studio/public/fonts/lora-vietnamese-600-normal.woff2",
+"c": 5564,
+"sha": "a1c0be49870b2d78b58caccbc0cf7594f25e5545",
+"vai": "chep",
+"nhi_phan": true
+},
+{
+"p": "studio/remotion.config.ts",
+"c": 591,
+"sha": "eea27a2aec20837c342a75f55ea4ca5f11e5ca67",
+"vai": "chep"
+},
+{
+"p": "studio/src/Root.tsx",
+"c": 7101,
+"sha": "6f9b7187dc1dde1a9458e73b1772f89256259506",
+"vai": "chep"
+},
+{
+"p": "studio/src/common.tsx",
+"c": 6778,
+"sha": "9d42e0e99404884c93492f9a811ccc06183026b9",
+"vai": "chep"
+},
+{
+"p": "studio/src/components/Benefits.tsx",
+"c": 9535,
+"sha": "6d9ec210783691f0d048aa9a5fb3756c34eeb573",
+"vai": "chep"
+},
+{
+"p": "studio/src/components/InfoList.tsx",
+"c": 3196,
+"sha": "1bd6c983e40cd743fd8d60cb7d214293dbb9d56c",
+"vai": "chep"
+},
+{
+"p": "studio/src/components/InfoQuote.tsx",
+"c": 2148,
+"sha": "ceb48b61a4a597303ee943aba80dfe496fa53bd1",
+"vai": "chep"
+},
+{
+"p": "studio/src/components/InfoStat.tsx",
+"c": 2621,
+"sha": "01c855ed67dfaeedccf98b90b3b5c52b4079ee4e",
+"vai": "chep"
+},
+{
+"p": "studio/src/components/InfoSteps.tsx",
+"c": 4975,
+"sha": "2e8c6538b19d90947628d4d6f35485343e0e5bb1",
+"vai": "chep"
+},
+{
+"p": "studio/src/components/Intro.tsx",
+"c": 9229,
+"sha": "62a481bf6d00efdd56dbbbfbceb503435fafcd84",
+"vai": "chep"
+},
+{
+"p": "studio/src/components/LowerThird.tsx",
+"c": 3085,
+"sha": "e13741772526c935912f26a2bfb95042a28dad04",
+"vai": "chep"
+},
+{
+"p": "studio/src/components/Outro.tsx",
+"c": 7343,
+"sha": "8e43c4b061ce72a23169a6d0b0107c0a8e7390c0",
+"vai": "chep"
+},
+{
+"p": "studio/src/components/SectionTitle.tsx",
+"c": 3053,
+"sha": "0a149d1a4f5f75a5f6b6fe7237eee08f4fa270e3",
+"vai": "chep"
+},
+{
+"p": "studio/src/components/Thumbnail.tsx",
+"c": 16231,
+"sha": "c08c22086a3b720bb9eb6987a81d217487f3f6ef",
+"vai": "chep"
+},
+{
+"p": "studio/src/components/YCanh.tsx",
+"c": 27860,
+"sha": "9c9c3f9dbb6af610368d7879b667ee2c9b5f1b10",
+"vai": "chep"
+},
+{
+"p": "studio/src/components/YNiem.tsx",
+"c": 10457,
+"sha": "e44ea6427147c4ba58f4bcef2f6fee362a797225",
+"vai": "chep"
+},
+{
+"p": "studio/src/fonts.ts",
+"c": 2109,
+"sha": "b5099ed3011ee04b447e4394b10aa23f2eb42940",
+"vai": "chep"
+},
+{
+"p": "studio/src/index.ts",
+"c": 105,
+"sha": "d831f7b0f12b8445b8a2d547eb2bd0c3559a5d36",
+"vai": "chep"
+},
+{
+"p": "studio/src/layout.ts",
+"c": 1116,
+"sha": "07393f6ca769de78da847c7df760d9e02b5a7cae",
+"vai": "chep"
+},
+{
+"p": "studio/src/theme.ts",
+"c": 2337,
+"sha": "2ac47b6afcef349de3728196033d83f434d0b9e3",
+"vai": "chep"
+},
+{
+"p": "studio/src/y-niem/index.ts",
+"c": 4237,
+"sha": "475055e6673b0672149e32cacb94e0a0ae04a874",
+"vai": "chep"
+},
+{
+"p": "studio/tsconfig.json",
+"c": 315,
+"sha": "7924bd27188225851ce64e29304a65bf533bf6e5",
+"vai": "chep"
+},
+{
+"p": "thu-vien/AM-THANH.md",
+"c": 8356,
+"sha": "2b1fedab98f32de82552fad4d765a1f56c96c086",
+"vai": "chep"
+},
+{
+"p": "thu-vien/HINH-ANH.md",
+"c": 4268,
+"sha": "ca93ddb3fae832d015485d197e6c703f2848c73e",
+"vai": "chep"
+},
+{
+"p": "thu-vien/am-thanh.json",
+"c": 9999,
+"sha": "f24718d044541133135f7eb99318a4147944de38",
+"vai": "chep"
+},
+{
+"p": "tools/assemble.py",
+"c": 73239,
+"sha": "7647f4fbc8d9029d053b91001c14167b32cb1dc5",
+"vai": "chep"
+},
+{
+"p": "tools/ban-dung.py",
+"c": 20452,
+"sha": "c9d19535c7ab1fee62669fa0adfcaf6d87cdb1bb",
+"vai": "chep"
+},
+{
+"p": "tools/ban-dung/ban-dung.css",
+"c": 13454,
+"sha": "8949d28344db53bd1d43df51c7f81ee8e7bac559",
+"vai": "chep"
+},
+{
+"p": "tools/ban-dung/index.html",
+"c": 2628,
+"sha": "dc5307607609f029a453cb6523758351d895b7ad",
+"vai": "chep"
+},
+{
+"p": "tools/ban-dung/js/app.js",
+"c": 18094,
+"sha": "3ff8a09d19428d01e49247ecc8da751b3ab086b1",
+"vai": "chep"
+},
+{
+"p": "tools/ban-dung/js/dong-thoi-gian.js",
+"c": 22400,
+"sha": "89048fbe8c960967bea43dd1e44258c726b6a9b7",
+"vai": "chep"
+},
+{
+"p": "tools/ban-dung/js/loi.js",
+"c": 20760,
+"sha": "caa2d11e198a58419a844b8225421f0d71d40180",
+"vai": "chep"
+},
+{
+"p": "tools/ban-dung/js/mo-hinh.js",
+"c": 21102,
+"sha": "4cb09c092578489487beda26f9c0dd6a12682c70",
+"vai": "chep"
+},
+{
+"p": "tools/ban-dung/js/thuoc-tinh.js",
+"c": 14582,
+"sha": "26c66877973ced997d642fef9165b38f94a34afd",
+"vai": "chep"
+},
+{
+"p": "tools/ban-dung/js/tien-ich.js",
+"c": 2259,
+"sha": "4a8a08ad92ce7c41ea21cf62af4c9ecc2c4d1252",
+"vai": "chep"
+},
+{
+"p": "tools/ban-dung/js/xem.js",
+"c": 11833,
+"sha": "bf970b5a2ce5dcf9bc80f09f1addb55848ddf97d",
+"vai": "chep"
+},
+{
+"p": "tools/ban_dung_loi.py",
+"c": 7752,
+"sha": "9babff0ce36d2be0edc4083a470eccd40fad46c1",
+"vai": "chep"
+},
+{
+"p": "tools/bo-cuc-slide.py",
+"c": 6694,
+"sha": "9cbca5cc1705032cd5f3de71a6e5820043561102",
+"vai": "chep"
+},
+{
+"p": "tools/cai-dat.py",
+"c": 29892,
+"sha": "7d35e50063de20cb7d0674e1847bb15c2cbf44f6",
+"vai": "chep"
+},
+{
+"p": "tools/canh-ghep.py",
+"c": 6794,
+"sha": "9be4b0e9db8428ddae9b50422a2cc6865eee8312",
+"vai": "chep"
+},
+{
+"p": "tools/canh.mjs",
+"c": 18446,
+"sha": "d9eb0976d0f10fcb3e1b7747646cfc9d5d65e71f",
+"vai": "chep"
+},
+{
+"p": "tools/cau_hinh.py",
+"c": 3491,
+"sha": "8f0d20f4f0950a28d8158762a4f36b45fa0768ce",
+"vai": "chep"
+},
+{
+"p": "tools/chon-khung-thumbnail.py",
+"c": 18521,
+"sha": "a3957764582a3e2ebdd2a9fd81f0f71365edbb09",
+"vai": "chep"
+},
+{
+"p": "tools/chuong-youtube.py",
+"c": 3861,
+"sha": "0c7d17602d09dff146cbbe2fa274c45daf330ddf",
+"vai": "chep"
+},
+{
+"p": "tools/dang-tai.py",
+"c": 21907,
+"sha": "97442aa82659b520428b4a99d3a2550706839288",
+"vai": "chep"
+},
+{
+"p": "tools/do-dong-bo.py",
+"c": 8573,
+"sha": "d8c149b9d55429ab259764eb7b4de11f2f4fa03d",
+"vai": "chep"
+},
+{
+"p": "tools/dong-goi-skill.py",
+"c": 14698,
+"sha": "4dd0b47c0dab3aab08775facc775922c8f066fdd",
+"vai": "chep"
+},
+{
+"p": "tools/du-an-moi.py",
+"c": 3251,
+"sha": "db1113db0c46bc320dcfe8e0a235e1dbe4361b8e",
+"vai": "chep"
+},
+{
+"p": "tools/dung-dai.py",
+"c": 10617,
+"sha": "3cdb2b83302ef27c75f52f0d5358fe474b1a47c3",
+"vai": "chep"
+},
+{
+"p": "tools/giao-thanh-pham.py",
+"c": 9673,
+"sha": "d87678f28da7bd0a7adf3685879152d8f78874d7",
+"vai": "chep"
+},
+{
+"p": "tools/hang-doi-go-bang.py",
+"c": 7696,
+"sha": "1d0cc6ae353f7e3e35ade4da72806c82761f6811",
+"vai": "chep",
+"chay": true
+},
+{
+"p": "tools/kiem-dong-bo.py",
+"c": 9827,
+"sha": "ca89e8939ea419e50905692e18a87977ec4cafaa",
+"vai": "chep"
+},
+{
+"p": "tools/kiem-sach.py",
+"c": 7850,
+"sha": "adc39fc873aa93575af50a67a31c58576dc36b40",
+"vai": "chep"
+},
+{
+"p": "tools/kiem-tai-lieu.py",
+"c": 17031,
+"sha": "eab3a98bc7306e6d80018721f4357c7e9c4c6d88",
+"vai": "chep"
+},
+{
+"p": "tools/kiem-tra-xuong.py",
+"c": 18024,
+"sha": "eaa449f760b7a90a298d5a40d2b9866e07b587b5",
+"vai": "chep"
+},
+{
+"p": "tools/lap-ban-do-tep.py",
+"c": 5022,
+"sha": "2f5634a8a8a6118b9a2500125bbb5e6f97f5e7ef",
+"vai": "ban-mau"
+},
+{
+"p": "tools/mau-du-an/GHI-CHU.md",
+"c": 1131,
+"sha": "404363eecd21ee19a02b94758b68fe35362ea6ea",
+"vai": "chep"
+},
+{
+"p": "tools/mau-du-an/do-hoa/job-do-hoa.json",
+"c": 900,
+"sha": "7faebb0f60804a0686b48ad785381f11dce1dda7",
+"vai": "chep"
+},
+{
+"p": "tools/mau-du-an/project.json",
+"c": 254,
+"sha": "4fc2f4d1971027d5b3b58db466988216d74478fb",
+"vai": "chep"
+},
+{
+"p": "tools/mau-du-an/tai-lieu-phong-van/GHI-CHU.md",
+"c": 1743,
+"sha": "dadbd8a2c0b72b01c54126e0fe7171b933275f33",
+"vai": "chep"
+},
+{
+"p": "tools/mau-du-an/timeline.json",
+"c": 1062,
+"sha": "9785ad8717cd0129d460bbb20d2f0c98b35555e8",
+"vai": "chep"
+},
+{
+"p": "tools/mau-sac.py",
+"c": 9076,
+"sha": "5cb587d9c7e8aa22fc79d09c4312acfde5a15374",
+"vai": "chep"
+},
+{
+"p": "tools/mediainfo.py",
+"c": 2184,
+"sha": "42bb60ffddacd409b89ac366da1a5ccf8fb5b1da",
+"vai": "chep"
+},
+{
+"p": "tools/moc-tu.py",
+"c": 14434,
+"sha": "db28ccc4f5e24b9dcea8b7c9b3a5271f08f2dba7",
+"vai": "chep"
+},
+{
+"p": "tools/models/TAI-MODEL.md",
+"c": 5452,
+"sha": "565e4aabd78bbe177f5aa8727fc16ae238763736",
+"vai": "chep"
+},
+{
+"p": "tools/multicam-dan.py",
+"c": 42710,
+"sha": "bfe2d1f797ed75b18065737f1254f4eddd44e2c5",
+"vai": "chep"
+},
+{
+"p": "tools/multicam-khop.py",
+"c": 17914,
+"sha": "20b8eac7641103ba9165a1aee2c36c81b42f0e23",
+"vai": "chep"
+},
+{
+"p": "tools/multicam-proxy.py",
+"c": 8908,
+"sha": "fae419a65ab6dc55724bbd66fcba04701abc03fe",
+"vai": "chep"
+},
+{
+"p": "tools/nghiem-thu.py",
+"c": 18214,
+"sha": "5cf33b5e51c8d93688f4e22b84071e3d7245672f",
+"vai": "chep"
+},
+{
+"p": "tools/nhan-doan.py",
+"c": 4621,
+"sha": "80f0d9e452f6ad9630f7bb3153dd604a8b0ad438",
+"vai": "chep"
+},
+{
+"p": "tools/nhap-am-thanh.py",
+"c": 10024,
+"sha": "5be0e8703f1a0cd0ddb5e2d9289d9cde894c06de",
+"vai": "chep"
+},
+{
+"p": "tools/proxy-mac.py",
+"c": 8868,
+"sha": "fdd4754e8d4e33ff90d6a871dfadce0e720e46cf",
+"vai": "chep"
+},
+{
+"p": "tools/quet-mat-theo-giay.py",
+"c": 4653,
+"sha": "c0bd675fcac2f830bd1eb3104f11a81e3b436945",
+"vai": "chep"
+},
+{
+"p": "tools/render-do-hoa.mjs",
+"c": 12139,
+"sha": "bfee4d889a9a260c3c935db5360acd1e0d019058",
+"vai": "chep"
+},
+{
+"p": "tools/slide-khop.py",
+"c": 13578,
+"sha": "02c9ba4246b12dadbc678a1a44780431bfd1492d",
+"vai": "chep"
+},
+{
+"p": "tools/slide-nguon.py",
+"c": 10956,
+"sha": "49052f560942b7071894c3102218329e7dd1df53",
+"vai": "chep"
+},
+{
+"p": "tools/soan-nhac.py",
+"c": 23236,
+"sha": "cd178cd135b31f6629759ea997fc78def4909014",
+"vai": "chep"
+},
+{
+"p": "tools/tai-chat-lieu.py",
+"c": 6147,
+"sha": "7bb4fa3f29ec09d2f862d473b21a3c5baa4a94f8",
+"vai": "chep"
+},
+{
+"p": "tools/transcribe.py",
+"c": 10913,
+"sha": "f2edfaf6da1759c26ea0c0e3cdd9f893eebfca36",
+"vai": "chep"
+},
+{
+"p": "tools/uoc-luong.py",
+"c": 14676,
+"sha": "33fff35c51983e6b4c9a2b591f4750d5cb6b514f",
+"vai": "chep",
+"chay": true
+},
+{
+"p": "tools/xem-khung.sh",
+"c": 1631,
+"sha": "6002c0054e0a70256cd4543fc8d77c8970c04198",
+"vai": "chep",
+"chay": true
+}
+]
+}

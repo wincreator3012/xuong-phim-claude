@@ -77,6 +77,7 @@ Kết chặng: "Mình nói thêm vài thói quen giúp xưởng ra kết quả t
 - dành sức cho bảng phương án vì sửa ở đó rẻ nhất;
 - góp ý theo mốc thời gian, và "chê một lần rồi dặn từ nay luôn" để xưởng học;
 - tái dùng một buổi quay cho nhiều clip, và dùng gói đăng tải với thử nghiệm thumbnail.
+- cứ nói việc bằng lời thường, skill trong tài khoản tự mở đúng quy trình; khi xưởng học thêm điều mới, lưu lại những skill AI gửi để tài khoản luôn khớp xưởng.
 
 Nếu người dùng nhắc tới sự kiện, hội thảo hay bài nói có khán giả, thêm: người xem ở nhà không ngồi trong phòng nên phần nhắc việc tại chỗ sẽ được đề xuất bỏ; chữ, thẻ và slide không bao giờ được che mặt bất kỳ ai; thumbnail xen cận mặt với khung rộng.
 

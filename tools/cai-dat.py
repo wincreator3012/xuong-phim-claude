@@ -10,6 +10,14 @@ Cách dùng (từ bất kỳ đâu, script tự tìm gốc xưởng):
     python3 tools/cai-dat.py --khong-thu     # bỏ bước dựng thử cuối
     python3 tools/cai-dat.py --khong-loi     # bỏ hai model mốc lời của Bàn dựng (khoảng 450 MB)
     python3 tools/cai-dat.py --danh-dau gioi-thieu   # ghi dấu "đã giới thiệu xưởng cho người dùng" (Claude gọi sau buổi giới thiệu)
+    python3 tools/cai-dat.py --dung-xuong --ten-xuong "<tên>" --tien-to <2-6 chữ> --ban-mau <mã commit>
+                                             # cá nhân hoá xưởng vừa dựng từ bản thiết kế (DUNG-XUONG.md, bước 3)
+
+Xưởng của người dùng được AI dựng từ BẢN THIẾT KẾ trên GitHub (DUNG-XUONG.md), không phải bản clone:
+--dung-xuong bỏ các khối chỉ dành cho bản thiết kế (<!-- BAN-MAU --> ... <!-- /BAN-MAU -->), thay tên bản
+thiết kế bằng tên xưởng của người dùng trong tài liệu và skill, tạo cau-hinh.json (kèm tiền tố skill
+tienToSkill), README.md của xưởng, hai thư mục Du an/, Thanh pham/ cạnh xưởng, và ghi bản thiết kế đã dựng
+từ (repo, commit, ngày) vào tools/.cai-dat.json để lần sau đối chiếu bản mới (HUONG-DAN.md mục Cập nhật xưởng).
 
 Mỗi bước tự bỏ qua nếu đã xong. Bước tải model có thể cần chạy lại nhiều lần
 (mỗi lần tải tiếp tối đa ~150 giây rồi thoát mã 2 = "chưa xong, chạy lại y nguyên").
@@ -391,6 +399,93 @@ def b6_dung_thu(kt):
     return True
 
 
+# ------------------------------------------------------------------ dựng xưởng từ bản thiết kế
+TEN_BAN_MAU = "xuong-phim-claude"
+REPO_BAN_MAU = "https://github.com/wincreator3012/xuong-phim-claude"
+DUOI_CHU = (".md", ".py", ".mjs", ".js", ".ts", ".tsx", ".json", ".sh", ".command", ".html", ".css", ".txt")
+BO_QUA_CA_NHAN_HOA = {"LICENSE", os.path.join("studio", "package.json"), os.path.join("studio", "package-lock.json"),
+                      os.path.join("tools", "cai-dat.py")}
+
+
+def _khoi_ban_mau(text):
+    import re
+    return re.sub(r"[ \t]*<!-- BAN-MAU -->.*?<!-- /BAN-MAU -->[ \t]*\n*", "", text, flags=re.S)
+
+
+def dung_xuong(args, tt):
+    import re
+    ten = (args.ten_xuong or os.path.basename(ROOT)).strip()
+    tien_to = (args.tien_to or "").strip().lower()
+    if not re.match(r"^[a-z0-9]{2,6}$", tien_to):
+        raise SystemExit("! --tien-to cần 2-6 chữ thường hoặc số, không dấu (vd chữ cái đầu họ tên: tma)")
+    if os.path.isdir(os.path.join(ROOT, ".git")):
+        try:
+            remote = subprocess.run(["git", "remote", "-v"], cwd=ROOT, capture_output=True, text=True).stdout
+        except OSError:
+            remote = ""
+        if TEN_BAN_MAU in remote:
+            canh_bao("thư mục này là bản clone còn trỏ về repo bản thiết kế. Xưởng riêng không push, không pull về đó; "
+                     "muốn giữ git cho riêng mình thì: git remote remove origin")
+    print(f"DỰNG XƯỞNG TỪ BẢN THIẾT KẾ - cá nhân hoá: {ROOT}")
+    so_tep = 0
+    for dp, dn, fn in os.walk(ROOT):
+        rel_dp = os.path.relpath(dp, ROOT)
+        dn[:] = [d for d in dn if d not in (".git", "node_modules", "pylib", "models", "__pycache__")]
+        for f in fn:
+            rel = os.path.normpath(os.path.join(rel_dp, f))
+            if rel in BO_QUA_CA_NHAN_HOA or not f.endswith(DUOI_CHU) and f not in ("CLAUDE.md", "AGENTS.md"):
+                continue
+            p = os.path.join(dp, f)
+            try:
+                goc = open(p, encoding="utf-8").read()
+            except (UnicodeDecodeError, OSError):
+                continue
+            moi = _khoi_ban_mau(goc) if f.endswith(".md") else goc
+            # tên bản thiết kế thành tên xưởng; giữ nguyên khi là địa chỉ GitHub ("wincreator3012/xuong-phim-claude")
+            # hay khi nói về chính bản thiết kế ("bản thiết kế xuong-phim-claude")
+            moi = moi.replace("repo " + TEN_BAN_MAU, "xưởng " + ten)
+            moi = re.sub(r"(?<![\w.-])(?<!wincreator3012/)(?<!bản thiết kế )" + re.escape(TEN_BAN_MAU) + r"(?![\w-])", lambda m: ten, moi)
+            if moi != goc:
+                with open(p, "w", encoding="utf-8") as g:
+                    g.write(moi)
+                so_tep += 1
+    ok(f"tài liệu, skill, công cụ mang tên xưởng '{ten}' ({so_tep} tệp); bỏ khối chỉ dành cho bản thiết kế")
+    cfg_p = os.path.join(ROOT, "cau-hinh.json")
+    cfg = {}
+    if os.path.isfile(cfg_p):
+        cfg = json.load(open(cfg_p, encoding="utf-8"))
+    elif os.path.isfile(os.path.join(ROOT, "cau-hinh.mau.json")):
+        cfg = json.load(open(os.path.join(ROOT, "cau-hinh.mau.json"), encoding="utf-8"))
+    cfg["tienToSkill"] = tien_to
+    with open(cfg_p, "w", encoding="utf-8") as g:
+        json.dump(cfg, g, ensure_ascii=False, indent=2)
+        g.write("\n")
+    ok(f"cau-hinh.json: tiền tố skill '{tien_to}' (skill trong tài khoản sẽ tên {tien_to}-phim-...)")
+    readme = os.path.join(ROOT, "README.md")
+    if not os.path.isfile(readme):
+        with open(readme, "w", encoding="utf-8") as g:
+            g.write(f"# {ten}\n\nXưởng dựng phim cùng AI của riêng tôi. AI đọc `CLAUDE.md` ở đầu mỗi phiên; cách dùng ở `HUONG-DAN.md`.\n\n"
+                    f"Dựng từ bản thiết kế [xuong-phim-claude]({REPO_BAN_MAU}) của Lương Dũng Nhân "
+                    f"(commit {args.ban_mau or 'main'}, ngày {time.strftime('%Y-%m-%d')}), giấy phép MIT (xem `LICENSE`).\n"
+                    "Xưởng này không phải bản clone: không push, không pull về repo bản thiết kế. Muốn học thêm từ bản mới, "
+                    "nói với AI \"xem bản thiết kế có gì mới\" (HUONG-DAN.md mục Cập nhật xưởng).\n")
+        ok("README.md của xưởng (ghi công bản thiết kế)")
+    sys.path.insert(0, TOOLS)
+    import cau_hinh as CH
+    for d in (CH.du_an(), CH.thanh_pham(), CH.tam(tao=False)):
+        os.makedirs(d, exist_ok=True)
+    ok(f"dự án: {CH.du_an()}; thành phẩm: {CH.thanh_pham()}")
+    for f in ("Go bang tren Mac.command", "Mo ban dung.command"):
+        p = os.path.join(ROOT, f)
+        if os.path.isfile(p):
+            os.chmod(p, 0o755)
+    tt["ban_mau"] = {"repo": REPO_BAN_MAU, "commit": args.ban_mau or "main", "ngay": time.strftime("%Y-%m-%d")}
+    tt["ten_xuong"] = ten
+    tt["tien_to"] = tien_to
+    ghi_trang_thai(tt)
+    print("\n✓ ĐÃ CÁ NHÂN HOÁ. Bước kế tiếp: python3 tools/cai-dat.py (cài môi trường), rồi skill phim-thiet-lap.")
+
+
 # ------------------------------------------------------------------ main
 def in_trang_thai(tt):
     print("\nTRẠNG THÁI CÀI ĐẶT")
@@ -404,6 +499,9 @@ def in_trang_thai(tt):
     print(f"  bố cục slide: {'có' if tt.get('bo_cuc') else 'chưa'}")
     print(f"  dựng thử    : {'ĐẠT ' + str(tt.get('dung_thu_luc', '')) if tt.get('dung_thu') else 'chưa'}")
     print(f"  giới thiệu  : {'đã giới thiệu xưởng cho người dùng' if tt.get('da_gioi_thieu') else 'CHƯA (sau khi thiết lập xong, Claude giới thiệu xưởng: skills/phim-thiet-lap/references/gioi-thieu-xuong.md)'}")
+    bm = tt.get("ban_mau")
+    print(f"  bản thiết kế: " + (f"{bm.get('repo')} @ {bm.get('commit')} ({bm.get('ngay')}), xưởng '{tt.get('ten_xuong')}', tiền tố skill '{tt.get('tien_to')}'" if bm else "chưa ghi (xưởng dựng trước khi có DUNG-XUONG.md, hoặc chưa chạy --dung-xuong)"))
+    print(f"  skill tài khoản: xem python3 tools/dong-goi-skill.py (skill nào cần lưu, lưu lại)")
     print(f"  cập nhật    : {tt.get('cap_nhat', '-')}")
 
 
@@ -415,6 +513,10 @@ def main():
     ap.add_argument("--trang-thai", action="store_true", help="chỉ in trạng thái")
     ap.add_argument("--danh-dau", choices=["gioi-thieu"], help="ghi dấu một mốc đã xong rồi thoát (không cài gì)")
     ap.add_argument("--thoi-gian", type=int, default=150, help="ngân sách giây cho bước tải model mỗi lần chạy")
+    ap.add_argument("--dung-xuong", action="store_true", help="cá nhân hoá xưởng vừa dựng từ bản thiết kế rồi thoát")
+    ap.add_argument("--ten-xuong", help="tên thư mục xưởng của người dùng (mặc định: tên thư mục hiện tại)")
+    ap.add_argument("--tien-to", help="tiền tố skill trong tài khoản, 2-6 chữ thường (vd tma)")
+    ap.add_argument("--ban-mau", help="mã commit của bản thiết kế đã dùng để dựng")
     args = ap.parse_args()
 
     os.chdir(ROOT)
@@ -426,6 +528,9 @@ def main():
         return
     if args.trang_thai:
         in_trang_thai(tt)
+        return
+    if args.dung_xuong:
+        dung_xuong(args, tt)
         return
     print(f"XƯỞNG PHIM CLAUDE - cài đặt tại: {ROOT}")
 
@@ -449,7 +554,7 @@ def main():
 
     in_trang_thai(tt)
     print("\n✓ CÀI XONG. Bước kế tiếp: nói với Claude \"bắt đầu thiết lập phong cách\" (skill phim-thiet-lap)")
-    print("  để điền phong-cach/PHONG-CACH.md, brand/brand.json và tải nhạc theo mẫu bạn chọn.")
+    print("  để điền phong-cach/PHONG-CACH.md, brand/brand.json, tải nhạc theo mẫu bạn chọn, rồi lưu skill vào tài khoản.")
 
 
 if __name__ == "__main__":

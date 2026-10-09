@@ -3,6 +3,7 @@ tools/pylib/
 tools/models/*
 !tools/models/TAI-MODEL.md
 tools/.cai-dat.json
+tools/.dong-goi-skill.json
 tools/__pycache__/
 tools/go-bang/
 studio/node_modules/
@@ -12,6 +13,7 @@ do-hoa-chung/bo-cuc/
 # Chất liệu tải về theo máy (danh mục nằm ở thu-vien/)
 nhac-nen/*
 !nhac-nen/README.md
+!nhac-nen/CAM-DUNG.json
 hieu-ung/*
 !hieu-ung/README.md
 

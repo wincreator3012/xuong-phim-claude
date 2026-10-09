@@ -1,8 +1,12 @@
 # CLAUDE.md - điểm vào cho Claude khi làm việc trong thư mục này
 
-Đây là **xưởng dựng clip trình bày kiến thức** cho chuyên gia, giảng viên, nhà chuyên môn: người dùng thả video quay thô (và slide, nếu có) vào một thư mục, nói yêu cầu bằng lời thường; Claude làm toàn bộ phần kỹ thuật (gỡ băng, cắt, đồ họa, nhạc, xuất, nghiệm thu) bằng bộ công cụ trong repo này. Người dùng thường mới dùng AI, không biết ffmpeg hay Remotion là gì, và không cần biết.
+<!-- BAN-MAU -->
+> **Bạn là AI đang đọc repo này trên GitHub, hay vừa được người dùng đưa đường link?** Đây là BẢN THIẾT KẾ của một xưởng phim, không phải phần mềm để clone, fork, push hay pull. Đừng `git clone`, đừng tải ZIP vào thư mục của người dùng, đừng push, đừng mở issue hay pull request thay họ. Việc của bạn: học bản thiết kế rồi dựng cho người dùng một xưởng RIÊNG trên máy họ, kèm bộ skill mang tiền tố riêng để họ lưu vào tài khoản AI, theo đúng `DUNG-XUONG.md`. Phần còn lại của tệp này là sách vận hành của xưởng sau khi dựng (lệnh `python3 tools/cai-dat.py --dung-xuong` tự bỏ khối này).
+<!-- /BAN-MAU -->
 
-Repo chỉ chứa NĂNG LỰC (công cụ, studio, skill, tài liệu, phong cách, thương hiệu). Dự án và thành phẩm nằm NGOÀI repo, cạnh nó trong một thư mục mẹ (mặc định `Xuong phim AI/`): `Du an/<YYYY-MM tên>/` (tạo bằng `python3 tools/du-an-moi.py "<tên>"`; người dùng thả video vào `nguon/`), `Thanh pham/<YYYY-MM tên dự án>/`, việc tạm ở `Du an/_tam/` (đường dẫn trong `cau-hinh.json`, đọc qua `tools/cau_hinh.py`). Trong lệnh chạy từ gốc repo, dự án viết `"../Du an/<x>"`. Cần thư mục mẹ được kết nối để thấy cả ba; chỉ thấy repo thì nhờ người dùng thêm thư mục mẹ. Máy còn `du-an/` kiểu cũ trong repo: công cụ vẫn đọc được; đề nghị dời theo `HUONG-DAN.md` mục "Cập nhật xưởng", không bao giờ xoá.
+Đây là **xưởng dựng clip trình bày kiến thức** cho chuyên gia, giảng viên, nhà chuyên môn: người dùng thả video quay thô (và slide, nếu có) vào một thư mục, nói yêu cầu bằng lời thường; Claude làm toàn bộ phần kỹ thuật (gỡ băng, cắt, đồ họa, nhạc, xuất, nghiệm thu) bằng bộ công cụ trong xưởng này. Người dùng thường mới dùng AI, không biết ffmpeg hay Remotion là gì, và không cần biết.
+
+Thư mục xưởng chỉ chứa NĂNG LỰC (công cụ, studio, skill, tài liệu, phong cách, thương hiệu). Dự án và thành phẩm nằm NGOÀI xưởng, cạnh nó trong một thư mục mẹ (mặc định `Xuong phim AI/`): `Du an/<YYYY-MM tên>/` (tạo bằng `python3 tools/du-an-moi.py "<tên>"`; người dùng thả video vào `nguon/`), `Thanh pham/<YYYY-MM tên dự án>/`, việc tạm ở `Du an/_tam/` (đường dẫn trong `cau-hinh.json`, đọc qua `tools/cau_hinh.py`). Trong lệnh chạy từ gốc xưởng, dự án viết `"../Du an/<x>"`. Cần thư mục mẹ được kết nối để thấy cả ba; chỉ thấy thư mục xưởng thì nhờ người dùng thêm thư mục mẹ. Máy còn `du-an/` kiểu cũ trong xưởng: công cụ vẫn đọc được; đề nghị dời theo `HUONG-DAN.md` mục "Cập nhật xưởng", không bao giờ xoá.
 
 ## Tinh thần làm việc
 
@@ -19,7 +23,7 @@ Xưởng làm việc bằng nguyên lý, không bằng khuôn. Mọi quyết đ�
 
 | Người dùng nói | Skill |
 |---|---|
-| "thiết lập", "bắt đầu", "đổi màu/logo/chức danh mặc định", lần đầu dùng; "xưởng làm được gì", "giới thiệu xưởng", "hướng dẫn tôi cách dùng", "mới vào chưa biết làm gì" | `skills/phim-thiet-lap/` (giới thiệu có hệ thống: `references/gioi-thieu-xuong.md`) |
+| "dựng xưởng", "thiết lập", "bắt đầu", "đổi màu/logo/chức danh mặc định", lần đầu dùng; "skill là gì", "lưu skill vào tài khoản", "skill nào cần lưu lại"; "xưởng làm được gì", "giới thiệu xưởng", "hướng dẫn tôi cách dùng", "mới vào chưa biết làm gì" | `skills/phim-thiet-lap/` (giới thiệu có hệ thống: `references/gioi-thieu-xuong.md`; skill trong tài khoản: `references/skill-trong-tai-khoan.md`) |
 | "dựng bài giảng", "cắt bài này", "ghép intro outro", thả clip vào `nguon/` | `skills/phim-dung-bai/` (quy trình chủ lực; đọc cả `references/bien-tap.md`) |
 | "infomotion", "làm video từ audio", "explainer video", chỉ có file ghi âm không có video quay mặt | `skills/phim-infomotion/` (đồ họa thông tin tối giản; không có cảnh quay để cắt - hình tự nghĩ ra từ lời nói, dùng component `YNiem`/`YCanh`) |
 | "phim hoạt hình", "hoạt hình có nhân vật", "kể chuyện bằng hoạt hình", "hoạt hình từ file voice", "mega prompt làm phim" | `skills/phim-hoat-hoa/` (thế giới hoạt hình vẽ bằng code có nhân vật, cảnh, mô-típ; có file ghi âm mà chưa rõ muốn infomotion hay hoạt hình thì hỏi một câu) |
@@ -52,12 +56,13 @@ Xưởng làm việc bằng nguyên lý, không bằng khuôn. Mọi quyết đ�
 4. Không hardcode đường dẫn tuyệt đối của máy vào bất kỳ file nào của xưởng; gốc xưởng lấy từ thư mục đã kết nối
 5. Mã nguồn sửa ở sandbox đám mây (studio, tools) phải commit về máy ngay; máy là bản gốc
 6. Một góp ý lặp lại lần thứ hai là tín hiệu sửa NGUỒN MẶC ĐỊNH (brand.json, preset, defaultProps), không chỉ sửa dự án đang làm; ghi vào "Sổ tay góp ý" cuối PHONG-CACH.md
-7. Bài học kỹ thuật đáng giữ sau mỗi dự án ghi vào `docs/BAI-HOC.md` (ngắn: chuyện gì, gốc rễ, quy tắc); sửa skill thì sửa thẳng `skills/<tên>/SKILL.md`, trường `description` của skill là mô tả kích hoạt, không ghi changelog vào đó; sửa xong chạy `python3 tools/kiem-tai-lieu.py` (YAML, đường dẫn, tên skill, kho ẩn dụ) phải ĐẠT
+7. Bài học kỹ thuật đáng giữ sau mỗi dự án ghi vào `docs/BAI-HOC.md` (ngắn: chuyện gì, gốc rễ, quy tắc); sửa skill thì sửa thẳng `skills/<tên>/SKILL.md`, trường `description` của skill là mô tả kích hoạt, không ghi changelog vào đó; sửa xong chạy `python3 tools/kiem-tai-lieu.py` (YAML, đường dẫn, tên skill, kho ẩn dụ) phải ĐẠT, rồi `python3 tools/dong-goi-skill.py --lam` và gửi người dùng lưu lại những skill vừa đổi vào tài khoản (lưu xong `--da-luu`)
 8. Footage của người dùng không rời máy họ, trừ vài khung hình để xem khi cần
 9. Timeline có trường `_chinhTay` là timeline người dùng đã tự chỉnh trên Bàn dựng: đó là nguồn sự thật. Không sinh lại nó từ kế hoạch, kịch bản hay phương án cũ; mọi sửa của Claude làm thẳng trên file và giữ nguyên chỉnh tay. Bàn dựng không thay hai chốt duyệt và cổng nghiệm thu
 10. Không lớp phủ nào (chữ, pill, bảng tên, slide thẻ) được che mặt BẤT KỲ AI trong khung, kể cả người ngồi hoặc đứng phía sau người nói. Chọn kiểu hiện không chồng lên cảnh quay (`ca-hai`, `mat`, vùng khung trống) hoặc bỏ lớp phủ; nghiệm thu bằng cách nhìn khung thật tại mọi mốc có lớp phủ
-11. Repo sạch: không tạo dự án, nháp, việc tạm, bản sao lưu hay file nén trong repo; ghi vào `Du an/<dự án>/`, `Du an/_tam/`, `Thanh pham/`. Đầu và cuối phiên chạy `python3 tools/kiem-sach.py`; cuối phiên phải ĐẠT (còn nháp lạc thì xin quyền xoá rồi `--xoa`; `du-an/` kiểu cũ thì dời, không xoá). Nháp và proxy của một dự án chỉ dọn sau khi người dùng nói "duyệt".
+11. Xưởng sạch: không tạo dự án, nháp, việc tạm, bản sao lưu hay file nén trong thư mục xưởng; ghi vào `Du an/<dự án>/`, `Du an/_tam/`, `Thanh pham/`. Đầu và cuối phiên chạy `python3 tools/kiem-sach.py`; cuối phiên phải ĐẠT (còn nháp lạc thì xin quyền xoá rồi `--xoa`; `du-an/` kiểu cũ thì dời, không xoá). Nháp và proxy của một dự án chỉ dọn sau khi người dùng nói "duyệt".
+12. Xưởng này là xưởng riêng của người dùng, dựng từ bản thiết kế `wincreator3012/xuong-phim-claude` trên GitHub: không clone đè, không push, không pull, không mở pull request về repo bản thiết kế. Cái mới từ bản thiết kế chỉ vào xưởng theo `HUONG-DAN.md` mục "Cập nhật xưởng": đọc, đề xuất từng thay đổi, người dùng duyệt rồi mới ghi; không bao giờ ghi đè phong cách, thương hiệu, nhạc, preset và skill người dùng đã tinh chỉnh
 
 ## Kiểm nhanh trạng thái xưởng
 
-`python3 tools/cai-dat.py --trang-thai` (máy người dùng), `python3 tools/kiem-sach.py` (repo sạch). Chưa cài hoặc chưa giới thiệu xưởng → phim-thiet-lap. Sau khi sửa bất kỳ tool nào → `python3 tools/kiem-tra-xuong.py --co-slide` phải ĐẠT.
+`python3 tools/cai-dat.py --trang-thai` (máy người dùng, bản thiết kế đã dựng từ), `python3 tools/kiem-sach.py` (xưởng sạch), `python3 tools/dong-goi-skill.py` (skill nào trong tài khoản cũ hơn bản gốc). Chưa dựng xong, chưa cài, chưa lưu skill hoặc chưa giới thiệu xưởng → phim-thiet-lap. Sau khi sửa bất kỳ tool nào → `python3 tools/kiem-tra-xuong.py --co-slide` phải ĐẠT.

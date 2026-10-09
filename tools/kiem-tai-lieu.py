@@ -18,6 +18,8 @@ Cổng máy cho video (nghiem-thu.py) không đọc chữ; cổng này làm vi�
      (sửa skill xong thì chạy --dong-dau, rồi đề xuất lại skill tài khoản).
   6. Mỗi skill có mặt trong bảng "việc nào, skill nào" của CLAUDE.md; mọi tên skill được nhắc
      trong tài liệu đều có thật (bắt tên cũ, hay skill chỉ có ở một trong hai xưởng).
+  7. Cây có bản đồ tệp của bản thiết kế (BAN-DO-TEP.json, chỉ ở repo công khai, có git) thì bản đồ
+     phải khớp tệp thật (tools/lap-ban-do-tep.py --kiem), vì AI dựng xưởng kiểm mã từng tệp theo nó.
 """
 import argparse
 import datetime as dt
@@ -49,7 +51,8 @@ BO_QUA_DAU += ("dang-tai/", "khung/")  # thư mục gói đăng tải bên trong
 KY_TU_MAU = set("<>{}*|$=,:;()[]'\"")
 # tệp, thư mục chỉ sinh ra khi dùng (cài đặt, dự án đầu tiên): vắng mặt không phải lỗi
 SINH_KHI_DUNG = ("nhac-nen/THU-VIEN.md", "do-hoa-chung/an-du-y-niem.json", "tools/.cai-dat.json", "tools/pylib",
-                 "tools/models/sherpa-onnx-whisper-", "sherpa-onnx-whisper-", "outputs/", "_to_delete/", "references/", "studio/node_modules/")
+                 "tools/models/sherpa-onnx-whisper-", "sherpa-onnx-whisper-", "outputs/", "_to_delete/", "references/", "studio/node_modules/",
+                 "do-hoa-chung/bo-cuc/")  # bo-cuc: tools/cai-dat.py bước 4 sinh ra
 TEN_MIEN = re.compile(r"^[a-z0-9.-]+\.(com|org|net|io|vn|dev)/")
 
 
@@ -328,6 +331,17 @@ def so_tai_khoan(goc, bc, thu_muc):
     return 1 if lech else 0
 
 
+def kiem_ban_do(goc, kq):
+    cong_cu = os.path.join(goc, "tools", "lap-ban-do-tep.py")
+    if not (os.path.isfile(os.path.join(goc, "BAN-DO-TEP.json")) and os.path.isfile(cong_cu)
+            and os.path.isdir(os.path.join(goc, ".git"))):
+        return
+    import subprocess
+    p = subprocess.run([sys.executable, cong_cu, "--kiem"], capture_output=True, text=True)
+    if p.returncode != 0:
+        kq.l((p.stdout + p.stderr).strip() or "BAN-DO-TEP.json lệch tệp thật: chạy python3 tools/lap-ban-do-tep.py")
+
+
 def main():
     ap = argparse.ArgumentParser(description="Cổng kiểm tài liệu của xưởng")
     ap.add_argument("--goc", default=os.path.dirname(TOOLS))
@@ -348,6 +362,7 @@ def main():
     kiem_ten_skill(goc, bc, kq)
     kiem_an_du(goc, kq)
     kiem_bang_skill(goc, bc, kq)
+    kiem_ban_do(goc, kq)
     n = len(cac_skill(bc))
     for s in kq.canh:
         print("  cảnh báo:", s)

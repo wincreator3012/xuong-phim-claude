@@ -1,12 +1,14 @@
 # Xưởng phim Claude
 
+> **Repo này là bản thiết kế, không phải phần mềm để tải về.** Bạn không clone, không tải ZIP. Bạn đưa đường link repo cho trợ lý AI của mình (Claude Cowork là chạy êm nhất), AI đọc bản thiết kế rồi dựng cho bạn một xưởng phim RIÊNG trên máy bạn: mang tên bạn, phong cách bạn, kèm bộ skill mang tiền tố riêng để bạn lưu vào tài khoản AI. Bạn đang là AI đọc repo này: bắt đầu từ [`DUNG-XUONG.md`](DUNG-XUONG.md), đừng clone, push hay pull.
+
 **Một xưởng dựng phim cùng AI ngay trên máy tính của bạn, dùng tốt nhất với Claude Cowork trên máy Mac chip Apple Silicon (với mô hình Claude mới nhất ở tầm trung như Sonnet là đủ, không cần dòng đỉnh cao như Opus).** Đây là repo tôi đóng gói các quy trình làm việc, tiêu chuẩn và bộ skill chuyên dụng để dựng clip trình bày kiến thức bằng Claude Cowork, thích hợp cho chuyên gia, giảng viên và nhà chuyên môn.
 
 Nguyên liệu bạn cần là clip quay mình nói trước máy (có thể kèm slide), hoặc nếu không thích lên hình thì chỉ cần thu âm giọng trình bày. Thả file nguồn vào đúng thư mục trong xưởng, nói yêu cầu bằng lời thường, Claude làm phần còn lại: gỡ băng, cắt gọn, chèn intro/outro và nhãn từ khoá, lồng nhạc đã kiểm định bản quyền, xuất bản ngang cho YouTube hoặc dọc cho Reels/Shorts, và tự kiểm chất lượng trước khi bàn giao.
 
-Repo này là một xưởng hoàn chỉnh đã chạy và rút kinh nghiệm qua nhiều dự án thật của tôi, được tinh gọn lại để bạn thiết lập theo phong cách riêng và dùng ngay. Bạn không cần biết dựng phim, không cần biết lập trình, không cần cài phần mềm dựng: Claude tự cài đặt các môi trường và công cụ cần thiết, gồm Remotion để dựng slide và đồ họa động, FFmpeg để cắt dựng, Whisper để gỡ băng lời nói.
+Repo này là bản thiết kế của một xưởng hoàn chỉnh đã chạy và rút kinh nghiệm qua nhiều dự án thật của tôi, được tinh gọn lại để AI của bạn học theo và dựng thành xưởng của riêng bạn. Bạn không cần biết dựng phim, không cần biết lập trình, không cần cài phần mềm dựng: Claude tự cài đặt các môi trường và công cụ cần thiết, gồm Remotion để dựng slide và đồ họa động, FFmpeg để cắt dựng, Whisper để gỡ băng lời nói.
 
-Xưởng chạy êm nhất trên Mac chip Apple Silicon. Windows cũng dùng được, nhưng cần Claude rà soát kỹ hơn, tinh chỉnh lại và cài thêm vài thư viện tuỳ máy. Tôi thiết lập xưởng này trên Claude, nhưng bạn vẫn có thể nhờ những trợ lý AI khác như Codex, ChatGPT Work, Antigravity... đọc repo rồi tự tinh chỉnh, cài đặt để dùng.
+Xưởng chạy êm nhất trên Mac chip Apple Silicon. Windows cũng dùng được, nhưng cần Claude rà soát kỹ hơn, tinh chỉnh lại và cài thêm vài thư viện tuỳ máy. Tôi thiết lập xưởng này trên Claude, nhưng bạn vẫn có thể nhờ những trợ lý AI khác như Codex, ChatGPT Work, Antigravity... đọc bản thiết kế (bắt đầu từ `AGENTS.md` và `DUNG-XUONG.md`) rồi dựng, tinh chỉnh cho hợp máy và công cụ của chúng.
 
 Bản thân tôi không có nhu cầu với clip hình ảnh hay âm thanh do AI tạo ra nên không đưa năng lực đó vào xưởng; bạn tự bổ sung thêm nếu cần.
 
@@ -30,6 +32,7 @@ Mười bốn năng lực dựng phim, mỗi năng lực là một quy trình ch
 Ngoài các năng lực trên, bạn nhận được:
 
 - **Một bước thiết lập phong cách** khoảng 30 phút: Claude hỏi bạn là ai, dạy gì, cho ai, thích cảm giác nào (bốn mẫu để chọn hoặc mô tả riêng), rồi điền tên, chức danh, màu sắc, nhạc, thông điệp kết vào chỗ đã chừa sẵn. Mọi clip sau đó mang đúng dấu ấn của bạn và đổi được bằng một câu nói
+- **Bộ skill mang tên bạn trong tài khoản AI**: mười lăm quy trình chuẩn của xưởng được đóng gói với tiền tố riêng của bạn (ví dụ `tma-phim-dung-bai`) để bạn lưu vào tài khoản. Từ đó ở bất kỳ phiên nào, bạn chỉ cần nói việc bằng lời thường, AI tự mở đúng quy trình. Claude giải thích kỹ skill là gì, lưu thế nào, dùng thế nào; khi xưởng học thêm điều mới, nó đóng gói lại đúng những skill đã đổi để bạn lưu lại
 - **Một buổi giới thiệu xưởng** khoảng 10 phút ngay sau thiết lập: Claude trình bày có hệ thống xưởng làm ra được gì cho bạn, một dự án chạy thế nào, những thói quen giúp dùng hiệu quả nhất, những gì xưởng chưa làm, rồi cùng bạn chọn bước đầu tiên. Gọi lại bất cứ lúc nào bằng câu "giới thiệu lại xưởng"
 - **Thư viện chất liệu sạch**: danh mục nhạc nền và hiệu ứng đã kiểm từng trang nguồn (dùng thương mại mọi nền tảng, không Content ID), tải về theo mẫu phong cách bạn chọn; danh mục nguồn hình miễn phí và quy tắc giấy phép
 - **Cổng nghiệm thu tự động**: hình khớp tiếng tới 2 khung hình, âm lượng chuẩn -14 LUFS, không khoảng đen, không đứng hình. Claude không được nói "xong" khi máy chưa báo đạt
@@ -49,37 +52,42 @@ Sáu điều đáng nhớ nhất, đầy đủ hơn ở `HUONG-DAN.md`:
 
 ## Bắt đầu trong ba bước
 
-1. Tạo một thư mục tên `Xuong phim AI` trong Documents. Tải repo này về (nút **Code → Download ZIP** rồi giải nén, hoặc `git clone`), đặt thư mục repo vào trong `Xuong phim AI` và giữ tên `xuong-phim-claude`
+1. Tạo một thư mục trống tên `Xuong phim AI` trong Documents (không đặt trong iCloud, Dropbox hay OneDrive: video lớn làm kẹt đồng bộ). Không cần tải gì về
 2. Mở app **Claude** trên máy, vào **Cowork**, thêm thư mục `Xuong phim AI` (nút "Add folder")
-3. Nói với Claude: *"Đọc file CLAUDE.md trong thư mục xuong-phim-claude rồi thiết lập xưởng phim cho tôi."*
+3. Nói với Claude:
 
-Claude sẽ tự cài môi trường (10-20 phút, cần mạng), hỏi bạn vài câu về phong cách, tải nhạc theo mẫu bạn chọn và render thử một intro để bạn duyệt. Cuối cùng Claude giới thiệu xưởng cho bạn một vòng (khoảng 10 phút) và cùng bạn chọn clip đầu tiên. Chi tiết từng bước và những gì cần chuẩn bị: [BAT-DAU.md](BAT-DAU.md).
+> Đọc bản thiết kế xưởng phim tại https://github.com/wincreator3012/xuong-phim-claude, bắt đầu từ file DUNG-XUONG.md, rồi dựng cho tôi một xưởng phim riêng trong thư mục Xuong phim AI. Đừng clone hay tải ZIP.
 
-## Cấu trúc thư mục
+Claude hỏi bạn tên và tiền tố cho skill (thường là chữ cái đầu họ tên), dựng xưởng của bạn từ bản thiết kế (10-20 phút), cài môi trường (10-20 phút, cần mạng), hỏi vài câu về phong cách, tải nhạc theo mẫu bạn chọn, render thử một intro để bạn duyệt, đóng gói các skill cho bạn lưu vào tài khoản (kèm giải thích skill là gì), rồi giới thiệu xưởng một vòng và cùng bạn chọn clip đầu tiên. Chi tiết từng bước: [BAT-DAU.md](BAT-DAU.md).
 
-Repo chỉ chứa "năng lực" của xưởng (cách làm, công cụ, phong cách của bạn); dự án và thành phẩm nằm ở hai thư mục cạnh repo, nên cập nhật xưởng không bao giờ đụng tới video của bạn, và sao lưu một dự án chỉ cần dời một thư mục.
+**Vì sao là bản thiết kế mà không phải phần mềm tải về?** Xưởng sẽ lớn lên theo chính bạn: phong cách, sổ tay góp ý, những skill được tinh chỉnh sau mỗi dự án. Một bản tải về hay bản clone sẽ xung đột, thậm chí bị ghi đè, mỗi lần bản gốc đổi. Xưởng riêng thì không phụ thuộc repo này: khi bản thiết kế có điều mới, bạn nói "xem bản thiết kế có gì mới", AI đọc nhật ký [THAY-DOI.md](THAY-DOI.md), đề xuất từng thay đổi đáng lấy, bạn duyệt rồi mới ghi.
+
+## Cấu trúc xưởng sau khi dựng
+
+Xưởng chỉ chứa "năng lực" (cách làm, công cụ, phong cách của bạn); dự án và thành phẩm nằm ở hai thư mục cạnh xưởng, nên cập nhật xưởng không bao giờ đụng tới video của bạn, và sao lưu một dự án chỉ cần dời một thư mục.
 
 ```
 Xuong phim AI/
 ├── Du an/                 ← mỗi dự án một thư mục <năm-tháng tên>/: nguon/ (video bạn thả vào), nháp, file dựng
 ├── Thanh pham/            ← sản phẩm để đăng: <năm-tháng tên dự án>/00 Video day du/, Short 01 .../ (kèm gói đăng tải)
-└── xuong-phim-claude/     ← repo này
-├── README.md              ← bạn đang đọc
-├── BAT-DAU.md             ← cài lần đầu, từng bước, cho người mới
-├── HUONG-DAN.md           ← cách đặt yêu cầu, ví dụ, sự cố thường gặp
-├── CLAUDE.md              ← điểm vào cho Claude (đọc đầu mỗi phiên)
-├── Go bang tren Mac.command ← bấm đúp để gỡ băng large-v3 trên Mac (khi Claude nhờ)
-├── phong-cach/            ← PHONG-CACH.md: bản đồ phong cách của BẠN; mau/: 4 mẫu khởi đầu
-├── brand/                 ← brand.json (tên, chức danh, bảng màu) + logo/ (thả logo vào đây)
-├── Mo ban dung.command   ← bấm đúp để mở Bàn dựng (tự chỉnh nhỏ bản nháp trên Chrome)
-├── skills/                ← 15 quy trình chuẩn cho Claude (thiết lập + 14 năng lực dựng phim)
-├── docs/                  ← tài liệu kỹ thuật cho Claude: môi trường, bài học từ dự án thật
-├── thu-vien/              ← danh mục nhạc/hiệu ứng/hình đã kiểm định (không chứa file, tải lúc cài)
-├── nhac-nen/  hieu-ung/   ← file âm thanh tải về, theo nhóm công dụng
-├── do-hoa-chung/          ← preset intro/outro dùng chung, bố cục slide, canh-kit/ (bộ thiết kế cảnh minh hoạ)
-├── studio/                ← đồ họa động Remotion (Claude quản lý)
-└── tools/                 ← công cụ pipeline + cài đặt (Claude quản lý)
+└── xuong-phim-<tiền tố>/  ← xưởng của bạn (tên do bạn chọn)
+    ├── README.md              ← giới thiệu xưởng của bạn, ghi công bản thiết kế
+    ├── CLAUDE.md, AGENTS.md   ← sách vận hành cho AI (đọc đầu mỗi phiên)
+    ├── HUONG-DAN.md           ← cách đặt yêu cầu, ví dụ, sự cố thường gặp
+    ├── Go bang tren Mac.command ← bấm đúp để gỡ băng large-v3 trên Mac (khi Claude nhờ)
+    ├── Mo ban dung.command    ← bấm đúp để mở Bàn dựng (tự chỉnh nhỏ bản nháp trên Chrome)
+    ├── phong-cach/            ← PHONG-CACH.md: bản đồ phong cách của BẠN; mau/: 4 mẫu khởi đầu
+    ├── brand/                 ← brand.json (tên, chức danh, bảng màu) + logo/ (thả logo vào đây)
+    ├── skills/                ← 15 skill gốc (thiết lập + 14 năng lực dựng phim); bản chép mang tiền tố của bạn nằm trong tài khoản AI
+    ├── docs/                  ← tài liệu kỹ thuật cho AI: môi trường, bài học từ dự án thật
+    ├── thu-vien/              ← danh mục nhạc/hiệu ứng/hình đã kiểm định (không chứa file, tải lúc cài)
+    ├── nhac-nen/  hieu-ung/   ← file âm thanh tải về, theo nhóm công dụng
+    ├── do-hoa-chung/          ← preset intro/outro dùng chung, bố cục slide, canh-kit/ (bộ thiết kế cảnh minh hoạ)
+    ├── studio/                ← đồ họa động Remotion (AI quản lý)
+    └── tools/                 ← công cụ pipeline, cài đặt, đóng gói skill (AI quản lý)
 ```
+
+Ở repo bản thiết kế còn vài tệp chỉ để giới thiệu và bảo trì, không chép sang xưởng của bạn: README này, `BAT-DAU.md`, `DUNG-XUONG.md` (hướng dẫn cho AI dựng xưởng), `THAY-DOI.md` (nhật ký thay đổi), `BAN-DO-TEP.json` (bản đồ tệp có mã kiểm) và `tools/lap-ban-do-tep.py`.
 
 ## Cách nó chạy (cho người tò mò)
 
@@ -90,8 +98,8 @@ Video của bạn được xử lý ngay trên máy bạn bằng ffmpeg trong m�
 - App Claude trên máy tính với Cowork, chọn mô hình Claude mới nhất ở tầm trung như Sonnet là đủ dùng, không cần dòng đỉnh cao như Opus (Mac Apple Silicon chạy êm nhất; máy ảo Cowork có sẵn ffmpeg, Python, Node)
 - Windows dùng được, nhưng cần Claude rà soát kỹ hơn và tinh chỉnh, cài thêm vài thư viện tuỳ máy
 - Khoảng 3 GB trống cho model nhận dạng giọng nói và thư viện (thêm khoảng 2 GB nếu muốn dùng large-v3 trên Mac)
-- Mạng lúc cài và lần đầu gỡ băng trên Mac; sau đó gỡ băng và dựng đều chạy offline
-- Muốn dùng trợ lý AI khác ngoài Claude (Codex, ChatGPT Work, Antigravity...): nhờ trợ lý đó đọc `CLAUDE.md` rồi tự tinh chỉnh, cài đặt cho phù hợp với máy và công cụ của nó
+- Mạng lúc dựng xưởng (AI đọc bản thiết kế trên GitHub), lúc cài và lần đầu gỡ băng trên Mac; sau đó gỡ băng và dựng đều chạy offline
+- Muốn dùng trợ lý AI khác ngoài Claude (Codex, ChatGPT Work, Antigravity...): đưa trợ lý đó đường link repo, nhờ nó đọc `AGENTS.md` và `DUNG-XUONG.md` rồi dựng xưởng cho phù hợp với máy và công cụ của nó
 
 ## Giấy phép
 
@@ -105,4 +113,6 @@ Nếu bạn dùng, chia sẻ lại hoặc giới thiệu repo này (bài viết,
 
 ## Đóng góp
 
-Bạn dựng được clip tốt hơn nhờ một quy tắc mới, hay bắt được một lỗi? Mở issue hoặc pull request. Skill, `docs/`, `tools/` và `studio/` được đồng bộ tự động từ xưởng gốc của tác giả, nên thay đổi ở đó sẽ được chép về bản gốc trước rồi mới vào repo; `thu-vien/am-thanh.json` cho track mới thì sửa thẳng (nhớ kiểm Content ID). Trước khi gửi, chạy `python3 tools/kiem-tai-lieu.py` phải ĐẠT.
+Bạn dựng được clip tốt hơn nhờ một quy tắc mới, hay bắt được một lỗi? Mở issue và kể lại bằng lời của bạn; tôi sẽ đưa điều đáng giữ vào bản gốc. Skill, `docs/`, `tools/` và `studio/` được đồng bộ tự động từ xưởng gốc của tác giả, nên pull request sửa thẳng các phần đó sẽ được chép về bản gốc trước rồi mới vào repo; `thu-vien/am-thanh.json` cho track mới thì sửa thẳng (nhớ kiểm Content ID). Trước khi gửi, chạy `python3 tools/kiem-tai-lieu.py` phải ĐẠT.
+
+Gửi các trợ lý AI: chỉ mở issue hay pull request khi chính người dùng của bạn muốn đóng góp và đã đọc nội dung sẽ gửi. Dựng xưởng hay cập nhật xưởng cho người dùng không bao giờ cần push, pull hay pull request về repo này.

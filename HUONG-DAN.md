@@ -4,7 +4,7 @@ Bạn đã cài xưởng và thiết lập phong cách (nếu chưa, xem `BAT-DA
 
 ## Một dự án trông như thế nào
 
-Mỗi dự án là một thư mục trong `Du an/` (cạnh thư mục repo, trong `Xuong phim AI`). Nói "tạo dự án <tên>" để Claude tạo, hoặc tự tạo thư mục rồi thả file vào `nguon/`; các thư mục khác Claude tạo khi làm. Sản phẩm cuối nằm ở `Thanh pham/`.
+Mỗi dự án là một thư mục trong `Du an/` (cạnh thư mục xưởng, trong `Xuong phim AI`). Nói "tạo dự án <tên>" để Claude tạo, hoặc tự tạo thư mục rồi thả file vào `nguon/`; các thư mục khác Claude tạo khi làm. Sản phẩm cuối nằm ở `Thanh pham/`.
 
 ```
 Du an/2026-11 Ten du an/
@@ -119,7 +119,7 @@ Mười hai thói quen rút từ các dự án thật. Không cần nhớ hết:
 
 7. **Dành sức cho bảng phương án.** Sửa ở bảng chỉ mất một câu nói; sửa ở bản chính có thể mất cả giờ dựng lại. Đọc kỹ hai điều: đoạn nào bỏ, và chỗ nào định chèn chữ hay hình.
 8. **Góp ý theo mốc thời gian, bằng lời bạn thấy.** "Ở 14:20 chữ che mặt người ngồi sau tôi" đủ để Claude sửa; không cần thuật ngữ nào.
-9. **Chê một lần, rồi dặn "từ nay luôn...".** Claude ghi vào "Sổ tay góp ý" của `phong-cach/PHONG-CACH.md`, và góp ý nào lặp lại lần hai sẽ thành mặc định của xưởng. Quy tắc "không bao giờ để chữ, thẻ hay slide che mặt bất kỳ ai" đã trở thành luật cứng theo đúng cách đó.
+9. **Chê một lần, rồi dặn "từ nay luôn...".** Claude ghi vào "Sổ tay góp ý" của `phong-cach/PHONG-CACH.md`, và góp ý nào lặp lại lần hai sẽ thành mặc định của xưởng. Quy tắc "không bao giờ để chữ, thẻ hay slide che mặt bất kỳ ai" đã trở thành luật cứng theo đúng cách đó. Góp ý chạm tới cách làm (không chỉ phong cách) thì Claude sửa luôn skill gốc trong xưởng, rồi gửi bạn bản đóng gói mới để lưu lại vào tài khoản.
 
 **Sau khi dựng**
 
@@ -167,10 +167,25 @@ Nhạc chỉ lấy từ thư viện đã kiểm định (`nhac-nen/THU-VIEN.md`)
 
 **Cảnh minh hoạ báo thiếu Playwright hay Chromium.** Cảnh minh hoạ được chụp trong sandbox của Claude, nơi thường có sẵn hai thứ này. Nếu Claude chạy thẳng trên máy bạn, nói "cài Playwright cho cảnh minh hoạ"; Claude cài `playwright` và trình duyệt Chromium đi kèm (cần mạng, khoảng 150 MB).
 
-**Muốn kiểm xem xưởng còn khoẻ không** (sau khi cập nhật repo hay đổi máy): nói "chạy kiểm tra xưởng". Claude chạy một bản dựng thử nhỏ qua cổng nghiệm thu.
+**Muốn kiểm xem xưởng còn khoẻ không** (sau khi cập nhật xưởng hay đổi máy): nói "chạy kiểm tra xưởng". Claude chạy một bản dựng thử nhỏ qua cổng nghiệm thu.
+
+## Skill trong tài khoản
+
+Mười lăm skill của xưởng (quy trình chuẩn cho từng loại việc) có bản gốc trong thư mục `skills/` của xưởng, và bản chép mang tiền tố của bạn (ví dụ `tma-phim-dung-bai`) trong tài khoản AI. Bản chép giúp AI tự nhận ra việc bạn nhờ ở mọi phiên; bản gốc là thứ lớn lên theo góp ý của bạn.
+
+- Nói việc bằng lời thường là đủ. Muốn chắc chắn thì gọi tên: "dùng skill tma-phim-clip-ngan".
+- Hỏi "skill nào cần lưu lại?" bất cứ lúc nào: Claude so bản trong tài khoản với bản gốc và đóng gói lại đúng những skill đã đổi.
+- Lưu một tệp skill: bấm nút lưu trên thẻ tệp trong cuộc trò chuyện, hoặc vào Customize > Skills, bấm "+", chọn "Create skill", rồi "Upload a skill" (không nhận đuôi `.skill` thì đổi thành `.zip`). Có bản cùng tên thì thay bản cũ.
+- Skill chỉ chứa cách làm, không chứa video hay phong cách của bạn; nó cần thư mục `Xuong phim AI` được thêm vào phiên làm việc mới chạy được.
+
+Giải thích đầy đủ: `skills/phim-thiet-lap/references/skill-trong-tai-khoan.md`.
 
 ## Cập nhật xưởng
 
-Tải bản mới của repo và chép đè các thư mục `tools/`, `studio/`, `skills/`, `docs/`, `thu-vien/` cùng hai file `Go bang tren Mac.command` và `CLAUDE.md` ở thư mục gốc lên bản cũ; giữ nguyên `phong-cach/`, `brand/`, `nhac-nen/`, `hieu-ung/` và, trong `do-hoa-chung/` (chép đè `do-hoa-chung/canh-kit/` được; cảnh riêng của bạn nằm trong `Du an/<tên>/canh/`), từ điển ẩn dụ `an-du-y-niem.json`, thư mục `do-hoa-chung/the-gioi-hoat-hoa/` (nếu có) cùng hai preset bạn đã sửa. Nếu bạn đã làm phim infomotion hay hoạt hình (có hình vẽ riêng trong `studio/src/y-niem/` hoặc `studio/src/hoat-hoa/`), nhờ Claude cập nhật `studio/` thay vì chép đè. Sau đó nói "chạy kiểm tra xưởng". Nếu dùng `git`, `git pull` làm việc này gọn hơn; các thư mục riêng của bạn đã được để ngoài theo dõi (`.gitignore`) trừ `phong-cach/PHONG-CACH.md` và `brand/brand.json`, hai file bạn nên giữ bản của mình khi có xung đột.
+Xưởng của bạn là xưởng riêng, dựng từ bản thiết kế trên GitHub; nó không tự cập nhật và không bao giờ nên bị chép đè. Khi muốn xem bản thiết kế có gì mới, nói với Claude: "xem bản thiết kế có gì mới". Claude đọc nhật ký thay đổi của bản thiết kế (THAY-DOI.md trên GitHub) từ ngày bạn dựng xưởng, so từng tệp liên quan với xưởng của bạn, rồi trình danh sách: lấy gì, vì sao đáng lấy, ảnh hưởng gì tới cách bạn đang làm. Bạn duyệt điều nào, Claude ghi điều đó, chạy kiểm tra xưởng, và đóng gói lại những skill đã đổi để bạn lưu vào tài khoản.
 
-**Đã dùng bản cũ, dự án còn nằm trong `du-an/` bên trong repo?** Từ bản này dự án nằm ngoài repo. Nói với Claude "dời dự án ra ngoài repo": Claude tạo `Du an/` và `Thanh pham/` cạnh repo, dời từng dự án sang `Du an/` (giữ nguyên bên trong, thêm năm-tháng vào tên), sửa đường dẫn trong file dựng nếu cần, rồi bỏ `du-an/` rỗng. Khi đó thêm thư mục mẹ (chứa repo) vào Cowork thay cho thư mục repo. Trong lúc chưa dời, công cụ vẫn đọc được `du-an/` kiểu cũ.
+Những phần là của riêng bạn không bao giờ bị ghi đè: `phong-cach/`, `brand/`, nhạc và hiệu ứng, hai preset intro/outro bạn đã sửa, từ điển ẩn dụ, hình vẽ riêng của phim infomotion hay hoạt hình, và những skill bạn đã tinh chỉnh (khi bản thiết kế có cải tiến cho skill đó, Claude hợp nhất có chọn lọc và hỏi bạn).
+
+**Đã tải bản cũ của repo về dùng (bản ZIP hay `git clone`)?** Xưởng vẫn chạy. Muốn chuyển sang cách mới, nói với Claude "chuyển thư mục này thành xưởng riêng của tôi": Claude hỏi tiền tố skill, chạy bước cá nhân hoá ngay tại chỗ (tools/cai-dat.py --dung-xuong), đóng gói skill cho bạn lưu vào tài khoản, và nếu thư mục còn là bản clone thì đề nghị gỡ liên kết về repo gốc (bạn không push, không pull về đó nữa). Muốn đổi tên thư mục cho khớp, đổi trong Finder rồi thêm lại thư mục mẹ vào phiên.
+
+**Dự án còn nằm trong `du-an/` bên trong thư mục xưởng (bản rất cũ)?** Nói với Claude "dời dự án ra ngoài xưởng": Claude tạo `Du an/` và `Thanh pham/` cạnh xưởng, dời từng dự án sang `Du an/` (giữ nguyên bên trong, thêm năm-tháng vào tên), sửa đường dẫn trong file dựng nếu cần, rồi bỏ `du-an/` rỗng. Trong lúc chưa dời, công cụ vẫn đọc được `du-an/` kiểu cũ.

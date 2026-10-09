@@ -4,5 +4,7 @@
   "thuMucThanhPham": "../Thanh pham",
   "thuMucTam": "../Du an/_tam",
   "thuMucGiao": "",
-  "_giao": "thuMucGiao: nơi giao trọn gói thành phẩm sau khi duyệt (thường là thư mục đồng bộ Google Drive); để trống nếu không dùng."
+  "_giao": "thuMucGiao: nơi giao trọn gói thành phẩm sau khi duyệt (thường là thư mục đồng bộ Google Drive); để trống nếu không dùng.",
+  "tienToSkill": "",
+  "_tienToSkill": "tienToSkill: tiền tố riêng cho tên skill khi lưu vào tài khoản AI (2-6 chữ thường hoặc số, thường là chữ cái đầu họ tên; vd tma thì phim-dung-bai thành tma-phim-dung-bai). Dùng bởi tools/dong-goi-skill.py."
 }

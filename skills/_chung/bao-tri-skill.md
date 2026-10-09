@@ -3,7 +3,7 @@
 ## Sửa ở đâu
 
 1. Sửa ở `skills/<skill>/` (SKILL.md và references) trong thư mục xưởng trước. Đây là nguồn duy nhất.
-2. Nếu có cài skill vào tài khoản Claude: đề xuất cập nhật ngay sau khi sửa (bản đề xuất thay toàn bộ SKILL.md). Skill tài khoản chỉ mang SKILL.md, nên mọi tham chiếu tới references và tới `_chung/` ghi đủ đường dẫn `skills/<skill>/references/<file>.md`, `skills/_chung/<file>.md`.
+2. Lưu skill vào tài khoản AI (nên làm, xem hướng dẫn giải thích cho người dùng ở skills/phim-thiet-lap/references/skill-trong-tai-khoan.md): sau mỗi lần sửa skill, chạy `python3 tools/dong-goi-skill.py --lam` để đóng gói lại đúng những skill đã đổi, gửi tệp .skill cho người dùng lưu, lưu xong chạy `python3 tools/dong-goi-skill.py --da-luu`. Tên trong tài khoản mang tiền tố riêng của người dùng (khoá tienToSkill trong cau-hinh.json). SKILL.md ghi đủ đường dẫn `skills/<skill>/references/<file>.md`, `skills/_chung/<file>.md` để skill trong tài khoản luôn đọc bản mới nhất trong thư mục xưởng.
 3. Sau khi sửa skill: `python3 tools/kiem-tai-lieu.py` phải ĐẠT (YAML của skill, đường dẫn, tên skill, kho ẩn dụ).
 4. Thêm skill mới: thêm một dòng vào bảng "Việc nào, skill nào" của `CLAUDE.md` và bảng tài nguyên của `docs/QUY-TRINH-KY-THUAT.md`.
 

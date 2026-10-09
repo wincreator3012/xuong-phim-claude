@@ -93,7 +93,7 @@ PREVIEW_SIZES = {"ngang": (854, 480), "doc": (480, 854)}
 # --- Chống lệch hình-tiếng (bản vá 2026-09-05, 2026-09-17) --------------------
 # Đổi TOOL_VERSION mỗi khi sửa logic encode → mọi cache .sig cũ tự vô hiệu.
 XUONG = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # gốc xưởng: nhac-nen/, brand/, do-hoa-chung/
-TOOL_VERSION = "2026-10-09.r9"  # r9: segment "screen" (ô slide lấy từ VIDEO quay màn hình cùng trục thời gian, bài giảng có demo); r8: vi mờ 5 ms ở mép part có tiếng không liền với part kề (chống tiếng bụp ở mối cắt); r7: overlay "duration" (giữ/bớt khung giữa), volumeDb của đoạn, audioIn multicam theo từng quãng B-roll; r1: insert_part tự cắt đuôi tiếng AAC, role intro/outro cho bookends
+TOOL_VERSION = "2026-10-09.r10"  # r10: layout "mat-tren" cho khung dọc (mặt ở khung trên trên nền giấy, nửa dưới chừa cho motion graphic; cropFocusY, paneH, nen); r9: segment "screen" (ô slide lấy từ VIDEO quay màn hình cùng trục thời gian, bài giảng có demo); r8: vi mờ 5 ms ở mép part có tiếng không liền với part kề (chống tiếng bụp ở mối cắt); r7: overlay "duration" (giữ/bớt khung giữa), volumeDb của đoạn, audioIn multicam theo từng quãng B-roll; r1: insert_part tự cắt đuôi tiếng AAC, role intro/outro cho bookends
 # CONCAT_REV: đổi khi sửa bước GHÉP hoặc FINALIZE (không đụng cách encode từng part) - chỉ vô hiệu cache body,
 # không bắt encode lại các part đã xong. Sửa cách encode part thì đổi TOOL_VERSION.
 CONCAT_REV = "c8"  # c7: concat.txt ghi duration chính xác n/fps mỗi part; c8: đo loudness nghiêm ngặt, map insert chính xác
@@ -330,7 +330,7 @@ class Assembler:
         return "aresample=async=1:first_pts=0,aformat=sample_rates=48000:channel_layouts=stereo,apad"
 
     # ---------- bố cục bài giảng có slide ----------
-    LAYOUTS_OK = ("mat", "slide", "ca-hai", "chia-doi", "mat-chinh")
+    LAYOUTS_OK = ("mat", "slide", "ca-hai", "chia-doi", "mat-chinh", "mat-tren")
 
     def bo_cuc(self):
         """Đọc do-hoa-chung/bo-cuc/bo-cuc.json (cache) - toạ độ ô, palette, đường dẫn khung/mask."""
@@ -354,7 +354,8 @@ class Assembler:
                  fade_out_audio=0.0,
                  overlay=None, video_from=None, broll_from=0.0,
                  layout="mat", slide=None, slide_zoom=None, screen=None, screen_offset=0.0,
-                 audio_src=None, audio_in=None, volume_db=0.0, vi_mo=(False, False)):
+                 audio_src=None, audio_in=None, volume_db=0.0, vi_mo=(False, False),
+                 focus_y=0.5, pane_h=None):
         """Cắt [t_in, t_out] từ src thành một phần chuẩn hóa.
         video_from: nếu đặt → video lấy từ file khác (B-roll), audio vẫn từ src.
         layout/slide: bố cục bài giảng có slide (xem docs/QUY-TRINH-KY-THUAT.md mục "Bài giảng có slide").
@@ -388,7 +389,8 @@ class Assembler:
                                video_from=video_from, broll_from=broll_from, preview=self.preview,
                                mau=mau, layout=layout, slide=slide, slide_zoom=slide_zoom, theme=theme,
                                screen=(self.resolve(screen) if screen else None), screen_offset=screen_offset,
-                               audio_src=a_path, audio_in=audio_in, volume_db=volume_db, vi_mo=list(vi_mo))
+                               audio_src=a_path, audio_in=audio_in, volume_db=volume_db, vi_mo=list(vi_mo),
+                               focus_y=focus_y, pane_h=pane_h, nen=self.tl.get("nen"))
         if self._cache_hit(out, dur, sig) and check_av(out, dur, label=os.path.basename(out) + " (cache)", raise_on_fail=False, tol=AV_TOL_PCM):
             print(f"    (dùng lại part-{idx:03d}.mp4 đã encode)", flush=True)
             self.parts.append(out)
@@ -444,6 +446,17 @@ class Assembler:
             fc = ""
             if layout == "mat":
                 fc += f"[0:v]{mau}{self.vf_normalize(focus)}{self.vf_grade()}[v0];"
+            elif layout == "mat-tren":
+                # khung dọc: mặt ở ô trên (cao pane_h/1920 khung), nền giấy ở dưới chừa cho motion graphic (overlay)
+                bgc = "0x" + str(self.tl.get("nen") or "#FAF7F1").lstrip("#")
+                ph = int(round(self.h * float(pane_h or self.tl.get("paneH") or 960) / 1920.0))
+                ph -= ph % 2
+                ar = self.w / ph
+                fc += (f"color=c={bgc}:s={self.w}x{self.h}:r={self.fps}[bgc];"
+                       f"[0:v]{mau}fps={self.fps}:start_time=0,"
+                       f"crop='min(iw,ih*{ar:.6f})':'min(ih,iw/{ar:.6f})':'(iw-ow)*{focus}':'(ih-oh)*{float(focus_y)}',"
+                       f"scale={self.w}:{ph},setsar=1{self.vf_grade()},format=yuv420p[f0];"
+                       f"[bgc][f0]overlay=0:0:shortest=1,format=yuv420p[v0];")
             else:
                 spec = self.bo_cuc()
                 W, H = spec["size"]
@@ -512,7 +525,7 @@ class Assembler:
                 if dec:
                     cmd += ["-c:v", dec]
                 # nền đang ở 1920x1080 (bố cục slide) hoặc kích cỡ xuất (mat) - scale overlay cho khớp
-                ovW, ovH = (self.bo_cuc()["size"] if layout != "mat" else (self.w, self.h))
+                ovW, ovH = (self.bo_cuc()["size"] if layout not in ("mat", "mat-tren") else (self.w, self.h))
                 keo = self._keo_overlay(ov, ov_src)
                 if keo is None:
                     cmd += ["-itsoffset", f"{at:.3f}", "-i", ov_src]
@@ -731,6 +744,9 @@ class Assembler:
             layout = seg.get("layout", "mat")
             if layout not in self.LAYOUTS_OK:
                 errs.append(f"{tag}: layout '{layout}' không hợp lệ ({'|'.join(self.LAYOUTS_OK)})")
+            elif layout == "mat-tren":
+                if self.tl.get("aspect", "ngang") != "doc":
+                    errs.append(f"{tag}: layout 'mat-tren' chỉ dùng với aspect 'doc' (khung dọc)")
             elif layout != "mat":
                 if not seg.get("slide") and not seg.get("screen"):
                     errs.append(f"{tag}: layout '{layout}' cần trường 'slide' (ảnh slide) hoặc 'screen' (video màn hình)")
@@ -965,6 +981,7 @@ class Assembler:
                     audio_in=(float(seg.get("audioIn") or 0.0) + (a - t_in)) if seg.get("audioSrc") else None,
                     volume_db=float(seg.get("volumeDb") or 0.0),
                     vi_mo=(first and not lien_truoc, last and not lien_sau),
+                    focus_y=float(seg.get("cropFocusY", 0.5)), pane_h=seg.get("paneH"),
                 )
 
         if self.tl.get("outro"):
