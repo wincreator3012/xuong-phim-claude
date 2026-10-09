@@ -34,6 +34,7 @@ Mỗi cảnh chọn MỘT kiểu chèn (chi tiết lệnh và timeline ở `viet
 | Nền là khung hình mờ | như trên nhưng muốn người xem vẫn thấy đang ở trong phòng người dùng nói | `canh-ghep.py khung` lấy một khung, `chup --nen-anh` | `broll` |
 | Thẻ nổi cạnh người nói | ý ngắn hay nhịp thực hành, gương mặt người dùng vẫn cần hiện | `chup --alpha` ra webm | `overlay` |
 | Người nói thu vào góc | giải thích dài mà vẫn muốn giữ hiện diện của người dùng | `chup --pip`, rồi `canh-ghep.py pip` trên máy | `broll` |
+| Nửa dưới khung dọc (loạt short mặt trên, cảnh dưới) | cả loạt short đồng đều, mặt ở ô trên, cảnh vẽ ở ô dưới | `tools/short-canh.py` sinh trang từ dữ liệu (khung `do-hoa-chung/canh-kit/mau/canh-short.html`), `chup --alpha --khung doc` (`tools/short-render-canh.sh`) | `overlay` trên segment `mat-tren` |
 
 Mật độ: bài giảng dài thường một cảnh mỗi 2-4 phút ở đúng những đoạn giải thích; clip ngắn một cảnh là đủ. Đây là điểm xuất phát, không phải trần: đoạn giải thích dày thì đề xuất dày hơn kèm lý do. Hai cảnh toàn khung liên tiếp cách nhau ít nhất 5 giây thấy mặt người dùng (`_chung/overlay-va-the.md`); thẻ nổi không tính.
 
@@ -83,4 +84,4 @@ Góp ý của người dùng ghi `SO-GOP-Y.md` theo mốc; góp ý về cả h�
 - Thời lượng cảnh khớp ô trong timeline, đo bằng manifest hay `ffprobe`; không kéo dài bằng khung đứng. Ô bị rút ngắn sau khi chụp thì bớt bằng `overlay.duration` kèm `giu`, không chạm hoạt cảnh.
 - Chưa qua cổng nghiệm thu của skill gọi thì chưa báo "xong".
 
-<!-- ban-nguon: phim-canh-minh-hoa 2026-10-07 e6ba9af5 -->
+<!-- ban-nguon: phim-canh-minh-hoa 2026-10-09 133a1e58 -->

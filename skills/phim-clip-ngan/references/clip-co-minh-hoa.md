@@ -1,6 +1,6 @@
 # Clip ngắn có minh hoạ: nguyên lý rút từ ba short đã dựng
 
-Rút từ ba short đã dựng và được người dùng đánh giá cao: một clip 179 giây có tám cảnh minh hoạ, một clip 73 giây có hai cột so sánh, một clip 61 giây có một thẻ khung đi qua hộp AI. Đây là điều rút ra để hiểu, không phải khuôn để lặp: mỗi clip mới có lời, người nói và nhịp riêng, nên cách làm của nó có thể và nên khác. Bất biến kỹ thuật và giá trị vẫn giữ tuyệt đối (`skills/_chung/van-hanh.md` mục "Nguyên lý trước khuôn mẫu").
+Rút từ ba short đã dựng và được người dùng đánh giá cao: một clip 179 giây có tám cảnh minh hoạ, một clip 73 giây có hai cột so sánh, một clip 61 giây có một thẻ khung đi qua hộp AI. Khi cả loạt short cần đồng đều với mặt ở ô trên và cảnh ở ô dưới thì dùng khuôn `mat-tren` và bộ công cụ `short-*` ở `skills/phim-clip-ngan/references/short-mat-tren.md`. Đây là điều rút ra để hiểu, không phải khuôn để lặp: mỗi clip mới có lời, người nói và nhịp riêng, nên cách làm của nó có thể và nên khác. Bất biến kỹ thuật và giá trị vẫn giữ tuyệt đối (`skills/_chung/van-hanh.md` mục "Nguyên lý trước khuôn mẫu").
 
 ## 1. Chọn đoạn: một ý trọn, tự đứng được
 

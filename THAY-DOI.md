@@ -2,6 +2,13 @@
 
 Tệp này dành cho AI đang chăm một xưởng đã dựng từ bản thiết kế: khi người dùng nói "xem bản thiết kế có gì mới", đọc các mục SAU ngày `ban_mau.ngay` trong `tools/.cai-dat.json` của xưởng, rồi làm theo mục cuối của `DUNG-XUONG.md` (đề xuất từng thay đổi, người dùng duyệt rồi mới ghi, không ghi đè phần riêng của họ). Mỗi mục ghi: điều gì đổi, vì sao đáng lấy, tệp chính bị ảnh hưởng. Mục mới ở trên cùng.
 
+## 2026-10-10: loạt short dọc "mặt trên, cảnh dưới"
+
+- Bố cục `mat-tren` trong `tools/assemble.py` (r10, r11): khung dọc chia hai ô, mặt người nói ở ô trên (`cropFocus`, `cropFocusY`, `cropZoom`, `paneH`), nền giấy phía dưới cho cảnh minh hoạ chuyển động. `tools/kiem-tra-xuong.py` có thêm bước kiểm bố cục này.
+- Bộ công cụ làm cả loạt short từ một buổi giảng dài của một người nói: `tools/short-dung.py` (chốt mép cắt theo âm tiết, timeline, phụ đề), `tools/short-soi.py` (soi âm tiết, quãng lặng, độ khớp chữ), `tools/short-canh.py` với khung `do-hoa-chung/canh-kit/mau/canh-short.html` (cảnh viết bằng dữ liệu), `tools/short-render-canh.sh`, `tools/short-xuat.sh`, `tools/short-khung.sh`, `tools/short-chot.sh`.
+- Quy trình, thông số và các bẫy đã gặp: `skills/phim-clip-ngan/references/short-mat-tren.md` và mục 25 của `docs/BAI-HOC.md`. Gói đăng tải: chữ thumbnail ngang chia ba dòng ngắn để qua cổng 110 px; chữ công khai tránh ngày, giá, thương hiệu, mốc thời gian tương đối (`skills/phim-dang-tai/SKILL.md`).
+- Nếu xưởng của người dùng đã có `assemble.py` cũ hơn r10: đề xuất lấy bản mới (đổi `TOOL_VERSION`, chạy `tools/kiem-tra-xuong.py` trước khi dựng thật).
+
 ## 2026-10-09: bản thiết kế và skill trong tài khoản
 
 - Repo chuyển hẳn thành bản thiết kế: AI của người dùng đọc trên GitHub và dựng xưởng riêng, không clone, không tải ZIP, không push hay pull. Hướng dẫn cho AI: `DUNG-XUONG.md`; điểm vào cho mọi trợ lý: `AGENTS.md`; bản đồ tệp có mã kiểm: `BAN-DO-TEP.json` (lập bằng `tools/lap-ban-do-tep.py`).

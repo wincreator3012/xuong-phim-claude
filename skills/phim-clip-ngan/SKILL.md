@@ -1,6 +1,6 @@
 ---
 name: "phim-clip-ngan"
-description: "Cắt clip ngắn Reels/Shorts/TikTok hoặc clip quảng bá 30-180 giây (khung dọc 9:16 hoặc ngang) từ bài giảng, podcast, buổi nói chuyện, phim đã có trong thư mục \"xuong-phim-claude\" - chọn đoạn có hook, dựng hook-trước-intro, bảng tên cho người nói, kèm cảnh minh hoạ vẽ theo lời khi ý cần hình, burn phụ đề, nghiệm thu tự động. Kích hoạt khi user nói \"cắt clip ngắn\", \"làm Reels\", \"Shorts\", \"TikTok\", \"clip dọc\", \"clip quảng bá chương trình\", \"cắt đoạn hay nhất\", \"làm teaser\", \"bản gọn 60-90 giây\". KHÔNG dùng để dựng bài dài hoàn chỉnh (phim-dung-bai), dàn góc podcast nhiều máy (phim-multicam), hay phim tài liệu phỏng vấn (phim-tai-lieu-phong-van)."
+description: "Cắt clip ngắn Reels/Shorts/TikTok hoặc clip quảng bá 30-180 giây (khung dọc 9:16 hoặc ngang) từ bài giảng, podcast, buổi nói chuyện, phim đã có trong thư mục \"xuong-phim-claude\" - chọn đoạn có hook, dựng hook-trước-intro, bảng tên cho người nói, kèm cảnh minh hoạ vẽ theo lời khi ý cần hình (kể cả loạt short dọc mặt trên, motion graphic dưới), burn phụ đề, nghiệm thu tự động. Kích hoạt khi user nói \"cắt clip ngắn\", \"làm Reels\", \"Shorts\", \"TikTok\", \"clip dọc\", \"clip quảng bá chương trình\", \"cắt đoạn hay nhất\", \"làm teaser\", \"bản gọn 60-90 giây\", \"short motion graphic\", \"mặt trên cảnh dưới\". KHÔNG dùng để dựng bài dài hoàn chỉnh (phim-dung-bai), dàn góc podcast nhiều máy (phim-multicam), hay phim tài liệu phỏng vấn (phim-tai-lieu-phong-van)."
 ---
 
 # Clip ngắn cho Reels, Shorts và quảng bá
@@ -46,6 +46,7 @@ Nháp tăng số mỗi vòng để không ghi đè bản người dùng đang xe
 - **Nhịp cắt**: được phép sát hơn bài dài, bỏ mọi khoảng thở trên 0,8 giây trừ khoảng lặng có chủ đích trước câu chốt.
 - **Điểm kết là chữ cuối của ý đã trọn**, rồi outro lên ngay. Mốc cuối của cue hay của đoạn nhận dạng thường kéo sang nửa câu kế tiếp, nên chốt bằng đường bao năng lượng 10-20 ms của chính thành phẩm: khoảng trũng 0,05-0,15 giây ngay sau chữ cuối, `fadeOut` 0,05 giây. Người dùng nghe ra "câu thừa" thì đó là lỗi cắt, không phải gu: rút `out`, bớt phần giữ cuối của cảnh bằng `overlay.duration` kèm `giu`, sửa cue cuối, dựng, burn, nghiệm thu lại.
 - **Cảnh minh hoạ trong clip ngắn** (khi lời là một lập luận có ví dụ hay quy trình): một chủ thể hình biến hình xuyên suốt theo lời, lấy đúng ví dụ người nói nêu; mặt ở nửa trên, thẻ ở nửa dưới, cảnh bắt đầu sau LowerThird, chừa 1-2 giây giữ yên cuối cảnh. Nguyên lý và nhịp làm việc: `skills/phim-clip-ngan/references/clip-co-minh-hoa.md` mục 3-5; cách vẽ: skill phim-canh-minh-hoa.
+- **Loạt short dọc "mặt trên, cảnh dưới"** (nguồn một người nói, nhiều đoạn giảng cần hình ẩn dụ hay sơ đồ, cả loạt đồng đều): dùng bố cục `mat-tren` và bộ công cụ `tools/short-*.py`, `tools/short-*.sh` thay vì tự viết timeline từng clip. Quy trình, thông số crop, cách chọn mép cắt ở quãng lặng, cách viết cảnh bằng dữ liệu, phụ đề, gói đăng tải và các bẫy máy-sandbox: `skills/phim-clip-ngan/references/short-mat-tren.md`.
 - Hai hệ mốc và các điểm hay nhầm khác: `_chung/timeline-va-dung.md`. assemble tự kiểm hình = tiếng từng part và thành phẩm, dừng khi KHÔNG ĐẠT: đọc bảng chẩn đoán, tìm nguyên nhân rồi mới chạy lại.
 
 ## Bước 3 - phụ đề (mặc định CÓ cho clip dọc)
@@ -69,4 +70,4 @@ File đã burn là bản HOÀN CHỈNH: ghi vào `Du an/<x>/xuat-hoan-chinh/<slu
 
 Báo kết quả kèm dòng "nghiệm thu máy: ĐẠT" và danh sách ngắn các điểm cần người dùng nghe lại (chữ nhận dạng chưa chắc, con số người nói ước lượng, chức danh, chỗ đã cắt bỏ tham chiếu ngoài clip). Một bài giảng tốt thường ra 3-5 clip: sau khi người dùng duyệt clip đầu, đề nghị dựng loạt còn lại cùng format cho đồng đều.
 
-<!-- ban-nguon: phim-clip-ngan 2026-10-07 d744f636 -->
+<!-- ban-nguon: phim-clip-ngan 2026-10-09 116a784c -->

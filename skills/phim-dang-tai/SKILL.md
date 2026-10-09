@@ -37,7 +37,7 @@ Ghi ra (trong đầu hoặc nháp) bốn điều trước khi viết chữ nào:
 
 1. Người xem nhận được gì sau clip, nói trong một câu.
 2. Một hoặc hai cụm từ khoá chính, là cách một người Việt thật sự gõ tìm chủ đề này (không phải tên nội bộ của khung).
-3. Những gì không được đưa lên chữ: tên người thứ ba được nhắc trong clip, số liệu chưa soát nguồn, chuyện kể lại chưa kiểm chứng, nhận định dễ gây hiểu lầm khi tách khỏi ngữ cảnh. Những điều này vào `ghi_chu_kiem`.
+3. Những gì không được đưa lên chữ: tên người thứ ba được nhắc trong clip, số liệu chưa soát nguồn, chuyện kể lại chưa kiểm chứng, nhận định dễ gây hiểu lầm khi tách khỏi ngữ cảnh. Chữ công khai (tiêu đề, mô tả, status, thumbnail) cũng tránh ngày tháng, giá tiền, tên thương hiệu của bên khác và mốc thời gian tương đối ("hôm qua", "tuần trước"): chúng cũ nhanh hoặc dễ gán sai; có trong lời thì giữ trong lời. Những điều này vào `ghi_chu_kiem`.
 4. Chương: mốc lấy từ tool, không gõ tay. Clip một góc có chapter trong timeline: `<video>.chapters.txt` do assemble ghi. Clip multicam hay chương theo mốc nội dung: `tools/chuong-youtube.py --map ... --chuong <json> --ket "<tên chương outro>"` (mốc lấy thẳng từ kế hoạch pill). Clip dọc dưới 3 phút không cần chương.
 
 ## Bước 2 - chữ: `dang-tai.json`
@@ -141,4 +141,4 @@ Báo người dùng trong cùng lượt với báo giao clip: đường dẫn `D
 - Người dùng chọn phương án, sửa chữ, hay chê một kiểu thumbnail: một dòng vào sổ tay góp ý của `phong-cach/PHONG-CACH.md`; lặp lần hai thì sửa mặc định (PHONG-CACH mục 8, `thumbnailDefaults` trong `Thumbnail.tsx`, mẫu trong `references/mau-dang-tai.md`).
 - Kết quả thử nghiệm A/B người dùng kể lại (phương án nào thắng, kiểu chữ nào): ghi vào `docs/BAI-HOC.md` chủ đề "Đăng tải" kèm tên clip; đủ nhiều thì chưng thành nguyên lý trong `references/nghien-cuu-thumbnail.md`.
 
-<!-- ban-nguon: phim-dang-tai 2026-10-07 3946e3bb -->
+<!-- ban-nguon: phim-dang-tai 2026-10-09 625985c0 -->

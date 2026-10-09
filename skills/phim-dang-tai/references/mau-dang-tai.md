@@ -59,7 +59,7 @@ Tệp để chép ra khi soạn gói đăng tải (skill phim-dang-tai). Khuôn 
 - `người dùng`: mã khung trong `khung/khung.json`; "k12#1" là mặt thứ hai của khung k12 (khung nhiều mặt).
 - Tuỳ chọn từng bản: `photoSide` ("left", "right"), `faceScale` (chiều cao mặt so với chiều cao ô ảnh; mặc định 0.34 chia đôi một ảnh, 0.30 hai ảnh, 0.30 toàn ảnh, 0.26 ô vòm), `headlineSize` (px, chỉ khi ước lượng tự động sai), `theme`, `logo`, `chinh_anh` ({"k05c": {"focusX": 0.4, "focusY": 0.45, "faceScale": 0.3}}).
 - Cỡ khung theo `faceScale` (chiều cao mặt / chiều cao ô ảnh): cận mặt 0.30-0.34; vừa 0.16-0.22; rộng zoom out 0.13 (`toan-anh`) hay 0.15-0.16 (`chia-doi`, ô vòm). Khung rộng cần ảnh nguồn lớn (cắt từ 4K, 16:9 hoặc vuông quanh người và màn hình) để vẫn phủ kín ô sau khi thu. Khai trong `khung.json` bằng `loai: "rong"`.
-- Ngưỡng chữ: lệnh `job` báo lỗi khi chữ tiêu đề ước dưới 110 px (khung ngang) hay 95 px (khung dọc).
+- Ngưỡng chữ: lệnh `job` báo lỗi khi chữ tiêu đề ước dưới 110 px (khung ngang) hay 95 px (khung dọc). Với thumbnail ngang, dòng dài nhất khoảng 8-10 ký tự mới qua cổng 110 px: chia chữ thành ba dòng ngắn (ví dụ "3 phút / mỗi ngày / cho mình"), đừng thu nhỏ chữ; nhiều short trong một loạt chín từng bị báo lỗi vì chữ ước chỉ 81-102 px.
 
 ## 3. Khuôn mô tả YouTube
 

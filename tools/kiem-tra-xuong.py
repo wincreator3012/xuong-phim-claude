@@ -164,6 +164,9 @@ def main():
     print("→ kiểm vi mờ ở mối nối (r8)", flush=True)
     if not kiem_vi_mo(out):
         raise SystemExit("! Vi mờ ở mối nối chưa đúng - xem dòng ✗ ở trên")
+    print("→ kiểm bố cục mat-tren của short dọc (r10/r11: ô mặt trên, nền giấy dưới, cropZoom)", flush=True)
+    if not kiem_mat_tren(proj):
+        raise SystemExit("! Bố cục mat-tren chưa đúng - xem dòng ✗ ở trên (short dọc mặt trên cảnh dưới sẽ hỏng)")
     print("→ kiem-dong-bo.py (đồng bộ hình-tiếng tuyệt đối: dựng thử chớp/click)", flush=True)
     p = subprocess.run([sys.executable, os.path.join(TOOLS, "kiem-dong-bo.py")], text=True)
     if p.returncode != 0:
@@ -218,6 +221,41 @@ def kiem_r7(proj, out):
         hien = v > 215
         print(f"  {'✓' if hien == phai_hien else '✗'} {ten}: độ sáng ô thẻ {v:.0f}")
         ok = ok and hien == phai_hien
+    return ok
+
+
+def kiem_mat_tren(proj):
+    """Dựng một đoạn 4 giây khung dọc với layout mat-tren (cropFocus, cropFocusY, cropZoom) từ nguồn thử rồi đo trên khung:
+    tỉ lệ 9:16, ô mặt phủ kín tới hàng paneH (nguồn thử có màu, không phải màu giấy), phần dưới đúng màu nền giấy."""
+    tl = {"aspect": "doc", "fps": 30, "nen": "#FAF7F1", "paneH": 960,
+          "segments": [{"type": "video", "src": "nguon/chinh.mp4", "in": 2.0, "out": 6.0, "snap": False,
+                        "layout": "mat-tren", "cropFocus": 0.5, "cropFocusY": 0.0, "cropZoom": 1.12, "label": "mat-tren-thu"}]}
+    with open(os.path.join(proj, "timeline-mat-tren.json"), "w", encoding="utf-8") as f:
+        json.dump(tl, f, ensure_ascii=False, indent=1)
+    p = subprocess.run([sys.executable, "tools/assemble.py", "--project", proj, "--timeline", "timeline-mat-tren.json",
+                        "--preview", "--out", "mat-tren-thu"], capture_output=True, text=True)
+    out = os.path.join(proj, "xuat-nhap", "mat-tren-thu-nhap.mp4")
+    if p.returncode != 0 or not os.path.isfile(out):
+        print("  ✗ assemble.py không dựng được đoạn mat-tren:", (p.stdout + p.stderr)[-600:])
+        return False
+    kt = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height",
+                         "-of", "csv=p=0", out], capture_output=True, text=True).stdout.strip().split(",")
+    w, h = int(kt[0]), int(kt[1])
+    ok = abs(w / h - 9 / 16) < 0.01
+    print(f"  {'✓' if ok else '✗'} khung {w}x{h} (cần tỉ lệ 9:16)")
+
+    def mau(y):
+        r = subprocess.run(["ffmpeg", "-hide_banner", "-v", "error", "-ss", "1", "-i", out, "-frames:v", "1", "-vf",
+                            f"scale=1080:1920,crop=40:10:520:{y},scale=1:1,format=rgb24", "-f", "rawvideo", "-"],
+                           capture_output=True)
+        return tuple(r.stdout[:3]) if len(r.stdout) >= 3 else (0, 0, 0)
+    giay = (250, 247, 241)
+    for y, phai_giay in ((100, False), (900, False), (930, False), (990, True), (1700, True)):
+        c = mau(y)
+        d = max(abs(c[i] - giay[i]) for i in range(3))
+        dung = (d <= 8) if phai_giay else (d >= 30)
+        ok = ok and dung
+        print(f"  {'✓' if dung else '✗'} hàng {y} của khung 1920: {c} ({'nền giấy' if phai_giay else 'ô mặt'})")
     return ok
 
 

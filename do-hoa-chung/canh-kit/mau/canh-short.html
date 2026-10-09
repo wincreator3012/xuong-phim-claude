@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="vi" data-theme="giay" data-khung="doc">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>__TITLE__</title>
+<!-- canh-kit -->
+<!-- Khung cảnh dữ liệu cho short dọc (bố cục mat-tren): thẻ nửa dưới trên nền giấy, mặt người nói ở ô trên, họ màu giấy.
+     Mọi thứ là hàm của t. Dữ liệu (đã đổi sang đồng hồ cảnh) do tools/short-canh.py điền vào biến D bên dưới.
+     Loại phần tử: dot, link, chip, text, path, ring, rect; vai màu: chinh, ketqua, tot, xau, khac, mo, chu, trang.
+     Cách viết dữ liệu: skills/phim-clip-ngan/references/short-mat-tren.md mục 5. -->
+<style>
+  :root[data-alpha='1'] .san::before { display: none; }
+  .the-noi {
+    position: absolute; left: calc(var(--u) * 4); right: calc(var(--u) * 4);
+    top: calc(var(--u) * 90.6); height: calc(var(--u) * 66);
+    padding: calc(var(--u) * 2) calc(var(--u) * 2.4) calc(var(--u) * 2.2);
+    display: flex; flex-direction: column; gap: calc(var(--u) * 1);
+    background: color-mix(in srgb, var(--nen-2) 96%, transparent);
+  }
+  .hang { display: flex; align-items: center; justify-content: space-between; min-height: calc(var(--u) * 4.6); }
+  .the-noi .kicker { font-size: calc(var(--u) * 2.5); padding: calc(var(--u) * 0.8) calc(var(--u) * 2.2); }
+  .side { font-weight: 800; font-size: calc(var(--u) * 3); color: var(--chu-phu); }
+  .side b { color: var(--c-chinh); font-size: calc(var(--u) * 4); }
+  .than { position: relative; flex: 1; min-height: 0; }
+  .luoi { position: absolute; left: 0; right: 0; top: 0; bottom: calc(var(--u) * 6.6); width: 100%; height: calc(100% - var(--u) * 6.6); overflow: visible; }
+  .cap { position: absolute; left: 0; right: 0; bottom: 0; height: calc(var(--u) * 5.6); display: flex; align-items: center; justify-content: center; }
+  .cap span { font-weight: 700; font-size: calc(var(--u) * 3.3); color: var(--chu); padding: calc(var(--u) * 0.7) calc(var(--u) * 2);
+    border-radius: 999px; background: color-mix(in srgb, var(--c-chinh) 9%, white);
+    border: 1px solid color-mix(in srgb, var(--c-chinh) 35%, transparent); white-space: nowrap; }
+  svg text { font-family: var(--font-chu); }
+  svg text.hl { paint-order: stroke; stroke: var(--nen-2); stroke-width: 7px; stroke-linejoin: round; }
+</style>
+</head>
+<body>
+<div class="san">
+  <div class="the the-noi" id="the">
+    <div class="hang">
+      <span class="kicker vai-chinh" id="kick"></span>
+      <span class="side" id="side"></span>
+    </div>
+    <div class="than">
+      <svg class="luoi" id="luoi" viewBox="0 0 985 520" preserveAspectRatio="xMidYMid meet"></svg>
+      <div class="cap" id="cap"></div>
+    </div>
+  </div>
+</div>
+<script>
+const D = __DATA__;
+const T0 = __T0__;
+const NS = 'http://www.w3.org/2000/svg';
+const ROLE = {chinh: 'var(--c-chinh)', ketqua: 'var(--c-ketqua)', tot: 'var(--c-tot)', xau: 'var(--c-xau)', khac: 'var(--c-khac)', mo: 'var(--chu-mo)', chu: 'var(--chu)', trang: '#fff'};
+function el(tag, attrs, parent) {
+  const n = document.createElementNS(NS, tag);
+  for (const k in attrs) n.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(n);
+  return n;
+}
+function lines(node, txt, x, size, lh) {
+  const ls = String(txt).split('\n');
+  ls.forEach((s, i) => { const ts = el('tspan', {x: x, dy: i === 0 ? 0 : lh}, node); ts.textContent = s; });
+}
+const BY = {};
+let ITEMS = [];
+
+CANH.canh({
+  thoiLuong: __DUR__,
+  khung: ['doc'],
+  chuanBi(K) {
+    document.getElementById('kick').textContent = D.kicker || '';
+    const sv = document.getElementById('luoi');
+    ITEMS = D.items.map((it) => {
+      const o = {it};
+      const g = el('g', {opacity: 0}, sv); o.g = g;
+      const rl = ROLE[it.role || 'chinh'];
+      if (it.k === 'dot') {
+        const r = it.r || 40;
+        o.halo = el('circle', {cx: 0, cy: 0, r: r + 14, fill: 'none', stroke: rl, 'stroke-width': 5, opacity: 0}, g);
+        o.body = el('g', {}, g);
+        if (it.person) {
+          o.c = el('circle', {cx: 0, cy: 0, r: r, fill: rl}, o.body);
+          el('circle', {cx: 0, cy: -r * 0.27, r: r * 0.34, fill: '#fff'}, o.body);
+          el('path', {d: `M ${-r * 0.58} ${r * 0.56} C ${-r * 0.5} ${r * 0.12} ${r * 0.5} ${r * 0.12} ${r * 0.58} ${r * 0.56} Z`, fill: '#fff'}, o.body);
+        } else {
+          o.c = el('circle', {cx: 0, cy: 0, r: r, fill: rl}, o.body);
+          if (it.txt) {
+            const tx = el('text', {x: 0, y: (it.size || 28) * 0.36, 'text-anchor': 'middle', 'font-size': it.size || 28, 'font-weight': 800, fill: '#fff'}, o.body);
+            lines(tx, it.txt, 0, it.size || 28, (it.size || 28) * 1.1);
+            if (String(it.txt).includes('\n')) tx.setAttribute('y', -(it.size || 28) * 0.2);
+          }
+        }
+        if (it.below) {
+          const tb = el('text', {x: 0, y: r + 34, 'text-anchor': 'middle', 'font-size': it.bsize || 30, 'font-weight': 700, fill: 'var(--chu)', class: 'hl'}, g);
+          lines(tb, it.below, 0, it.bsize || 30, (it.bsize || 30) * 1.15);
+        }
+      } else if (it.k === 'link') {
+        o.ln = el('line', {x1: 0, y1: 0, x2: 0, y2: 0, stroke: rl, 'stroke-width': it.w || 5, 'stroke-linecap': 'round', 'stroke-dasharray': it.dash ? '3 12' : ''}, g);
+      } else if (it.k === 'chip') {
+        o.rect = el('rect', {x: 0, y: 0, width: 10, height: 10, rx: 0, fill: it.solid ? rl : `color-mix(in srgb, ${rl} 12%, white)`, stroke: `color-mix(in srgb, ${rl} 45%, transparent)`, 'stroke-width': 2}, g);
+        o.tx = el('text', {x: 0, y: 0, 'text-anchor': 'middle', 'font-size': it.size || 30, 'font-weight': 800, fill: it.solid ? '#fff' : rl}, g);
+        lines(o.tx, it.txt, 0, it.size || 30, (it.size || 30) * 1.15);
+      } else if (it.k === 'text') {
+        o.tx = el('text', {x: 0, y: 0, 'text-anchor': it.anchor || 'middle', 'font-size': it.size || 34, 'font-weight': it.wt || 800, fill: it.ink ? ROLE[it.ink] : rl, class: it.hl ? 'hl' : ''}, g);
+        lines(o.tx, it.txt, 0, it.size || 34, (it.size || 34) * 1.18);
+      } else if (it.k === 'path') {
+        o.pa = el('path', {d: it.d, fill: 'none', stroke: rl, 'stroke-width': it.w || 8, 'stroke-linecap': 'round', 'stroke-linejoin': 'round'}, g);
+        o.len = o.pa.getTotalLength();
+        if (it.head) o.hd = el('path', {d: 'M -22 -14 L 0 0 L -22 14', fill: 'none', stroke: rl, 'stroke-width': it.w || 8, 'stroke-linecap': 'round', 'stroke-linejoin': 'round'}, g);
+      } else if (it.k === 'ring') {
+        o.rings = (it.t || []).map(() => el('circle', {cx: 0, cy: 0, r: 10, fill: 'none', stroke: rl, 'stroke-width': 5, opacity: 0}, sv));
+      } else if (it.k === 'rect') {
+        o.rect = el('rect', {x: it.x, y: it.y, width: it.w, height: it.h, rx: it.rx || 22, fill: it.fillc ? ROLE[it.fillc] : `color-mix(in srgb, ${rl} 10%, white)`, stroke: `color-mix(in srgb, ${rl} 45%, transparent)`, 'stroke-width': 3, 'stroke-dasharray': it.dash ? '10 10' : ''}, g);
+      }
+      if (it.id) BY[it.id] = o;
+      return o;
+    });
+    // đo chip
+    ITEMS.forEach((o) => {
+      if (o.it.k === 'chip') {
+        const bb = o.tx.getBBox();
+        const w = bb.width + 44, h = bb.height + 22;
+        o.w = w; o.h = h;
+        o.rect.setAttribute('width', w); o.rect.setAttribute('height', h); o.rect.setAttribute('rx', h / 2);
+        o.rect.setAttribute('x', -w / 2); o.rect.setAttribute('y', -h / 2);
+        o.tx.setAttribute('y', 0);
+        const bb2 = o.tx.getBBox();
+        o.tx.setAttribute('transform', `translate(0 ${-(bb2.y + bb2.height / 2)})`);
+      }
+    });
+    this.capSp = document.createElement('span'); document.getElementById('cap').appendChild(this.capSp);
+  },
+  ve(t, K) {
+    const T = t + T0;
+    const {p, hien, E, song} = K;
+    hien('#the', D.card === null ? 1 : p(T, D.card, 0.6), {y: 50});
+    const posOf = (o) => {
+      const it = o.it; let x = it.x, y = it.y;
+      (it.mv || []).forEach((m) => { const q = p(T, m[0], m[3] || 0.9, E.vaora); x = x + (m[1] - x) * q; y = y + (m[2] - y) * q; });
+      return [x, y];
+    };
+    const sclOf = (o) => { let s = o.it.s0 === undefined ? 1 : o.it.s0; (o.it.sc || []).forEach((m) => { const q = p(T, m[0], m[2] || 0.5, E.vaora); s = s + (m[1] - s) * q; }); return s; };
+    ITEMS.forEach((o) => {
+      const it = o.it;
+      const ai = it.at === undefined ? -1000 : it.at;
+      const a = p(T, ai, it.in || 0.5) * (it.out === undefined ? 1 : 1 - p(T, it.out, 0.4));
+      let op = a * (it.op === undefined ? 1 : it.op);
+      if (it.k === 'dot') {
+        const [x, y] = posOf(o); const sc = sclOf(o) * (0.55 + 0.45 * a) * (it.pulse ? 1 + 0.05 * song(T, 2.4) : 1);
+        o.g.setAttribute('transform', `translate(${x} ${y}) scale(${sc})`);
+        if (it.fill) {
+          let cur = it.role || 'chinh', prv = cur, tt = -1000;
+          it.fill.forEach((f) => { if (T >= f[0]) { prv = cur; cur = f[1]; tt = f[0]; } });
+          const mix = p(T, tt, 0.4);
+          o.c.setAttribute('fill', `color-mix(in srgb, ${ROLE[cur]} ${Math.round(mix * 100)}%, ${ROLE[prv]})`);
+        }
+        const hl = it.halo ? Math.max(0, p(T, it.halo[0], 0.4) - (it.halo[1] === undefined ? 0 : p(T, it.halo[1], 0.4))) : 0;
+        o.halo.setAttribute('opacity', hl * (0.5 + 0.35 * Math.sin((T - (it.halo ? it.halo[0] : 0)) * 4)));
+      } else if (it.k === 'link') {
+        const A = BY[it.a], B = BY[it.b];
+        const pa = posOf(A), pb = posOf(B);
+        const dx = pb[0] - pa[0], dy = pb[1] - pa[1], d = Math.hypot(dx, dy) || 1;
+        const ra = (A.it.r || 40) * sclOf(A) * 0.9, rb = (B.it.r || 40) * sclOf(B) * 0.9;
+        const q = p(T, ai, it.dur || 0.6);
+        const x1 = pa[0] + dx / d * ra, y1 = pa[1] + dy / d * ra;
+        const x2f = pb[0] - dx / d * rb, y2f = pb[1] - dy / d * rb;
+        o.ln.setAttribute('x1', x1); o.ln.setAttribute('y1', y1);
+        o.ln.setAttribute('x2', x1 + (x2f - x1) * q); o.ln.setAttribute('y2', y1 + (y2f2(y1, y2f, q)));
+        op = (it.out === undefined ? 1 : 1 - p(T, it.out, 0.4)) * (q > 0 ? 1 : 0) * (it.op === undefined ? 1 : it.op);
+        // hiệu ứng xung nhẹ
+        if (it.pulse && T >= it.pulse[0]) op *= 0.65 + 0.35 * (0.5 + 0.5 * Math.sin((T - it.pulse[0]) * 5));
+        o.g.setAttribute('transform', '');
+      } else if (it.k === 'chip') {
+        const sc = 0.8 + 0.2 * a;
+        o.g.setAttribute('transform', `translate(${it.x} ${it.y + (1 - a) * 14}) scale(${sc})`);
+        if (it.fadeTo !== undefined) op *= (1 - (1 - it.fadeTo) * p(T, it.fadeAt, 0.5));
+      } else if (it.k === 'text') {
+        o.g.setAttribute('transform', `translate(${it.x} ${it.y + (1 - a) * 12})`);
+        if (it.fadeTo !== undefined) op *= (1 - (1 - it.fadeTo) * p(T, it.fadeAt, 0.5));
+      } else if (it.k === 'path') {
+        const q = p(T, ai, it.dur || 0.9, E.vaora);
+        o.pa.setAttribute('stroke-dasharray', o.len); o.pa.setAttribute('stroke-dashoffset', o.len * (1 - q));
+        op = (it.out === undefined ? 1 : 1 - p(T, it.out, 0.4)) * (q > 0 ? 1 : 0);
+        if (o.hd) {
+          const L = Math.max(0, o.len * q), P1 = o.pa.getPointAtLength(L), P0 = o.pa.getPointAtLength(Math.max(0, L - 4));
+          const ang = Math.atan2(P1.y - P0.y, P1.x - P0.x) * 180 / Math.PI;
+          o.hd.setAttribute('transform', `translate(${P1.x} ${P1.y}) rotate(${ang})`);
+          o.hd.setAttribute('opacity', q > 0.92 ? 1 : 0);
+        }
+      } else if (it.k === 'ring') {
+        const [x, y] = posOf(BY[it.of]); const r0 = (BY[it.of].it.r || 40);
+        o.rings.forEach((c, i) => {
+          const ph = (T - it.t[i]) / 1.0;
+          c.setAttribute('cx', x); c.setAttribute('cy', y);
+          if (ph > 0 && ph < 1) { c.setAttribute('r', r0 + 46 * E.ra(ph)); c.setAttribute('opacity', 0.6 * (1 - ph)); }
+          else c.setAttribute('opacity', 0);
+        });
+        op = 0;
+      } else if (it.k === 'rect') {
+        o.g.setAttribute('transform', `translate(0 ${(1 - a) * 12})`);
+      }
+      o.g.setAttribute('opacity', op);
+    });
+    // phụ: bên phải hàng tiêu đề
+    let sd = '';
+    (D.side || []).forEach((s) => { if (T >= s[0]) sd = s[1]; });
+    document.getElementById('side').innerHTML = sd;
+    // chú thích
+    let cp = null;
+    (D.caps || []).forEach((c) => { if (T >= c[0]) cp = c; });
+    if (cp && cp[1]) { this.capSp.textContent = cp[1]; this.capSp.style.opacity = String(p(T, cp[0], 0.35)); this.capSp.style.display = ''; }
+    else { this.capSp.style.display = 'none'; }
+  }
+});
+function y2f2(y1, y2f, q) { return (y2f - y1) * q; }
+</script>
+</body>
+</html>

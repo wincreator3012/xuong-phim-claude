@@ -2,8 +2,8 @@
 "_huong-dan": "Bản đồ tệp của bản thiết kế xưởng phim. AI dựng xưởng: đọc DUNG-XUONG.md; lấy từng tệp vai 'chep' theo mẫu địa chỉ 'raw' (thay {ref} bằng mã commit đang dùng hoặc 'main', {p} bằng đường dẫn đã mã hoá URL), kiểm 'sha' (sha1 của 'blob <cỡ>\\0' + nội dung, giống git hash-object), tệp 'chay' thì cấp quyền chạy. Tệp vai 'ban-mau' không chép. Bản đồ này không tự liệt kê mình.",
 "repo": "https://github.com/wincreator3012/xuong-phim-claude",
 "raw": "https://raw.githubusercontent.com/wincreator3012/xuong-phim-claude/{ref}/{p}",
-"so_tep": 205,
-"so_tep_chep": 199,
+"so_tep": 214,
+"so_tep_chep": 208,
 "tep": [
 {
 "p": ".gitattributes",
@@ -75,8 +75,8 @@
 },
 {
 "p": "THAY-DOI.md",
-"c": 4349,
-"sha": "46d903070654edfdd49233581a77155295254f6b",
+"c": 5734,
+"sha": "3745fe190a8c2252d05cb625cfceda63cc3e5593",
 "vai": "ban-mau"
 },
 {
@@ -329,6 +329,12 @@
 "nhi_phan": true
 },
 {
+"p": "do-hoa-chung/canh-kit/mau/canh-short.html",
+"c": 12496,
+"sha": "9ab75b25a807f1ac09696fb8739b34294142a1b1",
+"vai": "chep"
+},
+{
 "p": "do-hoa-chung/canh-kit/mau/cua-so-dung-nap.html",
 "c": 12629,
 "sha": "d800662e67bacf4375c85306e307c799b2b80604",
@@ -360,14 +366,14 @@
 },
 {
 "p": "docs/BAI-HOC.md",
-"c": 83235,
-"sha": "31d0f22c2651be0cf6346aae6609706c0f2b741a",
+"c": 88372,
+"sha": "9e4d2f6bd0eb266dfdd5728031f3fdb7a0e8d348",
 "vai": "chep"
 },
 {
 "p": "docs/QUY-TRINH-KY-THUAT.md",
-"c": 52070,
-"sha": "0a776d93a8e96eab2bb32988e3ba7799c50230aa",
+"c": 52803,
+"sha": "d55bd969f7a5f323bfbb688ec6de188c02285c85",
 "vai": "chep"
 },
 {
@@ -498,8 +504,8 @@
 },
 {
 "p": "skills/phim-canh-minh-hoa/SKILL.md",
-"c": 12735,
-"sha": "e6686dd3e8664b6c7cddd529b1381bdc4f491872",
+"c": 13091,
+"sha": "d9ec765ef8c844fc685ca5702e1843a3c5914933",
 "vai": "chep"
 },
 {
@@ -516,14 +522,14 @@
 },
 {
 "p": "skills/phim-clip-ngan/SKILL.md",
-"c": 12547,
-"sha": "9ba65e630ad0fb98db202a1dc672419851a9e63d",
+"c": 13204,
+"sha": "c6e82df0efa23aed1d5f5fe165a532eeba9e4619",
 "vai": "chep"
 },
 {
 "p": "skills/phim-clip-ngan/references/clip-co-minh-hoa.md",
-"c": 10186,
-"sha": "3137c2be0ef5929a54031cf7f6122690d0461d65",
+"c": 10397,
+"sha": "187bd1acb7513121a898b93cccfced680a4822f6",
 "vai": "chep"
 },
 {
@@ -533,15 +539,21 @@
 "vai": "chep"
 },
 {
+"p": "skills/phim-clip-ngan/references/short-mat-tren.md",
+"c": 11997,
+"sha": "4e0bd5812fd7dfba392ae530df3090c047dae992",
+"vai": "chep"
+},
+{
 "p": "skills/phim-dang-tai/SKILL.md",
-"c": 19012,
-"sha": "ca246462cdae2371b7f71ea411864fa085b77b9f",
+"c": 19299,
+"sha": "4bb523b3b050cbcb9e99cf33c97eeb3efc01ea98",
 "vai": "chep"
 },
 {
 "p": "skills/phim-dang-tai/references/mau-dang-tai.md",
-"c": 7538,
-"sha": "16674f82f42287cbe75c4d730c3fb62e154eacce",
+"c": 7830,
+"sha": "c4384475b4a604c9dc86f0454d1d0ef9f2509e43",
 "vai": "chep"
 },
 {
@@ -942,8 +954,8 @@
 },
 {
 "p": "tools/assemble.py",
-"c": 73239,
-"sha": "7647f4fbc8d9029d053b91001c14167b32cb1dc5",
+"c": 73434,
+"sha": "3b915825405bdfcb46967f9a9e3d06a2b99c710b",
 "vai": "chep"
 },
 {
@@ -1117,8 +1129,8 @@
 },
 {
 "p": "tools/kiem-tra-xuong.py",
-"c": 18024,
-"sha": "eaa449f760b7a90a298d5a40d2b9866e07b587b5",
+"c": 20721,
+"sha": "74a0117f1b6a53cfd7d8addf43f797f7babd56e5",
 "vai": "chep"
 },
 {
@@ -1234,6 +1246,55 @@
 "c": 12139,
 "sha": "bfee4d889a9a260c3c935db5360acd1e0d019058",
 "vai": "chep"
+},
+{
+"p": "tools/short-canh.py",
+"c": 3496,
+"sha": "12bb06b027096526e55a2cafaaecb870e997f8b2",
+"vai": "chep",
+"chay": true
+},
+{
+"p": "tools/short-chot.sh",
+"c": 1334,
+"sha": "518bbabc6a9caf398416999aac492b07124d49ec",
+"vai": "chep",
+"chay": true
+},
+{
+"p": "tools/short-dung.py",
+"c": 12470,
+"sha": "853b0e22434b9f283bf3591b5b35ff646571effd",
+"vai": "chep",
+"chay": true
+},
+{
+"p": "tools/short-khung.sh",
+"c": 1957,
+"sha": "b238a02f028bf1566ee70a3f919568ab05265b78",
+"vai": "chep",
+"chay": true
+},
+{
+"p": "tools/short-render-canh.sh",
+"c": 1460,
+"sha": "b164ba5e28f4a259ce8ea16a519b7f123ea46676",
+"vai": "chep",
+"chay": true
+},
+{
+"p": "tools/short-soi.py",
+"c": 6087,
+"sha": "48430af5eebb03e0b93fe6f2f81f2c823263add3",
+"vai": "chep",
+"chay": true
+},
+{
+"p": "tools/short-xuat.sh",
+"c": 2029,
+"sha": "c26f2f447220e966bfe04bf63a50b64a23f1d340",
+"vai": "chep",
+"chay": true
 },
 {
 "p": "tools/slide-khop.py",
