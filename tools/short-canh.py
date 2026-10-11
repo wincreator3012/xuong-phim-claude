@@ -22,12 +22,18 @@ def build(grp, tag, spec_grp):
     for p_ in parts:
         cum.append(c); c += p_[1] - p_[0]
     def conv(P):
-        for i, p_ in enumerate(parts):
+        for i, p_ in enumerate(parts):   # trước hết tìm đoạn chứa P (các đoạn có thể không theo thứ tự nguồn)
             if p_[0] - 0.05 <= P <= p_[1] + 0.05:
                 return round(cum[i] + min(max(P, p_[0]), p_[1]) - p_[0], 3)
-            if P < p_[0]:
-                return round(cum[i], 3)
-        return round(c, 3)
+        if all(parts[i][1] <= parts[i + 1][0] for i in range(len(parts) - 1)):   # các đoạn theo thứ tự nguồn
+            for i, p_ in enumerate(parts):
+                if P < p_[0]:
+                    return round(cum[i], 3)
+            return round(c, 3)
+        # đoạn không theo thứ tự nguồn: về mép gần nhất của đoạn gần nhất
+        best = min(range(len(parts)), key=lambda i: min(abs(P - parts[i][0]), abs(P - parts[i][1])))
+        p_ = parts[best]
+        return round(cum[best] + ((p_[1] - p_[0]) if abs(P - p_[1]) < abs(P - p_[0]) else 0.0), 3)
     def ci(x):
         return [conv(x[0])] + x[1:] if isinstance(x, list) else x
     def conv_item(it):

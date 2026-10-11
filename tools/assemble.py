@@ -36,7 +36,8 @@ timeline.json:
      "fadeIn": 0, "fadeOut": 0,       // giây; 0 = cắt thẳng
      "fadeOutAudio": 0,               // giây; CHỈ mờ tiếng cuối segment, giữ hình cắt thẳng
      "cropFocus": 0.5,                // khung dọc: tâm crop ngang (0=trái, 1=phải)
-     "chapter": "Tên chương",        // tùy chọn, để tạo chapters.txt
+     "chapter": "Tên chương",        // tùy chọn, để tạo chapters.txt (intro: "chapterIntro" ở cấp cao nhất,
+                                      // mặc định "Mở đầu"; phim chữ tiếng Anh đặt "Intro")
      "overlay": {"src": "do-hoa/ngang/lt.webm", "at": 1.0},  // bảng tên alpha
                                       // overlay thêm "duration": giây hiện trên hình khác độ dài file
                                       // (dài hơn: giữ khung tại "giu", mặc định giữa file; ngắn hơn: bỏ
@@ -1222,7 +1223,8 @@ class Assembler:
         f = os.path.splitext(self.out_file)[0] + ".chapters.txt"
         with open(f, "w", encoding="utf-8") as fh:
             if self.chapters[0][0] > 0.01:
-                fh.write("00:00 Mở đầu\n")
+                # tên chương của intro: "chapterIntro" ở cấp cao nhất (phim chữ tiếng Anh: "Intro"), mặc định "Mở đầu"
+                fh.write(f"00:00 {self.tl.get('chapterIntro') or 'Mở đầu'}\n")
             for t, name in self.chapters:
                 h, m, s = int(t // 3600), int(t % 3600 // 60), int(t % 60)
                 ts = f"{h:d}:{m:02d}:{s:02d}" if h else f"{m:02d}:{s:02d}"

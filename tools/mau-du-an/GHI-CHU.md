@@ -5,4 +5,5 @@ Dự án thật nằm NGOÀI repo, trong thư mục `Du an/` cạnh repo, ví d�
 - `timeline.json` ở đây là ví dụ đầy đủ các trường hay dùng (schema chi tiết trong docstring `tools/assemble.py`)
 - `do-hoa/job-do-hoa.json` là ví dụ job render đồ họa (`@xuong/brand/brand.json` nghĩa là brand của xưởng, tính từ gốc repo) (intro/outro nên bắt đầu từ preset `do-hoa-chung/` thay vì file này)
 - Hai hệ mốc thời gian: `in`/`out`/`broll.at` tính trong FILE NGUỒN; `overlay.at` tính từ ĐẦU ĐOẠN đã cắt
+- Recap sự kiện từ nhiều clip quay rời: `python3 tools/du-an-moi.py "<tên>" --loai recap` (thêm thư mục `recap/`, xem `recap/GHI-CHU.md` cạnh đây; bộ lệnh `tools/recap.py`)
 - Phim tài liệu phỏng vấn nhiều nhân vật có cấu trúc riêng (nguồn chia theo loại, năm file hồ sơ đi qua nhiều phiên): xem `tai-lieu-phong-van/GHI-CHU.md` cạnh đây

@@ -2,8 +2,8 @@
 "_huong-dan": "Bản đồ tệp của bản thiết kế xưởng phim. AI dựng xưởng: đọc DUNG-XUONG.md; lấy từng tệp vai 'chep' theo mẫu địa chỉ 'raw' (thay {ref} bằng mã commit đang dùng hoặc 'main', {p} bằng đường dẫn đã mã hoá URL), kiểm 'sha' (sha1 của 'blob <cỡ>\\0' + nội dung, giống git hash-object), tệp 'chay' thì cấp quyền chạy. Tệp vai 'ban-mau' không chép. Bản đồ này không tự liệt kê mình.",
 "repo": "https://github.com/wincreator3012/xuong-phim-claude",
 "raw": "https://raw.githubusercontent.com/wincreator3012/xuong-phim-claude/{ref}/{p}",
-"so_tep": 214,
-"so_tep_chep": 208,
+"so_tep": 220,
+"so_tep_chep": 214,
 "tep": [
 {
 "p": ".gitattributes",
@@ -31,8 +31,8 @@
 },
 {
 "p": "CLAUDE.md",
-"c": 14097,
-"sha": "ca5f0bf835ee8a2581696ceb72d70c0e0e0ff17e",
+"c": 14452,
+"sha": "feef9391a5a45d09ca44f60a4903cca5aaf72c2c",
 "vai": "chep"
 },
 {
@@ -50,8 +50,8 @@
 },
 {
 "p": "HUONG-DAN.md",
-"c": 21885,
-"sha": "03cafda6b161d347786d05e14b6b992a20c16771",
+"c": 22747,
+"sha": "57096611384e365755b4ad1fbb0fbbb7f8964983",
 "vai": "chep"
 },
 {
@@ -69,14 +69,14 @@
 },
 {
 "p": "README.md",
-"c": 17546,
-"sha": "83b5ddac34b0d8a6f1e283c0ccb0c4973fa11c64",
+"c": 17984,
+"sha": "42b69b0a153e119394a22802954aa4b858d7f654",
 "vai": "ban-mau"
 },
 {
 "p": "THAY-DOI.md",
-"c": 5734,
-"sha": "3745fe190a8c2252d05cb625cfceda63cc3e5593",
+"c": 7650,
+"sha": "b9c25ef48c9cad84b6393f04ffb5716376be6fe0",
 "vai": "ban-mau"
 },
 {
@@ -366,14 +366,14 @@
 },
 {
 "p": "docs/BAI-HOC.md",
-"c": 88372,
-"sha": "9e4d2f6bd0eb266dfdd5728031f3fdb7a0e8d348",
+"c": 92499,
+"sha": "babcaa9af3a38f6c4216d5d4f2a033576be5d6fd",
 "vai": "chep"
 },
 {
 "p": "docs/QUY-TRINH-KY-THUAT.md",
-"c": 52803,
-"sha": "d55bd969f7a5f323bfbb688ec6de188c02285c85",
+"c": 53238,
+"sha": "0d69500741007ccc9d67ad18f073f9b7865326d4",
 "vai": "chep"
 },
 {
@@ -432,8 +432,8 @@
 },
 {
 "p": "skills/_chung/README.md",
-"c": 1666,
-"sha": "5e832b5ee33067e10898775484fe53a926c34f78",
+"c": 1696,
+"sha": "bad30e563a2bb5931843b0352b00d1cc032f7637",
 "vai": "chep"
 },
 {
@@ -462,8 +462,8 @@
 },
 {
 "p": "skills/_chung/van-hanh.md",
-"c": 9517,
-"sha": "2fe25b114de69d42b2335e6a6c16de4bfba74aad",
+"c": 9802,
+"sha": "3ee9c917c510262318ab95e0fd5ef1787f6540d7",
 "vai": "chep"
 },
 {
@@ -659,6 +659,30 @@
 "vai": "chep"
 },
 {
+"p": "skills/phim-recap-su-kien/SKILL.md",
+"c": 14893,
+"sha": "f3ffe1c87f6baf7406e1be8b080613049359257a",
+"vai": "chep"
+},
+{
+"p": "skills/phim-recap-su-kien/references/danh-muc-quay.md",
+"c": 4021,
+"sha": "41d4bdc49221511d4a7d56816200b9ffc53f3025",
+"vai": "chep"
+},
+{
+"p": "skills/phim-recap-su-kien/references/mau-bang-canh.md",
+"c": 3739,
+"sha": "7e2e7b71d2fcca269c447ef222e9cee03f429dd7",
+"vai": "chep"
+},
+{
+"p": "skills/phim-recap-su-kien/references/nghien-cuu-recap.md",
+"c": 8781,
+"sha": "21d59a59a104c90788da5635e70bc47d5826fb32",
+"vai": "chep"
+},
+{
 "p": "skills/phim-tai-lieu-phong-van/SKILL.md",
 "c": 21977,
 "sha": "9f90498d7386efba9efb337346ac616363c45156",
@@ -684,8 +708,8 @@
 },
 {
 "p": "skills/phim-thiet-lap/references/gioi-thieu-xuong.md",
-"c": 13064,
-"sha": "1d251179b5d89ad9c5376deac8ce1cc400293870",
+"c": 13531,
+"sha": "f010ad59d24a90edb656c1554adb89093a7aa990",
 "vai": "chep"
 },
 {
@@ -828,8 +852,8 @@
 },
 {
 "p": "studio/src/components/Benefits.tsx",
-"c": 9535,
-"sha": "6d9ec210783691f0d048aa9a5fb3756c34eeb573",
+"c": 9718,
+"sha": "db114ac6d193b63eb2154637c53723d72fd070d4",
 "vai": "chep"
 },
 {
@@ -870,8 +894,8 @@
 },
 {
 "p": "studio/src/components/Outro.tsx",
-"c": 7343,
-"sha": "8e43c4b061ce72a23169a6d0b0107c0a8e7390c0",
+"c": 7534,
+"sha": "9eae79a6b604f9da82502faa2dbc990391f4ee0d",
 "vai": "chep"
 },
 {
@@ -936,8 +960,8 @@
 },
 {
 "p": "thu-vien/AM-THANH.md",
-"c": 8356,
-"sha": "2b1fedab98f32de82552fad4d765a1f56c96c086",
+"c": 8797,
+"sha": "b701d7b12182a58aad1fca4e1cc58bd02fcaa04d",
 "vai": "chep"
 },
 {
@@ -954,8 +978,8 @@
 },
 {
 "p": "tools/assemble.py",
-"c": 73434,
-"sha": "3b915825405bdfcb46967f9a9e3d06a2b99c710b",
+"c": 73768,
+"sha": "e05f33e250b170f488fbbf8f3077c186c62f2995",
 "vai": "chep"
 },
 {
@@ -1086,8 +1110,8 @@
 },
 {
 "p": "tools/du-an-moi.py",
-"c": 3251,
-"sha": "db1113db0c46bc320dcfe8e0a235e1dbe4361b8e",
+"c": 3354,
+"sha": "4289e7874e4f4d56f5d687fba494970d1179fa60",
 "vai": "chep"
 },
 {
@@ -1129,8 +1153,8 @@
 },
 {
 "p": "tools/kiem-tra-xuong.py",
-"c": 20721,
-"sha": "74a0117f1b6a53cfd7d8addf43f797f7babd56e5",
+"c": 25138,
+"sha": "1e156a6bd72c54b05d1307aa61e74c969e51862a",
 "vai": "chep"
 },
 {
@@ -1141,8 +1165,8 @@
 },
 {
 "p": "tools/mau-du-an/GHI-CHU.md",
-"c": 1131,
-"sha": "404363eecd21ee19a02b94758b68fe35362ea6ea",
+"c": 1327,
+"sha": "436a201fbbc11224b34cdda9fd8e230198a35bfa",
 "vai": "chep"
 },
 {
@@ -1155,6 +1179,12 @@
 "p": "tools/mau-du-an/project.json",
 "c": 254,
 "sha": "4fc2f4d1971027d5b3b58db466988216d74478fb",
+"vai": "chep"
+},
+{
+"p": "tools/mau-du-an/recap/GHI-CHU.md",
+"c": 707,
+"sha": "2dca7ce319ae11ce1891ea57c402576be64e9a25",
 "vai": "chep"
 },
 {
@@ -1242,6 +1272,12 @@
 "vai": "chep"
 },
 {
+"p": "tools/recap.py",
+"c": 51653,
+"sha": "71f845185cce5a613020ea7acffeb1b5616381ee",
+"vai": "chep"
+},
+{
 "p": "tools/render-do-hoa.mjs",
 "c": 12139,
 "sha": "bfee4d889a9a260c3c935db5360acd1e0d019058",
@@ -1249,8 +1285,8 @@
 },
 {
 "p": "tools/short-canh.py",
-"c": 3496,
-"sha": "12bb06b027096526e55a2cafaaecb870e997f8b2",
+"c": 4093,
+"sha": "ede1f537b39db672a040bfb7afa7f090575f3286",
 "vai": "chep",
 "chay": true
 },
@@ -1263,8 +1299,8 @@
 },
 {
 "p": "tools/short-dung.py",
-"c": 12470,
-"sha": "853b0e22434b9f283bf3591b5b35ff646571effd",
+"c": 12714,
+"sha": "0a3b07a607576f59a6e1fc72a66e4728ef75715a",
 "vai": "chep",
 "chay": true
 },
@@ -1310,8 +1346,8 @@
 },
 {
 "p": "tools/soan-nhac.py",
-"c": 23236,
-"sha": "cd178cd135b31f6629759ea997fc78def4909014",
+"c": 26928,
+"sha": "74850c3bb7cbe03d9648baf8ce6f2fd36f17435d",
 "vai": "chep"
 },
 {

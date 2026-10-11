@@ -27,6 +27,7 @@ Xưởng làm việc bằng nguyên lý, không bằng khuôn. Mọi quyết đ�
 
 - Máy lên sandbox: `device_stage_files`, chỉ file cần cho bước đó; không stage chỉ để đọc hay sửa chữ.
 - Sandbox về máy: chép vào `/mnt/user-data/outputs/<thư mục>/`, rồi `device_commit_files` với `stagedPath` và đường dẫn tuyệt đối trên máy. Mỗi lần commit bản sửa dùng tên staged MỚI; so md5 hai phía (mp4 và ảnh so bằng `ffprobe` vì có thể bị gắn thêm hộp manifest). File hơn 20 MB: `split -b 19m`, commit từng phần, `cat` trên máy, kiểm checksum.
+- Gửi người dùng nghe, xem thử qua chat (SendUserFile): tối đa 30 MiB mỗi tệp; stage một mp4 khoảng 20 MB từ máy lên có lúc báo "upload failed" liên tiếp, nên làm bản xem nhẹ (640 px, khoảng 380 kbps, cỡ 10-12 MB) cho mọi bản gửi qua chat.
 - File `.tsx` sửa ở sandbox commit về `studio/src/...` trên máy NGAY sau khi sửa.
 - Sửa file có dấu tiếng Việt trên máy bằng `python3 <<'PYEOF'` đọc sửa ghi, rồi đọc lại đoạn vừa ghi để chắc dấu còn nguyên.
 - Không xoá file trong thư mục của người dùng khi chưa được phép; file cần bỏ chuyển vào `Du an/_tam/_to_delete/` (ngoài repo). Ảnh kiểm tra tạm để trong thư mục nhà của VM, không để trong thư mục dự án.

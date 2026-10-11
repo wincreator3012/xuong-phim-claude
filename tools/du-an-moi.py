@@ -2,13 +2,13 @@
 # -*- coding: utf-8 -*-
 """DỰ ÁN MỚI: tạo hồ sơ một dự án phim NGOÀI repo (repo chỉ chứa năng lực).
 
-    python3 tools/du-an-moi.py "Bai giang thang 11" [--loai bai-giang|infomotion|tai-lieu-phong-van] [--thang 2026-11]
+    python3 tools/du-an-moi.py "Bai giang thang 11" [--loai bai-giang|infomotion|tai-lieu-phong-van|recap] [--thang 2026-11]
 
 Tạo <thư mục Du an>/<YYYY-MM tên>/ (cau-hinh.json > thuMucDuAn, mặc định "../Du an") từ khuôn tools/mau-du-an/:
     project.json         tên, mô tả, tông sáng tối, đầu ra (Claude điền cùng anh)
     timeline.json        timeline mẫu (cắt, intro, outro, overlay, insert)
     do-hoa/job-do-hoa.json   job đồ họa mẫu, brandFile "@xuong/brand/brand.json" (gốc xưởng)
-    nguon/  transcript/  GHI-CHU.md (theo loại dự án, nếu có)
+    nguon/  transcript/  GHI-CHU.md (theo loại dự án, nếu có); loại recap thêm recap/ (tools/recap.py)
 In ra đường dẫn dự án dạng tương đối từ gốc xưởng để dùng trong lệnh: "../Du an/<YYYY-MM tên>".
 Thành phẩm sau khi anh duyệt vào <Thanh pham>/<YYYY-MM tên dự án>/ (CLAUDE.md quy tắc 11).
 """
@@ -37,7 +37,7 @@ def ten_an_toan(s):
 def main():
     ap = argparse.ArgumentParser(description="Tạo hồ sơ dự án phim ngoài repo")
     ap.add_argument("ten", help="tên dự án (không dấu sẽ an toàn hơn cho dòng lệnh; có dấu được tự bỏ dấu)")
-    ap.add_argument("--loai", default="bai-giang", choices=["bai-giang", "infomotion", "tai-lieu-phong-van"])
+    ap.add_argument("--loai", default="bai-giang", choices=["bai-giang", "infomotion", "tai-lieu-phong-van", "recap"])
     ap.add_argument("--thang", help="YYYY-MM đặt trước tên (mặc định tháng hiện tại)")
     a = ap.parse_args()
 
@@ -57,7 +57,7 @@ def main():
     os.makedirs(os.path.join(da, "do-hoa"))
     s = open(os.path.join(MAU, "do-hoa", "job-do-hoa.json"), encoding="utf-8").read()
     open(os.path.join(da, "do-hoa", "job-do-hoa.json"), "w", encoding="utf-8").write(s)
-    for d in ("nguon", "transcript"):
+    for d in ("nguon", "transcript") + (("recap",) if a.loai == "recap" else ()):
         os.makedirs(os.path.join(da, d))
     ghi_chu = os.path.join(MAU, a.loai, "GHI-CHU.md")
     if os.path.isfile(ghi_chu):

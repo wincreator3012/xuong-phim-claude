@@ -403,11 +403,82 @@ def bản_nhe_sang(hat=1):
     return mix, total
 
 
+def bản_piano_diu_dang(hat=1):
+    """Piano dịu dàng, 66 nhịp, Đô trưởng: giai điệu đơn giản như bài ru ở âm vực cao, tay trái rải nhẹ, chuông nhỏ lấp lánh."""
+    rng = np.random.default_rng(hat)
+    bpm = 66
+    B = beat_len(bpm)
+    bar = 4 * B
+    # hợp âm: (nốt bass, bốn nốt rải tăng dần)
+    CH = dict(
+        C=(48, [55, 60, 64, 67]), G=(43, [50, 55, 59, 62]), Am=(45, [52, 57, 60, 64]),
+        F=(41, [53, 57, 60, 65]), CE=(40, [55, 60, 64, 67]), Dm=(38, [50, 57, 60, 65]),
+        Em=(40, [55, 59, 62, 67]), Gs=(43, [50, 55, 60, 62]),
+    )
+    A_ch = ["C", "G", "Am", "F", "CE", "F", "Dm", "Gs"]
+    A2_ch = ["C", "G", "Am", "F", "CE", "F", "Dm", "C"]
+    B_ch = ["F", "G", "Em", "Am", "F", "CE", "Dm", "G"]
+    A_mel = [
+        [(0, 76, 1.5), (1.5, 79, .5), (2, 81, 1), (3, 79, 1)],
+        [(0, 74, 1.5), (1.5, 76, .5), (2, 79, 2)],
+        [(0, 76, 1), (1, 81, 1.5), (2.5, 79, .5), (3, 76, 1)],
+        [(0, 76, 1.5), (1.5, 74, .5), (2, 72, 2)],
+        [(0, 76, 1), (1, 79, 1), (2, 84, 2)],
+        [(0, 81, 1.5), (1.5, 79, .5), (2, 77, 1), (3, 81, 1)],
+        [(0, 81, 1), (1, 77, 1), (2, 76, 1), (3, 74, 1)],
+        [(0, 74, 2), (2, 71, 2)],
+    ]
+    A2_mel = A_mel[:7] + [[(0, 72, 4)]]
+    B_mel = [
+        [(0, 84, 2), (2, 81, 1), (3, 84, 1)],
+        [(0, 83, 2), (2, 79, 2)],
+        [(0, 79, 1), (1, 83, 1), (2, 81, 1), (3, 79, 1)],
+        [(0, 76, 2), (2, 81, 2)],
+        [(0, 81, 1.5), (1.5, 79, .5), (2, 77, 2)],
+        [(0, 76, 1), (1, 79, 1), (2, 76, 2)],
+        [(0, 77, 1), (1, 81, 1), (2, 79, 1), (3, 77, 1)],
+        [(0, 74, 1), (1, 76, 1), (2, 74, 2)],
+    ]
+    # hình thức: dạo 2 ô nhịp, lượt 1 (A A' B A'), lượt 2 (A B A') có chuông
+    plan = [("intro", [], ["C", "G"], False)]
+    plan += [("A", A_mel, A_ch, False), ("A2", A2_mel, A2_ch, False), ("B", B_mel, B_ch, False), ("A2", A2_mel, A2_ch, False)]
+    plan += [("A", A_mel, A_ch, True), ("B", B_mel, B_ch, True), ("A2", A2_mel, A2_ch, True)]
+    nbar = sum(len(p[2]) for p in plan)
+    total = nbar * bar + 8
+    mix = Mix(total)
+    arp = [None, 0, 1, 2, 3, 2, 1, 2]
+    bi = 0
+    for name, mel, chs, bells in plan:
+        for k, cname in enumerate(chs):
+            t0 = bi * bar
+            bass, notes = CH[cname]
+            mix.add(piano(bass, bar * 0.95, vel=0.36, rng=rng, ring=1.2), t0 + human(rng, 8), pan=-0.3, send=0.25)
+            for j in range(1, 8):
+                note = notes[arp[j]]
+                mix.add(piano(note, B * 0.9, vel=0.20 + 0.06 * rng.random(), rng=rng, ring=1.0), t0 + j * B / 2 + human(rng, 8), pan=-0.1, send=0.3)
+            if mel:
+                for (b0, m, d) in mel[k]:
+                    t = t0 + b0 * B + human(rng, 10)
+                    mix.add(piano(m, d * B * 0.95, vel=0.46, rng=rng, ring=1.6), t, pan=0.15, send=0.35)
+                    if bells and rng.random() < 0.55:
+                        mix.add(mallet(m + 12, vel=0.15), t + 0.01, pan=0.3, send=0.4)
+            if bells and k % 2 == 0:
+                sp = [72, 76, 79, 84][int(rng.integers(0, 4))] + 12
+                mix.add(bell(sp, vel=0.12, L=4.0), t0 + float(rng.choice([1.5, 2.5, 3.5])) * B, pan=float(rng.uniform(-0.4, 0.4)), send=0.5)
+            bi += 1
+    t_end = nbar * bar
+    for k, n in enumerate([48, 55, 60, 64, 67, 72]):
+        mix.add(piano(n, 3, vel=0.34 - 0.02 * k, rng=rng, ring=3.0), t_end + k * 0.14, pan=-0.1 + 0.05 * k, send=0.4)
+    mix.add(bell(91, vel=0.14, L=5.0), t_end + 1.0, pan=0.3, send=0.5)
+    return mix, total
+
+
 BAN = {
     "xuong-guitar-am": (bản_guitar_am, "acoustic-am", "Guitar mộc ấm, Đô trưởng, 72 nhịp"),
     "xuong-piano-tinh": (bản_piano_tinh, "piano-tinh-lang", "Piano trầm lắng, Rê thứ, 58 nhịp"),
     "xuong-thien-pad": (bản_thien_pad, "thien-ambient", "Nền thiền Rê, thảm âm và chuông thưa, không nhịp"),
     "xuong-nhe-sang": (bản_nhe_sang, "nang-luong-nhe", "Sáng và nhẹ, Son trưởng, 100 nhịp"),
+    "xuong-piano-diu-dang": (bản_piano_diu_dang, "piano-tinh-lang", "Piano dịu dàng, Đô trưởng, 66 nhịp, âm vực cao, chuông nhỏ"),
 }
 
 

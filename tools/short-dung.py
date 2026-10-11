@@ -180,7 +180,7 @@ def cmd_snap(slug):
         else:
             ov = [{"src": f"{base}/do-hoa/doc/canh-p{k}.webm", "at": 0}]
         segs.append(seg(f'than{k+1}', p['in'], p['out'], ov, 'Than' if k == 0 else None))
-    segs.append({"type": "insert", "src": C['outro'], "role": "outro"})
+    segs.append({"type": "insert", "src": sp.get('outro', C['outro']), "role": "outro"})
     t['segments'] = segs
     W(f'{base}/timeline.json', t)
     W(f'{base}/phu-de/cues.json', sp['cues'])
@@ -235,8 +235,14 @@ def cmd_ass(slug):
         return f"{int(t//3600)}:{int(t%3600//60):02d}:{t%60:05.2f}"
     dau = ASS_DAU.format(font=C['font'], co=C['co-chu'], mau=C['mau-chu'], le1=C['le-duoi'], le2=C['le-duoi-nang'])
     lines = [dau]
+    prev_tb = -1.0
     for a, b, txt in CUES:
         ta, tb = to_out(a), to_out(b)
+        if ta < prev_tb:   # libass đẩy cue chồng thời gian lên cao (đè cảnh): không cho chồng
+            ta = prev_tb
+        if tb < ta + 0.1:
+            tb = ta + 0.1
+        prev_tb = tb
         st = 'Raised' if (ta < LT[1] and tb > LT[0]) else 'Default'
         _t = two(txt)
         if st == 'Raised' and tb > LT[1] + 0.25 and ta < LT[1] - 0.25:

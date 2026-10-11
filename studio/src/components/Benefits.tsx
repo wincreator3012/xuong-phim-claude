@@ -96,7 +96,9 @@ export const Benefits: React.FC<BenefitsProps> = ({
     const frameAt =
       it.revealAt != null
         ? Math.round(it.revealAt * fps)
-        : Math.round((durationInFrames / (normalized.length + 1)) * (it.i + 1));
+        : normalized.length === 1
+          ? Math.round(0.3 * fps) // một dòng chữ nổi: hiện ngay theo mốc overlay.at (trước đây hiện ở giữa thời lượng)
+          : Math.round((durationInFrames / (normalized.length + 1)) * (it.i + 1));
     return {label: it.label, frame: frameAt};
   });
 

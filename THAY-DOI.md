@@ -2,6 +2,13 @@
 
 Tệp này dành cho AI đang chăm một xưởng đã dựng từ bản thiết kế: khi người dùng nói "xem bản thiết kế có gì mới", đọc các mục SAU ngày `ban_mau.ngay` trong `tools/.cai-dat.json` của xưởng, rồi làm theo mục cuối của `DUNG-XUONG.md` (đề xuất từng thay đổi, người dùng duyệt rồi mới ghi, không ghi đè phần riêng của họ). Mỗi mục ghi: điều gì đổi, vì sao đáng lấy, tệp chính bị ảnh hưởng. Mục mới ở trên cùng.
 
+## 2026-10-11: recap sự kiện từ nhiều clip quay rời
+
+- Skill mới `skills/phim-recap-su-kien/`: dựng nhanh clip tổng kết một buổi workshop, hội thảo, ngày hội từ vài chục clip điện thoại; mạch theo các phần của chương trình, nhạc làm chính xen vài câu nói của người tổ chức, chữ nổi trích ý chính, lời chia sẻ riêng tư của người tham dự chỉ lấy hình. Kèm `references/nghien-cuu-recap.md` (nghiên cứu và thực hành nghề có nguồn), `references/danh-muc-quay.md` (danh mục quay gửi người quay, đồng ý ghi hình), `references/mau-bang-canh.md`.
+- `tools/recap.py` (mới): `kiem-ke` (xếp clip theo giờ quay, cờ HDR, VFR, khung dọc), `doi-ten` (tên `NNN_HHMM_<giai-doan>_<mo-ta>` có sổ đổi ngược), `khao-sat` (ảnh tổng quan và bảng khung, chỉ giải mã khung khoá nên rất nhanh), `nhac` (LUFS, gainDb gợi ý, dò nhịp và pha), `cat` (proxy theo bảng cảnh, tự tonemap HDR, quãng lặng theo năng lượng cho cảnh giữ tiếng để `snap` có tác dụng), `timeline`, `khop-nhip` (mép cảnh câm vào phách nhạc), `kiem` (kiểm giấy). `tools/du-an-moi.py --loai recap`, khuôn `tools/mau-du-an/recap/`. `tools/kiem-tra-xuong.py` có bước kiểm bộ lệnh này.
+- Sửa nhỏ: Benefits một mục không có `revealAt` nay hiện sau 0,3 giây (trước hiện ở giữa thời lượng); Outro giữ xuống dòng `\n` trong `headline`; `assemble.py` đọc `chapterIntro` cho tên chương của intro (phim chữ tiếng Anh). `tools/soan-nhac.py` có thêm bản piano dịu dàng (Đô trưởng, 66 nhịp) cho buổi chăm sóc tinh thần.
+- Bài học: mục 26 của `docs/BAI-HOC.md`. Nếu xưởng của người dùng đã có `Benefits.tsx` cũ và các job một mục đang bù trễ bằng `revealAt`, không cần đổi job.
+
 ## 2026-10-10: loạt short dọc "mặt trên, cảnh dưới"
 
 - Bố cục `mat-tren` trong `tools/assemble.py` (r10, r11): khung dọc chia hai ô, mặt người nói ở ô trên (`cropFocus`, `cropFocusY`, `cropZoom`, `paneH`), nền giấy phía dưới cho cảnh minh hoạ chuyển động. `tools/kiem-tra-xuong.py` có thêm bước kiểm bố cục này.

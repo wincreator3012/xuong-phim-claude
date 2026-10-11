@@ -7,7 +7,8 @@
 Tạo nguồn giả bằng ffmpeg (màn test + tiếng sine), soạn timeline có đủ các
 kỹ thuật chính (cắt, fade, overlay alpha, B-roll, B-roll cảnh minh hoạ thu vào góc,
 insert, tuỳ chọn bố cục slide và multicam audioSrc), rồi chạy đúng đường thật: assemble.py --kiem-tra →
-assemble.py --preview → nghiem-thu.py video. Thoát mã 0 = ĐẠT.
+assemble.py --preview → nghiem-thu.py video; thêm các bước kiểm riêng (r7, vi mờ, mat-tren, bộ lệnh
+recap.py trên nguồn giả của một buổi, đồng bộ tuyệt đối). Thoát mã 0 = ĐẠT.
 
 Dự án thử nằm ở <Du an>/_tam/_kiem-tra-tu-dong/ (NGOÀI repo, xoá được). Không cần model, không cần mạng.
 
@@ -167,6 +168,9 @@ def main():
     print("→ kiểm bố cục mat-tren của short dọc (r10/r11: ô mặt trên, nền giấy dưới, cropZoom)", flush=True)
     if not kiem_mat_tren(proj):
         raise SystemExit("! Bố cục mat-tren chưa đúng - xem dòng ✗ ở trên (short dọc mặt trên cảnh dưới sẽ hỏng)")
+    print("→ kiểm bộ lệnh recap (kiem-ke, cat kèm khoảng lặng, timeline, nhịp nhạc, khop-nhip, kiem)", flush=True)
+    if not kiem_recap(os.path.dirname(proj)):
+        raise SystemExit("! tools/recap.py chưa đúng - xem dòng ✗ ở trên (dựng recap sự kiện sẽ hỏng)")
     print("→ kiem-dong-bo.py (đồng bộ hình-tiếng tuyệt đối: dựng thử chớp/click)", flush=True)
     p = subprocess.run([sys.executable, os.path.join(TOOLS, "kiem-dong-bo.py")], text=True)
     if p.returncode != 0:
@@ -221,6 +225,69 @@ def kiem_r7(proj, out):
         hien = v > 215
         print(f"  {'✓' if hien == phai_hien else '✗'} {ten}: độ sáng ô thẻ {v:.0f}")
         ok = ok and hien == phai_hien
+    return ok
+
+
+def kiem_recap(goc_tam):
+    """Nguồn giả của một buổi (ba clip tên VID_<ngày>_<giờ>, một clip có lời ngắt quãng trên nền ồn nhẹ) và một
+    bản nhạc click 120 nhịp: kiem-ke xếp đúng giờ, cat sinh proxy và quãng lặng cho cảnh giữ tiếng, nhac dò đúng
+    nhịp, khop-nhip đưa mép cảnh câm vào phách, kiem chạy trọn. Không cần assemble nên nhanh."""
+    import shutil
+    da = os.path.join(goc_tam, "_kiem-tra-recap")
+    shutil.rmtree(da, ignore_errors=True)
+    tho = os.path.join(da, "nguon-tho")
+    os.makedirs(tho)
+    lv = ["ffmpeg", "-hide_banner", "-v", "error", "-y"]
+    for ten, dai, tieng in (("VID_20261007_151000.mp4", 6, "sine=f=330"), ("VID_20261007_150000.mp4", 6, "sine=f=440"),
+                            ("VID_20261007_152000.mp4", 8, "lời")):
+        if tieng == "lời":
+            au = ["-f", "lavfi", "-i", f"aevalsrc='if(lt(mod(t,1.3),0.8),0.3*sin(2*PI*220*t),0)':s=48000:d={dai}",
+                  "-f", "lavfi", "-i", f"anoisesrc=a=0.003:d={dai}:r=48000",
+                  "-filter_complex", "[1:a][2:a]amix=inputs=2:normalize=0[a]", "-map", "0:v", "-map", "[a]"]
+        else:
+            au = ["-f", "lavfi", "-i", f"{tieng}:d={dai}"]
+        sh(lv + ["-f", "lavfi", "-i", f"testsrc2=s=640x360:r=30:d={dai}"] + au +
+           ["-c:v", "libx264", "-preset", "ultrafast", "-c:a", "aac", "-shortest", os.path.join(tho, ten)])
+    nhac = os.path.join(da, "nhac-click-120.wav")
+    sh(lv + ["-f", "lavfi", "-i", "aevalsrc='if(lt(mod(t,0.5),0.03),0.6*sin(2*PI*1200*t),0)+0.05*sin(2*PI*110*t)':s=22050:d=40",
+             nhac])
+    R = [sys.executable, os.path.join(TOOLS, "recap.py")]
+    ok = True
+    p = subprocess.run(R + ["kiem-ke", tho, "--du-an", da], capture_output=True, text=True)
+    kk = json.load(open(os.path.join(da, "recap", "kiem-ke.json"), encoding="utf-8")) if p.returncode == 0 else {"clip": []}
+    thu_tu = [c["ten"][13:17] for c in kk["clip"]]
+    dung = thu_tu == ["1500", "1510", "1520"]
+    ok &= dung
+    print(f"  {'✓' if dung else '✗'} kiem-ke xếp theo giờ quay: {thu_tu}")
+    canh = [{"id": "a1", "clip": "001", "tu": 0.5, "den": 3.2, "tieng": "tat", "chuong": "One"},
+            {"id": "v1", "clip": "003", "tu": 0.4, "den": 6.0, "tieng": "giu"},
+            {"id": "a2", "clip": "002", "tu": 1.0, "den": 4.1, "tieng": "tat", "chuong": "Two"}]
+    with open(os.path.join(da, "recap", "canh.json"), "w", encoding="utf-8") as f:
+        json.dump(canh, f)
+    for lenh in (["cat", "--du-an", da, "--rong", "640"], ["nhac", "--du-an", da, "--nhac", nhac],
+                 ["timeline", "--du-an", da, "--chuong-dau", "Intro"], ["khop-nhip", "--du-an", da, "--ghi"],
+                 ["kiem", "--du-an", da]):
+        p = subprocess.run(R + lenh, capture_output=True, text=True)
+        if p.returncode != 0:
+            print(f"  ✗ recap.py {lenh[0]} lỗi:", (p.stdout + p.stderr)[-500:])
+            return False
+    sil = json.load(open(os.path.join(da, "transcript", "v1_003.silences.json")))
+    dung = len(sil) >= 3
+    ok &= dung
+    print(f"  {'✓' if dung else '✗'} quãng lặng theo năng lượng cho cảnh giữ tiếng: {len(sil)} quãng (cần từ 3)")
+    nh = json.load(open(os.path.join(da, "recap", "nhip.json")))
+    dung = abs(nh["bpm"] - 120) <= 1.5
+    ok &= dung
+    print(f"  {'✓' if dung else '✗'} dò nhịp nhạc click 120: {nh['bpm']:g}")
+    tl = json.load(open(os.path.join(da, "timeline.json")))
+    T, t, lech = 60 / nh["bpm"], 0.0, []
+    for sg in tl["segments"]:
+        t += sg["out"] - sg["in"]
+        if sg.get("volumeDb", 0) <= -60:
+            lech.append(abs(((t - nh["pha"] + T / 2) % T) - T / 2))
+    dung = bool(lech) and max(lech) <= 0.04 and tl.get("chapterIntro") == "Intro"
+    ok &= dung
+    print(f"  {'✓' if dung else '✗'} khop-nhip: mép cảnh câm lệch phách tối đa {max(lech or [9]):.3f} s; chapterIntro {tl.get('chapterIntro')}")
     return ok
 
 

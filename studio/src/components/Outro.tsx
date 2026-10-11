@@ -74,6 +74,7 @@ export const Outro: React.FC<OutroProps> = ({
               fontSize: titleSize * (isVertical ? 0.72 : 0.76),
               color: palette.ink,
               lineHeight: 1.28,
+              whiteSpace: 'pre-line', // giữ xuống dòng "\n" anh chủ ý đặt trong headline
             }}
           >
             {headline}
@@ -131,7 +132,9 @@ export const Outro: React.FC<OutroProps> = ({
                 lineHeight: 1.5,
               }}
             >
-              {scheduleLines.join(' · ')}
+              {scheduleLines.map((l, i) => (
+                <div key={i} style={{whiteSpace: 'nowrap'}}>{l}</div>
+              ))}
             </div>
           </div>
         </FadeUp>

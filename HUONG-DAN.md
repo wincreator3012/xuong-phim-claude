@@ -59,6 +59,11 @@ Người xem ở nhà không ngồi trong phòng, nên Claude sẽ đề xuất 
 **Phim tài liệu phỏng vấn, sau khi quay**
 > Đã quay xong theo kế hoạch, source trong dự án phim-du-an-x/nguon. Gỡ băng, đối chiếu với kế hoạch rồi viết kịch bản thực tế cho tôi duyệt trước khi dựng.
 
+**Recap một buổi workshop từ nhiều clip điện thoại**
+> Đây là kịch bản buổi workshop hôm thứ Tư và thư mục 38 clip quay hôm đó. Dựng giúp tôi một clip recap khoảng 3 phút để ôn lại những điểm chính và kỷ niệm của buổi, đổi tên các clip cho dễ hình dung. Giữ giọng người hướng dẫn, không dùng tiếng người tham dự chia sẻ.
+
+Claude hỏi trước bốn điều (khung và độ dài, giữ tiếng ai, ai xem, thẻ mở và kết), xếp clip theo giờ quay, gửi ảnh khảo sát và bảng phương án cắt kèm hai phương án nhạc để bạn chọn. Chương trình nói tiếng Anh thì chữ trên hình bằng tiếng Anh. Trước buổi kế tiếp, gửi người quay danh mục cảnh trong `skills/phim-recap-su-kien/references/danh-muc-quay.md`.
+
 **Cảnh minh hoạ cho đoạn đang giải thích**
 > Trong dự án bai-1, đoạn phút 6:20 tới 7:05 tôi giải thích vòng lặp căng thẳng và hồi phục. Làm một cảnh minh hoạ động cho đoạn đó, lấy một khung hình của chính đoạn quay làm nền mờ.
 
