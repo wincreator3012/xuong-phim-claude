@@ -2,6 +2,14 @@
 
 Tệp này dành cho AI đang chăm một xưởng đã dựng từ bản thiết kế: khi người dùng nói "xem bản thiết kế có gì mới", đọc các mục SAU ngày `ban_mau.ngay` trong `tools/.cai-dat.json` của xưởng, rồi làm theo mục cuối của `DUNG-XUONG.md` (đề xuất từng thay đổi, người dùng duyệt rồi mới ghi, không ghi đè phần riêng của họ). Mỗi mục ghi: điều gì đổi, vì sao đáng lấy, tệp chính bị ảnh hưởng. Mục mới ở trên cùng.
 
+## 2026-10-17: slideshow ảnh im lặng, lặp liền mạch
+
+- Skill mới `skills/phim-slideshow-anh/`: dựng clip slideshow từ một thư mục ảnh tĩnh (đám cưới, kỷ niệm, tri ân), mặc định im lặng và lặp liền mạch để chiếu vòng quanh ở sự kiện có nhạc sống hay nhạc của hội trường; cốt truyện theo chương, ảnh bìa, khung ảnh, ảnh đôi, ảnh ba, lưới bốn, mười chuyển cảnh mềm, thẻ chữ mở đầu, trích dẫn và cảm ơn, zoom chậm không cắt mặt. Kèm `references/cot-truyen-va-chuyen-canh.md`, `references/ky-thuat-dong-co.md`, `references/nghien-cuu-slideshow.md`.
+- `tools/slideshow-anh/` (mới): `run.py` (`init`, `faces`, `sheets`, `plan`, `still`, `strip`, `review`, `render`, `concat`, `qc`), `engine.py`, `fonts/` (Cormorant Garamond, Great Vibes, giấy phép OFL), `mau/` (khuôn `spec.py` và `slideshow.json`). Hồ sơ dự án nằm ở `Du an/<dự án>/slideshow/`; render chia đoạn 10 giây, chạy lặp được trong giới hạn 180 giây mỗi lượt; cổng `qc` kiểm kích thước, số khung, thời lượng, không có tiếng và khớp khung đầu-cuối.
+- Cần model nhận dạng mặt `tools/models/face_detection_yunet_2023mar.onnx` (đã dùng cho thumbnail); thiếu thì `faces` báo rõ.
+- `tools/don-tuan.py`, `tools/short-canh.py`: chỉ sửa chữ trong chú thích và thông báo (bỏ tên ổ và tên họ màu riêng), không đổi hành vi.
+- Bài học: mục 28 của `docs/BAI-HOC.md`. Nếu xưởng của người dùng đã dựng trước ngày này: đề xuất lấy `skills/phim-slideshow-anh/`, `tools/slideshow-anh/` và dòng mới trong bảng "Việc nào, skill nào" của `CLAUDE.md`; rồi `tools/dong-goi-skill.py --lam` để lưu skill mới vào tài khoản.
+
 ## 2026-10-11: recap sự kiện từ nhiều clip quay rời
 
 - Skill mới `skills/phim-recap-su-kien/`: dựng nhanh clip tổng kết một buổi workshop, hội thảo, ngày hội từ vài chục clip điện thoại; mạch theo các phần của chương trình, nhạc làm chính xen vài câu nói của người tổ chức, chữ nổi trích ý chính, lời chia sẻ riêng tư của người tham dự chỉ lấy hình. Kèm `references/nghien-cuu-recap.md` (nghiên cứu và thực hành nghề có nguồn), `references/danh-muc-quay.md` (danh mục quay gửi người quay, đồng ý ghi hình), `references/mau-bang-canh.md`.

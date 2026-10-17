@@ -191,10 +191,22 @@ def cmd_video(args):
         else:
             kq.dat("Không có khoảng im lặng dài bất thường giữa bài")
     if v:
-        p = run(["ffmpeg", "-hide_banner", "-nostats", "-i", path, "-an",
-                 "-vf", "scale=160:-2,freezedetect=n=0.003:d=4,blackdetect=d=3:pic_th=0.98", "-f", "null", "-"])
-        fz = re.findall(r"freeze_start: ([\d.]+)", p.stderr)
-        fz_mid = [float(t) for t in fz if 1.0 < float(t) < (vd or 1e9) - 5.0]
+        # Quét song song theo khúc 600s (phim dài 1080p giải mã tuần tự quá chậm); mốc tính lại về trục phim.
+        from concurrent.futures import ThreadPoolExecutor
+        CH = 600.0
+        starts = [i * CH for i in range(int((vd or 1) // CH) + 1)] if vd else [0.0]
+
+        def _quet(ss):
+            cmd = ["ffmpeg", "-hide_banner", "-nostats", "-ss", f"{ss:.3f}", "-t", f"{CH:.3f}", "-i", path, "-an",
+                   "-vf", "scale=160:-2,freezedetect=n=0.003:d=4,blackdetect=d=3:pic_th=0.98", "-f", "null", "-"]
+            return ss, run(cmd).stderr
+        with ThreadPoolExecutor(max_workers=4) as ex:
+            kqs = list(ex.map(_quet, starts))
+        fz, bl = [], []
+        for ss, err_ in kqs:
+            fz += [ss + float(t) for t in re.findall(r"freeze_start: ([\d.]+)", err_)]
+            bl += [(ss + float(a_), ss + float(b_)) for a_, b_ in re.findall(r"black_start:([\d.]+) black_end:([\d.]+)", err_)]
+        fz_mid = [t for t in fz if 1.0 < t < (vd or 1e9) - 5.0]
         # Quãng layout "slide" (bài giảng có slide) đứng hình là cố ý - bỏ khỏi cảnh báo
         mp = os.path.splitext(path)[0] + ".map.json"
         if os.path.isfile(mp):
@@ -208,8 +220,7 @@ def cmd_video(args):
             kq.canh(f"{len(fz_mid)} quãng hình đứng ≥4s", ", ".join(f"{t:.0f}s" for t in fz_mid[:6]) + " - đồ họa tĩnh hay lỗi?")
         else:
             kq.dat("Không có quãng hình đứng bất thường")
-        bl = re.findall(r"black_start:([\d.]+) black_end:([\d.]+)", p.stderr)
-        bl_mid = [(float(s), float(e)) for s, e in bl if float(s) > 0.5 and float(e) < (vd or 1e9) - 0.5]
+        bl_mid = [(s, e) for s, e in bl if s > 0.5 and e < (vd or 1e9) - 0.5]
         if bl_mid:
             kq.canh(f"{len(bl_mid)} quãng đen ≥3s giữa bài", ", ".join(f"{s:.0f}-{e:.0f}s" for s, e in bl_mid[:6]))
 
@@ -218,13 +229,24 @@ def cmd_video(args):
         out = os.path.splitext(path)[0] + ".luoi.jpg"
         n = 12
         step = max(vd / n, 0.5)
-        vf = (f"fps=1/{step:.4f},scale=480:-2,"
-              f"drawtext=text='%{{pts\\:hms}}':x=8:y=8:fontsize=22:fontcolor=white:box=1:boxcolor=black@0.6,"
-              f"tile=4x3")
-        p = run(["ffmpeg", "-hide_banner", "-v", "error", "-y", "-i", path, "-vf", vf, "-frames:v", "1", "-q:v", "3", out])
-        if p.returncode != 0:  # drawtext thiếu font → bỏ chữ
-            vf = f"fps=1/{step:.4f},scale=480:-2,tile=4x3"
-            p = run(["ffmpeg", "-hide_banner", "-v", "error", "-y", "-i", path, "-vf", vf, "-frames:v", "1", "-q:v", "3", out])
+        # Nhảy thẳng tới 12 mốc (không giải mã cả phim), rồi ghép lưới 4x3 có ghi thời gian.
+        import tempfile
+        tmpd = tempfile.mkdtemp(prefix="luoi-")
+        ok_all = True
+        for k in range(n):
+            t = min(step * (k + 0.5), max(vd - 0.5, 0))
+            hh, mm, ss_ = int(t // 3600), int(t % 3600 // 60), int(t % 60)
+            lab = f"{hh}\\:{mm:02d}\\:{ss_:02d}"
+            fr = os.path.join(tmpd, f"f{k:02d}.jpg")
+            vf1 = f"scale=480:-2,drawtext=text='{lab}':x=8:y=8:fontsize=22:fontcolor=white:box=1:boxcolor=black@0.6"
+            q = run(["ffmpeg", "-hide_banner", "-v", "error", "-y", "-ss", f"{t:.3f}", "-i", path, "-vf", vf1,
+                     "-frames:v", "1", "-q:v", "3", fr])
+            if q.returncode != 0:  # drawtext thiếu font → bỏ chữ
+                q = run(["ffmpeg", "-hide_banner", "-v", "error", "-y", "-ss", f"{t:.3f}", "-i", path, "-vf", "scale=480:-2",
+                         "-frames:v", "1", "-q:v", "3", fr])
+            ok_all = ok_all and q.returncode == 0
+        p = run(["ffmpeg", "-hide_banner", "-v", "error", "-y", "-framerate", "1", "-i", os.path.join(tmpd, "f%02d.jpg"),
+                 "-vf", "tile=4x3", "-frames:v", "1", "-q:v", "3", out]) if ok_all else q
         if p.returncode == 0:
             kq.dat(f"Ảnh lưới 12 khung: {out}", "stage lên và NHÌN: intro/outro đúng chỗ, bảng tên hiện, không khung đen/lệch crop")
         else:

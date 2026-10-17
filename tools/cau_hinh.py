@@ -57,8 +57,20 @@ def thanh_pham():
 
 
 def giao():
-    v = (doc().get("thuMucGiao") or "").strip()
-    return _tuyet_doi(v) if v else None
+    """Thư mục giao thành phẩm. `thuMucGiao` là một đường dẫn hoặc DANH SÁCH đường dẫn (lấy cái đầu tiên tồn tại,
+    để cùng một cau-hinh.json chạy được cả trong VM Cowork lẫn trên Mac thật). Biến môi trường LDN_GIAO ghi đè khi chạy thử."""
+    e = (os.environ.get("LDN_GIAO") or "").strip()
+    if e:
+        return _tuyet_doi(e)
+    v = doc().get("thuMucGiao") or ""
+    ds = [v] if isinstance(v, str) else list(v)
+    ps = [_tuyet_doi(c.strip()) for c in ds if isinstance(c, str) and c.strip()]
+    if not ps:
+        return None
+    for p in ps:
+        if os.path.isdir(p):
+            return p
+    return ps[0]
 
 
 def tam(*con, tao=True):

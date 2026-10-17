@@ -14,7 +14,7 @@ slug = _a.slug
 os.chdir(_a.du_an)
 base = os.path.join('clip-ngan', slug, 'canh')
 spec = json.load(open(os.path.join(base, 'spec-gen.json'), encoding='utf-8'))
-tpl = open(os.path.join(ROOT, 'do-hoa-chung', 'canh-kit', 'mau', 'canh-short.html'), encoding='utf-8').read()
+tpl = open(os.path.join(ROOT, 'do-hoa-chung', 'canh-kit', 'mau', spec.get('mau', 'canh-short.html')), encoding='utf-8').read()   # spec 'mau': canh-short-navy.html cho họ màu navy
 
 def build(grp, tag, spec_grp):
     parts = spec_grp['parts']

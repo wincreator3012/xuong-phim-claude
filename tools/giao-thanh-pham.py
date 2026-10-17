@@ -179,10 +179,10 @@ def main():
                 ghi_t += ghi_van_ban(os.path.join(tr, "phu-de.srt"), ghi_srt(cues), a.ghi)
                 ghi_t += ghi_van_ban(os.path.join(tr, "loi-noi.txt"), "\n".join(c[2].replace("\n", " ") for c in cues) + "\n", a.ghi)
             if slug and os.path.isfile(mp) and goc:
-                parts = [p for p in json.load(open(mp, encoding="utf-8"))["parts"] if p.get("kind") == "cut" and p.get("audio_in") is not None]
+                parts = [p for p in json.load(open(mp, encoding="utf-8"))["parts"] if p.get("kind") == "cut" and (p.get("audio_in") is not None or p.get("in") is not None)]
                 dong = ["Gỡ băng của nguồn cho đúng các quãng đã dùng trong clip (giờ theo trục nguồn của cả buổi; clip có thể bỏ ngập ngừng nên chữ phụ đề đã chỉnh lại).", ""]
                 for p in parts:
-                    a0 = p["audio_in"]; b0 = a0 + p["dur"]
+                    a0 = p["audio_in"] if p.get("audio_in") is not None else p["in"]; b0 = a0 + p["dur"]
                     dong.append(f"== Trong clip {gio(p['start'], False)} - {gio(p['end'], False)} | nguồn {gio(a0, False)} - {gio(b0, False)} ==")
                     for x, y, tx in goc:
                         if y > a0 and x < b0:

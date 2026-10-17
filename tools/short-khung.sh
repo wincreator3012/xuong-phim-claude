@@ -20,7 +20,7 @@ case "$MODE" in
     F=$1; Z=$2; shift 2; NG="${NGUON:-$P/nguon/mat.mp4}"; i=0; IN=""; LAY=""; n=$#
     [ "$n" -lt 3 ] && { echo "cần ít nhất 3 mốc thời gian"; exit 2; }
     for t in "$@"; do
-      ffmpeg -y -v error -ss "$t" -i "$NG" -frames:v 1 -vf "crop='min(iw,ih*1.125)/$Z':'min(ih,iw/1.125)/$Z':'(iw-ow)*$F':0,scale=540:480" "$W/cr-$i.jpg"
+      ffmpeg -y -v error -ss "$t" -i "$NG" -frames:v 1 -vf "crop='min(iw,ih*1.125)/$Z':'min(ih,iw/1.125)/$Z':'(iw-ow)*$F':'(ih-oh)*${FY:-0}',scale=540:480" "$W/cr-$i.jpg"
       IN="$IN -i $W/cr-$i.jpg"; LAY="$LAY|$((i%4*540))_$((i/4*480))"; i=$((i+1))
     done
     ffmpeg -y -v error $IN -filter_complex "xstack=inputs=$n:layout=${LAY#|}" "$P/xuat-nhap/crop.jpg" && echo "-> $P/xuat-nhap/crop.jpg" ;;

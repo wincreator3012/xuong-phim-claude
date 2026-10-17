@@ -355,3 +355,16 @@ Quy trình: skill `phim-recap-su-kien`, bộ lệnh `tools/recap.py`; nghiên c�
 - **Truyền file:** bản nghe thử gửi qua chat phải dưới 30 MiB; tệp 20 MB đẩy từ máy lên có lúc báo "upload failed" ba lần liền, bản 640 px khoảng 11 MB thì qua.
 - **Cảnh báo "không đủ mốc" của phép đo đồng bộ so với nguồn là bình thường với phim toàn đoạn ngắn** (`do-dong-bo.py` cần đoạn đủ dài để đặt mốc); chấp nhận khi assemble báo hình = tiếng ở từng part và thành phẩm.
 
+## 28. Slideshow ảnh im lặng, lặp liền mạch
+
+Quy trình: skill `phim-slideshow-anh`, bộ lệnh `tools/slideshow-anh/run.py`; nghiên cứu nền ở `references/nghien-cuu-slideshow.md`. Người dùng duyệt ngay bản đầu sau một vòng loại ảnh theo yêu cầu của chủ nhân.
+
+- **Phim chiếu lặp ở sự kiện: im lặng, khoảng 5 giây mỗi ảnh, 10 phút.** Các hướng dẫn trên mạng nói 1,5 đến 3 giây mỗi ảnh nhưng đều cho slideshow theo nhạc; người đứng xem giữa vòng lặp chỉ liếc, cần nhìn rõ mặt. Muốn nhanh hơn thì giảm thời gian giữ danh nghĩa trong `spec.py`, không đổi động cơ.
+- **Vòng lặp liền mạch nhờ thẻ cuối mờ về đúng khung nền của thẻ đầu** (ngà, khung vàng đôi): khung đầu và cuối lệch trung bình khoảng 0,5/255. Kiểm bằng `run.py qc` (ngưỡng 3/255) chứ không bằng mắt. **[máy]**
+- **Thời gian giữ của mọi ảnh co giãn bằng một hệ số chung để tổng đúng mục tiêu (600,00 giây):** hệ quả là bỏ hay thêm ảnh nào sau khi đã render thì mọi đoạn đều hết giá trị. Hỏi chủ nhân danh sách ảnh bỏ TRƯỚC khi render, hoặc chấp nhận render lại cả phim (khoảng 8 lượt gọi, 12 phút). **[máy]** `plan` báo ảnh thiếu, trùng, và bỏ có chủ đích.
+- **Ảnh bìa nối ảnh khung bằng `dissolve` hay `zoom` nhìn như hai lớp chồng nhau:** dùng `sweep`, `focus`, `lightleak` hay `glow` ở những chỗ đổi bố cục.
+- **Ảnh đen trắng ISO cao: khử nhiễu, không làm nét.** Làm nét sau khi phóng làm hạt nổi như cát; khử nhiễu nhẹ trước khi phóng cho nền mịn. `denoise` trong `slideshow.json`.
+- **Ảnh ngược sáng, ảnh lưng, ảnh đen trắng thường không nhận ra mặt:** zoom lệch khỏi người. `faces` in danh sách ảnh không thấy mặt, ghi `focus_override` cho từng ảnh rồi mới xem `still`.
+- **Chữ trên thẻ xem ở giây chữ đã hiện đủ và so với viền khung:** hai thẻ đầu từng để chữ sát đường kẻ vàng; dời dòng và cỡ chữ theo lưới `y` rồi xem lại. Chữ trên phim cho người Mỹ xem bằng tiếng Anh, giữ đúng dấu tên riêng tiếng Việt.
+- **Máy ảo:** `device_bash` dừng lệnh ở khoảng 120 giây nếu tham số timeout thấp; đặt `timeout 112` quanh lệnh render ngân sách 95 giây. Không có quyền xoá thì `os.remove` ném lỗi: render ghi đè `.part.mp4` thay vì xoá.
+- **Phim im lặng không qua `nghiem-thu.py`** (thiên về tiếng nói): dùng `run.py qc` kiểm kích thước, số khung, thời lượng, không có luồng tiếng, khớp vòng lặp và bảng khung ở các mốc nối đoạn. **[máy]**

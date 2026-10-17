@@ -1,0 +1,27 @@
+{
+ "_ghi-chu": "Cau hinh dong co slideshow. nguon: thu muc anh (tuong doi so voi thu muc du an hoac tuyet doi). Moi toa do 'focus_override' la (tam x, tam y, nua rong, nua cao) tuong doi theo anh, chi can cho anh ma nhan dang mat that bai.",
+ "nguon": "../../Sources/TEN THU MUC ANH",
+ "palette": {"ivory": "#F7F2E8", "ivory_hi": "#FCF8F0", "gold": "#B08D57", "ink": "#3A2F28", "frame": "#FAF7F0", "warmwhite": "#FCF3E8"},
+ "focus_override": {},
+ "denoise": [],
+ "cards": {
+  "title": {
+   "els": [
+    {"text": "THE WEDDING OF", "font": "caps", "size": 42, "tracking": 0.42, "y": 336, "color": "gold", "t0": 1.0, "t1": 2.6, "mode": "fade"},
+    {"text": "Alex & Sam", "font": "script", "size": 250, "tracking": 0.0, "y": 586, "color": "ink", "t0": 2.0, "t1": 4.6, "mode": "wipe"},
+    {"text": "JUNE 6, 2027", "font": "caps", "size": 58, "tracking": 0.30, "y": 790, "color": "ink", "t0": 5.0, "t1": 6.4, "mode": "fade"},
+    {"text": "LAKESIDE GARDEN, OREGON", "font": "caps", "size": 42, "tracking": 0.38, "y": 858, "color": "gold", "t0": 5.8, "t1": 7.2, "mode": "fade"}
+   ],
+   "line": [4.2, 5.4, 712]
+  },
+  "closing": {
+   "els": [
+    {"text": "Thank you for sharing this day with us", "font": "italic", "size": 58, "tracking": 0.0, "y": 385, "color": "ink", "t0": 1.4, "t1": 3.0, "mode": "fade"},
+    {"text": "Alex & Sam", "font": "script", "size": 220, "tracking": 0.0, "y": 625, "color": "ink", "t0": 3.4, "t1": 5.6, "mode": "wipe"},
+    {"text": "JUNE 6, 2027", "font": "caps", "size": 58, "tracking": 0.30, "y": 835, "color": "gold", "t0": 5.8, "t1": 7.2, "mode": "fade"}
+   ],
+   "line": [5.2, 6.4, 752],
+   "fade_out": [9.0, 11.6]
+  }
+ }
+}

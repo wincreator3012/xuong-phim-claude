@@ -171,10 +171,10 @@ def cmd_snap(slug):
         if sp.get('hook_scene'):
             ov = [{"src": f"{base}/do-hoa/doc/canh-h{k}.webm", "at": 0.25 if k == 0 else 0.0}]
         segs.append(seg(f'hook{k+1}' if len(out['hook']) > 1 else 'hook', h['in'], h['out'], ov, 'Hook' if k == 0 else None))
-    segs.append({"type": "insert", "src": C['intro'], "role": "intro"})
+    segs.append({"type": "insert", "src": sp.get('intro', C['intro']), "role": "intro"})
     for k, p in enumerate(out['parts']):
         if k == 0:
-            ov = [{"src": C['lt-nhan'], "at": 0.3}]
+            ov = [{"src": sp.get('lt', C['lt-nhan']), "at": 0.3}]
             if (p['out'] - p['in']) - 4.7 >= 0.5:   # cảnh p0 chỉ có khi phần còn lại sau 4,7 s dài >= 0,5 s (khớp short-canh.py)
                 ov.append({"src": f"{base}/do-hoa/doc/canh-p0.webm", "at": 4.7})
         else:
@@ -188,6 +188,8 @@ def cmd_snap(slug):
     sc = dict(sp['scene'])
     sc['parts'] = [[p['in'], p['out']] + ([sp['part0_at']] if (k == 0 and sp.get('part0_at') is not None) else []) for k, p in enumerate(out['parts'])]
     sc['title'] = sp.get('tieu_de', slug)
+    if sp.get('mau'):
+        sc['mau'] = sp['mau']   # mẫu cảnh khác mặc định (ví dụ canh-short-navy.html)
     if sp.get('hook_scene'):
         hs = dict(sp['hook_scene'])
         hs['parts'] = [[h['in'], h['out']] + ([0.25] if k == 0 else [0.0]) for k, h in enumerate(out['hook'])]
