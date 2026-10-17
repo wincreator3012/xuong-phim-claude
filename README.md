@@ -33,7 +33,7 @@ Mười bốn năng lực dựng phim, mỗi năng lực là một quy trình ch
 Ngoài các năng lực trên, bạn nhận được:
 
 - **Một bước thiết lập phong cách** khoảng 30 phút: Claude hỏi bạn là ai, dạy gì, cho ai, thích cảm giác nào (bốn mẫu để chọn hoặc mô tả riêng), rồi điền tên, chức danh, màu sắc, nhạc, thông điệp kết vào chỗ đã chừa sẵn. Mọi clip sau đó mang đúng dấu ấn của bạn và đổi được bằng một câu nói
-- **Bộ skill mang tên bạn trong tài khoản AI**: mười lăm quy trình chuẩn của xưởng được đóng gói với tiền tố riêng của bạn (ví dụ `tma-phim-dung-bai`) để bạn lưu vào tài khoản. Từ đó ở bất kỳ phiên nào, bạn chỉ cần nói việc bằng lời thường, AI tự mở đúng quy trình. Claude giải thích kỹ skill là gì, lưu thế nào, dùng thế nào; khi xưởng học thêm điều mới, nó đóng gói lại đúng những skill đã đổi để bạn lưu lại
+- **Bộ skill mang tên bạn trong tài khoản AI**: mười bảy quy trình chuẩn của xưởng được đóng gói với tiền tố riêng của bạn (ví dụ `tma-phim-dung-bai`) để bạn lưu vào tài khoản. Từ đó ở bất kỳ phiên nào, bạn chỉ cần nói việc bằng lời thường, AI tự mở đúng quy trình. Claude giải thích kỹ skill là gì, lưu thế nào, dùng thế nào; khi xưởng học thêm điều mới, nó đóng gói lại đúng những skill đã đổi để bạn lưu lại
 - **Một buổi giới thiệu xưởng** khoảng 10 phút ngay sau thiết lập: Claude trình bày có hệ thống xưởng làm ra được gì cho bạn, một dự án chạy thế nào, những thói quen giúp dùng hiệu quả nhất, những gì xưởng chưa làm, rồi cùng bạn chọn bước đầu tiên. Gọi lại bất cứ lúc nào bằng câu "giới thiệu lại xưởng"
 - **Thư viện chất liệu sạch**: danh mục nhạc nền và hiệu ứng đã kiểm từng trang nguồn (dùng thương mại mọi nền tảng, không Content ID), tải về theo mẫu phong cách bạn chọn; danh mục nguồn hình miễn phí và quy tắc giấy phép
 - **Cổng nghiệm thu tự động**: hình khớp tiếng tới 2 khung hình, âm lượng chuẩn -14 LUFS, không khoảng đen, không đứng hình. Claude không được nói "xong" khi máy chưa báo đạt
@@ -79,7 +79,7 @@ Xuong phim AI/
     ├── Mo ban dung.command    ← bấm đúp để mở Bàn dựng (tự chỉnh nhỏ bản nháp trên Chrome)
     ├── phong-cach/            ← PHONG-CACH.md: bản đồ phong cách của BẠN; mau/: 4 mẫu khởi đầu
     ├── brand/                 ← brand.json (tên, chức danh, bảng màu) + logo/ (thả logo vào đây)
-    ├── skills/                ← 15 skill gốc (thiết lập + 14 năng lực dựng phim); bản chép mang tiền tố của bạn nằm trong tài khoản AI
+    ├── skills/                ← 18 skill gốc (thiết lập + 17 năng lực dựng phim); bản chép mang tiền tố của bạn nằm trong tài khoản AI
     ├── docs/                  ← tài liệu kỹ thuật cho AI: môi trường, bài học từ dự án thật
     ├── thu-vien/              ← danh mục nhạc/hiệu ứng/hình đã kiểm định (không chứa file, tải lúc cài)
     ├── nhac-nen/  hieu-ung/   ← file âm thanh tải về, theo nhóm công dụng

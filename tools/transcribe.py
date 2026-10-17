@@ -164,7 +164,8 @@ def main():
     ap.add_argument("input")
     ap.add_argument("--model", default="auto", choices=["auto", "small", "turbo", "large-v3", "tiny", "base", "medium"],
                     help="auto: large-v3 khi đủ RAM (Linux >= 7 GB trống, macOS tổng >= 12 GB), không thì turbo")
-    ap.add_argument("--lang", default="vi")
+    ap.add_argument("--lang", default="vi",
+                    help="mã ngôn ngữ (vi, en...); \"auto\" hoặc rỗng = whisper tự nhận ngôn ngữ từng đoạn (clip song ngữ), ghi vào trường lang")
     ap.add_argument("--out-dir", default=None)
     ap.add_argument("--threads", type=int, default=None,
                     help="mặc định: 4 trong VM Linux, tối đa 8 luồng trên macOS")
@@ -200,6 +201,9 @@ def main():
                     print(f"      chưa có whisper-{args.model} trong tools/models/ (xem TAI-MODEL.md), dùng whisper-{thay}", flush=True)
                     args.model = thay
                     break
+    auto_lang = args.lang.strip().lower() in ("", "auto")
+    if auto_lang:
+        args.lang = ""  # sherpa-onnx: ngôn ngữ rỗng = tự nhận từng đoạn
     src = args.input
     base = os.path.splitext(os.path.basename(src))[0]
     out_dir = args.out_dir or os.path.join(os.path.dirname(src), "..", "transcript")
@@ -237,11 +241,14 @@ def main():
         for (start, arr), st in zip(batch, streams):
             text = st.result.text.strip()
             if text:
-                results.append({
+                item = {
                     "start": round(start, 2),
                     "end": round(start + len(arr) / SAMPLE_RATE, 2),
                     "text": text,
-                })
+                }
+                if auto_lang:
+                    item["lang"] = re.sub(r"[<|>\s]", "", getattr(st.result, "lang", "") or "")
+                results.append(item)
         done = min(i + args.batch, len(segs))
         print(f"      {done}/{len(segs)} đoạn", flush=True)
 

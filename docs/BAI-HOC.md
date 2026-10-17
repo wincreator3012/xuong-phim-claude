@@ -106,6 +106,7 @@ Bài học là lý do để hiểu vì sao một cách làm từng đúng với 
 - **Nhiều lần gỡ cùng đoạn ra kết quả khác hẳn nhau là bằng chứng mạnh của hallucination;** ưu tiên bản gỡ từ clip đã dựng xong và đối chiếu điều đã biết về người dùng (ví dụ tên tổ chức bị nghe thành một cụm tiếng Anh na ná). (dự án thật, 2026-09-03)
 - **Whisper có thể rớt hẳn một cụm ở ranh giới lô khoảng 28 giây;** chốt điểm cắt gần ranh giới thì gỡ lại cửa sổ quanh đó để xác minh. (dự án thật, 2026-08-29) **[máy]** `nghiem-thu.py transcript` bắt quãng có tiếng dài hơn 8 giây không có chữ
 - **large-v3 chết lặng trong VM 4 GB;** chạy large-v3 trên Mac qua hàng đợi, VM chỉ turbo. Lượt đầu sau khi máy khởi động chậm hẳn vì nạp 1,7 GB model. (dự án thật, 2026-09-21) **[máy]** `--model auto`
+- **Nguồn nói tiếng Anh (hay trộn hai tiếng) thì gỡ băng bằng `--lang auto`, không để mặc định `vi`:** Whisper tự nhận ngôn ngữ từng đoạn và ghi vào trường `lang` của `.transcript.json` (cũng chạy được qua hàng đợi Mac). Nhãn của đoạn rất ngắn không đáng tin (một tên riêng tiếng Việt có dấu bị gắn `ar`): quyết định ngôn ngữ theo cả clip. Chữ Whisper tiếng Anh ra thường, không dấu câu, tên riêng có dấu bị chép thành từ tiếng Anh gần âm: hiệu đính khi làm phụ đề. (dự án thật, 2026-10-17) **[máy]** `transcribe.py --lang auto`
 
 ## 8. Phụ đề
 
@@ -119,6 +120,7 @@ Bài học là lý do để hiểu vì sao một cách làm từng đúng với 
 - **Font trong `.ass` bị rơi về DejaVu Sans** khi style xin weight 400 mà file chỉ có SemiBold: thêm file Regular/Bold thật hoặc khai đúng weight của file có sẵn; xem log `fontselect` khi burn. (dự án thật, 2026-09-21)
 
 - **Cue theo hơi nói, nhóm cân bằng, khoảng 28 ký tự mỗi dòng trên điện thoại:** chia thuần theo tỉ lệ ký tự trong cụm dài lệch vài phần mười giây và để lẻ chữ; ASR file đã dựng lấy ranh giới cụm, nhóm cân bằng ưu tiên dấu câu, chữ soát tay. Burn và chuẩn hoá âm lượng trong cùng một lượt ffmpeg (acompressor, volume, alimiter); `volume` 2,5 dB cho -15,1 LUFS (không đạt), 3,7 dB cho -14,6; luôn đo lại. (dự án thật, 2026-10-03)
+- **Phụ đề song ngữ cho clip ngang chiếu ở sự kiện** (hai dòng cùng lúc, chữ to, nền hộp mờ, cue viết theo mốc nguồn): xem mục 29 và `tools/phu-de-song-ngu.py`; khác phụ đề dọc ở trên về cỡ chữ (64 px trên khung 1080, 42 ký tự mỗi dòng), nền hộp và việc cue sống sót qua mọi lần cắt lại. (dự án thật, 2026-10-17)
 
 ## 9. Đồ họa Remotion và render
 
@@ -161,7 +163,7 @@ Bài học là lý do để hiểu vì sao một cách làm từng đúng với 
 
 ## 13. Truyền file và hạ tầng
 
-- **Commit lại cùng một `stagedPath` từng ghi bản CŨ;** mỗi lần commit bản sửa dùng tên staged mới và so md5 hai phía. (dự án thật, 2026-09-29)
+- **Commit lại cùng một `stagedPath` từng ghi bản CŨ;** mỗi lần commit bản sửa dùng tên staged mới và so md5 hai phía. (một podcast nhiều góc, 2026-09-29; tái phạm khi chép bản sửa của `phu-de-song-ngu.py`, 2026-10-17: `written` báo thành công mà máy vẫn giữ bản cũ; luôn kiểm kích thước hoặc `grep` dòng vừa sửa trên máy)
 - **mp4 và ảnh qua `outputs/` có thể được gắn hộp `uuid` (manifest nguồn gốc):** md5 và dung lượng khác dù hình tiếng giữ nguyên; so bằng `ffprobe`. (dự án thật, 2026-09-30)
 - **File hơn 20 MB: `split`, commit từng phần, `cat` trên máy, kiểm `sha256sum` hai đầu.** Chunk đầu chứa header `ftyp` từng bị chèn thêm byte; chèn một chuỗi byte rác vào đầu chunk đầu rồi `tail -c +<n+1>` cắt bỏ trên máy. (dự án thật, 2026-09-22)
 - **Dấu tiếng Việt có thể mất khi script tạo qua heredoc thường;** luôn dùng `python3 <<'PYEOF'` đọc sửa ghi và đọc lại giá trị đã ghi (`repr`) sau khi chạy. (dự án thật, 2026-09-22)
@@ -368,3 +370,18 @@ Quy trình: skill `phim-slideshow-anh`, bộ lệnh `tools/slideshow-anh/run.py`
 - **Chữ trên thẻ xem ở giây chữ đã hiện đủ và so với viền khung:** hai thẻ đầu từng để chữ sát đường kẻ vàng; dời dòng và cỡ chữ theo lưới `y` rồi xem lại. Chữ trên phim cho người Mỹ xem bằng tiếng Anh, giữ đúng dấu tên riêng tiếng Việt.
 - **Máy ảo:** `device_bash` dừng lệnh ở khoảng 120 giây nếu tham số timeout thấp; đặt `timeout 112` quanh lệnh render ngân sách 95 giây. Không có quyền xoá thì `os.remove` ném lỗi: render ghi đè `.part.mp4` thay vì xoá.
 - **Phim im lặng không qua `nghiem-thu.py`** (thiên về tiếng nói): dùng `run.py qc` kiểm kích thước, số khung, thời lượng, không có luồng tiếng, khớp vòng lặp và bảng khung ở các mốc nối đoạn. **[máy]**
+
+## 29. Lời chúc gửi từ xa chiếu ở đám cưới: một nguồn, cắt gọn, phụ đề song ngữ ghi cứng
+
+Quy trình: skill `phim-phu-de-song-ngu`, công cụ `tools/phu-de-song-ngu.py` (`khoi-tao`, `dung`, `burn`, `khung`). Một clip ngang quay bằng điện thoại, hai người nói thay phiên, khoảng tám phút rưỡi, chiếu cho cả hội trường có cả khách nói tiếng Việt lẫn khách nói tiếng Anh. Người dùng duyệt phương án cắt, rồi bản nháp 480p, rồi xuất bản chính; không nhạc nền, không gói đăng tải.
+
+- **Khách ngồi xa nghe không rõ và có hai thứ tiếng: phụ đề phải ghi cứng, hai ngôn ngữ cùng lúc, chữ to.** Dòng tiếng Anh trắng, dòng tiếng Việt vàng nhạt, 64 px trên khung 1080, tối đa 42 ký tự mỗi dòng, hai dòng mỗi cue, nền hộp mờ (`BorderStyle=3`). So viền chữ với nền hộp trên khung thật trước khi chọn: chữ viền mất tương phản trên áo sáng và tường trắng, hộp thì luôn đọc được. Bảng tên người gửi hiện 4 giây đầu (không che mặt, đặt góc trên trái).
+- **Cue viết theo mốc NGUỒN (giây trong file quay), chiếu sang thành phẩm bằng `map.json`:** đổi phương án cắt thì sinh lại phụ đề bằng một lệnh, nháp 480p và bản 1080p dùng chung một tệp `cues.json` (trong thư mục `phu-de` của hồ sơ dự án). Một câu dài tách thành nhiều cue: điểm chia theo tỉ lệ ký tự rồi hút về khoảng ngừng gần nhất trong ±0,9 giây (`silencedetect -32dB:d=0.1` trên tiếng gốc), để chỗ ngắt rơi đúng hơi thở. Hiện sớm 0,05 giây, kéo dài 0,25 giây sau lời, tối thiểu 1,3 giây; cảnh báo cue đọc trên 21 ký tự mỗi giây. **[máy]** `phu-de-song-ngu.py dung`.
+- **Cắt gọn lời chúc từ khoảng 8,5 phút xuống 4 phút 12 giây (phương án B, 22 đoạn):** giữ nhịp cảm xúc (lời mở, ký ức, lời cảm ơn từng người, lời khuyên cuối, câu chúc), bỏ chỗ lặp, chỗ nói lạc, chỗ chuyển ý dài. Điểm cắt đặt ngay trong câu ở chỗ ngừng thật (`snap`), 21 mối nối không nghe thấy; kiểm bằng `map.json` và khung ở mỗi mối nối. Bốn phút là mức người dùng duyệt cho clip chiếu ở lễ cưới: người xem không phải thân với người gửi vẫn ở lại hết clip.
+- **Không suy diễn quan hệ và tên riêng:** bản dịch buộc phải chọn đại từ, nên dễ vô tình khẳng định quan hệ (vợ chồng, chị em). Chưa biết thì dùng cách nói trung tính ("hai bạn", "chúng mình") và hỏi người dùng tên riêng có dấu TRƯỚC khi dịch. Ở clip này người dùng sửa ngay một tên (dấu nặng) và dặn không nói người này là vợ của người kia.
+- **Chỗ nghe không chắc thì không đoán thầm:** ghi vào `ghi-chu` của cue, báo cáo `.bao-cao.txt` liệt kê mốc thành phẩm cho chủ nhân nghe lại; bản dịch theo ý đoán cũng ghi rõ. Bốn chỗ ở clip này (một tên riêng bị chép thành từ tiếng Anh gần âm, một từ "fresh" có thể là "playful", một từ cuối câu bị chép thành "Dresspo", một cụm "nostalgic for you" dịch theo ý đoán); người dùng duyệt không trả lời nên giữ nguyên và ghi trong báo cáo giao.
+- **Hai người thay phiên nói trong một nguồn:** gán người nói bằng cao độ F0 trung bình từng đoạn (tự tương quan) đối chiếu khung hình, không đoán theo nội dung; cần để chọn đại từ trong bản dịch và chữ trên bảng tên.
+- **iPhone quay HDR HLG: tonemap chuẩn của skill màu ra hơi gắt và bão hoà:** thêm `eq=saturation=0.90:gamma=1.04` vào `mau-sac.json` cho da tự nhiên; chọn bằng mắt trên khung thật cạnh bản gốc, không bằng số liệu. (Nguyên tắc chung của skill màu vẫn đúng: HDR bắt buộc tonemap, kiểm `color_transfer` từng file.)
+- **Burn 1080p trong giới hạn 180 giây của một lượt `device_bash`:** `ass=` với `-preset veryfast -crf 17 -c:a copy` ra clip 4 phút trong 60 đến 100 giây; `-preset fast` cùng crf vượt 180 giây và để lại file cụt (277 MB thay vì 260 MB). Luôn so thời lượng bản burn với bản gốc; công cụ tự làm và từ chối clip dài hơn khoảng 6,5 phút (chạy trên Mac). `.ass` khai `PlayResX/Y` 1920x1080 đúng, không dùng `force_style` (mục 8). Không có quyền xoá thì `rm` ném lỗi: `ffmpeg -y` ghi đè được. **[máy]** `phu-de-song-ngu.py burn`.
+- **Kiểm phụ đề bằng khung thật** ở đầu clip (bảng tên cộng cue đầu), giữa clip và cuối, `-ss` đặt SAU `-i`; `silencedetect` trên thành phẩm không dùng được để kiểm khoảng lặng khi phòng quay có tạp âm nền (không thấy khoảng lặng nào), dựa vào `map.json` và cổng `nghiem-thu.py video` (-13,9 LUFS, 21 mối nối sạch). **[máy]** `phu-de-song-ngu.py khung`.
+- **Clip chiếu tại sự kiện, không đăng mạng thì không làm gói đăng tải** (người dùng chốt: "không cần đăng tải"); quy tắc tự chạy `phim-dang-tai` dành cho clip sẽ đăng. Chưa rõ clip có đăng không thì hỏi một câu khi nộp bản nháp.

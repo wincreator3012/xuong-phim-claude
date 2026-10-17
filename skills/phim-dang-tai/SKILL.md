@@ -20,7 +20,7 @@ Kết quả của mỗi clip soạn ở `Du an/<tên>/dang-tai/<tên video>/` r�
 
 ## Khi nào chạy
 
-- **Tự chạy** ngay sau khi một clip có "nghiệm thu máy: ĐẠT" (mọi skill dựng trỏ về đây ở bước giao). Người dùng không cần ra lệnh thêm; báo giao clip và gói đăng tải trong cùng một lượt.
+- **Tự chạy** ngay sau khi một clip có "nghiệm thu máy: ĐẠT" (mọi skill dựng trỏ về đây ở bước giao). Người dùng không cần ra lệnh thêm; báo giao clip và gói đăng tải trong cùng một lượt. Ngoại lệ: clip chỉ chiếu tại sự kiện, không đăng mạng (slideshow ảnh, lời chúc chiếu ở lễ cưới) thì không làm gói; chưa rõ thì hỏi một câu khi nộp bản nháp, người dùng nói "không cần đăng tải" thì bỏ qua.
 - Nhiều clip một lượt (một buổi podcast ra hai clip, một loạt Reels): mỗi clip một gói, soạn chữ cho cả loạt cùng lúc để các tiêu đề không trùng ý.
 - Clip cũ, clip không dựng trong xưởng: chạy độc lập theo đường dẫn video (`--video` thay cho `--map` ở bước chọn khung).
 - Gói đăng tải là bản nháp để người dùng duyệt khi đăng, không có chốt duyệt chặn trước; Claude không tự đăng lên nền tảng nào.
@@ -141,4 +141,4 @@ Báo người dùng trong cùng lượt với báo giao clip: đường dẫn `D
 - Người dùng chọn phương án, sửa chữ, hay chê một kiểu thumbnail: một dòng vào sổ tay góp ý của `phong-cach/PHONG-CACH.md`; lặp lần hai thì sửa mặc định (PHONG-CACH mục 8, `thumbnailDefaults` trong `Thumbnail.tsx`, mẫu trong `references/mau-dang-tai.md`).
 - Kết quả thử nghiệm A/B người dùng kể lại (phương án nào thắng, kiểu chữ nào): ghi vào `docs/BAI-HOC.md` chủ đề "Đăng tải" kèm tên clip; đủ nhiều thì chưng thành nguyên lý trong `references/nghien-cuu-thumbnail.md`.
 
-<!-- ban-nguon: phim-dang-tai 2026-10-09 625985c0 -->
+<!-- ban-nguon: phim-dang-tai 2026-10-17 80cf9fb0 -->

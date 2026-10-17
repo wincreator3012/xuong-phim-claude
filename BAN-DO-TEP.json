@@ -2,8 +2,8 @@
 "_huong-dan": "Bản đồ tệp của bản thiết kế xưởng phim. AI dựng xưởng: đọc DUNG-XUONG.md; lấy từng tệp vai 'chep' theo mẫu địa chỉ 'raw' (thay {ref} bằng mã commit đang dùng hoặc 'main', {p} bằng đường dẫn đã mã hoá URL), kiểm 'sha' (sha1 của 'blob <cỡ>\\0' + nội dung, giống git hash-object), tệp 'chay' thì cấp quyền chạy. Tệp vai 'ban-mau' không chép. Bản đồ này không tự liệt kê mình.",
 "repo": "https://github.com/wincreator3012/xuong-phim-claude",
 "raw": "https://raw.githubusercontent.com/wincreator3012/xuong-phim-claude/{ref}/{p}",
-"so_tep": 233,
-"so_tep_chep": 227,
+"so_tep": 235,
+"so_tep_chep": 229,
 "tep": [
 {
 "p": ".gitattributes",
@@ -31,14 +31,14 @@
 },
 {
 "p": "CLAUDE.md",
-"c": 14785,
-"sha": "292d06b7fd2ba79d5966fb9399c17e9c3310ebf0",
+"c": 15307,
+"sha": "8ce94bb16accfb60d419a6748e5dfdd6dbde769b",
 "vai": "chep"
 },
 {
 "p": "DUNG-XUONG.md",
-"c": 11308,
-"sha": "87a29c4754ac54a44b0c68ef61575492039022a7",
+"c": 11309,
+"sha": "9f7499afa255e8a05279da529264aa730d0a4e78",
 "vai": "ban-mau"
 },
 {
@@ -69,14 +69,14 @@
 },
 {
 "p": "README.md",
-"c": 17984,
-"sha": "42b69b0a153e119394a22802954aa4b858d7f654",
+"c": 17985,
+"sha": "abdb8d74c97ceb0bc6b1938c8891c3fb5ad59fb7",
 "vai": "ban-mau"
 },
 {
 "p": "THAY-DOI.md",
-"c": 9501,
-"sha": "8d7c97117e34d58e88a6f311e45844296e62a2f4",
+"c": 11586,
+"sha": "25dbb1238733187f4254b053afef243e87517ada",
 "vai": "ban-mau"
 },
 {
@@ -366,14 +366,14 @@
 },
 {
 "p": "docs/BAI-HOC.md",
-"c": 95364,
-"sha": "6731e0aead435ce2461d9c993543018cec5a0769",
+"c": 102120,
+"sha": "6e220eb4d029db513c35923e2fae4e4c40ff8b0e",
 "vai": "chep"
 },
 {
 "p": "docs/QUY-TRINH-KY-THUAT.md",
-"c": 53815,
-"sha": "d5f8bdc33680e15555d273ef3071261ae828d26d",
+"c": 54775,
+"sha": "15af7a7cc1f9fc86cabc9ff386a6e685b301ba34",
 "vai": "chep"
 },
 {
@@ -546,8 +546,8 @@
 },
 {
 "p": "skills/phim-dang-tai/SKILL.md",
-"c": 19299,
-"sha": "4bb523b3b050cbcb9e99cf33c97eeb3efc01ea98",
+"c": 19569,
+"sha": "5374e70a5b0e946af20d4d2ac77b73897a082645",
 "vai": "chep"
 },
 {
@@ -659,6 +659,12 @@
 "vai": "chep"
 },
 {
+"p": "skills/phim-phu-de-song-ngu/SKILL.md",
+"c": 11768,
+"sha": "dfd3406dcb6e19817b52ba7442e476c3bbd5269a",
+"vai": "chep"
+},
+{
 "p": "skills/phim-recap-su-kien/SKILL.md",
 "c": 14893,
 "sha": "f3ffe1c87f6baf7406e1be8b080613049359257a",
@@ -744,8 +750,8 @@
 },
 {
 "p": "skills/phim-transcript/SKILL.md",
-"c": 7162,
-"sha": "17fa155e937e0a0e1f2384fc540254e6a14753d4",
+"c": 7615,
+"sha": "03a47719f02e6ec69aa4e6d64ca4a63b5566fbe3",
 "vai": "chep"
 },
 {
@@ -1296,6 +1302,12 @@
 "vai": "chep"
 },
 {
+"p": "tools/phu-de-song-ngu.py",
+"c": 17786,
+"sha": "befe5ba45c32eb7ccc5e8304a7152d8d0c3e0e15",
+"vai": "chep"
+},
+{
 "p": "tools/proxy-mac.py",
 "c": 8868,
 "sha": "fdd4754e8d4e33ff90d6a871dfadce0e720e46cf",
@@ -1439,8 +1451,8 @@
 },
 {
 "p": "tools/transcribe.py",
-"c": 10913,
-"sha": "f2edfaf6da1759c26ea0c0e3cdd9f893eebfca36",
+"c": 11402,
+"sha": "18c3d38daf26f95a50359006c63c68ba568d9c18",
 "vai": "chep"
 },
 {

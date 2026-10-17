@@ -32,7 +32,7 @@ python3 tools/transcribe.py "<đường dẫn file>" --out-dir "<thư mục kế
 
 Dù chạy ở đâu, luôn qua cổng: `python3 tools/nghiem-thu.py transcript "../Du an/<x>" [--nguon <tên file>]`.
 
-- `--lang vi` mặc định; đổi khi nội dung tiếng khác
+- `--lang vi` mặc định; đổi khi nội dung tiếng khác. Nguồn nói tiếng khác hoặc trộn hai tiếng (lời chúc, khách nước ngoài): `--lang auto` (cả `transcribe.py` lẫn `hang-doi-go-bang.py them`), Whisper tự nhận ngôn ngữ từng đoạn và ghi vào trường `lang`; nhãn của đoạn rất ngắn không đáng tin (một tên riêng bị gắn nhầm ngôn ngữ), quyết theo cả clip. Phụ đề song ngữ cho clip chiếu ở sự kiện: skill `phim-phu-de-song-ngu`
 - Kết quả 4 file cùng tên gốc: `.transcript.json` (mốc giây, dùng cho máy), `.srt` (phụ đề), `.txt` (dạng đọc: `[hh:mm:ss - hh:mm:ss] lời nói`), `.silences.json` (khoảng lặng - hệ thống cắt phim dùng)
 
 ## Cổng nghiệm thu transcript (bắt buộc trước khi dùng hay giao)
@@ -54,4 +54,4 @@ Cảnh báo (không chặn): câu dài hơn 25 giây (Whisper gộp câu - phụ
 - **Nghi ngờ một đoạn là Whisper hallucinate (câu lạc quẻ, đứt quãng, nhắc tên/thương hiệu không khớp ngữ cảnh) - đừng vội kết luận chỉ dựa vào việc transcript RIÊNG một cửa sổ ngắn (vài giây) quanh đoạn đó để kiểm tra**: bản thân việc cắt ngắn/tách rời khỏi ngữ cảnh xung quanh có thể LÀ NGUYÊN NHÂN khiến Whisper đoán sai, không phải vì audio gốc có vấn đề. Đã gặp thực tế: một đoạn 2.7s bị nhận nhầm thành câu quảng cáo kênh khi transcript riêng cửa sổ ngắn, nhưng ra chữ hoàn toàn mạch lạc khi transcript lại nguyên khối dài hơn (cả đoạn liên tục, hoặc cả file). Quy trình đúng: nghi ngờ → thử transcript lại một cửa sổ RỘNG HƠN nhiều (30-60s bao quanh, hoặc cả đoạn liên tục nếu không quá dài) trước khi kết luận là lỗi nhận dạng thật
 - Sửa skill này theo `skills/_chung/bao-tri-skill.md`; bài học gỡ băng và phụ đề mới vào `docs/BAI-HOC.md` chủ đề "Gỡ băng", "Phụ đề"
 
-<!-- ban-nguon: phim-transcript 2026-10-07 fd5c5f61 -->
+<!-- ban-nguon: phim-transcript 2026-10-17 35247c01 -->

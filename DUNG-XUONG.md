@@ -83,7 +83,7 @@ Làm theo skill `skills/phim-thiet-lap/SKILL.md` của xưởng mới, từ Bư�
 
 Theo Bước 5b của skill phim-thiet-lap:
 
-1. `python3 tools/dong-goi-skill.py --lam --tat-ca`: mười lăm tệp `<tiền tố>-phim-*.skill` ở `Du an/_tam/goi-skill/<ngày giờ>/`.
+1. `python3 tools/dong-goi-skill.py --lam --tat-ca`: mười bảy tệp `<tiền tố>-phim-*.skill` ở `Du an/_tam/goi-skill/<ngày giờ>/`.
 2. Giải thích cho người dùng skill là gì, vì sao nên lưu vào tài khoản, cách lưu và cách dùng, theo `skills/phim-thiet-lap/references/skill-trong-tai-khoan.md`. Gửi từng tệp để họ lưu.
 3. Họ báo đã lưu xong: `python3 tools/dong-goi-skill.py --da-luu --tat-ca`.
 

@@ -33,6 +33,7 @@ Xưởng làm việc bằng nguyên lý, không bằng khuôn. Mọi quyết đ�
 | "làm intro", "infographic", "bảng tên", "sửa đồ họa" | `skills/phim-do-hoa/` |
 | "cảnh minh hoạ", "minh hoạ động cho đoạn này", "dùng hình này làm nền mờ", B-roll giải thích cơ chế, quy trình, số liệu | `skills/phim-canh-minh-hoa/` (mỗi cảnh là một trang web có thời gian ảo, xem trực tiếp được, chụp từng khung ra video; bốn kiểu chèn vào bài giảng; phim-dung-bai và phim-infomotion gọi skill này) |
 | "gỡ băng", "phụ đề", "transcript" | `skills/phim-transcript/` |
+| "phụ đề song ngữ", "burn phụ đề hai thứ tiếng", "lời chúc" hay clip gửi từ xa chiếu ở sự kiện, khách ngồi xa nghe không rõ, nguồn nói tiếng khác hoặc trộn hai tiếng, "cắt gọn mà giữ cảm xúc" cho một clip ngang một nguồn | `skills/phim-phu-de-song-ngu/` (công cụ `tools/phu-de-song-ngu.py`; cue theo mốc nguồn, bản burn là bản hoàn chỉnh) |
 | "tìm hình minh hoạ", "cần ảnh cho đoạn này" | `skills/phim-tu-lieu/` |
 | "màu bị bạc", "hai góc lệch màu", "da không đẹp" | `skills/phim-mau-sac/` |
 | "phim tài liệu", "phóng sự phỏng vấn", "phim giới thiệu dự án/chương trình", "sắp có sự kiện muốn làm phim", "phỏng vấn ai, hỏi gì", "cần quay cảnh trám nào", nhiều file phỏng vấn nhiều người | `skills/phim-tai-lieu-phong-van/` (hai pha: Kế hoạch ghi hình trước quay, kịch bản thực tế sau quay; gọi phim-dung-bai/phim-do-hoa ở bước dựng) |
@@ -48,7 +49,7 @@ Xưởng làm việc bằng nguyên lý, không bằng khuôn. Mọi quyết đ�
 - Hỏi ít, mỗi lượt tối đa 4 câu, luôn có mặc định lấy từ PHONG-CACH.md. Hai chốt duyệt cố định: phương án cắt và overlay (trước khi dựng), bản nháp 480p (trước bản chính). Phim tài liệu phỏng vấn có thêm hai chốt trên giấy: Kế hoạch ghi hình (trước khi quay) và kịch bản thực tế có ước tính thời lượng (trước khi dựng). Người dùng vắng mặt: chọn mặc định, ghi rõ giả định, làm tiếp
 - Người dùng mới hoặc hỏi "xưởng làm được gì": giới thiệu có hệ thống theo `skills/phim-thiet-lap/references/gioi-thieu-xuong.md` (sáu chặng, mỗi lượt một chặng, kết bằng một câu hỏi), cá nhân hoá theo `PHONG-CACH.md`; chỉ nói điều xưởng thật sự có và nói thẳng điều chưa làm được. Cách dùng hiệu quả nhất nằm ở `HUONG-DAN.md`
 - Báo tiến độ ngắn khi việc chạy lâu (gỡ băng bài dài, xuất bản chính), nói rõ đang chờ máy chứ không phải chờ người dùng
-- Kết mỗi dự án bằng: thư mục clip trong `Thanh pham/<YYYY-MM tên dự án>/` (video, kết quả nghiệm thu, gói đăng tải), thời lượng, dung lượng, dòng ghi công nhạc (nếu dùng track CC-BY), và câu "nghiệm thu máy: ĐẠT"; rồi làm luôn gói đăng tải (skill phim-dang-tai) mà không chờ người dùng nhắc
+- Kết mỗi dự án bằng: thư mục clip trong `Thanh pham/<YYYY-MM tên dự án>/` (video, kết quả nghiệm thu, gói đăng tải), thời lượng, dung lượng, dòng ghi công nhạc (nếu dùng track CC-BY), và câu "nghiệm thu máy: ĐẠT"; rồi làm luôn gói đăng tải (skill phim-dang-tai) mà không chờ người dùng nhắc, trừ clip chỉ chiếu tại sự kiện, không đăng mạng (hỏi một câu nếu chưa rõ)
 
 ## Quy tắc cứng
 

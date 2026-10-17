@@ -2,6 +2,14 @@
 
 Tệp này dành cho AI đang chăm một xưởng đã dựng từ bản thiết kế: khi người dùng nói "xem bản thiết kế có gì mới", đọc các mục SAU ngày `ban_mau.ngay` trong `tools/.cai-dat.json` của xưởng, rồi làm theo mục cuối của `DUNG-XUONG.md` (đề xuất từng thay đổi, người dùng duyệt rồi mới ghi, không ghi đè phần riêng của họ). Mỗi mục ghi: điều gì đổi, vì sao đáng lấy, tệp chính bị ảnh hưởng. Mục mới ở trên cùng.
 
+## 2026-10-17: phụ đề song ngữ ghi cứng cho clip ngang một nguồn
+
+- Skill mới `skills/phim-phu-de-song-ngu/`: clip ngang một nguồn (lời chúc, thông điệp gửi từ xa, lời chia sẻ) chiếu cho khán giả hai thứ tiếng hoặc người ngồi xa nghe không rõ; gỡ băng nguồn nói tiếng khác hoặc trộn hai tiếng, tuỳ chọn cắt gọn theo mạch cảm xúc có chốt duyệt trên giấy, phụ đề hai ngôn ngữ cùng lúc trong hộp chữ lớn, nghiệm thu, giao. Chỉ chiếu tại chỗ thì không làm gói đăng tải.
+- `tools/phu-de-song-ngu.py` (mới): `khoi-tao` (nháp cue từ transcript), `dung` (cue theo mốc nguồn, chiếu sang thành phẩm bằng `map.json`, sinh `.ass` và ba `.srt`, báo cáo cue đọc nhanh và chỗ cần nghe lại), `burn` (một lượt ffmpeg `veryfast`, từ chối clip quá dài, so thời lượng chống file cụt), `khung` (trích khung kiểm bằng output-seek). Cue nằm ở `Du an/<dự án>/phu-de/cues.json`, nên cắt lại phim chỉ cần chạy lại `dung` và `burn`.
+- `tools/transcribe.py`: thêm `--lang auto` (Whisper tự nhận ngôn ngữ từng đoạn, ghi trường `lang`), dùng được qua `tools/hang-doi-go-bang.py them --lang auto`. Skill `phim-transcript` ghi cách dùng và lưu ý nhãn ngôn ngữ của đoạn ngắn không đáng tin.
+- Skill `phim-dang-tai`: ghi ngoại lệ, clip chỉ chiếu tại sự kiện thì không làm gói đăng tải.
+- Bài học: mục 29 của `docs/BAI-HOC.md` (cắt gọn lời chúc, cỡ chữ và hộp chữ cho người ngồi xa, không suy diễn quan hệ giữa người trong clip, chỗ nghe không chắc, burn trong 180 giây). Nếu xưởng của người dùng đã dựng trước ngày này: đề xuất lấy `skills/phim-phu-de-song-ngu/`, `tools/phu-de-song-ngu.py`, `--lang auto` của `tools/transcribe.py` và dòng mới trong bảng "Việc nào, skill nào" của `CLAUDE.md`; rồi `tools/dong-goi-skill.py --lam` để lưu skill mới vào tài khoản.
+
 ## 2026-10-17: slideshow ảnh im lặng, lặp liền mạch
 
 - Skill mới `skills/phim-slideshow-anh/`: dựng clip slideshow từ một thư mục ảnh tĩnh (đám cưới, kỷ niệm, tri ân), mặc định im lặng và lặp liền mạch để chiếu vòng quanh ở sự kiện có nhạc sống hay nhạc của hội trường; cốt truyện theo chương, ảnh bìa, khung ảnh, ảnh đôi, ảnh ba, lưới bốn, mười chuyển cảnh mềm, thẻ chữ mở đầu, trích dẫn và cảm ơn, zoom chậm không cắt mặt. Kèm `references/cot-truyen-va-chuyen-canh.md`, `references/ky-thuat-dong-co.md`, `references/nghien-cuu-slideshow.md`.
