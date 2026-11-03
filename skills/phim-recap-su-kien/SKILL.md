@@ -51,7 +51,7 @@ Kèm danh sách "cần người dùng kiểm bằng tai, bằng mắt" (người
 ## Bước 3 - nhạc
 
 - **Chọn theo cảm xúc của buổi**: nhịp nhanh hay chậm đổi mức hưng phấn, giọng trưởng hay thứ đổi sắc cảm xúc (Husain, Thompson và Schellenberg, 2002). Buổi chăm sóc tinh thần, chữa lành: giọng trưởng, 60-80 nhịp, âm vực cao, giai điệu đơn giản dễ thương; tránh giọng thứ, nền pad điệu thức, tiếng ngân kéo dài (dễ nghe thành bí ẩn, u buồn). Hội nghị, ngày hội năng lượng: 100-130 nhịp.
-- Nhóm A trước (`thu-vien/AM-THANH.md`); thư viện thiếu đúng màu cảm xúc thì soạn bản mới bằng `tools/soan-nhac.py` (thêm một hàm bản nhạc và một dòng `BAN`), đó vẫn là nhạc riêng, không lo Content ID.
+- Bộ nhạc soạn mới trước (bảng "Bộ nhạc soạn mới, ưu tiên hàng đầu" trong `thu-vien/AM-THANH.md`, người dùng dặn 2026-11-02): recap tri ân, tổng kết, cộng đồng thường hợp Mùa thương; recap khí thế, ra mắt hợp Tin tiếp; buổi chữa lành, chiêm nghiệm hợp các bản piano (Ngày xuân, Thiết tha, Thương nhớ). Không bản nào hợp mới xuống nhóm A còn lại; thư viện thiếu đúng màu cảm xúc thì soạn bản mới bằng `tools/soan-nhac.py` (thêm một hàm bản nhạc và một dòng `BAN`) hoặc theo các công cụ soạn bằng mẫu đàn thật `tools/soan-piano-*.py`, `soan-phuc-am.py`, `soan-pop-rock.py`; đó vẫn là nhạc riêng, rủi ro Content ID thấp.
 - `python3 tools/recap.py nhac --du-an "../Du an/<x>" --nhac nhac-nen/<x>.mp3 [--bpm <nhịp>]` đo LUFS, dò nhịp và pha, ghi `Du an/<x>/recap/nhip.json` kèm `gainDb` gợi ý: recap ít lời để nhạc khoảng -20 LUFS trước chuẩn hoá (bản -15 LUFS thì khoảng -5); clip nói nhiều để nhạc khoảng -30 LUFS. Mode `full` + `duck`, `fadeIn` 2, `fadeOut` 4.
 
 ## Bước 4 - đồ họa
@@ -86,7 +86,7 @@ python3 tools/nghiem-thu.py video "../Du an/<x>/xuat-nhap/<tên>-ngang.mp4" --kh
 ## Bước 6 - báo, giao, dọn
 
 - Báo người dùng: dòng "nghiệm thu máy: ĐẠT", thời lượng, nhạc gì và vì sao, các điểm cần nghe lại. Bản nghe thử gửi qua chat phải dưới 30 MiB (bản 640 px khoảng 11 MB là chắc ăn).
-- Gói đăng tải (skill phim-dang-tai) chỉ khi phim đăng công khai; recap gửi riêng khách hàng thì bỏ và nói rõ, đề nghị làm khi người dùng muốn đăng. Nhạc nhóm A ghi `GHI-CONG.txt` "nhạc gốc của xưởng, không cần ghi công".
+- Gói đăng tải (skill phim-dang-tai) chỉ khi phim đăng công khai; recap gửi riêng khách hàng thì bỏ và nói rõ, đề nghị làm khi người dùng muốn đăng. Nhạc tổng hợp hoàn toàn (hậu tố `_xuong-rieng`) ghi `GHI-CONG.txt` "nhạc gốc của xưởng, không cần ghi công"; bộ nhạc soạn mới (hậu tố `_xuong-rieng-salamander`) ghi "nhạc gốc của xưởng; Tiếng piano: Salamander Grand Piano V3 - Alexander Holm (CC BY 3.0)", và khi có gói đăng tải thì dòng này vào mô tả.
 - Thành phẩm, giao và dọn theo cách xưởng gom thành phẩm và dọn nháp (CLAUDE.md, mục quy tắc về thành phẩm và xưởng sạch). Khi dọn giữ `Du an/<x>/recap/`, `timeline.json`, đồ họa, proxy đang dùng; bỏ `Du an/<x>/_kt/`, nháp, proxy không còn trong bảng cảnh (`cat` liệt kê). Nguồn thô đã ở ổ lưu trữ thì chỉ ghi `NGUON-O-DAU.md`.
 
 ## Quy tắc cứng
@@ -96,7 +96,7 @@ python3 tools/nghiem-thu.py video "../Du an/<x>/xuat-nhap/<tên>-ngang.mp4" --kh
 3. Không thẻ, pill, chữ nào che mặt người; kiểm trên khung thật của bản dựng.
 4. Không dùng hình, clip do AI tạo thay cho hình thật của sự kiện.
 5. Nguồn của người dùng chỉ đổi tên qua `recap.py doi-ten` (có sổ đổi ngược); không xoá, không ghi đè, không chép nguồn thô vào repo.
-6. Nhạc riêng của xưởng trước (`tools/soan-nhac.py`), track bị cấm không dùng; tắt tiếng nhạc phát trong phòng.
+6. Bộ nhạc soạn mới trước, rồi nhạc riêng khác của xưởng, track bị cấm không dùng; tắt tiếng nhạc phát trong phòng; bản `_xuong-rieng-salamander` luôn kèm dòng ghi công tiếng piano.
 7. Hai chốt duyệt và cổng `nghiem-thu.py` như mọi phim; người dùng bỏ chốt nháp thì ghi lại trong tiến độ.
 
-<!-- ban-nguon: phim-recap-su-kien 2026-10-11 cee6a2c1 -->
+<!-- ban-nguon: phim-recap-su-kien 2026-11-02 15d8cd95 -->

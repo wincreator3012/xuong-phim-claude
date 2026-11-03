@@ -8,5 +8,7 @@
   "tienToSkill": "",
   "_tienToSkill": "tienToSkill: tiền tố riêng cho tên skill khi lưu vào tài khoản AI (2-6 chữ thường hoặc số, thường là chữ cái đầu họ tên; vd tma thì phim-dung-bai thành tma-phim-dung-bai). Dùng bởi tools/dong-goi-skill.py.",
   "thuMucLuuTru": "",
-  "_luuTru": "thuMucLuuTru: nơi lưu trữ lâu dài thành phẩm đã duyệt (thường là ổ ngoài), cùng cấu trúc với Thanh pham; tools/don-tuan.py chép sang, đối chiếu rồi mới xoá bản trên máy. Có thể là danh sách nhiều đường dẫn, lấy đường đầu tiên tồn tại. Để trống nếu không dùng."
+  "_luuTru": "thuMucLuuTru: nơi lưu trữ lâu dài thành phẩm đã duyệt (thường là ổ ngoài), cùng cấu trúc với Thanh pham; tools/don-tuan.py chép sang, đối chiếu rồi mới xoá bản trên máy. Có thể là danh sách nhiều đường dẫn, lấy đường đầu tiên tồn tại. Để trống nếu không dùng.",
+  "thuMucKhoNguon": "",
+  "_khoNguon": "thuMucKhoNguon: kho nguồn quay gốc trên ổ ngoài; tools/don-tuan.py doi-ho-so dời media nặng của hồ sơ dự án đã duyệt vào <kho>/<dự án>/ho-so-nguon/. Để trống nếu không dùng."
 }

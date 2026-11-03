@@ -27,6 +27,7 @@
 
 import {execFileSync} from 'node:child_process';
 import crypto from 'node:crypto';
+import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -164,7 +165,8 @@ for (const job of spec.jobs) {
     // Đường nhanh cho alpha (2026-09-29): Remotion encode vp8 alpha bằng một luồng, một lower-third
     // 4.5 s mất ~90 s trên máy 2 lõi. Render chuỗi PNG (~10 s) rồi để ffmpeg libvpx realtime encode
     // (~5 s) cho cùng kết quả vp8 + yuva420p (alpha_mode=1), nhanh ~6 lần.
-    const seqDir = path.join(outDir, `_seq_${Date.now()}`);
+    // Thư mục tạm ở /tmp (tên không có dấu chấm): remotion coi "5.0 Gioi thieu" trong đường dẫn là đuôi file và từ chối
+    const seqDir = path.join(os.tmpdir(), `_seq_${process.pid}_${Date.now()}`);
     fs.rmSync(seqDir, {recursive: true, force: true});
     execFileSync('npx', ['remotion', 'render', 'src/index.ts', compId, seqDir, '--sequence',
       `--props=${propsFile}`, '--image-format=png', '--log=error'], {cwd: studioDir, stdio: 'inherit'});

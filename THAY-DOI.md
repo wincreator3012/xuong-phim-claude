@@ -2,6 +2,16 @@
 
 Tệp này dành cho AI đang chăm một xưởng đã dựng từ bản thiết kế: khi người dùng nói "xem bản thiết kế có gì mới", đọc các mục SAU ngày `ban_mau.ngay` trong `tools/.cai-dat.json` của xưởng, rồi làm theo mục cuối của `DUNG-XUONG.md` (đề xuất từng thay đổi, người dùng duyệt rồi mới ghi, không ghi đè phần riêng của họ). Mỗi mục ghi: điều gì đổi, vì sao đáng lấy, tệp chính bị ảnh hưởng. Mục mới ở trên cùng.
 
+## 2026-11-03: short dọc song ngữ, bộ nhạc tự soạn, ảnh trong cảnh minh hoạ
+
+- Short dọc có chế độ phụ đề song ngữ (tiếng Việt trên, tiếng Anh dưới nhỏ hơn, màu nhấn) trong một khối chữ: `tools/short-dung.py ass --song-ngu` đọc bản dịch `clip-ngan/<slug>/phu-de/en.json`, hạ khối chữ để khỏi chạm thẻ cảnh, tự tách dòng tiếng Anh dài, tránh ngắt dòng giữa từ ghép; `short-xuat.sh`, `short-chot.sh` theo đó. `Outro.tsx` thêm `headlineEn`, `ctaLinesEn`; chú thích QR được xuống dòng. Skill `phim-clip-ngan` và `references/short-mat-tren.md` ghi chuẩn mới; skill `phim-dang-tai` thêm phần tiếng Anh cho gói đăng tải của short song ngữ.
+- Bộ nhạc soạn bằng code: `tools/soan-piano-mau.py`, `soan-piano-thuong-nho.py`, `soan-piano-tha-thiet.py`, `soan-phuc-am.py`, `soan-pop-rock.py`, `soan-violin-mau.py`; `soan-nhac.py` thêm bộ phát mẫu và bản vui cho clip lễ hội. Bảng chọn theo cảm xúc ở mục "Bộ nhạc soạn mới" của `thu-vien/AM-THANH.md`; bản dùng tiếng piano Salamander phải ghi công (CC BY 3.0), `phim-dang-tai` kiểm trường `nhac_ccby`.
+- Cảnh minh hoạ của short nhận ảnh: phần tử `img` trong `canh-short.html` (bo góc, viền, phóng chậm), `short-canh.py` nhúng ảnh thành data URI để trang cảnh tự chứa.
+- `tools/giao-thanh-pham.py`: transcript của short song ngữ, short cắt từ khúc proxy ghép nhiều mảnh; lời nói không lặp ở chỗ cắt. `tools/render-do-hoa.mjs`: dựng thư mục chuỗi ảnh ở thư mục tạm của hệ thống (đường dẫn dự án có dấu chấm từng làm Remotion báo lỗi). `Benefits.tsx`: `maxWidthUnits` để thu hẹp cột pill khi cần chừa mặt.
+- Skill mới `skills/phim-duyet/` cho lệnh `tools/duyet.py` (đã có từ trước): khi người dùng nói "duyệt", chép trọn gói thành phẩm sang thư mục giao của máy, đối chiếu, rồi dọn nháp; dòng mới trong bảng "Việc nào, skill nào" của `CLAUDE.md`.
+- `tools/don-tuan.py doi-ho-so`: hồ sơ dự án đã duyệt còn nặng vì media dẫn xuất (proxy, âm tách, bản ghi tách luồng, mảnh `.ts`, bản xuất cũ) thì dời sang kho nguồn trên ổ ngoài (`thuMucKhoNguon` mới trong `cau-hinh.mau.json`), vào `<kho>/<dự án>/ho-so-nguon/` giữ đường dẫn tương đối, kèm sổ `DOI-RA.json`; tệp trùng mã băm mẫu với bản gốc có sẵn trong kho thì chỉ xoá. Đối chiếu rồi mới xoá trên máy, chạy lặp được.
+- Bài học: mục 30 của `docs/BAI-HOC.md`. Nếu xưởng của người dùng đã dựng trước ngày này: đề xuất lấy các tệp trên, rồi `tools/dong-goi-skill.py --lam` để cập nhật skill `phim-clip-ngan`, `phim-dang-tai` trong tài khoản.
+
 ## 2026-10-17: phụ đề song ngữ ghi cứng cho clip ngang một nguồn
 
 - Skill mới `skills/phim-phu-de-song-ngu/`: clip ngang một nguồn (lời chúc, thông điệp gửi từ xa, lời chia sẻ) chiếu cho khán giả hai thứ tiếng hoặc người ngồi xa nghe không rõ; gỡ băng nguồn nói tiếng khác hoặc trộn hai tiếng, tuỳ chọn cắt gọn theo mạch cảm xúc có chốt duyệt trên giấy, phụ đề hai ngôn ngữ cùng lúc trong hộp chữ lớn, nghiệm thu, giao. Chỉ chiếu tại chỗ thì không làm gói đăng tải.

@@ -67,6 +67,20 @@ Không cần đủ 15 track mới dùng được: hai track đúng mẫu phong c
 
 Nhóm này còn mỏng. Dùng `soan-nhac.py xuong-nhe-sang` cho nhịp nhanh; khi tìm thêm, ưu tiên nhạc riêng, rồi incompetech.com, rồi Pixabay (sau khi thử riêng tư).
 
+### Bộ nhạc soạn mới: tự soạn bằng code, ưu tiên hàng đầu
+
+Năm bản do xưởng tự viết giai điệu, hoà âm và cấu trúc; tiếng đàn lấy từ bộ mẫu nốt đơn (không phải bản thu của ai), nên không vướng Content ID. Repo không kèm file mp3: Claude soạn ra trên máy của bạn bằng các script `tools/soan-*.py` (cần numpy, scipy, mido, ffmpeg; mẫu piano Salamander tải qua `npm pack @audio-samples/piano-mp3-velocity{4,8,12}`, mẫu VSCO 2 CE cho dây, organ, kèn), rồi đặt vào đúng thư mục `nhac-nen/` dưới đây.
+
+| Cảm xúc của clip | Track (đặt tên đúng như sau) | Script |
+|---|---|---|
+| hoài niệm, nhẹ nhàng, tươi sáng, kỷ niệm | `piano-tinh-lang/xuong-piano-ngay-xuan_xuong-rieng-salamander` | `soan-piano-mau.py` |
+| da diết, nỗi nhớ, khoảng cách, chiêm nghiệm sâu | `piano-tinh-lang/xuong-piano-thuong-nho_xuong-rieng-salamander` | `soan-piano-thuong-nho.py` (cần `soan-violin-mau.py` cùng thư mục) |
+| dịu dàng, thiết tha, tình thân, lời cảm ơn riêng tư | `piano-tinh-lang/xuong-piano-thiet-tha_xuong-rieng-salamander` | `soan-piano-tha-thiet.py` |
+| ấm áp tập thể, biết ơn, tri ân, tổng kết | `acoustic-am/xuong-phuc-am-mua-thuong_xuong-rieng-salamander` | `soan-phuc-am.py` (gainDb full -17) |
+| truyền lửa, vượt khó, ra mắt, khí thế | `nang-luong-nhe/xuong-pop-tin-tiep_xuong-rieng-salamander` | `soan-pop-rock.py` (gainDb full -17) |
+
+Cả năm bản dùng tiếng piano Salamander nên BẮT BUỘC ghi công trong mô tả khi đăng: điền `"nhac_ccby": "Tiếng piano: Salamander Grand Piano V3 - Alexander Holm (CC BY 3.0)"` vào `dang-tai.json` để cổng kiểm bắt khi mô tả thiếu. Bản violin `soan-violin-mau.py` dùng mẫu VSCO 2 CE (CC0) nên không cần ghi công. Thứ tự chọn nhạc: bộ này trước, rồi các nhóm ở trên.
+
 ### rieng: nhạc của chính bạn
 
 Thả vào `nhac-nen/rieng/`, chạy `nhap-am-thanh.py`. Claude ghi chú "nhạc riêng của người dùng" và không kiểm định thêm. Bạn chịu trách nhiệm về quyền sử dụng.

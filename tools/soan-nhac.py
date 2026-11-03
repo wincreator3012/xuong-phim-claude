@@ -35,6 +35,8 @@ class Mix:
         size = self.n + SR * 14
         self.dry = np.zeros((2, size), np.float32)
         self.send = np.zeros((2, size), np.float32)
+        self.rt60 = 2.8        # mỗi bản đặt lại được (bản vui, nhịp nhanh dùng phòng ngắn)
+        self.fade_out = 5.0    # giây mờ cuối (bản có nốt kết dứt khoát đặt ngắn hơn)
 
     def add(self, sig, t, pan=0.0, gain=1.0, send=0.25):
         i = int(t * SR)
@@ -50,7 +52,8 @@ class Mix:
             self.send[0, i:j] += s * l * send
             self.send[1, i:j] += s * r * send
 
-    def render(self, rt60=2.8, wet=1.0, seed=7):
+    def render(self, rt60=None, wet=1.0, seed=7):
+        rt60 = self.rt60 if rt60 is None else rt60
         rng = np.random.default_rng(seed)
         n = int(rt60 * 1.1 * SR)
         t = np.arange(n) / SR
@@ -473,11 +476,178 @@ def bản_piano_diu_dang(hat=1):
     return mix, total
 
 
+# ---------------------------------------------------------------- bản Halloween vui (nhạc cụ riêng của bản)
+
+def _xylo(m, vel=0.5, L=0.9):
+    f = mtof(m)
+    t = np.arange(int(L * SR)) / SR
+    sig = (np.sin(2 * np.pi * f * t) * np.exp(-t / 0.17)
+           + 0.35 * np.sin(2 * np.pi * f * 3.0 * t) * np.exp(-t / 0.07)
+           + 0.12 * np.sin(2 * np.pi * f * 6.0 * t) * np.exp(-t / 0.03))
+    sig *= 1 - np.exp(-t / 0.0015)
+    return sig * vel * 0.8
+
+
+def _kick(vel=0.7):
+    n = int(0.28 * SR)
+    t = np.arange(n) / SR
+    f = 48 + 110 * np.exp(-t / 0.035)
+    ph = 2 * np.pi * np.cumsum(f) / SR
+    return np.sin(ph) * np.exp(-t / 0.11) * (1 - np.exp(-t / 0.002)) * vel
+
+
+def _snap(vel=0.5, rng=None):
+    rng = rng or np.random.default_rng(2)
+    n = int(0.14 * SR)
+    t = np.arange(n) / SR
+    x = sosfilt(butter(2, [900, 5200], btype="band", fs=SR, output="sos"), rng.standard_normal(n))
+    env = np.exp(-t / 0.035) * 0.6 + np.where(t > 0.012, np.exp(-np.clip(t - 0.012, 0, None) / 0.03), 0) * 0.4
+    return x * env * vel
+
+
+def _wood(m=84, vel=0.4):
+    f = mtof(m)
+    n = int(0.12 * SR)
+    t = np.arange(n) / SR
+    return (np.sin(2 * np.pi * f * t) + 0.4 * np.sin(2 * np.pi * f * 2.3 * t)) * np.exp(-t / 0.02) * vel * 0.6
+
+
+def _ghost(m, dur, vel=0.3, glide_from=None, vib=5.5, glide_t=0.18):
+    """Tiếng ma hú kiểu theremin: sóng sin có vuốt cao độ và rung chậm dần vào."""
+    n = int((dur + 0.4) * SR)
+    t = np.arange(n) / SR
+    f = mtof(m) * np.ones(n)
+    if glide_from is not None:
+        f = np.where(t < glide_t, mtof(glide_from) + (mtof(m) - mtof(glide_from)) * (t / glide_t), f)
+    f = f * (1 + 0.012 * np.minimum(1, t / 0.4) * np.sin(2 * np.pi * vib * t))
+    ph = 2 * np.pi * np.cumsum(f) / SR
+    sig = np.sin(ph) + 0.18 * np.sin(2 * ph) + 0.05 * np.sin(3 * ph)
+    env = np.minimum(1, t / 0.08) * np.where(t > dur, np.exp(-(t - dur) / 0.12), 1.0)
+    return sig * env * vel
+
+
+def bản_halloween_vui(hat=1):
+    """Halloween vui nhộn, 112 nhịp, La thứ nhảy nhót kiểu oom-pah: bass gảy, đàn gảy đánh nghịch phách,
+    xylophone chạy giai điệu có nốt nửa cung "ma quái", đoạn giữa sáng lên (Đô trưởng), đoạn tiếng ma hú rón rén,
+    kết bằng cú hú tụt xuống, một nhát đàn dứt khoát rồi hộp nhạc ru dịu khép bằng hợp âm La trưởng."""
+    rng = np.random.default_rng(hat)
+    bpm = 112
+    B = beat_len(bpm)
+    bar = 4 * B
+    CH = {
+        "Am": (45, 52, [57, 60, 64]), "Dm": (50, 57, [57, 62, 65]), "F": (41, 48, [57, 60, 65]),
+        "E7": (40, 47, [56, 59, 62, 64]), "C": (48, 55, [55, 60, 64]), "G": (43, 50, [55, 59, 62]),
+    }
+    MA = {  # giai điệu Phần A, mỗi ô nhịp: (phách, nốt, độ dài theo phách)
+        "Am": [(0, 69, .5), (.5, 72, .5), (1, 76, 1), (2.5, 75, .5), (3, 76, .5), (3.5, 72, .5)],
+        "Am2": [(0, 69, .5), (.5, 72, .5), (1, 76, 1), (2.5, 74, .5), (3, 72, .5), (3.5, 71, .5)],
+        "F": [(0, 69, .5), (.5, 72, .5), (1, 77, 1), (2.5, 76, .5), (3, 74, .5), (3.5, 72, .5)],
+        "E7": [(0, 71, .5), (.5, 74, .5), (1, 76, 1), (2, 68, 1), (3, 71, 1)],
+        "Dm": [(0, 69, .5), (.5, 74, .5), (1, 77, 1), (2.5, 76, .5), (3, 74, .5), (3.5, 72, .5)],
+        "E7b": [(0, 71, .5), (.5, 68, .5), (1, 71, .5), (1.5, 74, .5), (2, 76, 1), (3, 75, .5), (3.5, 76, .5)],
+        "Amend": [(0, 69, 2), (2.5, 64, .5), (3, 69, .5), (3.5, 72, .5)],
+    }
+    MB = {  # Phần B sáng
+        "C": [(0, 72, .5), (.5, 76, .5), (1, 79, 1), (2, 77, .5), (2.5, 76, .5), (3, 74, 1)],
+        "G": [(0, 74, .5), (.5, 79, .5), (1, 83, 1), (2, 81, .5), (2.5, 79, .5), (3, 78, 1)],
+        "F": [(0, 72, .5), (.5, 77, .5), (1, 81, 1), (2, 79, .5), (2.5, 77, .5), (3, 76, 1)],
+        "E7": [(0, 71, .5), (.5, 74, .5), (1, 76, .5), (1.5, 80, .5), (2, 83, 1), (3, 80, 1)],
+        "Cend": [(0, 72, .5), (.5, 76, .5), (1, 79, 1), (2, 84, 1), (3, 79, .5), (3.5, 76, .5)],
+    }
+    A1 = [("Am", "Am"), ("Am", "Am2"), ("F", "F"), ("E7", "E7"), ("Am", "Am"), ("Dm", "Dm"), ("E7", "E7b"), ("Am", "Amend")]
+    BB = [("C", "C"), ("G", "G"), ("F", "F"), ("E7", "E7"), ("C", "C"), ("G", "G"), ("F", "F"), ("E7", "E7")]
+    CC = [("Am", None), ("Am", None), ("Dm", None), ("E7", None), ("Am", None), ("Dm", None), ("E7", None), ("Am", None)]
+    ghost = [  # (ô nhịp trong đoạn C, phách, nốt, dài phách, vuốt từ)
+        (0, 0, 69, 3.0, 64), (1, 0, 72, 1.5, None), (1, 2, 71, 2.0, None), (2, 0, 74, 3.0, 69), (3, 0, 76, 2.0, None), (3, 2, 75, 2.0, None),
+        (4, 0, 69, 3.0, 64), (5, 0, 77, 1.5, None), (5, 2, 76, 2.0, None), (6, 0, 74, 1.5, None), (6, 2, 71, 2.0, 76), (7, 0, 69, 3.5, None),
+    ]
+    plan = [("intro", [("Am", None), ("Am", None)]), ("A1", A1), ("A2", A1), ("B1", BB), ("A3", A1), ("C", CC), ("A4", A1)]
+    nbar = sum(len(p[1]) for p in plan) + 6  # + phần kết có hộp nhạc
+    total = nbar * bar + 8
+    mix = Mix(total)
+    mix.rt60 = 1.3
+    mix.fade_out = 1.2
+    bi = 0
+    for name, bars in plan:
+        for k, (cname, mkey) in enumerate(bars):
+            t0 = bi * bar
+            root, fifth, notes = CH[cname]
+            full = name != "intro"
+            ghostly = name == "C"
+            # bass gảy: gốc phách 1, quãng năm phách 3 (oom-pah)
+            mix.add(pluck(root, vel=0.62, g=0.992, variant=int(rng.integers(0, 3)), L=1.1), t0 + human(rng, 4), pan=-0.25, send=0.08)
+            mix.add(pluck(fifth, vel=0.5, g=0.992, variant=int(rng.integers(0, 3)), L=1.0), t0 + 2 * B + human(rng, 4), pan=-0.25, send=0.08)
+            if name.startswith("A") or name.startswith("B"):
+                mix.add(pluck(root + 12, vel=0.28, g=0.99, variant=1, L=0.6), t0 + 3.5 * B + human(rng, 4), pan=-0.2, send=0.08)
+            # đàn gảy đánh nghịch phách (phách 2 và 4)
+            if full and not ghostly:
+                for beat in (1, 3):
+                    for j, nn in enumerate(notes):
+                        mix.add(pluck(nn, vel=0.22 + 0.04 * rng.random(), g=0.985, variant=2, L=0.5),
+                                t0 + beat * B + j * 0.011 + human(rng, 4), pan=0.25, send=0.12)
+            # nhịp: kick phách 1-3, snap phách 2-4, shaker nửa phách, mộc ở nghịch phách
+            for beat in range(4):
+                tt = t0 + beat * B
+                if full and not ghostly:
+                    if beat in (0, 2):
+                        mix.add(_kick(0.55), tt, send=0.02)
+                    else:
+                        mix.add(_snap(0.30, rng), tt + human(rng, 3), pan=0.1, send=0.1)
+                elif ghostly and beat in (0, 2):
+                    mix.add(_kick(0.30), tt, send=0.02)
+                for h in (0, 0.5):
+                    if full or h == 0.5:
+                        mix.add(shaker(vel=0.10 + 0.06 * rng.random() * (1 if h else 0.6), rng=rng), tt + h * B, pan=0.35, send=0.05)
+                if (not full) or name in ("A2", "A4") or ghostly:
+                    if beat in (1, 3):
+                        mix.add(_wood(88 if beat == 1 else 84, 0.30), tt + 0.5 * B, pan=-0.3, send=0.1)
+            # giai điệu
+            if mkey and name != "intro":
+                mel = (MB if name.startswith("B") else MA)[mkey]
+                hi = 12 if name in ("A2", "A4") else 0
+                for (b0, m, d) in mel:
+                    tt = t0 + b0 * B + human(rng, 5)
+                    mix.add(_xylo(m, vel=0.40), tt, pan=0.15, send=0.15)
+                    if name in ("A2", "B1", "B2", "A4"):
+                        mix.add(mallet(m + 12, vel=0.15, L=0.8), tt + 0.01, pan=0.35, send=0.25)
+                    if hi and rng.random() < 0.5:
+                        mix.add(bell(m + 12, vel=0.10, L=1.6), tt, pan=-0.3, send=0.35)
+            # tiếng ma hú ở cuối các lượt A3 để chuyển sang đoạn giữa
+            if name == "A3" and k == 7:
+                mix.add(_ghost(81, 1.0, vel=0.22, glide_from=69, glide_t=0.5), t0 + 2 * B, pan=0.0, send=0.35)
+            bi += 1
+        if name == "C":
+            t_c = (bi - 8) * bar
+            for (kb, beat, m, d, gf) in ghost:
+                mix.add(_ghost(m, d * B * 0.95, vel=0.20, glide_from=gf), t_c + kb * bar + beat * B, pan=0.1, send=0.45)
+    # kết: cú hú tụt xuống, nhát dứt khoát, rồi hộp nhạc ru dịu và hợp âm La trưởng (lên tông sáng cho cái kết gia đình)
+    t_end = bi * bar
+    mix.add(_ghost(52, 1.9 * B, vel=0.24, glide_from=88, glide_t=1.4 * B, vib=6.5), t_end, pan=0.0, send=0.4)
+    t_hit = t_end + 2 * B
+    for nn, g in ((45, 0.7), (57, 0.5), (60, 0.42), (64, 0.42)):
+        mix.add(pluck(nn, vel=g, g=0.995, variant=0, L=2.0), t_hit, pan=-0.1 + 0.05 * (nn % 3), send=0.2)
+    mix.add(_kick(0.7), t_hit, send=0.02)
+    mix.add(bell(93, vel=0.16, L=3.0), t_hit + 0.02, pan=0.3, send=0.5)
+    mix.add(_xylo(81, vel=0.5), t_hit + 0.02, pan=0.2, send=0.3)
+    t_box = t_hit + 1.5 * B
+    for k, nn in enumerate((69, 72, 76, 81)):
+        mix.add(bell(nn + 12, vel=0.17, L=2.4), t_box + k * B, pan=-0.2 + 0.15 * k, send=0.55)
+        mix.add(mallet(nn, vel=0.22, L=1.4), t_box + k * B, pan=0.2, send=0.4)
+    t_fin = t_box + 4.5 * B
+    for nn, g in ((57, 0.20), (64, 0.18), (69, 0.20), (73, 0.20), (76, 0.20)):
+        mix.add(bell(nn + 12, vel=g, L=5.0), t_fin, pan=0.0, send=0.6)
+    mix.add(pad([45, 57, 61, 64], 4.0, att=0.4, rel=3.0, vel=0.12, bright=0.3, seed=99), t_fin, send=0.4)
+    mix.fade_out = 3.2
+    return mix, total
+
+
+
 BAN = {
     "xuong-guitar-am": (bản_guitar_am, "acoustic-am", "Guitar mộc ấm, Đô trưởng, 72 nhịp"),
     "xuong-piano-tinh": (bản_piano_tinh, "piano-tinh-lang", "Piano trầm lắng, Rê thứ, 58 nhịp"),
     "xuong-thien-pad": (bản_thien_pad, "thien-ambient", "Nền thiền Rê, thảm âm và chuông thưa, không nhịp"),
     "xuong-nhe-sang": (bản_nhe_sang, "nang-luong-nhe", "Sáng và nhẹ, Son trưởng, 100 nhịp"),
+    "xuong-halloween-vui": (bản_halloween_vui, "nang-luong-nhe", "Halloween vui nhộn, La thứ oom-pah, 112 nhịp, xylophone và tiếng ma hú"),
     "xuong-piano-diu-dang": (bản_piano_diu_dang, "piano-tinh-lang", "Piano dịu dàng, Đô trưởng, 66 nhịp, âm vực cao, chuông nhỏ"),
 }
 
@@ -565,7 +735,7 @@ def ebur(path):
     return I, tp
 
 
-def hoan_thien(stereo, ten, ra, muc=-15.0):
+def hoan_thien(stereo, ten, ra, muc=-15.0, fade_out=5.0):
     import wave
     n = stereo.shape[1]
     # cắt đuôi im, fade
@@ -574,7 +744,7 @@ def hoan_thien(stereo, ten, ra, muc=-15.0):
     n = min(n, int(idx[-1]) + int(0.2 * SR)) if len(idx) else n
     x = stereo[:, :n].copy()
     fi = int(0.8 * SR)
-    fo = int(5.0 * SR)
+    fo = int(fade_out * SR)
     x[:, :fi] *= np.linspace(0, 1, fi) ** 1.5
     x[:, -fo:] *= np.linspace(1, 0, fo) ** 1.5
     sos = butter(2, 28, btype="high", fs=SR, output="sos")
@@ -618,7 +788,7 @@ def main():
     os.makedirs(a.ra, exist_ok=True)
     mix, total = fn(a.hat)
     st = mix.render()
-    kq = hoan_thien(st, a.ban, a.ra)
+    kq = hoan_thien(st, a.ban, a.ra, fade_out=mix.fade_out)
     kq["nhom"] = nhom
     kq["mo_ta"] = mt
     kq["hat"] = a.hat

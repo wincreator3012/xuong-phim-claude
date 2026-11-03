@@ -35,6 +35,7 @@ DEFAULT = {
     'outro': 'clip-ngan/_chung/do-hoa/outro.mp4',
     'lt-nhan': 'clip-ngan/_chung/do-hoa/lt-nhan.webm',
     'font': 'DejaVu Sans', 'co-chu': 54, 'mau-chu': '&H002F3526', 'le-duoi': 110, 'le-duoi-nang': 230,
+    'en-co': 36, 'en-mau': '&H004F5E2B', 'en-dong-toi-da': 44, 'sn-le-duoi': 80,
 }
 ASS_DAU = """[Script Info]
 ScriptType: v4.00+
@@ -157,7 +158,7 @@ def cmd_snap(slug):
     fx, fy = sp.get('focus', [0.4, 0.5])
 
     def seg(label, a, b, ov=None, chapter=None):
-        s = {"type": "video", "src": C['nguon'], "snap": False, "layout": "mat-tren", "cropFocus": fx, "cropFocusY": fy,
+        s = {"type": "video", "src": sp.get('nguon', C['nguon']), "snap": False, "layout": "mat-tren", "cropFocus": fx, "cropFocusY": fy,
              "cropZoom": sp.get("zoom", 1.0), "in": a, "out": b, "label": label}
         if chapter:
             s["chapter"] = chapter
@@ -198,11 +199,15 @@ def cmd_snap(slug):
     print('  đã ghi snap.json, timeline.json, phu-de/cues.json, canh/spec-gen.json')
 
 
-def cmd_ass(slug):
+def cmd_ass(slug, song_ngu=False):
     C = cau_hinh()
+    if song_ngu:
+        C['le-duoi'] = C['sn-le-duoi']   # khối chữ hai ngôn ngữ cao hơn: hạ xuống để khỏi chạm khung cảnh
     base = f'clip-ngan/{slug}'
     M = J(f"xuat-nhap/{slug}-{C['hau-to']}.map.json")
     CUES = J(f'{base}/phu-de/cues.json')
+    EN = J(f'{base}/phu-de/en.json') if song_ngu else {}
+    thieu_en = []
     cuts = [pt for pt in M['parts'] if pt['kind'] == 'cut']
     nh = len(J(f'{base}/snap.json').get('hook', []))
     body = cuts[min(nh, len(cuts) - 1)]
@@ -219,6 +224,19 @@ def cmd_ass(slug):
             return best['start'] + (min(max(p, best['in']), best['out']) - best['in'])
         raise ValueError(f'cue ngoài mọi đoạn: {p}')
 
+    # Cụm không nên tách ở chỗ xuống dòng (hai âm tiết của một từ ghép, hoặc từ chức năng không được đứng cuối dòng)
+    KHONG_TACH = {'tàu điện', 'điện ngầm', 'nhờ quen', 'chỗ kia', 'đồ chơi', 'mấy con', 'con nít', 'cùng ra', 'phục vụ', 'đam mê',
+                  'thượng khách', 'nó lại', 'không gian', 'mình không', 'tay nghề', 'đầu bếp', 'cao cấp', 'giao hưởng', 'nhà hát',
+                  'cuối cùng', 'đời sống', 'thời gian', 'đặc điểm', 'chuyên môn', 'nhân viên', 'quốc gia', 'tình cờ', 'nghệ sĩ', 'sản phẩm', 'cách đường'}
+    KHONG_CUOI_DONG = {'cái', 'những', 'các', 'một', 'của', 'với', 'cho', 'ở', 'trong', 'mỗi', 'mấy', 'tại', 'đồ', 'phục', 'đam',
+                       'thượng', 'nhờ', 'có', 'từ', 'như', 'thì', 'là'}
+
+    def ket_dong_xau(x, y):
+        cap = (x.lower().strip(',.;?!') + ' ' + y.lower()).strip()
+        if cap in KHONG_TACH:
+            return 40
+        return 30 if x.lower().strip(',.;?!') in KHONG_CUOI_DONG and x[-1] not in ',.;?!' else 0
+
     def two(t):
         if '\\N' in t or len(t) <= 30:
             return t
@@ -226,9 +244,23 @@ def cmd_ass(slug):
         best = None
         for k in range(1, len(w)):
             a, b = ' '.join(w[:k]), ' '.join(w[k:])
-            sc = abs(len(a) - len(b)) - (14 if (w[k-1][-1] in ',.;?' and max(len(a), len(b)) <= 31) else 0)
+            sc = abs(len(a) - len(b)) - (14 if (w[k-1][-1] in ',.;?' and max(len(a), len(b)) <= 31) else 0) + ket_dong_xau(w[k-1], w[k])
             if max(len(a), len(b)) > 31:
                 sc += 100
+            if best is None or sc < best[0]:
+                best = (sc, a + '\\N' + b)
+        return best[1]
+
+    def en_dong(t):
+        """Dòng tiếng Anh: một dòng nếu đủ ngắn, không thì tách hai dòng cân bằng."""
+        lim = C['en-dong-toi-da']
+        if len(t) <= lim:
+            return t
+        w = t.split()
+        best = None
+        for k in range(1, len(w)):
+            a, b = ' '.join(w[:k]), ' '.join(w[k:])
+            sc = abs(len(a) - len(b)) - (10 if w[k-1][-1] in ',.;?!' else 0) + (100 if max(len(a), len(b)) > lim else 0)
             if best is None or sc < best[0]:
                 best = (sc, a + '\\N' + b)
         return best[1]
@@ -247,25 +279,39 @@ def cmd_ass(slug):
         prev_tb = tb
         st = 'Raised' if (ta < LT[1] and tb > LT[0]) else 'Default'
         _t = two(txt)
+        _vi = _t
+        if song_ngu:
+            e = EN.get(txt)
+            if e:
+                _t = _t + '\\N{\\fs10} \\N{\\fs' + str(C['en-co']) + '\\c' + C['en-mau'] + '&}' + en_dong(e)
+            else:
+                thieu_en.append(txt)
         if st == 'Raised' and tb > LT[1] + 0.25 and ta < LT[1] - 0.25:
             # cue vắt qua mép bảng tên: phần sau bảng tên hạ về vị trí thường để không đè chữ cảnh
             lines.append(f"Dialogue: 0,{fmt(ta)},{fmt(LT[1])},Raised,,0,0,0,,{_t}")
             lines.append(f"Dialogue: 0,{fmt(LT[1])},{fmt(tb)},Default,,0,0,0,,{_t}")
         else:
             lines.append(f"Dialogue: 0,{fmt(ta)},{fmt(tb)},{st},,0,0,0,,{_t}")
-        wmax = max(len(x) for x in _t.split('\\N'))
+        wmax = max(len(x) for x in _vi.split('\\N'))
         print(f'{ta:6.2f}-{tb:6.2f} {st:7s} {_t!r}' + (f'   !! DÒNG DÀI {wmax} (>31)' if wmax > 31 else ''))
-    open(f"{base}/phu-de/{slug}-{C['hau-to']}.ass", 'w', encoding='utf-8').write('\n'.join(lines) + '\n')
+    hau = '-songngu' if song_ngu else ''
+    open(f"{base}/phu-de/{slug}-{C['hau-to']}{hau}.ass", 'w', encoding='utf-8').write('\n'.join(lines) + '\n')
+    if thieu_en:
+        print(f'  !! {len(thieu_en)} cue chưa có bản dịch trong phu-de/en.json: {thieu_en}')
 
 
 def main():
     ap = argparse.ArgumentParser(description='Dựng short dọc mặt trên + cảnh dưới')
     ap.add_argument('lenh', choices=['snap', 'ass'])
     ap.add_argument('slug')
+    ap.add_argument('--song-ngu', action='store_true', help='thêm dòng tiếng Anh từ phu-de/en.json (ass)')
     ap.add_argument('--du-an', default='.', help='thư mục dự án (mặc định: thư mục hiện tại)')
     a = ap.parse_args()
     os.chdir(a.du_an)
-    {'snap': cmd_snap, 'ass': cmd_ass}[a.lenh](a.slug)
+    if a.lenh == 'ass':
+        cmd_ass(a.slug, a.song_ngu)
+    else:
+        cmd_snap(a.slug)
 
 
 if __name__ == '__main__':

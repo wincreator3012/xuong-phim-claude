@@ -38,6 +38,11 @@ def build(grp, tag, spec_grp):
         return [conv(x[0])] + x[1:] if isinstance(x, list) else x
     def conv_item(it):
         o = dict(it)
+        if o.get('k') == 'img' and 'file' in o:   # nhúng ảnh (đường dẫn tính từ thư mục dự án) thành data URI để trang cảnh tự chứa
+            import base64, mimetypes
+            _f = o.pop('file')
+            _mt = mimetypes.guess_type(_f)[0] or 'image/png'
+            o['href'] = f"data:{_mt};base64," + base64.b64encode(open(_f, 'rb').read()).decode('ascii')
         for k in ('at', 'out', 'fadeAt'):
             if k in o: o[k] = conv(o[k])
         if 't' in o: o['t'] = [conv(v) for v in o['t']]

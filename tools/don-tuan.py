@@ -12,6 +12,8 @@ giữ nguyên cấu trúc `<YYYY-MM tên dự án>/00 Video day du/`, `Short NN 
                                                        # rồi đối chiếu cỡ từng tệp và mã băm mẫu của video, ghi sổ
     python3 tools/don-tuan.py xoa-thanh-pham [--ghi]   # xoá bản trên Mac của dự án ĐÃ ĐỐI CHIẾU KHỚP (đối chiếu lại trước khi xoá)
     python3 tools/don-tuan.py don [--ghi] [--nhom R,N] # dọn rác (R) và nháp của dự án đã duyệt (N)
+    python3 tools/don-tuan.py doi-ho-so [--ghi]        # dời media nặng (proxy, âm tách, bản ghi Zoom, bản xuất cũ) của hồ sơ
+                                                       # đã duyệt sang <thuMucKhoNguon>/<dự án>/ho-so-nguon/; trùng bản gốc thì xoá
 
 Chỉ chạy `--ghi` của hai lệnh xoá khi anh đã cho phép xoá (device_request_delete_permission). Không bao giờ xoá nguồn
 quay thô, timeline, gỡ băng, đồ hoạ, nhạc, cảnh, transcript, dang-tai, NGUON-O-DAU.md.
@@ -451,9 +453,120 @@ def don(a):
     print(f'{"Đã giải phóng" if a.ghi else "Sẽ giải phóng"}: {dep(tong)}')
 
 
+def kho_nguon():
+    """Kho nguồn quay gốc trên ổ ngoài (thuMucKhoNguon trong cau-hinh.json)."""
+    v = CH.doc().get('thuMucKhoNguon') or []
+    for c in ([v] if isinstance(v, str) else v):
+        p = CH._tuyet_doi(c)
+        if os.path.isdir(p):
+            return p
+    return None
+
+
+MEDIA_NANG = {'.mp4', '.mov', '.mkv', '.m4a', '.wav', '.mp3', '.aac', '.webm', '.mts', '.m4v', '.flac', '.raw', '.pcm', '.ts'}
+GIU_HO_SO = ('dang-tai', 'do-hoa', 'canh')
+
+
+def doi_ho_so(a):
+    """Dời media nặng (>= 10 MB) của hồ sơ dự án ĐÃ DUYỆT sang <kho nguồn>/<dự án>/ho-so-nguon/ (giữ đường dẫn tương đối).
+    Tệp trùng mã băm mẫu với một tệp có sẵn trong kho (bản quay gốc) thì chỉ xoá. Sổ DOI-RA.json ghi từng tệp và
+    cách chép về; NGUON-O-DAU.md thêm một dòng. Giữ gói đăng tải, đồ hoạ, cảnh. Chạy lặp được (thoát 75 khi hết ngân sách)."""
+    kho = kho_nguon()
+    if not kho:
+        sys.exit('Chưa thấy kho nguồn (thuMucKhoNguon trong cau-hinh.json): gắn ổ vào phiên.')
+    bat_dau, hom = time.time(), dt.date.today().isoformat()
+    lt = luu_tru()
+    idx = {}
+    for dp, dn, fn in os.walk(kho):
+        if (lt and os.path.realpath(dp).startswith(os.path.realpath(lt))) or os.sep + 'ho-so-nguon' in dp:
+            dn[:] = []
+            continue
+        for f in fn:
+            q = os.path.join(dp, f)
+            try:
+                if not os.path.islink(q):
+                    idx.setdefault(os.path.getsize(q), []).append(q)
+            except OSError:
+                pass
+    tong_x = tong_d = 0
+    for ten in sorted(os.listdir(DU_AN)):
+        da = os.path.join(DU_AN, ten)
+        if ten.startswith(('_', '.')) or not os.path.isdir(da) or not da_duyet(ten):
+            continue
+        if a.du_an and ten not in a.du_an:
+            continue
+        dich = os.path.join(kho, ten, 'ho-so-nguon')
+        so_p = os.path.join(dich, 'DOI-RA.json')
+        so = None
+        if os.path.isfile(so_p):
+            so = json.load(open(so_p, encoding='utf-8'))
+        so = so or {'_ghi_chu': f'Media nặng dời khỏi hồ sơ Du an/{ten}. trung_goc: đã xoá vì trùng bản gốc (chép về từ '
+                               'đường dẫn ghi kèm); doi: bản ở thư mục này, chép về đúng đường dẫn tương đối.', 'tep': {}}
+        dem_d = dem_x = byte = 0
+        for dp, dn, fn in os.walk(da):
+            if os.path.relpath(dp, da).split(os.sep)[0] in GIU_HO_SO:
+                dn[:] = []
+                continue
+            for f in fn:
+                q = os.path.join(dp, f)
+                if os.path.islink(q) or os.path.splitext(f)[1].lower() not in MEDIA_NANG:
+                    continue
+                n = os.path.getsize(q)
+                if n < (10 << 20):
+                    continue
+                if time.time() - bat_dau > a.ngan_sach:
+                    print('HẾT NGÂN SÁCH: chạy lại lệnh để dời tiếp.')
+                    sys.exit(75)
+                rel = os.path.relpath(q, da)
+                key = unicodedata.normalize('NFC', rel)
+                b = bam_mau(q)
+                tr = next((c for c in idx.get(n, []) if bam_mau(c) == b), None)
+                if tr:
+                    tong_x += n
+                    print(f'{"XOÁ" if a.ghi else "sẽ xoá"} {dep(n):>9}  {ten}/{rel}  (trùng {os.path.relpath(tr, kho)})')
+                    if a.ghi:
+                        os.makedirs(dich, exist_ok=True)
+                        so['tep'][key] = {'trung_goc': os.path.relpath(tr, kho), 'byte': n, 'ngay': hom}
+                        ghi_tep(so_p, json.dumps(so, ensure_ascii=False, indent=1))
+                        os.remove(q)
+                        dem_x += 1; byte += n
+                    continue
+                tong_d += n
+                print(f'{"DỜI" if a.ghi else "sẽ dời"} {dep(n):>9}  {ten}/{rel}')
+                if not a.ghi:
+                    continue
+                d = os.path.join(dich, rel)
+                os.makedirs(os.path.dirname(d), exist_ok=True)
+                if not (os.path.isfile(d) and os.path.getsize(d) == n):
+                    shutil.copyfile(q, d + '.dang-chep')
+                    os.replace(d + '.dang-chep', d)
+                ok = False
+                for lan in range(5):
+                    try:
+                        ok = os.path.getsize(d) == n and bam_mau(d) == b
+                        break
+                    except OSError:
+                        time.sleep(1 + lan)
+                if not ok:
+                    print(f'  LỆCH, không xoá: {rel}')
+                    continue
+                so['tep'][key] = {'doi': 'ho-so-nguon/' + key, 'byte': n, 'ngay': hom}
+                ghi_tep(so_p, json.dumps(so, ensure_ascii=False, indent=1))
+                os.remove(q)
+                dem_d += 1; byte += n
+        if a.ghi and (dem_d or dem_x):
+            p = os.path.join(da, 'NGUON-O-DAU.md')
+            with open(p, 'a', encoding='utf-8') as f:
+                f.write(f'- {hom}: dời {dem_d} tệp media nặng sang ổ ngoài `{os.path.basename(kho)}/{ten}/ho-so-nguon/`, xoá {dem_x} tệp '
+                        f'trùng bản gốc ({dep(byte)}); danh sách và cách chép về ở `ho-so-nguon/DOI-RA.json` '
+                        f'(chép cả thư mục về hồ sơ, tệp `trung_goc` thì chép từ bản gốc về đúng tên cũ).\n')
+    print(f'{"Đã" if a.ghi else "Sẽ"} xoá trùng {dep(tong_x)}, dời {dep(tong_d)}')
+    print('XONG-DOI')
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument('lenh', nargs='?', default='xem', choices=['xem', 'chuyen', 'xoa-thanh-pham', 'don'])
+    ap.add_argument('lenh', nargs='?', default='xem', choices=['xem', 'chuyen', 'xoa-thanh-pham', 'don', 'doi-ho-so'])
     ap.add_argument('--du-an', action='append', help='chỉ dự án này (lặp được); cũng là xác nhận đã duyệt')
     ap.add_argument('--ngan-sach', type=int, default=150, help='giây tối đa mỗi lần chạy lệnh chuyen')
     ap.add_argument('--lai', action='store_true', help='chép và đối chiếu lại cả dự án đã khớp')
@@ -467,7 +580,7 @@ def main():
     if a.luu_tru:
         LUU_TRU_GHI_DE = CH._tuyet_doi(a.luu_tru)
     DUYET_GIA_DINH = set(a.du_an or [])
-    {'xem': xem, 'chuyen': chuyen, 'xoa-thanh-pham': xoa_thanh_pham, 'don': don}[a.lenh](a)
+    {'xem': xem, 'chuyen': chuyen, 'xoa-thanh-pham': xoa_thanh_pham, 'don': don, 'doi-ho-so': doi_ho_so}[a.lenh](a)
 
 
 if __name__ == '__main__':

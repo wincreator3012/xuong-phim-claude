@@ -173,21 +173,43 @@ def main():
             m = re.match(r"Short \d+ (.+)$", ten)
             slug = m.group(1) if m else None
             ass = os.path.join(da, "clip-ngan", slug or "_", "phu-de", f"{slug}-doc.ass")
+            if not os.path.isfile(ass):  # short song ngữ: <slug>-doc-songngu.ass
+                ass = os.path.join(da, "clip-ngan", slug or "_", "phu-de", f"{slug}-doc-songngu.ass")
+            # short cắt từ khúc proxy dn<k> (mốc khúc + M0 = mốc cả buổi): bù M0 để trích đúng gỡ băng cả buổi
+            m0 = 0.0
+            pcs = []  # khúc ghép nhiều mảnh (keynote Tuấn): [[tK đầu, tK cuối, M đầu], ...]
+            try:
+                kd = json.load(open(os.path.join(da, "clip-ngan", slug, "spec.json"), encoding="utf-8")).get("kd")
+                kj = json.load(open(os.path.join(da, "clip-ngan", "_src", f"{kd}.json"), encoding="utf-8")) if kd else {}
+                m0 = float(kj.get("M0", 0.0))
+                pcs = kj.get("pieces") or []
+            except (OSError, ValueError, TypeError):
+                m0 = 0.0
             mp = os.path.join(da, "xuat-nhap", f"{slug}-doc.map.json")
             if slug and os.path.isfile(ass):
                 cues = ass_sang_srt(ass)
                 ghi_t += ghi_van_ban(os.path.join(tr, "phu-de.srt"), ghi_srt(cues), a.ghi)
-                ghi_t += ghi_van_ban(os.path.join(tr, "loi-noi.txt"), "\n".join(c[2].replace("\n", " ") for c in cues) + "\n", a.ghi)
+                dong_ln = []
+                for c in cues:  # cue bị tách ở chỗ cắt lặp nguyên chữ: lời nói chỉ giữ một lần
+                    t = c[2].replace("\n", " ")
+                    if not dong_ln or dong_ln[-1] != t:
+                        dong_ln.append(t)
+                ghi_t += ghi_van_ban(os.path.join(tr, "loi-noi.txt"), "\n".join(dong_ln) + "\n", a.ghi)
             if slug and os.path.isfile(mp) and goc:
                 parts = [p for p in json.load(open(mp, encoding="utf-8"))["parts"] if p.get("kind") == "cut" and (p.get("audio_in") is not None or p.get("in") is not None)]
                 dong = ["Gỡ băng của nguồn cho đúng các quãng đã dùng trong clip (giờ theo trục nguồn của cả buổi; clip có thể bỏ ngập ngừng nên chữ phụ đề đã chỉnh lại).", ""]
                 for p in parts:
-                    a0 = p["audio_in"] if p.get("audio_in") is not None else p["in"]; b0 = a0 + p["dur"]
-                    dong.append(f"== Trong clip {gio(p['start'], False)} - {gio(p['end'], False)} | nguồn {gio(a0, False)} - {gio(b0, False)} ==")
-                    for x, y, tx in goc:
-                        if y > a0 and x < b0:
-                            dong.append(f"[{gio(x)}] {tx}")
-                    dong.append("")
+                    k0 = p["audio_in"] if p.get("audio_in") is not None else p["in"]; k1 = k0 + p["dur"]
+                    if pcs:  # tách theo từng mảnh của khúc
+                        doan = [(max(k0, q0) - q0 + qm, min(k1, q1) - q0 + qm) for q0, q1, qm in pcs if min(k1, q1) > max(k0, q0)]
+                    else:
+                        doan = [(k0 + m0, k1 + m0)]
+                    for a0, b0 in doan:
+                        dong.append(f"== Trong clip {gio(p['start'], False)} - {gio(p['end'], False)} | nguồn {gio(a0, False)} - {gio(b0, False)} ==")
+                        for x, y, tx in goc:
+                            if y > a0 and x < b0:
+                                dong.append(f"[{gio(x)}] {tx}")
+                        dong.append("")
                 ghi_t += ghi_van_ban(os.path.join(tr, "trich-nguon.txt"), "\n".join(dong), a.ghi)
         tong += n_byte
         ten_hien = ""

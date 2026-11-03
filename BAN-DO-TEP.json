@@ -2,8 +2,8 @@
 "_huong-dan": "Bản đồ tệp của bản thiết kế xưởng phim. AI dựng xưởng: đọc DUNG-XUONG.md; lấy từng tệp vai 'chep' theo mẫu địa chỉ 'raw' (thay {ref} bằng mã commit đang dùng hoặc 'main', {p} bằng đường dẫn đã mã hoá URL), kiểm 'sha' (sha1 của 'blob <cỡ>\\0' + nội dung, giống git hash-object), tệp 'chay' thì cấp quyền chạy. Tệp vai 'ban-mau' không chép. Bản đồ này không tự liệt kê mình.",
 "repo": "https://github.com/wincreator3012/xuong-phim-claude",
 "raw": "https://raw.githubusercontent.com/wincreator3012/xuong-phim-claude/{ref}/{p}",
-"so_tep": 235,
-"so_tep_chep": 229,
+"so_tep": 242,
+"so_tep_chep": 236,
 "tep": [
 {
 "p": ".gitattributes",
@@ -31,8 +31,8 @@
 },
 {
 "p": "CLAUDE.md",
-"c": 15307,
-"sha": "8ce94bb16accfb60d419a6748e5dfdd6dbde769b",
+"c": 15649,
+"sha": "0eab78425ff82f67e0aa54eeb86fe9f8b3a544dd",
 "vai": "chep"
 },
 {
@@ -75,8 +75,8 @@
 },
 {
 "p": "THAY-DOI.md",
-"c": 11586,
-"sha": "25dbb1238733187f4254b053afef243e87517ada",
+"c": 14508,
+"sha": "1efff0c2e83bfa2e70f1188db5fbfe51db6edd3f",
 "vai": "ban-mau"
 },
 {
@@ -93,8 +93,8 @@
 },
 {
 "p": "cau-hinh.mau.json",
-"c": 1538,
-"sha": "c28178331dd8d11a6e7ac8646986e48e7802e8c3",
+"c": 1791,
+"sha": "70c113dd8a498bb830694f013de779e230777606",
 "vai": "chep"
 },
 {
@@ -330,8 +330,8 @@
 },
 {
 "p": "do-hoa-chung/canh-kit/mau/canh-short.html",
-"c": 12496,
-"sha": "9ab75b25a807f1ac09696fb8739b34294142a1b1",
+"c": 13817,
+"sha": "18051d66a2ce9a1cb64006645eb73375d448773f",
 "vai": "chep"
 },
 {
@@ -366,8 +366,8 @@
 },
 {
 "p": "docs/BAI-HOC.md",
-"c": 102120,
-"sha": "6e220eb4d029db513c35923e2fae4e4c40ff8b0e",
+"c": 105065,
+"sha": "2dff0ae76dc344dc227f2172655d980aa84cf09c",
 "vai": "chep"
 },
 {
@@ -456,8 +456,8 @@
 },
 {
 "p": "skills/_chung/timeline-va-dung.md",
-"c": 7556,
-"sha": "74d7abc7650716282b4f465760ea22e8c5ca8d9f",
+"c": 8306,
+"sha": "250a14abcac0cacefe93f02386e84e0c18ed13eb",
 "vai": "chep"
 },
 {
@@ -522,8 +522,8 @@
 },
 {
 "p": "skills/phim-clip-ngan/SKILL.md",
-"c": 13204,
-"sha": "c6e82df0efa23aed1d5f5fe165a532eeba9e4619",
+"c": 14613,
+"sha": "6cedfeefc2f89f848bd26ab8207aa4855bc3d7f4",
 "vai": "chep"
 },
 {
@@ -540,20 +540,20 @@
 },
 {
 "p": "skills/phim-clip-ngan/references/short-mat-tren.md",
-"c": 11997,
-"sha": "4e0bd5812fd7dfba392ae530df3090c047dae992",
+"c": 14636,
+"sha": "c0eec1801fe7bc590c5c3975da652bb21d038f57",
 "vai": "chep"
 },
 {
 "p": "skills/phim-dang-tai/SKILL.md",
-"c": 19569,
-"sha": "5374e70a5b0e946af20d4d2ac77b73897a082645",
+"c": 20965,
+"sha": "c1d30814f7716e586de10a8be0f803fa7a380b93",
 "vai": "chep"
 },
 {
 "p": "skills/phim-dang-tai/references/mau-dang-tai.md",
-"c": 7830,
-"sha": "c4384475b4a604c9dc86f0454d1d0ef9f2509e43",
+"c": 8348,
+"sha": "b06fc09be1d52c83f92c9968ef2aafec0da7cae3",
 "vai": "chep"
 },
 {
@@ -584,6 +584,12 @@
 "p": "skills/phim-dung-bai/references/bien-tap.md",
 "c": 36272,
 "sha": "55cefed6d11ec5c9b47cbd86c99c7b2993b23a42",
+"vai": "chep"
+},
+{
+"p": "skills/phim-duyet/SKILL.md",
+"c": 5662,
+"sha": "1f40d47e7c7e90f36ae053d596181222f9a38907",
 "vai": "chep"
 },
 {
@@ -666,8 +672,8 @@
 },
 {
 "p": "skills/phim-recap-su-kien/SKILL.md",
-"c": 14893,
-"sha": "f3ffe1c87f6baf7406e1be8b080613049359257a",
+"c": 15784,
+"sha": "1ff98afa1c220cf6d51399cb568e157dcbfb1dd7",
 "vai": "chep"
 },
 {
@@ -876,14 +882,14 @@
 },
 {
 "p": "studio/src/common.tsx",
-"c": 6778,
-"sha": "9d42e0e99404884c93492f9a811ccc06183026b9",
+"c": 6901,
+"sha": "e2d1c3d4c71b9f1964775048749e698062ee9c33",
 "vai": "chep"
 },
 {
 "p": "studio/src/components/Benefits.tsx",
-"c": 9718,
-"sha": "db114ac6d193b63eb2154637c53723d72fd070d4",
+"c": 10006,
+"sha": "8ce3f8f7d2d5211470d5c3e7a1e582ef523a2dde",
 "vai": "chep"
 },
 {
@@ -924,8 +930,8 @@
 },
 {
 "p": "studio/src/components/Outro.tsx",
-"c": 7534,
-"sha": "9eae79a6b604f9da82502faa2dbc990391f4ee0d",
+"c": 8781,
+"sha": "186db4de7d2fa94a46cef23d86e2aeb287a29888",
 "vai": "chep"
 },
 {
@@ -990,8 +996,8 @@
 },
 {
 "p": "thu-vien/AM-THANH.md",
-"c": 8797,
-"sha": "b701d7b12182a58aad1fca4e1cc58bd02fcaa04d",
+"c": 10749,
+"sha": "e6b40b3494cd01aef33c470c700d99c2a3f90e6e",
 "vai": "chep"
 },
 {
@@ -1134,8 +1140,8 @@
 },
 {
 "p": "tools/don-tuan.py",
-"c": 21503,
-"sha": "28abd9604d8a4a0dfcd0e59e9f092f6d09539a1a",
+"c": 27410,
+"sha": "dea0b9c13cb29138cc9b60fd38f6beb8e20761f8",
 "vai": "chep"
 },
 {
@@ -1164,8 +1170,8 @@
 },
 {
 "p": "tools/giao-thanh-pham.py",
-"c": 9748,
-"sha": "030be6e6ab7bae7047920a2ce26cfe5ed278e52c",
+"c": 11229,
+"sha": "e11e6eed18be427672b374369abd834cc043875f",
 "vai": "chep"
 },
 {
@@ -1327,28 +1333,28 @@
 },
 {
 "p": "tools/render-do-hoa.mjs",
-"c": 12139,
-"sha": "bfee4d889a9a260c3c935db5360acd1e0d019058",
+"c": 12334,
+"sha": "0912466cc026fa954978afcd4ab6405eb1d95ac9",
 "vai": "chep"
 },
 {
 "p": "tools/short-canh.py",
-"c": 4166,
-"sha": "051cceeaa53486bb60997bdb4bc62b08994b99f3",
+"c": 4560,
+"sha": "51f08eaee269db9f499a07b0e4b2f104e6672147",
 "vai": "chep",
 "chay": true
 },
 {
 "p": "tools/short-chot.sh",
-"c": 1334,
-"sha": "518bbabc6a9caf398416999aac492b07124d49ec",
+"c": 1446,
+"sha": "c549a09aa8e85bb797728a2105660b6bfe1e4fc6",
 "vai": "chep",
 "chay": true
 },
 {
 "p": "tools/short-dung.py",
-"c": 12866,
-"sha": "d751e422fb513c49a75c313b5ca17452f350b789",
+"c": 15507,
+"sha": "05d8abed5cc152533ee7f7fda95fe312bde6ecdc",
 "vai": "chep",
 "chay": true
 },
@@ -1375,8 +1381,8 @@
 },
 {
 "p": "tools/short-xuat.sh",
-"c": 2029,
-"sha": "c26f2f447220e966bfe04bf63a50b64a23f1d340",
+"c": 2674,
+"sha": "654bd4b2cc5076dadedcc403a2fc8d59fcc6ea51",
 "vai": "chep",
 "chay": true
 },
@@ -1439,8 +1445,44 @@
 },
 {
 "p": "tools/soan-nhac.py",
-"c": 26928,
-"sha": "74850c3bb7cbe03d9648baf8ce6f2fd36f17435d",
+"c": 36855,
+"sha": "2a5c4a7e9864bc5777c5067d031645b85215932e",
+"vai": "chep"
+},
+{
+"p": "tools/soan-phuc-am.py",
+"c": 21303,
+"sha": "a6a884c3c72359f3ee515627d7795eb7939a2a2e",
+"vai": "chep"
+},
+{
+"p": "tools/soan-piano-mau.py",
+"c": 15679,
+"sha": "e6fb341ca8ed52a1a486d1fc45db44c765809f17",
+"vai": "chep"
+},
+{
+"p": "tools/soan-piano-tha-thiet.py",
+"c": 10045,
+"sha": "c749d1d6ac9c17e0812bf28c491204cd90429b98",
+"vai": "chep"
+},
+{
+"p": "tools/soan-piano-thuong-nho.py",
+"c": 8642,
+"sha": "aafb300f188a492301272078ef4d8432c3db5006",
+"vai": "chep"
+},
+{
+"p": "tools/soan-pop-rock.py",
+"c": 16772,
+"sha": "88f9feb68071bddaaf7f661a9634ec2b61f3018d",
+"vai": "chep"
+},
+{
+"p": "tools/soan-violin-mau.py",
+"c": 21024,
+"sha": "37cbf5f3ec7910ae9565a9dea4944249196b230e",
 "vai": "chep"
 },
 {

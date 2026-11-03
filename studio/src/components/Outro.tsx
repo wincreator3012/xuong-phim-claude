@@ -7,10 +7,13 @@ import {AccentLine, Canvas, FadeUp, LogoRow, QrPlate} from '../common';
 export type OutroProps = {
   headline?: string; // PLACEHOLDER: thông điệp kết
   ctaLines?: string[]; // PLACEHOLDER: lời mời hành động (1-2 dòng)
+  headlineEn?: string; // bản tiếng Anh của headline (clip song ngữ): chữ nhỏ hơn, màu nhấn, ngay dưới headline
+  ctaLinesEn?: string[]; // bản tiếng Anh của lời mời, hiện dưới các dòng tiếng Việt
   programName?: string; // PLACEHOLDER: tên chương trình đang mở đăng ký
   contactLines?: string[]; // PLACEHOLDER: web, email, điện thoại (fallback: brand.contactLines)
   qrFile?: string | null; // file QR trong public/brand/ (đưa vào qua "assets" của job)
   qrCaption?: string; // chú thích dưới QR
+  qrScale?: number; // phóng to QR (mặc định 1); thẻ "tạm dừng, quét mã" dùng 1.6-1.8 để quét được từ màn hình xa
   theme: ThemeName;
   brand: Brand;
   scheduleLabel?: string; // PLACEHOLDER: nhãn nhỏ phía trên lịch (vd "Lịch 5 chặng")
@@ -36,10 +39,13 @@ export const outroDefaults: OutroProps = {
 export const Outro: React.FC<OutroProps> = ({
   headline,
   ctaLines,
+  headlineEn,
+  ctaLinesEn,
   programName,
   contactLines,
   qrFile,
   qrCaption,
+  qrScale = 1,
   scheduleLabel,
   scheduleLines,
   theme,
@@ -52,7 +58,7 @@ export const Outro: React.FC<OutroProps> = ({
   const mono = logoMono ?? theme === 'dark';
   const contacts = contactLines?.length ? contactLines : brand.contactLines ?? [];
   const hasQr = Boolean(qrFile);
-  const qrSize = isVertical ? unit * 24 : unit * 22;
+  const qrSize = (isVertical ? unit * 24 : unit * 22) * qrScale;
 
   const MainColumn = (
     <div
@@ -81,6 +87,22 @@ export const Outro: React.FC<OutroProps> = ({
           </div>
         </FadeUp>
       ) : null}
+      {headlineEn ? (
+        <FadeUp from={20} duration={30}>
+          <div
+            style={{
+              fontFamily: 'Lora',
+              fontWeight: 500,
+              fontSize: titleSize * (isVertical ? 0.4 : 0.44),
+              color: palette.accent,
+              lineHeight: 1.3,
+              whiteSpace: 'pre-line',
+            }}
+          >
+            {headlineEn}
+          </div>
+        </FadeUp>
+      ) : null}
       <FadeUp from={28} duration={24} distance={0}>
         <AccentLine palette={palette} from={0} width={70} />
       </FadeUp>
@@ -92,6 +114,20 @@ export const Outro: React.FC<OutroProps> = ({
               fontWeight: 400,
               color: palette.inkSoft,
               lineHeight: 1.5,
+            }}
+          >
+            {line}
+          </div>
+        </FadeUp>
+      ))}
+      {(ctaLinesEn ?? []).map((line, i) => (
+        <FadeUp key={`en${i}`} from={52 + i * 10} duration={26}>
+          <div
+            style={{
+              fontSize: bodySize * 0.72,
+              fontWeight: 500,
+              color: palette.accent,
+              lineHeight: 1.45,
             }}
           >
             {line}

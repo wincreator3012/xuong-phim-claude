@@ -37,8 +37,11 @@ export type BenefitsProps = {
   // true: cho phep xuong dong, dung cho MOT cau dai (vd cau Hook lam caption)
   // thay vi tu khoa/cum tu ngan. Mac dinh false (nowrap, hanh vi cu).
   wrap?: boolean;
+  // Chiều rộng tối đa của pill khi wrap=true, tính theo đơn vị (1% cạnh ngắn). Mặc định 70.
+  // Hẹp lại (vd 44) để cột pill bên phải không lấn sang mặt người nói ngồi giữa khung.
+  maxWidthUnits?: number;
   // He so nhan them vao co chu/vong tron so/padding - dung khi mac dinh
-  // van bi che la nho (xem docs/BAI-HOC.md, chu de Overlay).
+  // van bi che la nho (xem BAI-HOC, chu de Overlay).
   // Mac dinh 1 (khong doi so voi truoc).
   scale?: number;
   // Khoang cach tu canh (top/bottom/left/right theo position) tinh theo
@@ -60,7 +63,7 @@ export const benefitsDefaults: BenefitsProps = {
   // Mac dinh 2026-09-17: doi tu 'top' sang 'bottom'. Voi khung hinh phong van
   // ngoi (dau nguoi noi thuong o 1/3-1/2 tren khung), position 'top' la
   // nguyen nhan he thong khien pill hay che dau/mat khi job quen truyen rieng
-  // `position` - da xay ra lap lai nhieu lan (xem docs/BAI-HOC.md).
+  // `position` - da xay ra lap lai nhieu lan (xem BAI-HOC, chu de Overlay).
   // 'bottom' an toan hon lam mac dinh that bai (fail-safe); van nen tuong
   // minh chon position phu hop tung canh quay va kiem bang frame that.
   position: 'bottom',
@@ -78,6 +81,7 @@ export const Benefits: React.FC<BenefitsProps> = ({
   position = 'bottom',
   showIndex = true,
   wrap = false,
+  maxWidthUnits = 70,
   scale = 1,
   edgeInset,
 }) => {
@@ -214,7 +218,7 @@ export const Benefits: React.FC<BenefitsProps> = ({
                   fontSize: (isVertical ? unit * 4.5 : unit * 4.0) * scale,
                   color: fg,
                   whiteSpace: wrap ? 'normal' : 'nowrap',
-                  maxWidth: wrap ? unit * 70 : undefined,
+                  maxWidth: wrap ? unit * maxWidthUnits : undefined,
                   textAlign: wrap ? 'center' : undefined,
                   lineHeight: wrap ? 1.35 : undefined,
                 }}

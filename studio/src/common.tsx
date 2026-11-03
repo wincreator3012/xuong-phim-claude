@@ -183,6 +183,8 @@ export const QrPlate: React.FC<{
           fontWeight: 500,
           color: palette.inkSoft,
           letterSpacing: '0.08em',
+          whiteSpace: 'pre-line', // cho phép chú thích hai dòng (song ngữ) bằng \n
+          textAlign: 'center',
         }}
       >
         {qrCaption}

@@ -37,6 +37,8 @@ Tệp để chép ra khi soạn gói đăng tải (skill phim-dang-tai). Khuôn 
 - `nhac_ccby`: dòng ghi công nhạc nguyên văn (mẫu trong `thu-vien/AM-THANH.md`) khi dùng track CC-BY; `null` khi nhạc không cần ghi công.
 - Clip chỉ đăng Facebook, Reels: bỏ khối `youtube`. Clip chỉ đăng YouTube: bỏ khối `facebook`.
 
+Short song ngữ: thêm trường `youtube.tieu_de_en` (mảng một tiêu đề tiếng Anh gợi ý, dưới 100 ký tự, sentence case), đoạn "In English" vào `youtube.mo_ta` (trước dòng "Tiếng piano: ..."), khối "In English:" cuối `facebook.status`, dòng "Full talk on YouTube: [paste the YouTube link after posting]" trong `facebook.binh_luan_dau`, và 2-3 thẻ tiếng Anh trong `youtube.the`. Cổng `dang-tai.py kiem` hiện không đòi các trường này, nhưng chuẩn short yêu cầu.
+
 ## 2. `thumbnail.json`
 
 ```json
