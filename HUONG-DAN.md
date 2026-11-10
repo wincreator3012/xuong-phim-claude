@@ -13,7 +13,7 @@ Du an/2026-11 Ten du an/
 ├── tu-lieu/          ← hình minh hoạ đã kiểm định + ghi chú TU-LIEU.md (khi bạn cần hình)
 ├── do-hoa/           ← intro, outro, thẻ, nhãn từ khoá đã render
 ├── timeline.json     ← "kịch bản dựng" máy đọc (Claude soạn, bạn không cần mở)
-├── xuat-nhap/        ← bản nháp 480p để bạn xem và góp ý
+├── xuat-nhap/        ← các vòng bản nháp để bạn xem và góp ý
 └── xuat-hoan-chinh/  ← bản đạt nghiệm thu, trước khi Claude đặt vào Thanh pham/
 
 Thanh pham/2026-11 Ten du an/
@@ -98,7 +98,7 @@ Bạn không cần nhớ tên skill hay tên công cụ. Claude nhận ra loại
 1. **Khảo sát**: Claude đọc thông số video, khám màu (đa số không cần chỉnh), hỏi vài điều còn thiếu nếu `PHONG-CACH.md` chưa trả lời (ngang hay dọc, độ dài, nhạc nào)
 2. **Gỡ băng**: vài phút cho mỗi 10 phút video; bài dài hơn một giờ thì lâu tương ứng. Máy tự kiểm xem có đoạn nào bị bỏ sót. Trên Mac, Claude có thể nhờ bạn bấm đúp `Go bang tren Mac.command` để gỡ băng bằng large-v3 (chính xác nhất)
 3. **Phương án cắt và nhãn** (bạn duyệt lần 1): một bảng ghi đoạn nào giữ, đoạn nào bỏ, vì sao, và các chỗ định chèn nhãn từ khoá, thẻ chuyển phần, cảnh trám. Sửa gì cứ nói
-4. **Đồ họa và bản nháp** (bạn duyệt lần 2): Claude render intro, outro, nhãn, rồi dựng bản nháp 480p vào `xuat-nhap/`. Mở xem trên máy, góp ý về nhịp, bố cục, chỗ nào chữ hiện sai lúc. Lặp tới khi ưng
+4. **Đồ họa và bản nháp** (bạn duyệt lần 2): Claude render intro, outro, nhãn, rồi dựng bản nháp vào `xuat-nhap/` (nháp nhỏ 480p hay đúng chất lượng bản giao, theo lựa chọn của bạn lúc thiết lập). Mở xem trên máy, góp ý về nhịp, bố cục, chỗ nào chữ hiện sai lúc. Lặp tới khi ưng
 5. **Bản chính**: xuất 1080p, máy đo hình khớp tiếng, âm lượng chuẩn, không khoảng đen, rồi Claude nhìn ảnh lưới 12 khung. Đạt thì copy vào `xuat-hoan-chinh/` và báo bạn: tên file, thời lượng, dung lượng, danh sách chương (nếu có), dòng ghi công nhạc cần dán vào mô tả video (nếu dùng track CC-BY)
 6. **Gói đăng tải**: ngay sau đó Claude soạn trong `dang-tai/` của dự án (rồi đặt cùng video vào `Thanh pham/`) ba phương án tiêu đề, mô tả YouTube, status Facebook và ba thumbnail từ khung hình thật; bạn chọn, sửa, rồi chép dán khi đăng
 

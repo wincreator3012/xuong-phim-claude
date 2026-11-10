@@ -98,7 +98,7 @@ Giao nháp cho người dùng xem trên máy, nhận góp ý theo mốc phút gi
 
 ### Bước 8 - Bản chính, bàn giao, cập nhật
 
-Render 1080p với `--out "<tên>-<khung>"`, nghiệm thu, copy bản đạt sang `xuat-hoan-chinh/`. Đề xuất bản dọc hoặc bản gọn 60-90 giây qua phim-clip-ngan nếu hợp. Cập nhật `an-du-y-niem.json` (số mục phải tăng nếu dự án có ẩn dụ mới); bài học kỹ thuật mới vào `docs/BAI-HOC.md` chủ đề "Infomotion và hình vẽ ẩn dụ"; cách làm đổi thì sửa skill theo `_chung/bao-tri-skill.md`. Giữ `do-hoa/job/*.json` tới khi giao xong.
+Bản chính 1080p: `--chot "<tên>-<khung>-nhapN"` nếu nháp kiểu `ban-giao` và người dùng đã duyệt đúng vòng đó, ngược lại render với `--out "<tên>-<khung>"`; nghiệm thu, copy bản đạt sang `xuat-hoan-chinh/`. Đề xuất bản dọc hoặc bản gọn 60-90 giây qua phim-clip-ngan nếu hợp. Cập nhật `an-du-y-niem.json` (số mục phải tăng nếu dự án có ẩn dụ mới); bài học kỹ thuật mới vào `docs/BAI-HOC.md` chủ đề "Infomotion và hình vẽ ẩn dụ"; cách làm đổi thì sửa skill theo `_chung/bao-tri-skill.md`. Giữ `do-hoa/job/*.json` tới khi giao xong.
 
 ## Khi một khâu hỏng
 
@@ -120,4 +120,4 @@ Nguyên tắc chung ở `_chung/van-hanh.md` và bảng từng khâu ở QUY-TRI
 - Hình vẽ bằng code theo brand; không dùng ảnh hay clip do AI tạo. Giọng máy chỉ làm bản tạm ở Lối vào B, không bao giờ vào bản giao.
 - Nghiệm thu máy VÀ cặp "hình - câu đang nói" là bắt buộc trước khi báo "xong".
 
-<!-- ban-nguon: phim-infomotion 2026-10-07 ba73ea25 -->
+<!-- ban-nguon: phim-infomotion 2026-11-10 05860ffd -->

@@ -19,6 +19,7 @@ Thiếu cau-hinh.json thì dùng mặc định bên dưới. Máy còn kiểu c�
     CH.tam("go-bang")     # thư mục tạm (tạo nếu chưa có)
     CH.trong_repo(p)      # p có nằm trong repo không
     CH.cho_phep(p)        # p nằm trong repo, Du an hoặc Thanh pham
+    CH.ban_nhap()         # kiểu bản nháp: "ban-giao" (cùng thông số bản giao) hoặc "480p"
 """
 import json
 import os
@@ -73,6 +74,30 @@ def giao():
     return ps[0]
 
 
+# Kiểu bản nháp (khoá "banNhap" trong cau-hinh.json), quyết định cách assemble.py --preview dựng nháp:
+#   "ban-giao": nháp đúng thông số bản giao (1920x1080 hoặc 1080x1920, CRF 18). Bản nháp được duyệt chốt
+#               thành bản chính bằng `assemble.py --chot <tên nháp>`, không render lại. Hợp máy mạnh.
+#   "480p":     nháp 854x480 encode nhanh để duyệt nhịp và nội dung; bản chính render lại 1080p.
+#               Hợp máy yếu, máy ảo giới hạn thời gian mỗi lệnh, phim rất dài.
+KIEU_NHAP = ("ban-giao", "480p")
+BAN_NHAP_MAC_DINH = ""  # bản thiết kế không chọn thay người dùng: hỏi lúc thiết lập rồi ghi banNhap
+_DA_BAO = []
+
+
+def ban_nhap(bao=True):
+    """Kiểu bản nháp đang dùng. Chưa chọn thì tạm dùng "480p" (an toàn cho mọi máy) và nhắc hỏi người dùng."""
+    v = str(doc().get("banNhap") or BAN_NHAP_MAC_DINH or "").strip().lower()
+    v = {"1080": "ban-giao", "1080p": "ban-giao", "giao": "ban-giao", "ban-chinh": "ban-giao", "480": "480p"}.get(v, v)
+    if v in KIEU_NHAP:
+        return v
+    if bao and not _DA_BAO:
+        _DA_BAO.append(1)
+        print("  (Chưa chọn kiểu bản nháp: khoá banNhap trong cau-hinh.json còn trống, tạm dựng nháp 480p. "
+              "Hỏi người dùng rồi ghi \"ban-giao\" (nháp cùng thông số bản giao, chốt không render lại; máy mạnh) "
+              "hoặc \"480p\" (nháp nhẹ, bản chính render lại; máy yếu).)", flush=True)
+    return "480p"
+
+
 def tam(*con, tao=True):
     d = _tuyet_doi(doc()["thuMucTam"])
     if not os.path.isdir(os.path.dirname(d)) and os.path.isdir(os.path.join(GOC, "du-an")):
@@ -103,3 +128,4 @@ if __name__ == "__main__":
     print("Thanh pham :", thanh_pham())
     print("Giao       :", giao() or "(chưa cấu hình thuMucGiao)")
     print("Tạm        :", tam(tao=False))
+    print("Bản nháp   :", ban_nhap(bao=False), "(banNhap)" if doc().get("banNhap") else "(mặc định)")

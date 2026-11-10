@@ -51,7 +51,7 @@ Ra `slide/DAN-HINH.md` (bảng: mốc nguồn, slide, bố cục đề xuất, t
 
 Chép segments từ `timeline-slide-nhap.json` vào `timeline.json` sau khi chỉnh theo bảng đã duyệt; kiểm đuôi file nguồn (.mp4/.MP4/.MOV). Mỗi segment thêm `"layout"` và `"slide": "slide/slide-NN.png"` hoặc `"screen": "nguon/man-hinh.mp4"` (một trong hai, bắt buộc khi layout khác `mat`; `screen` lấy ô slide từ VIDEO màn hình cùng trục thời gian với `src`, thêm `"screenOffset"` nếu lệch), tùy chọn `"slideZoom"` (vùng phóng cố định suốt segment; với `screen` là cách làm chữ thao tác đọc được và cũng là cách giữ thông tin ngoài vùng không lên hình, xem `demo-man-hinh.md` mục 3-4); cấp cao nhất `"theme": "light"|"dark"` chọn nền khung. Overlay pill, fade, chapter, B-roll dùng như thường (B-roll bỏ qua layout trong quãng của nó). Intro/outro từ preset như mọi dự án; hook-trước-intro áp dụng như phim-dung-bai.
 
-Kiểm rồi dựng: `python3 tools/assemble.py --project "../Du an/<tên>" --kiem-tra` (bắt layout sai, thiếu slide, slideZoom sai, thiếu bo-cuc) → `--preview --out "<tên>-ngang-nhap1"` (mỗi vòng nháp tăng số) → duyệt → bản chính `--out "<tên>-ngang"`. Bố cục ghép ở 1920x1080 rồi thu về preview nên bản nháp phản ánh đúng tỉ lệ. Thiếu `do-hoa-chung/bo-cuc/`: chạy `python3 tools/bo-cuc-slide.py`.
+Kiểm rồi dựng: `python3 tools/assemble.py --project "../Du an/<tên>" --kiem-tra` (bắt layout sai, thiếu slide, slideZoom sai, thiếu bo-cuc) → `--preview --out "<tên>-ngang-nhap1"` (mỗi vòng nháp tăng số) → duyệt → bản chính: `--chot "<tên>-ngang-nhapN"` nếu nháp kiểu `ban-giao`, ngược lại `--out "<tên>-ngang"` (`_chung/timeline-va-dung.md` mục "Bản nháp và bản chính"). Bố cục ghép ở 1920x1080 rồi mới thu về cỡ nháp nếu nháp 480p, nên bản nháp phản ánh đúng tỉ lệ. Thiếu `do-hoa-chung/bo-cuc/`: chạy `python3 tools/bo-cuc-slide.py`.
 
 ## Bước 4 - nghiệm thu
 
@@ -74,4 +74,4 @@ Báo kết quả kèm số quãng theo từng bố cục (ví dụ "mặt 40%, s
 - Nhắc user trước buổi live kế tiếp: đóng thông báo và các cửa sổ có tên khách hàng, dùng hồ sơ trình duyệt sạch hoặc chế độ không làm phiền, vì phóng vùng chỉ che được một phần
 - Sửa skill này theo `skills/_chung/bao-tri-skill.md`; bài học mới vào `docs/BAI-HOC.md`
 
-<!-- ban-nguon: phim-bai-giang-slide 2026-10-09 8f7c05a5 -->
+<!-- ban-nguon: phim-bai-giang-slide 2026-11-10 ad9bd779 -->

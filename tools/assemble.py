@@ -5,6 +5,13 @@
 Cách dùng (từ thư mục gốc "xuong-phim-claude"):
     python3 tools/assemble.py --project "../Du an/ten-du-an" [--timeline timeline.json]
                               [--preview] [--out ten-file]
+    python3 tools/assemble.py --project "../Du an/ten-du-an" --chot <tên nháp> [--out <tên bản chính>]
+
+Bản nháp (--preview) dựng theo khoá "banNhap" trong cau-hinh.json (tools/cau_hinh.py):
+"ban-giao" thì nháp đúng thông số bản giao (1080p, CRF 18) và bản nháp được duyệt CHỐT thành
+bản chính bằng --chot (chép sang tên bản chính kèm map.json, chapters, nghiem-thu.json; không
+render lại; từ chối nếu timeline, file nguồn, đồ họa, đơn màu hay công cụ đã đổi sau bản nháp);
+"480p" thì nháp 854x480 encode nhanh và bản chính phải render lại không --preview.
 
 Tên file xuất (trong Du an/<x>/xuat-nhap/): mặc định "<tên dự án>-<khung>", thêm
 "-nhap" khi --preview. Từ vòng nháp thứ hai trở đi LUÔN truyền --out tường minh,
@@ -86,6 +93,21 @@ import re
 import shlex
 import subprocess
 import sys
+
+try:
+    import cau_hinh as _CH  # cùng thư mục tools/
+except ImportError:  # chạy từ nơi khác: nạp theo đường dẫn
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    try:
+        import cau_hinh as _CH
+    except ImportError:
+        _CH = None
+
+
+def kieu_nhap():
+    """Kiểu bản nháp của máy này: "ban-giao" hoặc "480p" (xem tools/cau_hinh.py)."""
+    return _CH.ban_nhap() if _CH else "480p"
+
 
 FPS_DEFAULT = 30
 SIZES = {"ngang": (1920, 1080), "doc": (1080, 1920)}
@@ -234,10 +256,14 @@ class Assembler:
     def __init__(self, project, timeline, preview, out_name):
         self.project = project
         self.tl = timeline
-        self.preview = preview
+        self.nhap = bool(preview)  # vòng nháp (đặt tên -nhapN, chờ duyệt)
+        # self.preview = nháp THU NHỎ (480p, encode nhanh). Nháp kiểu "ban-giao" dựng đúng thông số bản chính,
+        # nên chữ ký cache, kích cỡ và lệnh encode trùng bản chính và bản nháp được duyệt chốt thẳng (--chot).
+        self.kieu_nhap = kieu_nhap() if preview else None
+        self.preview = bool(preview) and self.kieu_nhap == "480p"
         self.aspect = timeline.get("aspect", "ngang")
         self.fps = timeline.get("fps", FPS_DEFAULT)
-        self.w, self.h = (PREVIEW_SIZES if preview else SIZES)[self.aspect]
+        self.w, self.h = (PREVIEW_SIZES if self.preview else SIZES)[self.aspect]
         self.fade_color = timeline.get("fadeColor", "black")
         self.color_grade = timeline.get("colorGrade")
         # Đơn màu theo TỪNG FILE NGUỒN (skill phim-mau-sac): <dự án>/mau-sac.json
@@ -262,6 +288,7 @@ class Assembler:
         self.parts = []
         self.chapters = []
         self.bookend_spans = {}  # "intro"/"outro" -> (mốc bắt đầu, thời lượng) trên thành phẩm
+        self._van_tay = self.van_tay()  # chụp TRƯỚC khi validate/build có thể bổ sung trường vào timeline
 
     def resolve(self, p):
         """Đường dẫn tương đối: tìm trong thư mục dự án trước, rồi tới thư mục gốc
@@ -274,6 +301,37 @@ class Assembler:
         root = XUONG  # gốc xưởng (repo); dự án nằm ngoài repo ở "../Du an/<x>"
         cand2 = os.path.join(root, p)
         return cand2 if os.path.exists(cand2) else cand1
+
+    def van_tay(self):
+        """Vân tay của MỌI thứ quyết định thành phẩm: timeline, kích cỡ, lệnh encode, phiên bản công cụ,
+        đơn màu và dấu (cỡ, mtime) của mọi file timeline trỏ tới. Ghi vào .nghiem-thu.json; --chot so khớp."""
+        import hashlib
+        stamps = {}
+
+        def walk(v):
+            if isinstance(v, str):
+                p = self.resolve(v)
+                if os.path.isfile(p):
+                    stamps[v] = file_stamp(p)
+            elif isinstance(v, dict):
+                for vv in v.values():
+                    walk(vv)
+            elif isinstance(v, (list, tuple)):
+                for vv in v:
+                    walk(vv)
+        walk(self.tl)
+        ms = os.path.join(self.project, "mau-sac.json")
+        if os.path.isfile(ms):
+            stamps["mau-sac.json"] = file_stamp(ms)
+        raw = json.dumps({"tl": self.tl, "f": stamps, "fps": self.fps, "wh": [self.w, self.h],
+                          "enc": self.enc_args(), "v": TOOL_VERSION + CONCAT_REV},
+                         sort_keys=True, ensure_ascii=False, default=str)
+        return hashlib.md5(raw.encode("utf-8")).hexdigest()
+
+    def nhan_nghiem_thu(self):
+        """Trường thêm cho .nghiem-thu.json: kích cỡ, là nháp hay không, kiểu nháp, vân tay."""
+        return {"khung": f"{self.w}x{self.h}", "nhap": self.nhap, "kieuNhap": self.kieu_nhap,
+                "vanTay": self._van_tay}
 
     # ---------- encode 1 phần ----------
     def enc_args(self):
@@ -1233,7 +1291,8 @@ class Assembler:
 
     def run(self):
         print(f"[1/3] Cắt và chuẩn hóa các phần ({self.w}x{self.h} @ {self.fps}fps"
-              + (", BẢN NHÁP" if self.preview else "") + ") …", flush=True)
+              + ((", BẢN NHÁP 480p" if self.preview else ", BẢN NHÁP cùng thông số bản giao") if self.nhap else "")
+              + ") …", flush=True)
         self.validate_timeline()
         expected = self.build_parts()
         print(f"[2/3] Ghép {len(self.parts)} phần …", flush=True)
@@ -1251,7 +1310,8 @@ class Assembler:
             json.dump({"file": os.path.basename(self.out_file), "tool_version": TOOL_VERSION + "+" + CONCAT_REV,
                        "parts": len(self.parts), "hinh": round(fv or 0, 3), "tieng": round(fa or 0, 3),
                        "tong_part": round(getattr(self, "sum_parts", 0) or 0, 3),
-                       "ket_luan": "ĐẠT: hình = tiếng = tổng part"}, fh, ensure_ascii=False, indent=1)
+                       "ket_luan": "ĐẠT: hình = tiếng = tổng part", **self.nhan_nghiem_thu()},
+                      fh, ensure_ascii=False, indent=1)
         print(f"  ✓ NGHIỆM THU: hình {fv:.2f}s = tiếng {fa:.2f}s = tổng {len(self.parts)} part "
               f"({getattr(self, 'sum_parts', 0):.2f}s) → chạy thêm tools/nghiem-thu.py video để soi âm lượng/khung hình")
         size = os.path.getsize(self.out_file) / 1e6
@@ -1269,11 +1329,48 @@ class Assembler:
                         pass
 
 
+def chot_nhap(asm, ten_nhap, out_name=None):
+    """Chốt bản nháp đã duyệt thành bản chính KHÔNG render lại (chỉ khi nháp dựng kiểu "ban-giao").
+    Chép <nháp>.mp4 và các tệp đi kèm sang tên bản chính; từ chối nếu vân tay hiện tại khác lúc dựng nháp."""
+    import shutil
+    ten_nhap = re.sub(r"\.mp4$", "", os.path.basename(ten_nhap))
+    src = os.path.join(asm.out_dir, ten_nhap + ".mp4")
+    nt_src = os.path.join(asm.out_dir, ten_nhap + ".nghiem-thu.json")
+    if not os.path.isfile(src) or not os.path.isfile(nt_src):
+        sys.exit(f"✗ Không thấy {src} hoặc .nghiem-thu.json của nó.")
+    nt = json.load(open(nt_src, encoding="utf-8"))
+    ly_do = None
+    if nt.get("kieuNhap") != "ban-giao" or nt.get("khung") != f"{asm.w}x{asm.h}":
+        ly_do = (f"bản nháp dựng {nt.get('khung') or 'kiểu cũ'} ({nt.get('kieuNhap') or 'không ghi kiểu nháp'}), "
+                 f"không phải thông số bản giao {asm.w}x{asm.h}")
+    elif nt.get("vanTay") != asm._van_tay:
+        ly_do = "timeline, file nguồn, đồ họa, đơn màu hoặc công cụ đã đổi sau khi dựng bản nháp"
+    if ly_do:
+        sys.exit(f"✗ Không chốt được {ten_nhap}: {ly_do}. Dựng bản chính: bỏ --chot và --preview.")
+    ten = out_name or re.sub(r"-nhap\d*$", "", ten_nhap)
+    ten = re.sub(r"\.mp4$", "", ten)
+    if ten == ten_nhap:
+        sys.exit("✗ Tên bản chính trùng tên nháp: truyền --out <tên bản chính>.")
+    goc, dich = os.path.join(asm.out_dir, ten_nhap), os.path.join(asm.out_dir, ten)
+    for duoi in (".mp4", ".map.json", ".chapters.txt"):
+        if os.path.isfile(goc + duoi):
+            shutil.copyfile(goc + duoi, dich + duoi)
+    if os.path.getsize(dich + ".mp4") != os.path.getsize(src):
+        sys.exit("✗ Chép bản nháp sang bản chính không trọn vẹn (khác kích cỡ).")
+    nt.update({"file": ten + ".mp4", "nhap": False, "chotTu": ten_nhap + ".mp4"})
+    json.dump(nt, open(dich + ".nghiem-thu.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    print(f"✓ Đã chốt {ten_nhap}.mp4 thành bản chính {ten}.mp4 (không render lại; vân tay khớp).")
+    print("  Tiếp như mọi bản chính: tools/nghiem-thu.py video (không --nhap), phụ đề, gói đăng tải.")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--project", required=True)
     ap.add_argument("--timeline", default="timeline.json")
-    ap.add_argument("--preview", action="store_true", help="bản nháp 480p, encode nhanh")
+    ap.add_argument("--preview", action="store_true",
+                    help="bản nháp: kiểu theo banNhap trong cau-hinh.json (ban-giao: đúng thông số bản giao; 480p: thu nhỏ)")
+    ap.add_argument("--chot", metavar="TEN_NHAP", default=None,
+                    help="chốt bản nháp (kiểu ban-giao) đã duyệt thành bản chính, không render lại; --out đặt tên bản chính")
     ap.add_argument("--out", default=None)
     ap.add_argument("--kiem-tra", action="store_true",
                     help="chỉ kiểm timeline (file, mốc thời gian, overlay/B-roll), không dựng")
@@ -1285,6 +1382,9 @@ def main():
     tl_path = args.timeline if os.path.isabs(args.timeline) else os.path.join(args.project, args.timeline)
     with open(tl_path, encoding="utf-8") as f:
         timeline = json.load(f)
+    if args.chot:
+        chot_nhap(Assembler(args.project, timeline, False, None), args.chot, args.out)
+        return
     asm = Assembler(args.project, timeline, args.preview, args.out)
     if args.kiem_tra:
         asm.validate_timeline()

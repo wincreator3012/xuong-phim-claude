@@ -122,8 +122,8 @@ Khung chung; từng loại việc theo skill tương ứng.
 3. **Phân tích và duyệt giấy**: đọc transcript, chọn đoạn giữ hoặc bỏ, đề xuất overlay (tên chương trình, các bước, key message) cùng lúc. Gửi phương án cắt cho người dùng duyệt trước khi dựng. Infomotion và phim tài liệu có kịch bản trên giấy; con số trên giấy do `tools/uoc-luong.py` cộng, không cộng tay.
 4. **Đồ họa** (sandbox): intro, outro từ preset; đồ họa khác soạn job theo mẫu `tools/mau-du-an/do-hoa/`. `node tools/render-do-hoa.mjs <job.json> --studio <studio>`: script tự đồng bộ logo, file riêng của dự án khai báo trong trường `"assets"`, bỏ qua job đã render đúng props (`--lam-lai` để render lại), `--gioi-han <giây>` để dừng gọn và chạy lặp. QR theo dự án: python `qrcode` ở sandbox. Commit về `Du an/<x>/do-hoa/<ngang|doc>/`, kiểm đủ file và `ffprobe` đúng thời lượng trước khi dựng.
 5. **Timeline**: soạn `Du an/<x>/timeline.json` theo docstring đầu `tools/assemble.py` (mục "timeline.json: những điều phải nhớ" bên dưới). Chạy `assemble.py --kiem-tra` trước khi dựng.
-6. **Bản nháp**: `python3 tools/assemble.py --project "../Du an/<x>" --preview --out "<tên>-<khung>-nhapN"` rồi nghiệm thu và gửi người dùng duyệt.
-7. **Bản chính**: bỏ `--preview`, `--out "<tên>-<khung>"`. Bài dài gọi lặp y nguyên lệnh (tự resume).
+6. **Bản nháp**: `python3 tools/assemble.py --project "../Du an/<x>" --preview --out "<tên>-<khung>-nhapN"` rồi nghiệm thu và gửi người dùng duyệt. Kiểu nháp theo khoá `banNhap` trong `cau-hinh.json`: `ban-giao` (đúng thông số bản giao) hoặc `480p` (nháp nhỏ); còn trống thì hỏi người dùng rồi ghi lại.
+7. **Bản chính**: nháp `ban-giao` thì `--chot "<tên>-<khung>-nhapN"` đúng vòng người dùng duyệt (chép sang `<tên>-<khung>`, không render lại; công cụ từ chối khi timeline, nguồn, đồ họa, đơn màu hay công cụ đã đổi sau vòng đó). Nháp `480p` hoặc bị từ chối: bỏ `--preview`, `--out "<tên>-<khung>"`. Bài dài gọi lặp y nguyên lệnh (tự resume).
 8. **Giao**: bản đạt nghiệm thu (và đã burn phụ đề nếu là clip dọc) đặt vào thư mục clip trong `Thanh pham/` (xem mục "Quy ước hai thư mục xuất và tên file"). Báo tên file, đúng thư mục clip trong `Thanh pham/`, thời lượng, dung lượng, kèm chapters nếu có.
 9. **Đăng tải** (tự làm, không chờ nhắc): skill phim-dang-tai. Chọn khung mặt bằng `python3 tools/chon-khung-thumbnail.py --map <video>.map.json` (rồi `--quanh kNN`), soạn `dang-tai.json` và `thumbnail.json`, `python3 tools/dang-tai.py job` rồi render thumbnail ở sandbox bằng `render-do-hoa.mjs --lam-lai` (job `"still": true`), cuối cùng `python3 tools/dang-tai.py kiem` ĐẠT và nhìn `soi-thumbnail.jpg`. Báo cùng lượt với bước 8.
 
@@ -138,7 +138,7 @@ Bàn dựng [timeline editor] để người dùng tự tay chỉnh nhỏ một 
 - **Khi người dùng báo đã chỉnh xong**: đọc dòng cuối `Du an/<x>/ke-hoach-dung/_ban-dung/nhat-ky.jsonl` (danh sách thay đổi, đường dẫn bản cũ), chạy `assemble.py --kiem-tra`, dựng nháp với `--out` tường minh rồi nghiệm thu như mọi lần. Bản cũ mỗi lần lưu nằm ở `Du an/<x>/ke-hoach-dung/_phien-ban/` (clip ngắn: tên có tiền tố `clip-ngan__<slug>__`).
 - **Ghi có khoá**: file đã đổi từ lúc người dùng mở thì trang hỏi nạp bản mới hay ghi đè; không bao giờ ghi lặng lẽ đè lên sửa của Claude hay của máy kia.
 - **Nhật ký là góp ý thật**: một kiểu chỉnh tay lặp lần thứ hai (quy tắc cứng 6 của CLAUDE.md) thì đề xuất sửa nguồn mặc định.
-- **Xem trước gần đúng**: chưa có bố cục slide, đơn màu, chuẩn hoá -14 LUFS, nhạc giảm khi có lời, phụ đề burn. Bản nháp 480p vẫn là chốt duyệt.
+- **Xem trước gần đúng**: chưa có bố cục slide, đơn màu, chuẩn hoá -14 LUFS, nhạc giảm khi có lời, phụ đề burn. Bản nháp dựng bằng `assemble.py` vẫn là chốt duyệt.
 - **Kiểm ở sandbox**: Chromium của Playwright không giải mã H.264/AAC; dựng một dự án thử bằng WebM (VP9, Opus) từ `Du an/_tam/_kiem-tra-tu-dong` rồi chạy kịch bản kéo, tách, lưu, xung đột.
 
 ## timeline.json: những điều phải nhớ
@@ -174,6 +174,8 @@ Bối cảnh: một bất biến của hệ (hình = tiếng ở mọi file trun
 |---|---|
 | Kiểm timeline trước khi dựng | `python3 tools/assemble.py --project "../Du an/<x>" --kiem-tra` |
 | Dựng (tự kiểm từng part, thân phim, thành phẩm; ghi `.map.json`, `.nghiem-thu.json`) | `python3 tools/assemble.py --project "../Du an/<x>" [--preview] --out "<tên>"` |
+| Chốt bản nháp kiểu `ban-giao` đã duyệt thành bản chính, không render lại | `python3 tools/assemble.py --project "../Du an/<x>" --chot "<tên>-<khung>-nhapN"` |
+| Xem kiểu bản nháp của máy (`banNhap`) và các thư mục | `python3 tools/cau_hinh.py` |
 | Kiểm đồng bộ hình-tiếng tuyệt đối của `assemble.py` (dựng thử chớp/click, hồi quy) | `python3 tools/kiem-dong-bo.py` (`--assemble <bản khác>` để thử một bản cũ) |
 | Đo đồng bộ trên phim thật (thành phẩm so với nguồn, trôi theo thời gian) | `python3 tools/do-dong-bo.py "<file.mp4>" [--mau 12]` (nghiệm thu tự gọi) |
 | Nghiệm thu thành phẩm (hình = tiếng, đồng bộ so với nguồn, LUFS, khung, im lặng, hình đứng, ảnh lưới) | `python3 tools/nghiem-thu.py video "<file.mp4>" --khung ngang\|doc [--nhap] --anh` |
@@ -200,7 +202,7 @@ Bối cảnh: một bất biến của hệ (hình = tiếng ở mọi file trun
 
 ## Quy ước hai thư mục xuất và tên file
 
-- **`xuat-nhap/`**: mọi thứ `assemble.py` ghi ra (nháp 480p và bản chính chưa qua hậu kỳ nào khác). Vùng làm việc, không gửi người dùng như bản cuối; dọn được khi dự án xong.
+- **`xuat-nhap/`**: mọi thứ `assemble.py` ghi ra (các vòng nháp, bản chính dựng hoặc chốt từ nháp, chưa qua hậu kỳ nào khác). Vùng làm việc, không gửi người dùng như bản cuối; dọn được khi dự án xong.
 - **`xuat-hoan-chinh/`** (trong dự án): CHỈ file đã hoàn tất hậu kỳ và qua nghiệm thu (clip dọc là bản đã burn phụ đề); bước đệm trước khi vào `Thanh pham/`.
 - **`Thanh pham/`** (cạnh repo, ngang hàng `Du an/`): nơi duy nhất trỏ người dùng tới khi báo hoàn thành. MỖI DỰ ÁN MỘT THƯ MỤC MẸ `<YYYY-MM tên dự án>/`, bên trong mỗi clip một thư mục tự đủ đánh số thứ tự: `Short NN <slug>/` cho short (NN hai chữ số), `00 Video day du/` cho clip dài (nhiều video dài: `00 Video day du N <slug>/`); không tách thư mục ngang cấp ở `Thanh pham/`. Thư mục clip gồm video, `nghiem-thu.json`, `dang-tai/` (dang-tai.json, DANG-TAI.md, thumbnail-*.json, thumb-*.jpg, soi-thumbnail.jpg, khung/). Người dùng sao lưu bằng cách dời nguyên thư mục. Chép từ sandbox: chỉ khi render đã xong, đối chiếu md5; sau khi vào `Thanh pham/` chạy lại `dang-tai.py kiem`.
 - **Nguồn dựng** (timeline, cues, phụ đề .ass, map.json, script, nguồn cảnh minh hoạ, gỡ băng) lưu ở `Du an/<dự án>/`, không nằm trong thư mục clip; nhờ đó dựng lại được khi cần.
@@ -209,7 +211,7 @@ Bối cảnh: một bất biến của hệ (hình = tiếng ở mọi file trun
 
 ## Quy ước chất lượng
 
-- Chuẩn phát hành: 1080p, H.264 high, CRF 18 veryfast, AAC 192k 48 kHz stereo, -14 LUFS (loudnorm hai lượt, linear), true peak dưới -1 dB, +faststart, 30 fps (nguồn 25 fps đồng nhất thì đặt fps 25 để tránh giật).
+- Chuẩn phát hành: 1080p cho mọi nơi đăng (1920x1080 ngang, 1080x1920 dọc); 2K hay 4K chỉ khi được yêu cầu riêng cho từng clip, và công cụ dựng phải được mở rộng trước (đồ họa, bố cục slide hiện ghép ở 1080p). H.264 high, CRF 18 veryfast, AAC 192k 48 kHz stereo, -14 LUFS (loudnorm hai lượt, linear), true peak dưới -1 dB, +faststart, 30 fps (nguồn 25 fps đồng nhất thì đặt fps 25 để tránh giật).
 - Ghép part: luôn giải mã rồi mã hoá lại (không `concat -c copy`); cờ `--ep-encode-lai` chỉ còn để lệnh cũ không vỡ.
 - Điểm cắt: luôn hút về khoảng lặng thật; không cắt giữa từ; vùng có tạp âm nền không phải chỗ đặt mối nối.
 - Giữ mạch: ưu tiên `overlay` (một lần encode liên tục) hơn `broll` hay `insert` khi lời nói cần liền; trước khi chọn insert, hỏi "đoạn này có phải cắt cảnh không, hay chỉ cần một lớp chữ đè lên". Giữa hai thẻ toàn màn hình liên tiếp có ít nhất 5 giây cảnh quay chính (không áp cho overlay bán trong suốt, không áp cho infomotion vì không có người trong khung).

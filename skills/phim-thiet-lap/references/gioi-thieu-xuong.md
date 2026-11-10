@@ -59,7 +59,7 @@ Kể sáu bước, nhấn rõ ai làm gì (đọc `HUONG-DAN.md` mục "Chuyện
 
 1. **Bạn** thả file vào `nguon/` của dự án (`Du an/<năm-tháng tên>/`, Claude tạo giúp) và nói một câu yêu cầu.
 2. **Claude** khảo sát nguồn, gỡ băng, rồi gửi **bảng phương án** (đoạn nào giữ, đoạn nào bỏ, chỗ nào chèn chữ hay hình). Đây là **chốt duyệt 1**; sửa ở đây rẻ nhất.
-3. **Claude** làm đồ họa và dựng **bản nháp** nhỏ vào `xuat-nhap/`. Bạn xem và góp ý theo mốc thời gian. Đây là **chốt duyệt 2**.
+3. **Claude** làm đồ họa và dựng **bản nháp** vào `xuat-nhap/` (nhỏ 480p hay đúng chất lượng bản giao, theo lựa chọn lúc thiết lập). Bạn xem và góp ý theo mốc thời gian. Đây là **chốt duyệt 2**.
 4. **Claude** xuất **bản chính** 1080p, để máy tự đo hình khớp tiếng và âm lượng, rồi tự nhìn ảnh lưới 12 khung. Đạt thì video cùng gói đăng tải vào `Thanh pham/<năm-tháng tên dự án>/`.
 5. **Claude** soạn **gói đăng tải** trong `dang-tai/` mà không cần nhắc; bạn chọn, sửa, chép dán.
 6. Mọi góp ý đáng nhớ của bạn được ghi vào sổ tay để clip sau không lặp lại.

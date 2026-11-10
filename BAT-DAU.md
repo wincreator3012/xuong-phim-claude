@@ -76,14 +76,14 @@ Nói với Claude "tạo dự án Bai 1": Claude tạo thư mục `Du an/<năm-t
 
 > Dựng bài giảng ngang từ clip trong dự án Bai 1, cắt bỏ khoảng lặng và đoạn nói hỏng, thêm intro outro.
 
-Claude sẽ gỡ băng (vài phút cho clip 10 phút), gửi bạn **một bảng phương án**: đoạn nào giữ, đoạn nào bỏ, vì sao, và chỗ nào định chèn nhãn từ khoá. Bạn đọc, sửa nếu cần, gật đầu. Claude dựng **bản nháp** nhỏ để bạn xem trong `xuat-nhap/` của dự án; bạn góp ý; Claude sửa. Ưng rồi Claude xuất **bản chính** 1080p, tự kiểm hình khớp tiếng và âm lượng, làm luôn gói đăng tải, và đặt cả hai vào `Thanh pham/<năm-tháng> Bai 1/`. Đó là file bạn đăng. Khi bạn nói "duyệt", Claude xin phép rồi dọn nháp cho nhẹ máy.
+Claude sẽ gỡ băng (vài phút cho clip 10 phút), gửi bạn **một bảng phương án**: đoạn nào giữ, đoạn nào bỏ, vì sao, và chỗ nào định chèn nhãn từ khoá. Bạn đọc, sửa nếu cần, gật đầu. Claude dựng **bản nháp** để bạn xem trong `xuat-nhap/` của dự án; bạn góp ý; Claude sửa. Ưng rồi Claude xuất **bản chính** 1080p, tự kiểm hình khớp tiếng và âm lượng, làm luôn gói đăng tải, và đặt cả hai vào `Thanh pham/<năm-tháng> Bai 1/`. Đó là file bạn đăng. Khi bạn nói "duyệt", Claude xin phép rồi dọn nháp cho nhẹ máy.
 
 Cách đặt yêu cầu cho từng loại clip, ví dụ câu nói, và xử lý khi có gì lạ: đọc tiếp [HUONG-DAN.md](HUONG-DAN.md).
 
 ## Những điều nên biết
 
 - **Giữ app Claude mở và máy không ngủ** khi Claude đang gỡ băng hay xuất bản chính. Bài giảng dài một giờ có thể mất một giờ để xuất; Claude tự nối tiếp nếu bị ngắt, nhưng máy ngủ thì dừng
-- **Bản nháp nhỏ (480p), bản chính 1080p.** Xem nháp để góp ý bố cục và nhịp, không đánh giá độ nét ở bản nháp
+- **Bản chính luôn 1080p; kiểu bản nháp do bạn chọn lúc thiết lập.** Máy mạnh: nháp đúng chất lượng bản giao, soi được chữ, phụ đề, màu ngay từ vòng đầu, và vòng nháp bạn duyệt trở thành bản chính luôn, không phải chờ dựng lại. Máy yếu: nháp nhỏ 480p dựng nhanh để góp ý bố cục và nhịp, không đánh giá độ nét ở nháp; bản chính 1080p dựng lại sau khi duyệt. Muốn đổi lúc nào cũng được, chỉ cần nói với Claude
 - **Video của bạn không rời máy.** Gỡ băng và dựng chạy trên máy bạn. Chỉ đồ họa (intro, thẻ chữ, không có hình bạn) được dựng trong sandbox của Claude rồi ghép về
 - **Lần đầu trên một máy** có thể cần cấp thêm quyền (thư mục Downloads, cho phép trình duyệt tải nhiều file). Claude sẽ nhờ khi cần
 - **Dùng trên hai máy**: đồng bộ đám mây (iCloud, Dropbox) dễ kẹt với file video lớn, nên đừng đặt cả `Xuong phim AI` vào đó. Cách gọn: chép thư mục xưởng của bạn (chỉ thư mục xưởng, không cần `Du an`) sang máy thứ hai bằng ổ ngoài, rồi nói với Claude trên máy đó "cài lại môi trường cho xưởng này"; dự án nào dựng ở máy nào thì để ở máy đó. Muốn quản lý phiên bản xưởng của riêng bạn thì có thể dùng git với một repo riêng tư của bạn; đừng trỏ nó về repo bản thiết kế. Skill trong tài khoản thì tự có mặt ở mọi máy bạn đăng nhập. File `Go bang tren Mac.command` tự cài môi trường riêng trên từng máy, nên lần đầu bấm trên máy mới sẽ chờ vài phút

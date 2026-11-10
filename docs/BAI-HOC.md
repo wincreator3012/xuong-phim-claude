@@ -47,6 +47,8 @@ Bài học là lý do để hiểu vì sao một cách làm từng đúng với 
 - **Cache đo loudness không được nhận kết quả lỗi.** Trễ mount làm `mix.wav` chưa thấy, lỗi "No such file" bị ghi vào `mix.wav.ln`, lượt sau đọc cache hỏng và lặng lẽ rơi về loudnorm một lượt: phim ra -15,2 và -16,3 LUFS, trượt cổng. Nay finalize chờ `mix.wav` sẵn sàng, chỉ cache khi có `input_i`, thử lại 5 lần và dừng nếu vẫn hỏng, không còn nhánh rơi về một lượt. (dự án thật, 2026-09-30) **[máy]**
 - **Sửa map hay loudness của phim đã xong nghĩa là dựng lại toàn bộ** (`.tam/` đã về 0 byte). Phim 30 phút cần khoảng 8 lượt `timeout 170`; kiểm thử bản sửa `assemble.py` bằng `kiem-dong-bo.py` trước, rồi mới dựng thật. (dự án thật, 2026-09-30)
 
+- **Nháp 480p lợi ít hơn tưởng khi nguồn 4K hay 2.7K:** dù xuất cỡ nào, máy vẫn giải mã trọn khung gốc; chỉ khâu thu nhỏ, mã hoá và chụp đồ họa được nhẹ đi, nên nháp 480p thường chỉ nhanh hơn 1,5-2 lần chứ không 5 lần, mà không soi được chữ, phụ đề, màu da và lại thêm một lượt render bản chính. Máy mạnh dùng `banNhap: ban-giao` (nháp đúng thông số bản giao, `assemble.py --chot` vòng được duyệt); muốn nhanh thật thì làm proxy cho nguồn nặng một lần. Máy yếu hoặc máy ảo giới hạn thời gian mỗi lệnh vẫn hợp `480p`. Vân tay chốt nằm ở `.nghiem-thu.json` (`nghiem-thu.py` giữ lại khi ghi đè). **[máy]** `assemble.py --chot`
+
 ## 3. Mốc thời gian overlay và B-roll
 
 - **`overlay.at` tương đối từ đầu đoạn; `broll.at` tuyệt đối trong file nguồn.** Đặt `broll.at: 21` với `in: 186.6` làm B-roll bật ngay đầu đoạn. Đây là chỗ nhầm kinh điển nhất. (dự án thật, 2026-08-29) **[máy]** `--kiem-tra`

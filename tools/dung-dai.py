@@ -27,8 +27,10 @@ Những cái bẫy đã trả giá (phim live 64 phút, 2026-10-09):
     mất cache và phải encode lại hết. Công cụ này luôn đổi sang đường dẫn tuyệt đối.
   - Ổ tạm của máy làm việc có thể chỉ vài GB: mux-a ghi PCM thô vào thư mục tạm ngoài thư mục gắn
     (~/.dung-dai-tam), mux-b đọc qua pipe và ghi thẳng vào xuat-nhap/ (còn nhiều chỗ trống).
-  - Nháp 480p (--nhap) và final (mặc định) có cache part riêng theo chữ ký; chuyển từ nháp sang final phải
-    encode lại toàn bộ part, hãy tính thời gian (khoảng 25-30 phút cho phim 64 phút trên 4 lõi).
+  - Nháp (--nhap) dựng theo banNhap trong cau-hinh.json. Kiểu "ban-giao": nháp cùng thông số và chữ ký cache
+    với bản chính, duyệt xong chốt bằng `assemble.py --chot <tên nháp>` (không encode lại). Kiểu "480p": nháp
+    và final có cache part riêng, chuyển sang final phải encode lại toàn bộ part, hãy tính thời gian
+    (khoảng 25-30 phút cho phim 64 phút trên 4 lõi).
 """
 import argparse
 import importlib.util
@@ -213,7 +215,7 @@ def meta(a):
     M.check_av(asm.out_file, getattr(asm, "sum_parts", None), label="THÀNH PHẨM", dur_tol=0.1 + 0.01 * len(asm.parts))
     json.dump({"file": os.path.basename(asm.out_file), "tool_version": M.TOOL_VERSION + "+" + M.CONCAT_REV, "parts": len(asm.parts),
                "hinh": round(fv or 0, 3), "tieng": round(fa or 0, 3), "tong_part": round(getattr(asm, "sum_parts", 0) or 0, 3),
-               "ket_luan": "ĐẠT: hình = tiếng = tổng part"},
+               "ket_luan": "ĐẠT: hình = tiếng = tổng part", **asm.nhan_nghiem_thu()},
               open(os.path.splitext(asm.out_file)[0] + ".nghiem-thu.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print("META-OK", fv, fa, getattr(asm, "sum_parts", None))
     print("Tiếp: python3 tools/nghiem-thu.py (video, transcript) rồi gói đăng tải.")
@@ -225,7 +227,7 @@ def main():
     ap.add_argument("lenh", choices=["song-song", "ghep", "tron", "mux-a", "mux-b", "meta"])
     ap.add_argument("du_an")
     ap.add_argument("ten")
-    ap.add_argument("--nhap", action="store_true", help="bản nháp 480p (mặc định: final)")
+    ap.add_argument("--nhap", action="store_true", help="bản nháp, kiểu theo banNhap trong cau-hinh.json (mặc định: final)")
     ap.add_argument("--cong", type=int, default=4, help="số tiến trình song song")
     ap.add_argument("--ngan-sach", type=float, default=100.0, help="giây, sau mốc này không bắt đầu part mới")
     a = ap.parse_args()

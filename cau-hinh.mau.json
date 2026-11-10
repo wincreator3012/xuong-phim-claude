@@ -10,5 +10,7 @@
   "thuMucLuuTru": "",
   "_luuTru": "thuMucLuuTru: nơi lưu trữ lâu dài thành phẩm đã duyệt (thường là ổ ngoài), cùng cấu trúc với Thanh pham; tools/don-tuan.py chép sang, đối chiếu rồi mới xoá bản trên máy. Có thể là danh sách nhiều đường dẫn, lấy đường đầu tiên tồn tại. Để trống nếu không dùng.",
   "thuMucKhoNguon": "",
-  "_khoNguon": "thuMucKhoNguon: kho nguồn quay gốc trên ổ ngoài; tools/don-tuan.py doi-ho-so dời media nặng của hồ sơ dự án đã duyệt vào <kho>/<dự án>/ho-so-nguon/. Để trống nếu không dùng."
+  "_khoNguon": "thuMucKhoNguon: kho nguồn quay gốc trên ổ ngoài; tools/don-tuan.py doi-ho-so dời media nặng của hồ sơ dự án đã duyệt vào <kho>/<dự án>/ho-so-nguon/. Để trống nếu không dùng.",
+  "banNhap": "",
+  "_banNhap": "banNhap: kiểu bản nháp khi duyệt clip. \"ban-giao\": nháp dựng đúng thông số bản giao 1080p, bản nháp được duyệt chốt thành bản chính không render lại (assemble.py --chot); hợp máy mạnh như Mac chip M Pro/Max/Ultra, nguồn 4K nặng thì làm proxy trước. \"480p\": nháp nhỏ dựng nhanh để duyệt nhịp, bản chính render lại; hợp máy yếu, phim rất dài. Để trống thì công cụ tạm dùng 480p và nhắc Claude hỏi người dùng (skill thiết lập hỏi việc này)."
 }

@@ -21,6 +21,13 @@ Chạy từ gốc xưởng: `python3 tools/cai-dat.py`. Lệnh tự bỏ qua bư
 
 Nếu bước dựng thử báo KHÔNG ĐẠT: đọc chẩn đoán, sửa (thường là thiếu ffmpeg hoặc Pillow), chạy lại. Chưa đạt thì chưa sang bước 2 - xưởng chưa an toàn.
 
+Dựng thử đạt rồi, hỏi một câu về **kiểu bản nháp** (AskUserQuestion) và ghi vào khoá `banNhap` của `cau-hinh.json`; không chọn thay người dùng, vì máy mỗi người một khác. Giải thích bằng lời thường: bản chính luôn 1080p; câu hỏi chỉ là bản nháp để góp ý dựng thế nào.
+
+- `ban-giao` ("Nháp đúng chất lượng bản giao"): soi được chữ, phụ đề, màu ngay vòng đầu; vòng nháp được duyệt chốt thành bản chính, không dựng lại. Hợp máy mạnh: Mac chip M loại Pro, Max, Ultra hay máy để bàn nhiều lõi, và lệnh chạy được trên máy thật không bị giới hạn thời gian mỗi lượt.
+- `480p` ("Nháp nhỏ, dựng nhanh"): hợp máy yếu hơn (máy xách tay đời cũ, máy ít RAM), dựng trong máy ảo giới hạn khoảng 2-3 phút mỗi lệnh, hoặc thường làm phim rất dài. Bản chính dựng lại sau khi duyệt.
+
+Đưa khuyến nghị dựa trên cấu hình máy (`sysctl -n machdep.cpu.brand_string hw.ncpu hw.memsize` trên Mac) và thời gian dựng thử vừa đo, nhưng để người dùng quyết. Nguồn quay của họ là 4K hay 2.7K thì nói thêm: nháp nhỏ không nhẹ đi nhiều vì máy vẫn phải giải mã khung gốc, cách tăng tốc thật là làm proxy cho nguồn nặng. Người dùng vắng mặt: để trống `banNhap` (công cụ tạm dùng 480p và nhắc hỏi lại), ghi giả định trong tóm tắt 5a. Đổi về sau: sửa khoá này, không cần cài lại.
+
 Song song, ở sandbox đám mây (nếu phiên có): dựng studio Remotion theo mục "Khởi động phiên" trong `docs/QUY-TRINH-KY-THUAT.md` (stage `studio/` lên, `npm ci`, `npx remotion compositions src/index.ts` ra đúng 22 composition). Cần cho Bước 4.
 
 ## Bước 2 - phỏng vấn phong cách (3 lượt, AskUserQuestion)

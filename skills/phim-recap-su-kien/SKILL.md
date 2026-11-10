@@ -80,7 +80,8 @@ python3 tools/nghiem-thu.py video "../Du an/<x>/xuat-nhap/<tên>-ngang.mp4" --kh
 - Bảng cảnh `Du an/<x>/recap/canh.json` viết sau khi người dùng duyệt phương án (mẫu ở `references/mau-bang-canh.md` mục 1). `cat` cắt proxy có đệm 1 giây mỗi đầu, tự tonemap nguồn HDR, ép khung đều cho nguồn VFR, và sinh `transcript/<proxy>.silences.json` theo năng lượng cho cảnh giữ tiếng, nhờ vậy `snap` của assemble hút mép về quãng lặng. Sửa giây một cảnh rồi chạy lại: chỉ cảnh đó cắt lại.
 - `khop-nhip` kéo mép cuối từng cảnh câm (trong phần đệm sẵn có) về phách gần nhất của nhạc, giữ nguyên cảnh có lời; chạy lần hai với `--map` của bản nháp vì `snap` làm độ dài đoạn lời đổi vài phần mười giây. Cắt trên phách nhưng không đều tăm tắp: lệnh báo khi nhiều cảnh liền nhau dài bằng nhau.
 - `kiem` là kiểm giấy (thời lượng, tỉ lệ lời và cảnh câm, cảnh quá ngắn hay quá dài, cảnh có lời thiếu tệp khoảng lặng, chữ nổi dài quá cảnh, nhạc và gainDb, mép trúng phách); cổng thật vẫn là `nghiem-thu.py`.
-- Người dùng có thể bỏ chốt nháp 480p (đã từng nói "dựng luôn bản full"): khi đó dựng thẳng bản chính, vẫn chạy `khop-nhip --map` trên `map.json` của chính bản chính rồi dựng lại (assemble dùng lại cache, chỉ ráp lại phần đổi).
+- `khop-nhip --ghi` đổi timeline nên bản nháp trước đó không chốt được: nháp kiểu `ban-giao` thì dựng thêm một vòng nháp sau `khop-nhip --map` cho người dùng xem rồi `--chot` vòng đó, hoặc dựng thẳng bản chính như khối lệnh trên.
+- Người dùng có thể bỏ chốt nháp (đã từng nói "dựng luôn bản full"): khi đó dựng thẳng bản chính, vẫn chạy `khop-nhip --map` trên `map.json` của chính bản chính rồi dựng lại (assemble dùng lại cache, chỉ ráp lại phần đổi).
 - Cảnh báo "không đủ mốc" của phép đo đồng bộ so với nguồn là bình thường với phim toàn đoạn ngắn; chấp nhận khi assemble báo hình = tiếng ở từng part và thành phẩm.
 
 ## Bước 6 - báo, giao, dọn
@@ -99,4 +100,4 @@ python3 tools/nghiem-thu.py video "../Du an/<x>/xuat-nhap/<tên>-ngang.mp4" --kh
 6. Bộ nhạc soạn mới trước, rồi nhạc riêng khác của xưởng, track bị cấm không dùng; tắt tiếng nhạc phát trong phòng; bản `_xuong-rieng-salamander` luôn kèm dòng ghi công tiếng piano.
 7. Hai chốt duyệt và cổng `nghiem-thu.py` như mọi phim; người dùng bỏ chốt nháp thì ghi lại trong tiến độ.
 
-<!-- ban-nguon: phim-recap-su-kien 2026-11-02 15d8cd95 -->
+<!-- ban-nguon: phim-recap-su-kien 2026-11-10 e945120d -->

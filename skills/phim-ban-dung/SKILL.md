@@ -25,7 +25,7 @@ Làm ngay khi gửi bản nháp đầu tiên (chốt duyệt số 2), để ngư
 
 1. Đọc dòng cuối `Du an/<x>/ke-hoach-dung/_ban-dung/nhat-ky.jsonl`: danh sách thay đổi và đường dẫn bản cũ (thư mục `Du an/<x>/ke-hoach-dung/_phien-ban/`). Đọc thay đổi như đọc góp ý của người dùng.
 2. `python3 tools/assemble.py --project "../Du an/<x>" --timeline <file> --kiem-tra`. Lỗi thì báo đúng chỗ và hỏi người dùng, không tự sửa ngược ý người dùng.
-3. Dựng nháp với `--out` tường minh (số nháp kế tiếp), nghiệm thu, gửi người dùng như mọi vòng. Bản đạt mới sang bản chính.
+3. Dựng nháp với `--out` tường minh (số nháp kế tiếp), nghiệm thu, gửi người dùng như mọi vòng. Bản đạt mới sang bản chính (nháp kiểu `ban-giao` thì `--chot` đúng vòng đạt, xem `_chung/timeline-va-dung.md`).
 4. Nhìn lại thay đổi: một kiểu chỉnh lặp lần thứ hai (ví dụ luôn cho bảng tên hiện muộn hơn, luôn hạ nhạc) là góp ý lặp, sửa nguồn mặc định và ghi sổ tay góp ý của `phong-cach/PHONG-CACH.md` theo quy tắc cứng 6 của `CLAUDE.md`.
 
 ## Bước 3 - sửa timeline khi người dùng đã chỉnh tay
@@ -56,4 +56,4 @@ Bản đồ tệp, mô hình dữ liệu, quy tắc điểm cắt và cách ki�
 - Bài học kỹ thuật mới (một kiểu cắt hỏng, một định dạng không phát) vào chủ đề 17 của `docs/BAI-HOC.md`; đổi thao tác, lệnh thì sửa mục "Bàn dựng" của `docs/QUY-TRINH-KY-THUAT.md` và `HUONG-DAN.md`.
 - Góp ý về chính Bàn dựng (thiếu thao tác, khó dùng): ghi vào tài liệu "ban-dung-dac-ta" trong Project, làm theo từng đợt có chốt duyệt.
 
-<!-- ban-nguon: phim-ban-dung 2026-10-07 3b767ef5 -->
+<!-- ban-nguon: phim-ban-dung 2026-11-10 6b27a89e -->

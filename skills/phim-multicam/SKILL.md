@@ -73,7 +73,7 @@ Trình bảng dàn góc và tên session CÙNG bảng phương án cắt và ove
 
 Ghép `timeline.json`: segments từ `timeline-multicam-nhap.json` sau khi chỉnh theo bảng đã duyệt, giữ nguyên `audioSrc`/`audioIn` (tiếng chủ theo trục chung) và `snap: false` (điểm cắt đã hút về khoảng lặng; bật snap sẽ làm hình và tiếng lệch nhau vì snap chỉ dịch `in`/`out` của hình). Các khoá `_goc`, `_ly_do`, `_truc` chỉ để đọc, assemble bỏ qua. Thêm intro/outro từ preset, hook trước intro nếu có, overlay pill và chapter như phim-dung-bai; B-roll đè lên quãng nào thì tiếng chủ vẫn chạy. Cắt bỏ một quãng lời (ậm ừ, lạc đề) thì cắt cả hình và tiếng: bỏ hẳn quãng đó khỏi trục, tức tách segment và dịch `audioIn` theo, không chỉ dịch hình.
 
-`assemble.py` có sẵn `audioSrc`/`audioIn`. Kiểm rồi dựng: `--kiem-tra` → `--preview --out "<tên>-ngang-nhap1"` (mỗi vòng nháp tăng số) → duyệt → bản chính `--out "<tên>-ngang"`.
+`assemble.py` có sẵn `audioSrc`/`audioIn`. Kiểm rồi dựng: `--kiem-tra` → `--preview --out "<tên>-ngang-nhap1"` (mỗi vòng nháp tăng số) → duyệt → bản chính: `--chot "<tên>-ngang-nhapN"` nếu nháp kiểu `ban-giao`, ngược lại `--out "<tên>-ngang"` (`_chung/timeline-va-dung.md` mục "Bản nháp và bản chính").
 
 ## Bước 5 - nghiệm thu
 
@@ -105,4 +105,4 @@ python3 tools/chuong-youtube.py --map "../Du an/<tên>/xuat-hoan-chinh/<video>.m
 - Phim multicam là nơi lỗi công cụ dựng lộ rõ nhất (hàng trăm part, mỗi part một mốc cắt lẻ so với lưới khung của nguồn 29.97 fps): trước khi dựng bản chính của một dự án mới, chắc rằng `python3 tools/kiem-dong-bo.py` ĐẠT trên đúng phiên bản `assemble.py` đang dùng. Khi user báo lệch hình-tiếng, phân định lỗi nguồn hay lỗi dựng bằng `do-dong-bo.py` trước khi đoán (kinh nghiệm: nguồn đúng, lỗi ở công cụ dựng, `docs/BAI-HOC.md` chủ đề "Đồng bộ hình tiếng").
 - Sửa skill này theo `skills/_chung/bao-tri-skill.md`; bài học mới vào `docs/BAI-HOC.md` chủ đề "Multicam".
 
-<!-- ban-nguon: phim-multicam 2026-10-07 a21f23ec -->
+<!-- ban-nguon: phim-multicam 2026-11-10 ef1c933b -->

@@ -37,7 +37,7 @@ Nhãn `lang` của đoạn rất ngắn không đáng tin (một tên riêng có
 - Giữ trọn các câu có sức nặng; cắt ngay trong câu chỉ khi điểm cắt rơi đúng chỗ ngừng thật (`snap` của `assemble.py` hút về khoảng lặng gần nhất). Hai người nói thay phiên thì giữ lượt của cả hai cho cân; gán người nói bằng cao độ giọng từng đoạn đối chiếu khung hình, không đoán theo nội dung.
 - Nói rõ trong phương án điều gì mất đi và vì sao chịu mất. Số phút trên giấy do công cụ cộng, không cộng tay.
 
-## Bước 3 - bản nháp 480p (chốt duyệt số 2)
+## Bước 3 - bản nháp (chốt duyệt số 2)
 
 `timeline.json` một track video, `aspect: "ngang"`, `snap: true`, fade vào ở đoạn đầu và fade ra ở đoạn cuối, không nhạc, không intro, không outro (clip chiếu tại sự kiện thường để người nói mở đầu ngay). Dựng như `phim-dung-bai`:
 
@@ -80,10 +80,10 @@ Stage các khung rồi nhìn: bảng tên không che mặt, hộp chữ không c
 
 ## Bước 5 - bản chính 1080p
 
-Người dùng duyệt nháp thì bỏ `--preview` và dựng `--out "<tên>-ngang"`; sinh lại phụ đề bằng `map.json` của bản chính (`dung <tên>-ngang`), burn, nghiệm thu:
+Người dùng duyệt nháp thì có bản chính: nháp kiểu `ban-giao` chốt bằng `--chot "<tên>-ngang-nhapN"` (không render lại), kiểu `480p` thì bỏ `--preview` và dựng `--out "<tên>-ngang"`; sinh lại phụ đề bằng `map.json` của bản chính (`dung <tên>-ngang`), burn, nghiệm thu:
 
 ```
-python3 tools/assemble.py --project "../Du an/<x>" --out "<tên>-ngang"
+python3 tools/assemble.py --project "../Du an/<x>" --chot "<tên>-ngang-nhapN"   # nháp ban-giao; nháp 480p: --out "<tên>-ngang"
 python3 tools/phu-de-song-ngu.py dung "../Du an/<x>" <tên>-ngang
 timeout 170 python3 tools/phu-de-song-ngu.py burn "../Du an/<x>" <tên>-ngang      # ra xuat-nhap/<tên>-ngang-pd.mp4
 python3 tools/nghiem-thu.py video "../Du an/<x>/xuat-nhap/<tên>-ngang-pd.mp4"
@@ -98,7 +98,7 @@ python3 tools/nghiem-thu.py video "../Du an/<x>/xuat-nhap/<tên>-ngang-pd.mp4"
 ## Quy tắc cứng
 
 1. Chưa qua `tools/nghiem-thu.py video` ĐẠT trên chính bản đã burn thì chưa nói "xong"; không hạ ngưỡng.
-2. Hai chốt duyệt với người dùng: phương án cắt (nếu cắt gọn), rồi bản nháp 480p CÓ phụ đề, trước bản chính.
+2. Hai chốt duyệt với người dùng: phương án cắt (nếu cắt gọn), rồi bản nháp CÓ phụ đề, trước bản chính.
 3. Không suy diễn quan hệ giữa những người trong clip và không đoán chính tả tên riêng: hỏi, hoặc dịch trung tính và báo.
 4. Chữ nghe không chắc phải nằm trong `ghi-chu` và báo cáo giao; không bao giờ để một chỗ đoán trông như chắc chắn.
 5. Cue theo mốc nguồn, chiếu bằng `map.json`; không cộng trừ mốc bằng tay.
@@ -110,4 +110,4 @@ python3 tools/nghiem-thu.py video "../Du an/<x>/xuat-nhap/<tên>-ngang-pd.mp4"
 
 Sửa skill này theo `skills/_chung/bao-tri-skill.md`; bài học mới vào `docs/BAI-HOC.md` mục 29 (hoặc mục 8 nếu là phụ đề nói chung).
 
-<!-- ban-nguon: phim-phu-de-song-ngu 2026-10-17 a4183284 -->
+<!-- ban-nguon: phim-phu-de-song-ngu 2026-11-10 956550bd -->

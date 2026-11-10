@@ -135,7 +135,7 @@ User góp ý chủ yếu theo nhãn tra trong `NHAN-DOAN.md`, kèm mốc phút g
 
 ### Bước 2.6 - Bản chính và bàn giao
 
-Xuất 1080p với `--out "<tên>-<khung>"`, `nghiem-thu.py video` ĐẠT, lưới khung hình đọc lại lần cuối, copy vào `xuat-hoan-chinh/`. Báo theo `_chung/van-hanh.md` (kèm danh sách chương, ghi công nhạc CC-BY nếu có). Đề xuất bước tiếp: bản gọn 60-90 giây bằng phim-clip-ngan; bản riêng cho từng đối tác nếu cần logo riêng; gửi nhân vật xem trước nếu đã hứa. Cập nhật `HO-SO-PHIM.md` trạng thái hoàn tất; bài học kỹ thuật vào `docs/BAI-HOC.md`, bài học kể chuyện vào `ke-chuyen-phong-van.md` mục 6.
+Bản chính 1080p: `--chot "<tên>-<khung>-nhapN"` nếu nháp kiểu `ban-giao`, ngược lại xuất với `--out "<tên>-<khung>"`; `nghiem-thu.py video` ĐẠT, lưới khung hình đọc lại lần cuối, copy vào `xuat-hoan-chinh/`. Báo theo `_chung/van-hanh.md` (kèm danh sách chương, ghi công nhạc CC-BY nếu có). Đề xuất bước tiếp: bản gọn 60-90 giây bằng phim-clip-ngan; bản riêng cho từng đối tác nếu cần logo riêng; gửi nhân vật xem trước nếu đã hứa. Cập nhật `HO-SO-PHIM.md` trạng thái hoàn tất; bài học kỹ thuật vào `docs/BAI-HOC.md`, bài học kể chuyện vào `ke-chuyen-phong-van.md` mục 6.
 
 ## Khi một khâu hỏng
 
@@ -151,4 +151,4 @@ Nguyên tắc chung ở `_chung/van-hanh.md`. Riêng thể loại này:
 
 Dự án này luôn kéo qua nhiều phiên. Trước khi dừng, `HO-SO-PHIM.md` phải nói được: đang ở bước nào, chờ ai, quyết định nào đã chốt, nháp mới nhất tên gì. Phiên sau đọc file đó trước, không hỏi lại điều đã chốt.
 
-<!-- ban-nguon: phim-tai-lieu-phong-van 2026-10-07 95203654 -->
+<!-- ban-nguon: phim-tai-lieu-phong-van 2026-11-10 08444b7d -->

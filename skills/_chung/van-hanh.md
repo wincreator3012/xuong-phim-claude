@@ -41,7 +41,7 @@ Xưởng làm việc bằng nguyên lý, không bằng khuôn. Mọi quyết đ�
 
 ## Hai chốt duyệt và báo "xong"
 
-- Phương án cắt và overlay duyệt trước khi dựng; nháp 480p duyệt trước bản chính. Infomotion và phim tài liệu có thêm cổng duyệt trên giấy. Ở chốt nháp, người dùng có thể tự chỉnh nhỏ trên Bàn dựng (skill phim-ban-dung); timeline có `_chinhTay` là nguồn sự thật, không sinh lại.
+- Phương án cắt và overlay duyệt trước khi dựng; bản nháp duyệt trước bản chính (kiểu nháp theo `banNhap`, xem `_chung/timeline-va-dung.md` mục "Bản nháp và bản chính"). Infomotion và phim tài liệu có thêm cổng duyệt trên giấy. Ở chốt nháp, người dùng có thể tự chỉnh nhỏ trên Bàn dựng (skill phim-ban-dung); timeline có `_chinhTay` là nguồn sự thật, không sinh lại.
 - Chưa có "nghiệm thu máy: ĐẠT" thì chưa nói "xong" (chi tiết: `skills/_chung/nghiem-thu-dung-y.md`).
 - Báo giao: tên file, đúng thư mục clip trong `Thanh pham/`, thời lượng, dung lượng, chapters nếu có, dòng ghi công nhạc nếu dùng track CC-BY.
 - Clip vừa qua nghiệm thu thì làm luôn gói đăng tải theo skill phim-dang-tai (ba tiêu đề và mô tả YouTube, status Facebook, ba thumbnail từ khung hình thật, qua `tools/dang-tai.py kiem`), không chờ người dùng nhắc; báo cùng lượt với báo giao. Video và gói đăng tải của mỗi clip nằm chung một thư mục tự đủ `Short NN <slug>/` (NN hai chữ số theo thứ tự dựng), và mọi clip cùng dự án nằm dưới MỘT thư mục mẹ `Thanh pham/<YYYY-MM tên dự án>/` (clip dài ở `00 Video day du/`), không tách ngang cấp.

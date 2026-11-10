@@ -160,7 +160,7 @@ def main():
     print(f"[1/3] Tạo nguồn giả ở {pj} …", flush=True)
     tao_nguon(pj)
     tao_timeline(pj)
-    print("[2/3] Dựng thử bằng assemble.py (bản nháp 480p) …", flush=True)
+    print("[2/3] Dựng thử bằng assemble.py (bản nháp, kiểu theo cau-hinh.json) …", flush=True)
     r = subprocess.run([sys.executable, args.assemble, "--project", pj, "--preview",
                         "--out", "kdb-nhap1"], capture_output=True, text=True)
     if r.returncode != 0:

@@ -58,7 +58,7 @@ Việc che luôn đi cùng quy tắc cứng "không lớp phủ nào che mặt a
 
 ## 6. Dựng phim dài trên máy ảo
 
-Phim từ khoảng 30 phút, nhất là có hàng trăm part `ca-hai`, không chạy trọn một lượt `assemble.py` được trên máy có giới hạn khoảng 120 giây mỗi lệnh. Dùng `tools/dung-dai.py` (xem `skills/phim-dung-bai/SKILL.md` Bước 6): `song-song` (lặp đến khi in `XONG-SONG-SONG`), `ghep`, `tron`, `mux-a`, `mux-b`. Giữ nguyên MỘT cách viết đường dẫn dự án (tuyệt đối) trong mọi lệnh, vì chữ ký part chứa đường dẫn. Đổi từ nháp sang bản chính là encode lại toàn bộ part: chốt thông số rồi mới bấm.
+Phim từ khoảng 30 phút, nhất là có hàng trăm part `ca-hai`, không chạy trọn một lượt `assemble.py` được trên máy có giới hạn khoảng 120 giây mỗi lệnh. Dùng `tools/dung-dai.py` (xem `skills/phim-dung-bai/SKILL.md` Bước 6): `song-song` (lặp đến khi in `XONG-SONG-SONG`), `ghep`, `tron`, `mux-a`, `mux-b`. Giữ nguyên MỘT cách viết đường dẫn dự án (tuyệt đối) trong mọi lệnh, vì chữ ký part chứa đường dẫn. Nháp kiểu `480p`: đổi từ nháp sang bản chính là encode lại toàn bộ part, chốt thông số rồi mới bấm. Nháp kiểu `ban-giao`: nháp và bản chính cùng chữ ký part, vòng nháp được duyệt chốt bằng `assemble.py --chot` (với `dung-dai.py`, chạy `meta` xong mới chốt).
 
 ## 7. Thumbnail từ khung rộng có slide hay màn hình
 

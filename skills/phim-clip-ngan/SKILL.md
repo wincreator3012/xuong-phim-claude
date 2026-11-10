@@ -33,7 +33,7 @@ python3 tools/assemble.py --project "../Du an/<tên>" --timeline "clip-ngan/<slu
 python3 tools/assemble.py --project "../Du an/<tên>" --timeline "clip-ngan/<slug>/timeline.json" --out "<slug>-<khung>"
 ```
 
-Nháp tăng số mỗi vòng để không ghi đè bản người dùng đang xem; bản chính bỏ đuôi nháp.
+Nháp tăng số mỗi vòng để không ghi đè bản người dùng đang xem; bản chính bỏ đuôi nháp. Kiểu nháp `ban-giao` thì dòng thứ ba thay bằng `--chot "<slug>-<khung>-nhapN"` (cùng `--project`, `--timeline`), chốt vòng người dùng đã duyệt mà không render lại (`_chung/timeline-va-dung.md` mục "Bản nháp và bản chính").
 
 - **Hook trước, intro sau (bắt buộc)**: hook (3-10 giây lời đắt nhất) → intro NGẮN 2,5-4 giây từ preset (hoặc bỏ hẳn intro, dồn nhận diện về outro) → thân → outro. Không dùng trường `intro`/`outro` cấp cao nhất; đưa intro, outro vào `segments` như insert thường, intro đặt sau segment hook, gắn `"role": "intro"` / `"role": "outro"` (nhạc bookends và `--kiem-tra` dựa vào `role`). Không đặt thêm một thẻ toàn màn hình dính liền intro (quy tắc 5 giây ở `_chung/overlay-va-the.md`); cần nhấn một khái niệm ngay sau hook thì dùng Benefits hiện dần theo lời.
 - **LowerThird bắt buộc ngay sau intro cho mọi nhân vật xuất hiện lần đầu**, kể cả chính người dùng trong clip quảng bá: intro nói về CHƯƠNG TRÌNH, LowerThird nói về NGƯỜI; người xem lạ vào giữa clip không quay lại xem intro. Hiện khoảng 4-4,5 giây trên chính footage, neo dưới trái. `name`/`role` theo `_chung/van-hanh.md` mục "Chữ và chức danh" (không suy từ `Intro.props.subtitle`). Ghép bằng `overlay` dạng list trên cùng segment, ví dụ `[{"src": "...lowerthird.webm", "at": 0.3}, {"src": "...pill.webm", "at": 5.0}]`; mọi overlay phải chạy xong trước B-roll đầu tiên của segment đó, nên bỏ hoặc dời B-roll của segment mang cặp overlay này.
@@ -70,4 +70,4 @@ File đã burn là bản HOÀN CHỈNH: ghi vào `Du an/<x>/xuat-hoan-chinh/<slu
 
 Báo kết quả kèm dòng "nghiệm thu máy: ĐẠT" và danh sách ngắn các điểm cần người dùng nghe lại (chữ nhận dạng chưa chắc, con số người nói ước lượng, chức danh, chỗ đã cắt bỏ tham chiếu ngoài clip). Một bài giảng tốt thường ra 3-5 clip: sau khi người dùng duyệt clip đầu, đề nghị dựng loạt còn lại cùng format cho đồng đều.
 
-<!-- ban-nguon: phim-clip-ngan 2026-11-02 1c794e04 -->
+<!-- ban-nguon: phim-clip-ngan 2026-11-10 0bf927b5 -->

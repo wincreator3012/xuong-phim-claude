@@ -17,6 +17,15 @@ Schema đầy đủ của `timeline.json` nằm trong docstring đầu `tools/as
 - assemble ghi vào `Du an/<x>/xuat-nhap/`; bản đạt nghiệm thu (clip dọc: bản đã burn phụ đề) copy sang `xuat-hoan-chinh/`.
 - Gọi lặp y nguyên lệnh (cùng `--out`) khi một lượt bị ngắt; part đã đúng tự bỏ qua.
 
+## Bản nháp và bản chính
+
+- Đầu ra chuẩn là 1080p: 1920x1080 cho khung ngang, 1080x1920 cho khung dọc, cho mọi nơi đăng (YouTube, e-learning, mạng xã hội). Clip nào cần 2K hay 4K thì người dùng nói riêng; công cụ dựng hiện chỉ xuất 1080p, nên trước khi nhận việc đó phải báo phần cần mở rộng (đồ họa render ở cỡ lớn, bố cục slide ghép ở cỡ lớn), không phóng to bản 1080p.
+- `--preview` dựng nháp theo khoá `banNhap` trong `cau-hinh.json` (`python3 tools/cau_hinh.py` in kiểu đang dùng):
+  - `ban-giao`: nháp đúng thông số bản giao (1080p, CRF 18, cùng âm thanh). Người dùng duyệt vòng nháp nào thì chốt đúng vòng đó thành bản chính, không render lại: `python3 tools/assemble.py --project "../Du an/<x>" [--timeline ...] --chot "<tên>-<khung>-nhapN"` (ra `<tên>-<khung>.mp4` kèm `map.json`, `chapters.txt`, `nghiem-thu.json`; `--out` đặt tên khác). Công cụ từ chối chốt khi timeline, file nguồn, đồ họa, đơn màu hay công cụ dựng đã đổi sau vòng nháp đó: khi ấy dựng bản chính bằng lệnh thường (bỏ `--preview`).
+  - `480p`: nháp 854x480 dựng nhanh để duyệt nhịp, điểm cắt, nội dung; không đánh giá độ nét, chữ nhỏ, màu da trên nháp. Bản chính dựng lại không `--preview`.
+  - Còn trống: công cụ tạm dựng 480p và in lời nhắc. Hỏi người dùng một lần (máy mạnh chọn `ban-giao`, máy yếu hoặc máy ảo giới hạn thời gian mỗi lệnh chọn `480p`) rồi ghi vào `cau-hinh.json`.
+- Nháp chốt thành bản chính vẫn qua đủ nghiệm thu bản chính (`nghiem-thu.py video` không `--nhap`); phụ đề, gói đăng tải làm trên tên bản chính.
+
 ## Dự án con (clip ngắn cắt từ một dự án)
 
 `--project` trỏ DỰ ÁN GỐC (để dùng chung `transcript/`, `.tam/`), `--timeline "clip-ngan/<slug>/timeline.json"`, `--out "<slug>-<khung>[-nhapN]"`. Đồ họa riêng đặt trong `clip-ngan/<slug>/do-hoa/`, đường dẫn trong timeline tương đối so với dự án gốc.

@@ -34,6 +34,16 @@ SIZES = {"ngang": (1920, 1080), "doc": (1080, 1920)}
 PREVIEW_SIZES = {"ngang": (854, 480), "doc": (480, 854)}
 
 
+def kieu_nhap():
+    """Kiểu bản nháp của máy (tools/cau_hinh.py): "ban-giao" thì nháp có kích cỡ như bản chính."""
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        import cau_hinh
+        return cau_hinh.ban_nhap(bao=False)
+    except Exception:  # noqa: BLE001
+        return "480p"
+
+
 class KQ:
     """Gom kết quả: dat / khong_dat / canh_bao."""
 
@@ -156,7 +166,7 @@ def cmd_video(args):
     if v:
         w, h = int(v["width"]), int(v["height"])
         khung = args.khung or ("doc" if h > w else "ngang")
-        exp = (PREVIEW_SIZES if args.nhap else SIZES)[khung]
+        exp = (PREVIEW_SIZES if args.nhap and kieu_nhap() == "480p" else SIZES)[khung]
         (kq.dat if (w, h) == exp else kq.canh)(f"Kích cỡ {w}x{h} (chuẩn {khung}: {exp[0]}x{exp[1]})")
         fps = fps_of(v)
         (kq.dat if abs(fps - args.fps) < 0.01 else kq.canh)(f"fps {fps:.3f} (chuẩn {args.fps})")
@@ -253,8 +263,14 @@ def cmd_video(args):
             kq.canh("Không tạo được ảnh lưới", p.stderr[-200:])
 
     kq.show(os.path.basename(path))
-    kq.dump(os.path.splitext(path)[0] + ".nghiem-thu.json",
-            {"file": os.path.basename(path), "hinh": vd, "tieng": ad})
+    nt_path = os.path.splitext(path)[0] + ".nghiem-thu.json"
+    extra = {"file": os.path.basename(path), "hinh": vd, "tieng": ad}
+    try:  # giữ dấu dựng do assemble.py ghi (kích cỡ, kiểu nháp, vân tay) để assemble.py --chot còn đối chiếu được
+        cu = json.load(open(nt_path, encoding="utf-8"))
+        extra.update({k: cu[k] for k in ("khung", "nhap", "kieuNhap", "vanTay", "chotTu", "tool_version") if k in cu})
+    except (OSError, ValueError):
+        pass
+    kq.dump(nt_path, extra)
     sys.exit(1 if kq.fail else 0)
 
 
@@ -370,7 +386,8 @@ def main():
     v = sub.add_parser("video")
     v.add_argument("file")
     v.add_argument("--khung", choices=["ngang", "doc"], default=None)
-    v.add_argument("--nhap", action="store_true", help="bản nháp 480p")
+    v.add_argument("--nhap", action="store_true",
+                   help="bản nháp: kích cỡ chuẩn theo banNhap trong cau-hinh.json (ban-giao: như bản chính; 480p: 854x480)")
     v.add_argument("--fps", type=float, default=30)
     v.add_argument("--anh", action="store_true", help="xuất ảnh lưới 12 khung để soi mắt")
     v.add_argument("--khong-dong-bo", action="store_true", help="bỏ qua bước đo đồng bộ hình-tiếng so với nguồn (do-dong-bo.py)")
