@@ -22,6 +22,8 @@ import os
 import subprocess
 import sys
 
+sys.dont_write_bytecode = True
+os.environ["PYTHONDONTWRITEBYTECODE"] = "1"  # mọi công cụ con chạy thử không để __pycache__ trong repo
 TOOLS = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(TOOLS)
 sys.path.insert(0, os.path.join(TOOLS, "pylib"))

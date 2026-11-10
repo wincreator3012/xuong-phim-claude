@@ -36,6 +36,7 @@ PREVIEW_SIZES = {"ngang": (854, 480), "doc": (480, 854)}
 
 def kieu_nhap():
     """Kiểu bản nháp của máy (tools/cau_hinh.py): "ban-giao" thì nháp có kích cỡ như bản chính."""
+    sys.dont_write_bytecode = True  # nạp cau_hinh không để __pycache__ trong repo
     try:
         sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
         import cau_hinh

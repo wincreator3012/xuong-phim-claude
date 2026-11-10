@@ -1014,8 +1014,8 @@
 },
 {
 "p": "tools/assemble.py",
-"c": 79798,
-"sha": "1b67397f3c972768e02dc313448a245a7bb6b603",
+"c": 79883,
+"sha": "170c524556230b03be9a245792996a14c392a6d8",
 "vai": "chep"
 },
 {
@@ -1201,8 +1201,8 @@
 },
 {
 "p": "tools/kiem-tra-xuong.py",
-"c": 25138,
-"sha": "1e156a6bd72c54b05d1307aa61e74c969e51862a",
+"c": 25286,
+"sha": "4f9bdbf56cce2305537f900aeda1c78ff0134d6b",
 "vai": "chep"
 },
 {
@@ -1291,8 +1291,8 @@
 },
 {
 "p": "tools/nghiem-thu.py",
-"c": 20384,
-"sha": "02b41c00e0967447cd5191875fd94e595e64d955",
+"c": 20473,
+"sha": "3308ee257900d5980b1d3a41dda0b686de6c1257",
 "vai": "chep"
 },
 {

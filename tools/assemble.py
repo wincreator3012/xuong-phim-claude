@@ -94,6 +94,7 @@ import shlex
 import subprocess
 import sys
 
+sys.dont_write_bytecode = True  # nạp cau_hinh không để __pycache__ trong repo
 try:
     import cau_hinh as _CH  # cùng thư mục tools/
 except ImportError:  # chạy từ nơi khác: nạp theo đường dẫn
