@@ -11,7 +11,7 @@ Quy trình đầy đủ ở skills/phim-clip-ngan/references/short-mat-tren.md. 
       tạo phụ đề .ass từ xuat-nhap/<slug>-doc.map.json (assemble.py ghi) và cues.json; báo dòng dài, cue ngoài đoạn
 
 spec.json: {"slug", "kd": "<tên khúc gỡ băng>", "tieu_de", "hook": [A,B] hoặc [[A,B],...], "parts": [[A,B],...],
-            "focus": [x,y], "zoom": 1.0, "paneH": 960, "cues": [[a,b,"chữ"],...], "scene": {...}, "hook_scene": {...},
+            "focus": [x,y], "zoom": 1.0, "paneH": 960, "cues": [[a,b,"chữ"(,true nếu cue thuộc hook)],...], "scene": {...}, "hook_scene": {...},
             "part0_at": giây-trong-phần-đầu (tuỳ chọn), "intro_s", "outro_s"}
   A = đầu âm tiết đầu, B = cuối âm tiết cuối (giây trong file nguồn; xem tools/short-soi.py tu).
   parts[0] phải dài >= ~4,7 s nếu muốn thẻ bảng tên (0,3 s) rồi cảnh (4,7 s) trong phần thân.
@@ -208,12 +208,18 @@ def cmd_ass(slug, song_ngu=False):
     CUES = J(f'{base}/phu-de/cues.json')
     EN = J(f'{base}/phu-de/en.json') if song_ngu else {}
     thieu_en = []
-    cuts = [pt for pt in M['parts'] if pt['kind'] == 'cut']
+    cuts_all = [pt for pt in M['parts'] if pt['kind'] == 'cut']
     nh = len(J(f'{base}/snap.json').get('hook', []))
+    cuts = cuts_all
     body = cuts[min(nh, len(cuts) - 1)]
     LT = (body['start'] + 0.3, body['start'] + 4.6)   # cửa sổ bảng tên: phụ đề nâng lên (Raised)
 
-    def to_out(p):
+    def to_out(p, hook=False):
+        # cue phần hook (phần tử thứ tư của cue là true) chỉ khớp đoạn hook; cue thân chỉ khớp các đoạn thân.
+        # Nhờ vậy câu hook được phép lặp lại nguyên văn trong thân (hai quãng nguồn trùng nhau).
+        cuts = cuts_all[:nh] if hook else cuts_all[nh:]
+        if not cuts:
+            cuts = cuts_all
         for pt in cuts:
             if pt['in'] - 0.03 <= p <= pt['out'] + 0.03:
                 return pt['start'] + (min(max(p, pt['in']), pt['out']) - pt['in'])
@@ -270,8 +276,10 @@ def cmd_ass(slug, song_ngu=False):
     dau = ASS_DAU.format(font=C['font'], co=C['co-chu'], mau=C['mau-chu'], le1=C['le-duoi'], le2=C['le-duoi-nang'])
     lines = [dau]
     prev_tb = -1.0
-    for a, b, txt in CUES:
-        ta, tb = to_out(a), to_out(b)
+    for q in CUES:
+        a, b, txt = q[0], q[1], q[2]
+        is_hook = len(q) > 3 and bool(q[3])
+        ta, tb = to_out(a, is_hook), to_out(b, is_hook)
         if ta < prev_tb:   # libass đẩy cue chồng thời gian lên cao (đè cảnh): không cho chồng
             ta = prev_tb
         if tb < ta + 0.1:

@@ -123,6 +123,7 @@ Bài học là lý do để hiểu vì sao một cách làm từng đúng với 
 
 - **Cue theo hơi nói, nhóm cân bằng, khoảng 28 ký tự mỗi dòng trên điện thoại:** chia thuần theo tỉ lệ ký tự trong cụm dài lệch vài phần mười giây và để lẻ chữ; ASR file đã dựng lấy ranh giới cụm, nhóm cân bằng ưu tiên dấu câu, chữ soát tay. Burn và chuẩn hoá âm lượng trong cùng một lượt ffmpeg (acompressor, volume, alimiter); `volume` 2,5 dB cho -15,1 LUFS (không đạt), 3,7 dB cho -14,6; luôn đo lại. (dự án thật, 2026-10-03)
 - **Phụ đề song ngữ cho clip ngang chiếu ở sự kiện** (hai dòng cùng lúc, chữ to, nền hộp mờ, cue viết theo mốc nguồn): xem mục 29 và `tools/phu-de-song-ngu.py`; khác phụ đề dọc ở trên về cỡ chữ (64 px trên khung 1080, 42 ký tự mỗi dòng), nền hộp và việc cue sống sót qua mọi lần cắt lại. (dự án thật, 2026-10-17)
+- **Câu hook được phép lặp nguyên văn trong thân short:** hai quãng nguồn trùng nhau làm cue chiếu nhầm sang đoạn kia. Đánh dấu cue của hook bằng phần tử thứ tư `true` (`[a, b, "chữ", true]`): `short-dung.py ass` chỉ khớp cue hook với đoạn hook, cue thân với các đoạn thân. (dự án thật, 2026-11-09) **[máy]** `short-dung.py`
 
 ## 9. Đồ họa Remotion và render
 
@@ -225,6 +226,7 @@ Bài học là lý do để hiểu vì sao một cách làm từng đúng với 
 - **Vi mờ 5 ms chỉ đặt ở mối nối tiếng không liền** (cắt bỏ một quãng, đổi file, giáp đồ họa chèn); mối tách đoạn, B-roll, đổi góc multicam cùng tiếng chủ giữ nguyên. Trước r8, 1 ms sát mối nối có năng lượng bằng 1,05 lần phần bên cạnh (cắt cụt sóng); sau r8 dưới 0,5 lần. (dự án thật, 2026-10-01) **[máy]** `kiem-tra-xuong.py` đo 22 mép mối nối
 - **Đầu vùng tìm khe phải lùi vào trong chữ đủ sâu:** lấy đầu chữ + 0,04 s (làm tròn xuống khung) thì rơi đúng chỗ tiếng "hôm" vừa nhú, năng lượng còn thấp, bị nhận là khe; kéo theo luật "âm tiết dính" đánh dấu nhầm "ờ hôm" là dính liền. Sửa: đầu chữ + 0,08 s, làm tròn lên. 16 điểm đã nghe thử không đổi; người dùng nghe lại cả 16: 16/16 sạch. (dự án thật, 2026-10-01) **[máy]** `kiem-tra-xuong.py` kiểm điểm cắt trên lời tổng hợp
 - **Chữ mờ, chữ gạch chỉ hiện khi chưa đoạn nào dùng:** thứ tự đoạn có thể khác thứ tự file (đoạn multicam đứng giữa, đoạn đảo chỗ); hiện chữ đã có ở đoạn khác thì "khôi phục" sẽ thành lặp lời. (dự án thật, 2026-10-01)
+- **Khúc nói liền quá dài làm `moc-tu.py` bị hệ thống giết (mã 137):** VAD đôi khi trả khúc 60-140 giây, mô hình CTC 300M ngốn hàng GB RAM. Khúc dài hơn khoảng 35 giây được chia đều khoảng 25 giây, mỗi chỗ chia hút vào quãng năng lượng thấp nhất trong ±4 giây. (dự án thật, 2026-11-09) **[máy]** `moc-tu.py`
 
 ## 18. Clip panel hai khách mời (dự án thật, 2026-10-05)
 

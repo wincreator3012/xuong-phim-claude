@@ -2,6 +2,11 @@
 
 Tệp này dành cho AI đang chăm một xưởng đã dựng từ bản thiết kế: khi người dùng nói "xem bản thiết kế có gì mới", đọc các mục SAU ngày `ban_mau.ngay` trong `tools/.cai-dat.json` của xưởng, rồi làm theo mục cuối của `DUNG-XUONG.md` (đề xuất từng thay đổi, người dùng duyệt rồi mới ghi, không ghi đè phần riêng của họ). Mỗi mục ghi: điều gì đổi, vì sao đáng lấy, tệp chính bị ảnh hưởng. Mục mới ở trên cùng.
 
+## 2026-11-10 (bổ sung): mốc lời cho bài dài, câu hook lặp trong thân short
+
+- `tools/moc-tu.py`: khúc nói liền dài 60-140 giây (VAD trả về) từng làm mô hình nhận dạng tốn hàng GB RAM và bị hệ thống dừng (mã 137); nay khúc dài hơn khoảng 35 giây được chia đều khoảng 25 giây, chỗ chia hút vào quãng năng lượng thấp nhất trong ±4 giây. Vì sao đáng lấy: chuẩn bị Bàn dựng cho bài dài không còn chết giữa chừng trên máy ít RAM.
+- `tools/short-dung.py ass`: cue có phần tử thứ tư `true` là cue của hook, chỉ khớp với đoạn hook; cue thân chỉ khớp các đoạn thân. Câu hook được phép lặp nguyên văn trong thân mà phụ đề không chiếu nhầm. `docs/BAI-HOC.md` có hai dòng mới (mục 8 và 17).
+
 ## 2026-11-10: kiểu bản nháp do người dùng chọn, chốt nháp thành bản chính
 
 - Khoá mới `banNhap` trong `cau-hinh.mau.json`, đọc qua `tools/cau_hinh.py` (`ban_nhap()`): `ban-giao` thì `assemble.py --preview` dựng nháp đúng thông số bản giao 1080p; `480p` thì nháp nhỏ như trước. Bản thiết kế không chọn thay: còn trống thì công cụ tạm dùng 480p và in lời nhắc hỏi người dùng; skill `phim-thiet-lap` Bước 1 hỏi câu này sau khi dựng thử đạt. Vì sao đáng lấy: với nguồn 4K hay 2.7K, nháp 480p chỉ nhanh hơn khoảng 1,5-2 lần (máy vẫn giải mã khung gốc) mà không soi được chữ, phụ đề, màu, lại thêm một lượt dựng bản chính.

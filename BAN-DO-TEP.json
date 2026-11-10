@@ -75,8 +75,8 @@
 },
 {
 "p": "THAY-DOI.md",
-"c": 16403,
-"sha": "ca078722417eabed985bc877dcb957d45baa7bdd",
+"c": 17242,
+"sha": "95db868f40629906d3f6e1c622969f0dc1d5c1f6",
 "vai": "ban-mau"
 },
 {
@@ -331,7 +331,7 @@
 {
 "p": "do-hoa-chung/canh-kit/mau/canh-short.html",
 "c": 13817,
-"sha": "18051d66a2ce9a1cb64006645eb73375d448773f",
+"sha": "0baab6d86ec4cdae3f0113b828d3bf08f97db837",
 "vai": "chep"
 },
 {
@@ -366,8 +366,8 @@
 },
 {
 "p": "docs/BAI-HOC.md",
-"c": 105848,
-"sha": "7f269309074fe2203f0ad2cc4575223e16812723",
+"c": 106610,
+"sha": "249f7fd3dcd41a45ed3cf44cbde9f974d48a721a",
 "vai": "chep"
 },
 {
@@ -1261,8 +1261,8 @@
 },
 {
 "p": "tools/moc-tu.py",
-"c": 14434,
-"sha": "db28ccc4f5e24b9dcea8b7c9b3a5271f08f2dba7",
+"c": 15459,
+"sha": "a8997ccd6a49c239d9a55213183d2a499803dae6",
 "vai": "chep"
 },
 {
@@ -1353,8 +1353,8 @@
 },
 {
 "p": "tools/short-dung.py",
-"c": 15507,
-"sha": "05d8abed5cc152533ee7f7fda95fe312bde6ecdc",
+"c": 16026,
+"sha": "7caf0ac8aeaf3d3898254ed84319746b2393505b",
 "vai": "chep",
 "chay": true
 },

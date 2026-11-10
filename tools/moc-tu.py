@@ -231,6 +231,25 @@ def kiem_mo_hinh():
                  ". Cách tải: tools/models/TAI-MODEL.md, mục \"Mốc âm tiết cho Bàn dựng và Dựng bằng lời\".")
 
 
+def chia_khuc(s, e, nl, toi_da=25.0):
+    """VAD đôi khi trả khúc nói liền dài 60-140 s (vượt xa KHUC_TOI_DA), CTC 300M ngốn hàng GB RAM và bị hệ thống
+    giết (mã 137). Khúc dài hơn toi_da + 10 s được chia thành các đoạn đều nhau, mỗi chỗ cắt hút vào quãng
+    năng lượng thấp nhất trong ±4 s quanh điểm chia."""
+    if e - s <= toi_da + 10:
+        return [(s, e)]
+    n = int(np.ceil((e - s) / toi_da))
+    muc = (e - s) / n
+    cuts = [s]
+    for i in range(1, n):
+        t = s + i * muc
+        lo, hi = max(0, int((t - 4) * HZ)), min(len(nl), int((t + 4) * HZ))
+        sm = np.convolve(nl[lo:hi].astype(np.float32), np.ones(15, dtype=np.float32) / 15, mode="same")
+        j = int(np.argmin(sm[10:-10])) + 10
+        cuts.append(round((lo + j) / HZ, 3))
+    cuts.append(e)
+    return list(zip(cuts[:-1], cuts[1:]))
+
+
 def lam_mot_nguon(du_an, nguon, han_chot):
     src = os.path.join(du_an, nguon)
     if not os.path.isfile(src):
@@ -272,6 +291,7 @@ def lam_mot_nguon(du_an, nguon, han_chot):
         print(f"  … {nguon}: {len(meta['khuc'])} khúc nói, sàn ồn {meta['san']} dB")
     json.dump(meta, open(meta_p, "w", encoding="utf-8"), ensure_ascii=False)
     khuc = meta["khuc"]
+    nl_arr = np.fromfile(out_nl, dtype=np.uint8)
     con = [k for k in range(len(khuc)) if not os.path.isfile(os.path.join(tam, f"k{k:05d}.json"))]
     if con:
         chu, moc = BoChu(), BoMoc()
@@ -280,10 +300,12 @@ def lam_mot_nguon(du_an, nguon, han_chot):
                 print(f"  … {nguon}: còn {len([c for c in con if c >= k])}/{len(khuc)} khúc, chạy lại lệnh để làm tiếp")
                 return False
             s, e = khuc[k]
-            b = max(0.0, s - DEM)
-            x = a[int(b * SR):int(min(len(a) / SR, e + DEM) * SR)]
-            words = chu.chep(x)
-            r = moc.can(x, b, words) if words else []
+            r = []
+            for ps, pe in chia_khuc(s, e, nl_arr):
+                b = max(0.0, ps - DEM)
+                x = a[int(b * SR):int(min(len(a) / SR, pe + DEM) * SR)]
+                words = chu.chep(x)
+                r += moc.can(x, b, words) if words else []
             for w in r:
                 w["k"] = k
             json.dump(r, open(os.path.join(tam, f"k{k:05d}.json"), "w", encoding="utf-8"), ensure_ascii=False)
